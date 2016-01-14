@@ -1,6 +1,5 @@
-\documentclass[m,binding,twoside,scrreprt,master,palatino]{WeSTthesis}
-%\documentclass[m,bachelor,palatino]{WeSTthesis}
-%\documentclass[]{article}
+\documentclass[m,binding,scrreprt,master,palatino]{WeSTthesis}
+%\documentclass[m,binding,twoside,scrreprt,master,palatino]{WeSTthesis}
 \usepackage[english,ngerman]{babel}		% English and new German spelling
 \usepackage[utf8]{inputenc}           % correct input encoding
 \usepackage[T1]{fontenc}              % correct output encoding
@@ -36,9 +35,7 @@ urlcolor=black]{hyperref}
 \usepackage{microtype}
 \usepackage{multirow}% http://ctan.org/pkg/multirow
 
-
-
-%\newcommand{\itodo}[1]{\todo[inline]{#1}}
+\newcommand{\itodo}[1]{\todo[inline]{#1}}
 
 %TODO add matriculation number to WeSTthesis.cls?
 \author{Martin Körner\\[0.1cm]\normalsize{Matrikelnummer: 210200113}\vspace{-0.5cm}}
@@ -61,7 +58,7 @@ Distant Supervision}
 
 \maketitle
 
-\input{abstract}
+\input{frontbackmatter/abstract}
 \varclearpage
 
 \tableofcontents
@@ -81,7 +78,7 @@ Distant Supervision}
 %\bibliographystyle{plain}
 \bibliographystyle{alpha}
 
-\bibliography{bibliography}
+\bibliography{frontbackmatter/bibliography}
 \varclearpage
 
 %\appendix
