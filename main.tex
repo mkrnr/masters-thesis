@@ -1,0 +1,91 @@
+\documentclass[m,binding,twoside,scrreprt,master,palatino]{WeSTthesis}
+%\documentclass[m,bachelor,palatino]{WeSTthesis}
+%\documentclass[]{article}
+\usepackage[english,ngerman]{babel}		% English and new German spelling
+\usepackage[utf8]{inputenc}           % correct input encoding
+\usepackage[T1]{fontenc}              % correct output encoding
+\usepackage{graphicx}					      	% enhanced support for graphics
+\usepackage{tabularx}				      		% more flexible tabular
+\usepackage{amsfonts}					      	% math fonts
+\usepackage{amssymb}					      	%	math symbols
+\usepackage{amsmath}					      	% overall enhancements to math environment
+\usepackage[textsize=footnotesize,textwidth=27.5mm]{todonotes}					      	% package for notes/comments
+\usepackage[bookmarks=true,
+bookmarksopen=true,
+bookmarksnumbered=true,
+pdfstartpage=1,
+%TODO add final title
+pdftitle={},
+pdfauthor={Martin Christian Körner},
+pdfsubject={Master's Thesis},
+%TODO add keywords
+pdfkeywords={},
+breaklinks=true,
+colorlinks=true,
+linkcolor=black,
+anchorcolor=black,
+citecolor=black,
+filecolor=black,
+menucolor=black,
+urlcolor=black]{hyperref}
+%\usepackage{hyperref}
+\usepackage{float}                    % additional positions for images
+\usepackage{listings}                 % source code
+\usepackage[font=bf,labelfont=bf]{caption}    % captions
+\usepackage{appendix}                 % appendix
+\usepackage{microtype}
+\usepackage{multirow}% http://ctan.org/pkg/multirow
+
+
+
+%\newcommand{\itodo}[1]{\todo[inline]{#1}}
+
+%TODO add matriculation number to WeSTthesis.cls?
+\author{Martin Körner\\[0.1cm]\normalsize{Matrikelnummer: 210200113}\vspace{-0.5cm}}
+
+\title{Reference String Extraction from\\
+Social Science Research Papers using\\
+Conditional Random Fields and\\
+Distant Supervision}
+
+\degreecourse{Web Science}
+
+\firstreviewer{Prof. Dr. Steffen Staab}
+\firstreviewerinfo{Institute for Web Science and Technologies}
+
+\secondreviewer{Ren\'e Pickhardt}
+\secondreviewerinfo{Institute for Web Science and Technologies}
+
+\begin{document}
+\pagenumbering{roman}
+
+\maketitle
+
+\input{abstract}
+\varclearpage
+
+\tableofcontents
+\varclearpage
+
+\pagenumbering{arabic}
+% list of figures
+% \listoffigures
+% \varclearpage
+
+% beginning of the actual text section
+%\listoftodos
+\clearpage
+\input{chapters/introduction}
+\varclearpage
+
+%\bibliographystyle{plain}
+\bibliographystyle{alpha}
+
+\bibliography{bibliography}
+\varclearpage
+%\input{appendix}
+\varclearpage
+
+\pagenumbering{gooble}
+%\input{danksagung}
+\end{document}
