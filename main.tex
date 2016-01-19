@@ -35,8 +35,12 @@ urlcolor=black]{hyperref}
 \usepackage{microtype}
 \usepackage{multirow}% http://ctan.org/pkg/multirow
 \usepackage{epstopdf}
+\usepackage{cleveref}
 
 \newcommand{\itodo}[1]{\todo[inline]{#1}}
+
+% Make cref auto-capitalize labels
+\renewcommand{\cref}{\Cref}
 
 %TODO add matriculation number to WeSTthesis.cls?
 \author{Martin Körner\\[0.1cm]\normalsize{Matrikelnummer: 210200113}\vspace{-0.5cm}}
