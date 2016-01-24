@@ -21,13 +21,18 @@ pdfsubject={Master's Thesis},
 pdfkeywords={},
 breaklinks=true,
 colorlinks=true,
-linkcolor=black,
-anchorcolor=black,
-citecolor=black,
-filecolor=black,
-menucolor=black,
-urlcolor=black]{hyperref}
-%\usepackage{hyperref}
+%linkcolor=black,
+%anchorcolor=black,
+%citecolor=black,
+%filecolor=black,
+%menucolor=black,
+%urlcolor=black]{hyperref}
+linkcolor=blue,
+anchorcolor=blue,
+citecolor=blue,
+filecolor=blue,
+menucolor=blue,
+urlcolor=blue]{hyperref}
 \usepackage{float}                    % additional positions for images
 \usepackage{listings}                 % source code
 \usepackage[font=bf,labelfont=bf]{caption}    % captions
@@ -35,12 +40,16 @@ urlcolor=black]{hyperref}
 \usepackage{microtype}
 \usepackage{multirow}% http://ctan.org/pkg/multirow
 \usepackage{epstopdf}
-\usepackage[nameinlink]{cleveref} % for \Cref
+\usepackage[capitalize,noabbrev,nameinlink]{cleveref} % for \Cref
+\usepackage[toc,nonumberlist,acronym]{glossaries} % make a separate list of acronyms
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{scrhack}
+\usepackage[style=alphabetic,hyperref=true,backref=true,natbib=true,abbreviate=false]{biblatex}
+
+
 
 \newcommand{\itodo}[1]{\todo[inline]{#1}}
-
-% Make cref auto-capitalize labels
-\renewcommand{\cref}{\Cref}
 
 %TODO add matriculation number to WeSTthesis.cls?
 \author{Martin Körner\\[0.1cm]\normalsize{Matrikelnummer: 210200113}\vspace{-0.5cm}}
@@ -57,6 +66,18 @@ Distant Supervision}
 
 \secondreviewer{Ren\'e Pickhardt}
 \secondreviewerinfo{Institute for Web Science and Technologies}
+
+% load the different glossaries
+\loadglsentries{/home/martin/glossaries/mathematics/probability-theory/graphical-models/glossary.tex}
+\loadglsentries{/home/martin/glossaries/mathematics/probability-theory/glossary.tex}
+\loadglsentries{/home/martin/glossaries/mathematics/graph-theory/glossary.tex}
+\loadglsentries{/home/martin/glossaries/mathematics/glossary.tex}
+
+\loadglsentries{frontbackmatter/acronyms.tex}
+
+\makeglossaries
+
+\addbibresource{frontbackmatter/bibliography.bib}
 
 \begin{document}
 \pagenumbering{roman}
@@ -83,12 +104,9 @@ Distant Supervision}
 \clearpage
 \input{chapters/introduction}
 \varclearpage
-
-%\bibliographystyle{plain}
-\bibliographystyle{alpha}
-
-\bibliography{frontbackmatter/bibliography}
+\input{chapters/related-work}
 \varclearpage
+
 
 %\appendix
 %\appendixpage
@@ -96,6 +114,16 @@ Distant Supervision}
 %\input{appendices/insert-filename-here}
 %\varclearpage
 
-\pagenumbering{gooble}
+
+\printglossary[style=altlist]
+\printglossary[type=\acronymtype]
+%\printglossaries
+
+%\bibliographystyle{plain}
+%\bibliographystyle{alpha}
+
+\printbibliography
+\varclearpage
+
 %\input{danksagung}
 \end{document}

@@ -1,3 +1,6 @@
+*.acn
+*.acr
+*.alg
 *.aux
 *.backup
 *.bbl
@@ -6,6 +9,10 @@
 *.bib.bak
 *.fdb_latexmk
 *.fls
+*.glg
+*.glo
+*.gls
+*.ist
 *.kilepr
 *.latexmain
 *.log
