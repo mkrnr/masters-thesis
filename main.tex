@@ -67,13 +67,21 @@ Distant Supervision}
 \secondreviewer{Ren\'e Pickhardt}
 \secondreviewerinfo{Institute for Web Science and Technologies}
 
-% load the different glossaries
+% load globally defined glossaries
 \loadglsentries{/home/martin/glossaries/mathematics/probability-theory/graphical-models/glossary.tex}
 \loadglsentries{/home/martin/glossaries/mathematics/probability-theory/glossary.tex}
 \loadglsentries{/home/martin/glossaries/mathematics/graph-theory/glossary.tex}
 \loadglsentries{/home/martin/glossaries/mathematics/glossary.tex}
 
+% load local glossary
+\loadglsentries{frontbackmatter/glossary.tex}
+
+% load local acronyms
 \loadglsentries{frontbackmatter/acronyms.tex}
+
+
+% use italics for the first use of a glossary term
+\defglsdisplayfirst[\glsdefaulttype]{\textit{#1}}
 
 \makeglossaries
 
@@ -105,6 +113,9 @@ Distant Supervision}
 \input{chapters/introduction}
 \varclearpage
 \input{chapters/related-work}
+\varclearpage
+
+\input{chapters/distant-supervision}
 \varclearpage
 
 

@@ -1,20 +1,19 @@
 \chapter{Related Work}\label{cha:related-work}
 In this chapter we will give an overview of the related work in the area of information extraction from research papers.
-This will lead us to the statistical modeling method of \glspl{crf}.
-We will also survey distant supervision\todo{add gls} as a method for generating training data of labeled reference strings.
-We will also discuss relevant literature for evaluating reference string extraction.\\
+We will also survey \gls{distant supervision} as a method for generating training data of labeled reference strings.\\
 
 There has been a large body of research on information extraction from research papers and in the following we discuss a number of examples for such research.
+
+\citet{giles1998citeseer} propose one of the first autonomous citation indexing systems called \emph{CiteSeer}.
+It converts papers that are extracted from the World Wide Web to text, extracts the references and the context in which they are made in the body of the paper, and stores the information in a database.
+Yet, the extraction happens based on simple heuristics which results in a relatively low accuracy compared to more advanced approaches.
+In an evaluation of 5,093 documents related to ``neural networks'', 80.2\% of the titles, 82.1\% of the authors, and 44.2\% of the page numbers were extracted correctly from the retrieved references \cite{giles1998citeseer}.
 
 In order to simplify the creation of personal digital libraries, \citet{marinai2009metadata} proposes a software that combines \gls{pdf} parsing, low level document image processing, and layout analysis.
 First, text blocks of the research paper are segmented and annotated with layout information such as the position on the page and the width and height of the text block.
 Then, a \gls{mlp} classifier is applied on the annotated text blocks in order to extract the title and authors of the research paper.
 Based on this pair of title and authors, additional information about the paper is extracted from the DBLP\footnote{\url{http://dblp.uni-trier.de/}} computer science bibliography.
 Evaluated on 80 papers, the approach of learning from layout information resulted in successfully extracting 95\% of the titles and, by integrating information from DBLP, 73.58\% of the authors.
-
-\citet{dejean2005structuring} aim to extract information about a research papers' structure from its \gls{toc}.
-The approach is based on general properties of the \gls{toc} such as the contiguity, textual similarity, and ordering of the references in relation to sections in the paper.
-The evaluation showed very high precision an recall for both the \gls{toc} and link extraction \citep{dejean2005structuring}.
 
 \citet{powley2007evidence} address both citation extraction and citation-reference matching in research papers.
 For the citation extraction, they achieved a very high precision (0.9988) and recall (0.9678) by identifying pairs of year and author surnames in the text.
@@ -40,10 +39,24 @@ Other regular expressions were used to identify a section heading that ends the 
 The content of the extracted reference block was separated into reference strings with another set of regular expressions that search for makers like ``[1]'', ``[PM04]'', or ``1.'' at the beginning of the lines.
 If such markers were not found, other heuristics like author names at the beginning of the line, punctuation at the end of the line, and the length of the line were used.
 This approach was sufficient for the considered use cases in computer science and health sciences \citep{councill2008parscit,groza2012reference}.
-\citet{peng2004accurate} did not retrieve reference strings from research papers.\\
+Other related studies such as the one by \citet{peng2004accurate} did not retrieve reference strings from research papers but used a preprocessed data set containing reference strings .\\
+
+\citet{mintz2009distant} propose the paradigm of \gls{distant supervision} for relation extraction to avoid the weaknesses of supervised, unsupervised, and bootstrap learning.
+They argue that supervised learning can only be done with small data sets since labeling data manually is expensive.
+Purely unsupervised information extraction on the other hand may result in findings that are unrelated to a particular knowledge base \citep{mintz2009distant}.
+The third approach, bootstrap learning on a small number of seed instances, is said to often suffer from low precision and semantic drift \citep{mintz2009distant}.
+By using an external source of information for the supervision, \gls{distant supervision} is able to train on large amounts of data without loosing the focus on the relevant knowledge base \citep{mintz2009distant}.
+In their use case of relation extraction, \citet{mintz2009distant} use the semantic database \emph{Freebase} \citep{bollacker2008freebase} for the \gls{distant supervision}.
+The assumption is that if a sentence contains a pair of entities that are part of a Freebase relation, it is likely to express that relation in some way \citep{mintz2009distant}.
+A human evaluation of the extracted relations resulted in a 67.6\% precision.
+
+\citet{fan2015detecting} apply the concept of \gls{distant supervision} to the detection of tables in \gls{pdf} files. Their assumption is that tables in research papers have surrounding captions that conform to a limited number of official templates \citep{fan2015detecting}. Following this assumption, a training set is automatically generated by extracting the context around text lines that start with words like ``Table'' or ``Tab.''. The extracted context also includes further information about the coordinates in the file and the font style \citep{fan2015detecting}. Three canonical classifiers, namely \emph{Logistic Regression}, \emph{Support Vector Machines}, and \emph{Naive Bayes}, are built with the training set \citep{fan2015detecting}. Their performance was evaluated against a \emph{Heuristics} approach \citep{klampfl2014comparison} that was assumed to be state-of-the-art. The evaluation on two data sets showed that the approach by \citet{fan2015detecting} was superior to the Heuristics approach in all cases.\\
 
 In summary, several aspects of the information extraction from research papers can be achieved with a considerably good performance.
-In particular the segmentation of a given reference string into it's elements by using \glspl{crf} \citep{peng2004accurate,councill2008parscit,groza2012reference} as well as the combination of citation extraction and citation-reference matching \citep{powley2007evidence} show very promising results.
+Especially the segmentation of a given reference string into it's elements by using \glspl{crf} \citep{peng2004accurate,councill2008parscit,groza2012reference} as well as the combination of citation extraction and citation-reference matching \citep{powley2007evidence} show very promising results.
 Yet, the extraction of reference strings from research papers is currently done with regular expressions that search for a section in the document that is labeled ``References'', ``Bibliography'', or similar.
 In the case of research papers where the reference strings are listed in the footnotes on the page where they are referenced to, this approach is not suitable.
-Instead of creating another set of regular expressions, we will discuss in the following chapters how \glspl{crf} can be used to correctly label strings in a paper as reference strings.
+Instead of creating another set of regular expressions to cover these cases, we will discuss in the following chapters how \glspl{crf} can be used to correctly label strings in a paper as reference strings.
+
+\Gls{distant supervision} is a promising approach that allows the reduction of labeling costs by including external sources of information during the generation of training data sets.
+In the following chapter we will discuss how \gls{distant supervision} can be applied on our scenario of extracting reference strings from research papers.
