@@ -1,0 +1,53 @@
+\chapter{Conditional Random Fields}\label{cha:crfs}
+
+As we discussed in the previous chapter, \glspl{crf} are widely used in the related work for learning probabilistic models on given data.
+In this chapter we give an introduction to this framework.
+First we provide a background in probability theory and graphical models.
+In addition to relevant definitions we will use a simplified example that is based on the extraction of author information from reference strings in research papers.\\
+
+
+\section{Probability Theory}\label{sec:probability-theory}
+Numerous concepts in probability theory are crucial for an understanding of \glspl{crf}.
+The notion of \glspl{probability distribution} is one such concept.
+A \gls{probability distribution} $P$ is defined over $(\glssymbol{outcome space},\glssymbol{measurable set})$ where \glssymbol{outcome space} is the \gls{outcome space} and \glssymbol{measurable set} is a \gls{measurable set} of \glspl{event} \citep{koller2009probabilistic}.
+$P$ describes a mapping from events in \glssymbol{measurable set} to real values according to the following rules \citep{koller2009probabilistic}:
+\begin{itemize}
+  \item $P(\alpha)\geq 0 $ for all $ \alpha \in S$.
+  \item $P(\glssymbol{outcome space})=1$.
+  \item If $\alpha,\beta\in \glssymbol{outcome space}$ and $\alpha\cap\beta = \emptyset$, then $P(\alpha\cup\beta)=P(\alpha)+P(\beta)$.
+\end{itemize}
+
+In our example of author information extraction we can define \glssymbol{outcome space} as the set of all possible words that can appear in a specific position in a paper.
+The elements of \glssymbol{measurable set} are subsets
+
+% author example
+
+Based on the idea of \glspl{probability distribution}, a \gls{random variable} is a \gls{function} that associates with each outcome in \glssymbol{outcome space} a value.
+% set of random variables
+% Val(X)
+
+% author example
+
+% conditional probability
+
+% author example
+
+% joint distribution
+% marginal distribution
+% conditional probability distribution
+
+% author example
+
+% independence
+% conditional independence
+
+% author example
+
+% canonical outcome space
+% probability query
+
+
+\section{Graphical Models}\label{sec:graphical-models}
+
+% observed variable?
+% target variable?

@@ -47,7 +47,9 @@ urlcolor=blue]{hyperref}
 \usepackage{scrhack}
 \usepackage[style=alphabetic,hyperref=true,backref=true,natbib=true,abbreviate=false]{biblatex}
 
-
+\clubpenalty10000
+\widowpenalty10000
+\displaywidowpenalty=10000
 
 \newcommand{\itodo}[1]{\todo[inline]{#1}}
 
@@ -113,6 +115,9 @@ Distant Supervision}
 \input{chapters/introduction}
 \varclearpage
 \input{chapters/related-work}
+\varclearpage
+
+\input{chapters/crfs}
 \varclearpage
 
 \input{chapters/distant-supervision}
