@@ -2,10 +2,10 @@
 
 As we discussed in the previous chapter, \glspl{crf} are widely used in the related work for learning probabilistic models on given data.
 In this chapter we give an introduction to this framework.
-First we provide a background in probability theory and graphical models.
+First we provide an overview of relevant concepts in probability theory, graph theory, and graphical models.
 In addition to relevant definitions we will use a simplified example (see \todo{ref to Appendix}) that is based on the extraction of author information from reference strings in research papers.
 Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models.
-In the last section of this chapter we will discuss the application of \gls{crf} on entity recognition on which we will further expand in \todo{add ref}.\\
+In the last section of this chapter we will discuss the application of \gls{crf} on entity recognition.\\
 
 
 \section{Probability Theory}\label{sec:probability-theory}
@@ -29,24 +29,24 @@ Event $secondCapitalized$ contains all word sequences in which the second word o
 $P$ now assigns all events in \glssymbol{measurable set} a probability.
 Given the values in \todo{add ref}, $P(firstPeriod)$ is $XXX$ and $P(secondNotCapitalized)$ is $XXX$.\\
 
-Based on the idea of \glspl{probability distribution}, a \gls{random variable} is a \gls{function} that associates with each outcome in \glssymbol{outcome space} a value \cite{koller2009probabilistic}.
-A set of \glspl{random variable} is denoted with bold capital letters and assignments of values to the \glspl{random variable} in such sets are denoted with bold lowercase letters \cite{koller2009probabilistic}.
+Based on the idea of \glspl{probability distribution}, a \gls{random variable} is a \gls{function} that associates with each outcome in \glssymbol{outcome space} a value~\cite{koller2009probabilistic}.
+A set of \glspl{random variable} is denoted with bold capital letters and assignments of values to the \glspl{random variable} in such sets are denoted with bold lowercase letters~\cite{koller2009probabilistic}.
 In addition, $Val(X)$ is the set of values that $X$ can take.
-Given a random variable $X$, $P(X)$ is the distribution over events that are described using $X$ \cite{koller2009probabilistic}.
+Given a \gls{random variable} $X$, $P(X)$ is the distribution over \glspl{event} that are described using $X$~\cite{koller2009probabilistic}.
 It is referred to as the \gls{marginal distribution} over $X$.
-Given a set of \glspl{random variable} $\bm{X}$, $P(\bm{X})$ is called \gls{joint distribution} and assigns each \gls{full assignment} to $\bm{X}$ a probability \cite{koller2009probabilistic}.
-A \gls{full assignment} $\xi$ assigns to every variable in $\bm{X}$ a value and thereby $\xi\in Val(\bm{X})$.
+Given a set of \glspl{random variable} $\bm{X}$, $P(\bm{X})$ is called \gls{joint distribution} and assigns each \gls{full assignment} to $\bm{X}$ a probability~\cite{koller2009probabilistic}.
+A \gls{full assignment} $\xi$ assigns to every \gls{random variable} in $\bm{X}$ a value and thereby $\xi\in Val(\bm{X})$.
 Any \gls{event} that is described using $\bm{X}$ must be a union of events that correspond to \glspl{full assignment} to $\bm{X}$.
 This gives us a \gls{canonical outcome space} where each outcome is a joint assignment to the \glspl{random variable} in $\bm{X}$.
 
-Following our example we define a \gls{random variable} $Y$ as the function that associates with the first word in a sequence whether or not it end with a period.
+Following our example we define a \gls{random variable} $Y$ as the \gls{function} that associates with the first word in a sequence whether or not it end with a period.
 Thereby, the \gls{event} $firstPeriod$ can now also be denoted with $Y = period$ and $firstNotPeriod$ with $Y = notPeriod$ resulting in $Val(Y)=\{period, notPeriod\}$.
 Consequently, $P(firstPeriod)=P(Y=period)$ and $P(firstNotPeriod)=P(Y=period)$.
 $X$ is defined as the function that associates with the second word in a sequence whether or not it is capitalized with $Val(X)=\{capitalized, notCapitalized\}$.
 Given $X$ and $Y$, we can build the \gls{joint distribution} $P(X,Y)$.
 Using the values from \todo{ref}, $P(X=capitalized,Y=period)=XXX$ and $P(X=capitalized,Y=notPeriod)=XXX$.\\
 
-The \gls{conditional probability} of an event $\alpha$ given $\beta$ with $P(\beta)>0$ is defined as \cite{koller2009probabilistic}:
+The \gls{conditional probability} of an event $\alpha$ given $\beta$ with $P(\beta)>0$ is defined as~\cite{koller2009probabilistic}:
 
 \begin{equation}
 P(\alpha|\beta) = \frac{P(\alpha\cap\beta)}{P(\beta)}
@@ -57,15 +57,20 @@ This definition can be extended to \glspl{random variable}.
 Given that all assignments in $Y$ are non-zero, the \gls{conditional probability distribution} $P(X|Y)$ assigns each value $Y$ a probability over values of $X$ using the \gls{conditional probability}.
 This can also be extended to sets of \glspl{random variable}.
 
-With our example values from \todo{ref}, $P(X=capitalized\ |\ Y=period)=xxx$ and $P(X=capitalized\ |\ Y=notPeriod)=xxx$.
+With our example values from \todo{ref}, $P(X=capitalized\ |\ Y=period)=xxx$ and $P(X=capitalized\ |\ Y=notPeriod)=xxx$.\\
 
-% independence
-% conditional independence
+Another relevant concept is the notion of \gls{independence}.
+An \gls{event} $\alpha$ is \glslink{independence}{independent} of \gls{event} $\beta$ in $P$ if $P(\alpha\mid\beta)=P(\alpha)$ or if $P(\beta)=0$~\cite{koller2009probabilistic}.
+The \gls{independence} of $\alpha$ and $\beta$ is denoted with $P\models(\alpha\perp\beta)$.
+Two \glspl{event} can also be \glslink{independence}{independent} given a third \gls{event}, called \gls{conditional independence}:
+$\alpha$ is \glslink{conditional independence}{conditionally independent} of \gls{event} $\beta$ given \gls{event} $\gamma$ in $P$ if $P(\alpha\mid\beta\cap\gamma)=P(\alpha\mid\gamma)$ or if $P(\beta\cap\gamma)=0$~\cite{koller2009probabilistic}.
+\Gls{conditional independence} is denoted with $P\models(\alpha\perp\beta\mid\gamma)$.
 
-% author example
+\itodo{add example for independence and conditional independence}
 
-% probability query
+\itodo{probability query}
 
+\section{Graph Theory}\label{sec:graph-theory}
 
 \section{Graphical Models}\label{sec:graphical-models}
 
