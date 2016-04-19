@@ -4,11 +4,11 @@ As we discussed in the previous chapter, \glspl{crf} are widely used in the rela
 In this chapter we give an introduction to this framework.
 First we provide an overview of relevant concepts in probability theory, graph theory, and graphical models.
 In addition to relevant definitions we will use a simplified example (see \todo{ref to Appendix}) that is based on the extraction of author information from reference strings in research papers.
-Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models.
-In the last section of this chapter we will discuss the application of \gls{crf} on entity recognition.\\
+Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models for the task of entity recognition.\\
 
 
-\section{Probability Theory}\label{sec:probability-theory}
+\section{Foundations}\label{sec:foundations}
+\subsection{Probability Theory}\label{subsec:probability-theory}
 Several concepts from probability theory are crucial for an understanding of \glspl{crf}.
 The notion of \glspl{probability distribution} is one such concept.
 A \gls{probability distribution} $P$ is defined over $(\glssymbol{outcome space},\glssymbol{measurable set})$ where \glssymbol{outcome space} is the \gls{outcome space} and \glssymbol{measurable set} is a \gls{measurable set} of \glspl{event} \citep{koller2009probabilistic}.
@@ -70,9 +70,17 @@ $\alpha$ is \glslink{conditional independence}{conditionally independent} of \gl
 
 \itodo{probability query}
 
-\section{Graph Theory}\label{sec:graph-theory}
+\subsection{Graph Theory}\label{subsec:graph-theory}
 
-\section{Graphical Models}\label{sec:graphical-models}
+%TODO definition graphs, nodes, edges
+
+%TODO directed vs. undirected graphs
+
+
+\subsection{Graphical Models}\label{subsec:graphical-models}
 
 % observed variable?
 % target variable?
+\section{Definition of CRFs}\label{sec:definition-crfs}
+\section{Entity Recognition using CRFs}\label{sec:er-using-crfs}
+

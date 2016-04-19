@@ -1,22 +1,19 @@
 \chapter{Distant Supervision}\label{cha:distant-supervision}
 
-% TODO Intro sentence
-
-There are two ways to obtain a labeled data set for training the extraction of reference strings.
-The first is to manually label data.
+A common approach to learning \glspl{crf} is to use manually labeled data.
 This results in an accurate labeling in most cases but is expensive and can thereby only be performed on small data sets.
 The approach of \gls{distant supervision} that we discussed in \cref{cha:related-work} allows the automated labeling large data sets by using heuristics and external sources of information.
-In this chapter we will discuss how \gls{distant supervision} was used in the past and how it can be applied on the task of extracting reference strings.\\
+In this chapter we will first summarize how \gls{distant supervision} was used in the past. Based on this we will describe a way of using \gls{distant supervision} on the task of labeling authors in research papers. Finally we will discuss how this distantly supervised data set can be used as a training set for \glspl{crf}.\\
 
+\section{Past Usages of Distant Supervision}
 \Gls{distant supervision} was first applied on relation extraction by \citet{mintz2009distant}.
 They used \gls{freebase} as a knowledge base for known relations in order to train their model.
+
 Instead of using a knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables.
 They considered everything around a line starting with ``Table'' or ``Tab.'' potentially as a potential table.
 
 
 
-% TODO Discussing the term itself (in related work section?!)
+\section{Author Extraction using Distant Supervision}
 
-% TODO Explain options of how to apply it to our use case
-
-%
+\section{Distant Supervision and CRFs}
