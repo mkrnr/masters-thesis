@@ -5,15 +5,14 @@ This results in an accurate labeling in most cases but is expensive and can ther
 The approach of \gls{distant supervision} that we discussed in \cref{cha:related-work} allows the automated labeling large data sets by using heuristics and external sources of information.
 In this chapter we will first summarize how \gls{distant supervision} was used in the past. Based on this we will describe a way of using \gls{distant supervision} on the task of labeling authors in research papers. Finally we will discuss how this distantly supervised data set can be used as a training set for \glspl{crf}.\\
 
-\section{Past Usages of Distant Supervision}
-\Gls{distant supervision} was first applied on relation extraction by \citet{mintz2009distant}.
-They used \gls{freebase} as a knowledge base for known relations in order to train their model.
+% TODO part of related work
+%\section{Past Usages of Distant Supervision}
+%\Gls{distant supervision} was first applied on relation extraction by \citet{mintz2009distant}.
+%They used \gls{freebase} as a knowledge base for known relations in order to train their model.
+%
+%Instead of using a knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables.
+%They considered everything around a line starting with ``Table'' or ``Tab.'' potentially as a potential table.
 
-Instead of using a knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables.
-They considered everything around a line starting with ``Table'' or ``Tab.'' potentially as a potential table.
+\section{Distant Supervision in General}
 
-
-
-\section{Author Extraction using Distant Supervision}
-
-\section{Distant Supervision and CRFs}
+\section{Training CRFs using Distant Supervision}

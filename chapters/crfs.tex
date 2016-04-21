@@ -73,14 +73,45 @@ $\alpha$ is \glslink{conditional independence}{conditionally independent} of \gl
 \subsection{Graph Theory}\label{subsec:graph-theory}
 
 %TODO definition graphs, nodes, edges
+This subsection will give brief overview of concepts from graph theory that are needed for describing \glspl{crf} and graphical models in general.\\
 
-%TODO directed vs. undirected graphs
+% TODO add explanation for converting directed graph to undirected by ignoring the directions of the edges?
+A \gls{graph} $\mathcal{K}$ consists of a set of \glspl{node} (also called vertices) $\mathcal{V}$ and a set of \glspl{edge} $\mathcal{E}$.
+In a directed \gls{graph}, a pair of \glspl{node} $(v_i,v_j)$ can be connected by directed \glspl{edge} $v_i\to v_j$.
+We write $v_i\rightleftharpoons v_j$ to denote that there is some directed edge between $v_i$ and $v_j$.
+The \glspl{node} in an undirected graph are connected by undirected \glspl{node} $v_i\undedge v_j$.
+In the following, directed \glspl{graph} are denoted with $\mathcal{G}$ and undirected \glspl{graph} with $\mathcal{H}$.
+% TODO about child and parent?
 
+Given a \gls{graph} $\mathcal{K} = (\mathcal{V},\mathcal{E})$ and $\mathcal{S}\in\mathcal{V}$, an induced \gls{subgraph} $\mathcal{K}[\mathcal{S}]$ is the \gls{graph} consisting of $(\mathcal{S},\mathcal{E'})$ where $\mathcal{E'}$ is the set of all \glspl{edge} between \glspl{node} in $\mathcal{S}$.
+In a complete \gls{subgraph}, every two \glspl{node} in $\mathcal{S}$ are connected by an \gls{edge}.
+% TODO add definition of clique?
 
-\subsection{Graphical Models}\label{subsec:graphical-models}
+\subsection{Probabilistic Graphical Models}\label{subsec:graphical-models}
+When encoding practical problems with \glspl{probability distribution}, an observation is that ``variables tend to interact only with a very few others''~\citep{koller2009probabilistic}.
+This makes it possible to represent such distributions as graphs in a tractable and transparent way, allowing domain experts to evaluate their properties~\citep{koller2009probabilistic}.
+\Glspl{probabilistic graphical model} are such representations.\\
+%TODO edge part more precise
 
-% observed variable?
-% target variable?
+In a \gls{probabilistic graphical model}, the set of \glspl{random variable} $\mathcal{X}=\{X_1,\dots,X_n\}$ of a distribution are modeled as \glspl{node} and \glspl{edge} denote a ``direct probabilistic interaction''~\citep{koller2009probabilistic} between the two neighboring nodes.
+There are two fundamental groups of graphical models, based on the type of edge that are used:
+
+\Glspl{bayesian network} are encoded with directed \glspl{edge} to build a directed acyclic graph~\citep{koller2009probabilistic}.
+An \gls{edge} $X_i\to X_j$ thereby models a direct influence of $X_i$ on $X_j$.
+Referring to the example from \Cref{subsec:probability-theory}, $X\to Y$ denotes the influence of the first word in a sequence ending with a period on the second word being capitalized.
+Using the chain rule from \todo{add chain rule} it is possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into a set of \glspl{prior distribution} and \glspl{cpd} by considering the direct influences between the \glspl{node}.
+See \todo{add} for such a separation of the \gls{joint distribution} $P(X,Y)$ of our example.
+
+\Glspl{markov network} on the other hand use undirected \glspl{edge} to model a symmetrical influence between two \glspl{random variable}.
+Because of this it is not possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into \glspl{prior distribution} and \glspl{cpd}.
+Instead, $P(\mathcal{X})$ is represented as the product of \glspl{factor}.
+Given a set of \glspl{random variable} $\bm{D}$, a \gls{factor} $\phi$ is a function from $Val(\bm{D})$ to $\realnumbers$ and it is called nonnegative if all its entries are nonnegative~\citep{koller2009probabilistic}. $\bm{D}$ is called the \glslink{factor scope}{scope} of $\phi$, denoted by $Scope[\phi]$.
+For an example of a factor see \todo{add}.
+
+In the following chapters we will see that besides the encoding of practical distributions, \glspl{probabilistic graphical model} also support learning in a data-driven manner and allow effective inference.
+
 \section{Definition of CRFs}\label{sec:definition-crfs}
+% TODO observed & target variables
+
 \section{Entity Recognition using CRFs}\label{sec:er-using-crfs}
 

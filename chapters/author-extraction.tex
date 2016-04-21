@@ -1,0 +1,18 @@
+\chapter{Author Extraction}\label{cha:author-extraction}
+
+In the following we will discuss the different steps during the author extraction process.
+
+\section{Preprocessing}\label{sec:ae-preprocessing}
+
+The corpus that was used in our study consists of \todo{number} research papers that are accessible via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)} as \gls{pdf} documents.
+Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
+Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed April~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
+This is done by also taking into account the formatting of the document, for example when the research paper contains two text columns.
+\itodo{statistics about performance}
+\itodo{further preprocessing, e.g.\ scanned pdfs}
+
+\section{Generating Training Sets with Distant Supervision}\label{sec:ae-distant-supervision}
+
+
+\section{Training CRFs}\label{sec:ae-training-crfs}
+
