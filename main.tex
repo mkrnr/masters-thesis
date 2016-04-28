@@ -89,6 +89,10 @@ Distant Supervision}
 
 \addbibresource{frontbackmatter/bibliography.bib}
 
+\DefineBibliographyStrings{english}{%
+  bibliography = {References},
+}
+
 \begin{document}
 \pagenumbering{roman}
 
@@ -128,6 +132,9 @@ Distant Supervision}
 \input{chapters/author-extraction}
 \varclearpage{}
 
+\input{chapters/conclusions-and-future-work}
+\varclearpage{}
+
 %\appendix
 %\appendixpage
 %\addappheadtotoc
@@ -142,7 +149,7 @@ Distant Supervision}
 %\bibliographystyle{plain}
 %\bibliographystyle{alpha}
 
-\printbibliography{}
+\printbibliography[heading=bibintoc]
 \varclearpage{}
 
 

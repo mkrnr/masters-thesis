@@ -6,7 +6,6 @@ First we provide an overview of relevant concepts in probability theory, graph t
 In addition to relevant definitions we will use a simplified example (see \todo{ref to Appendix}) that is based on the extraction of author information from reference strings in research papers.
 Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models for the task of entity recognition.\\
 
-
 \section{Foundations}\label{sec:foundations}
 \subsection{Probability Theory}\label{subsec:probability-theory}
 Several concepts from probability theory are crucial for an understanding of \glspl{crf}.
@@ -49,15 +48,15 @@ Using the values from \todo{ref}, $P(X=capitalized,Y=period)=XXX$ and $P(X=capit
 The \gls{conditional probability} of an event $\alpha$ given $\beta$ with $P(\beta)>0$ is defined as~\cite{koller2009probabilistic}:
 
 \begin{equation}
-P(\alpha|\beta) = \frac{P(\alpha\cap\beta)}{P(\beta)}
+P(\alpha\mid\beta) = \frac{P(\alpha\cap\beta)}{P(\beta)}
 \label{equ:conditional-probability}
 \end{equation}
 
 This definition can be extended to \glspl{random variable}.
-Given that all assignments in $Y$ are non-zero, the \gls{conditional probability distribution} $P(X|Y)$ assigns each value $Y$ a probability over values of $X$ using the \gls{conditional probability}.
+Given that all assignments in $Y$ are non-zero, the \gls{conditional probability distribution} $P(X\mid Y)$ assigns each value $Y$ a probability over values of $X$ using the \gls{conditional probability}.
 This can also be extended to sets of \glspl{random variable}.
 
-With our example values from \todo{ref}, $P(X=capitalized\ |\ Y=period)=xxx$ and $P(X=capitalized\ |\ Y=notPeriod)=xxx$.\\
+With our example values from \todo{ref}, $P(X=capitalized\ \mid\ Y=period)=xxx$ and $P(X=capitalized\mid Y=notPeriod)=xxx$.\\
 
 Another relevant concept is the notion of \gls{independence}.
 An \gls{event} $\alpha$ is \glslink{independence}{independent} of \gls{event} $\beta$ in $P$ if $P(\alpha\mid\beta)=P(\alpha)$ or if $P(\beta)=0$~\cite{koller2009probabilistic}.
@@ -96,22 +95,53 @@ This makes it possible to represent such distributions as graphs in a tractable 
 In a \gls{probabilistic graphical model}, the set of \glspl{random variable} $\mathcal{X}=\{X_1,\dots,X_n\}$ of a distribution are modeled as \glspl{node} and \glspl{edge} denote a ``direct probabilistic interaction''~\citep{koller2009probabilistic} between the two neighboring nodes.
 There are two fundamental groups of graphical models, based on the type of edge that are used:
 
-\Glspl{bayesian network} are encoded with directed \glspl{edge} to build a directed acyclic graph~\citep{koller2009probabilistic}.
+\Glspl{bayesian network}, usually denoted with $\mathcal{G}$, are encoded with directed \glspl{edge} to build a directed acyclic graph~\citep{koller2009probabilistic}.
 An \gls{edge} $X_i\to X_j$ thereby models a direct influence of $X_i$ on $X_j$.
 Referring to the example from \Cref{subsec:probability-theory}, $X\to Y$ denotes the influence of the first word in a sequence ending with a period on the second word being capitalized.
 Using the chain rule from \todo{add chain rule} it is possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into a set of \glspl{prior distribution} and \glspl{cpd} by considering the direct influences between the \glspl{node}.
 See \todo{add} for such a separation of the \gls{joint distribution} $P(X,Y)$ of our example.
 
-\Glspl{markov network} on the other hand use undirected \glspl{edge} to model a symmetrical influence between two \glspl{random variable}.
+\Glspl{markov network}, usually denoted with $\mathcal{H}$,  on the other hand use undirected \glspl{edge} to model a symmetrical influence between two \glspl{random variable}.
 Because of this it is not possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into \glspl{prior distribution} and \glspl{cpd}.
 Instead, $P(\mathcal{X})$ is represented as the product of \glspl{factor}.
-Given a set of \glspl{random variable} $\bm{D}$, a \gls{factor} $\phi$ is a function from $Val(\bm{D})$ to $\realnumbers$ and it is called nonnegative if all its entries are nonnegative~\citep{koller2009probabilistic}. $\bm{D}$ is called the \glslink{factor scope}{scope} of $\phi$, denoted by $Scope[\phi]$.
+Given a set of \glspl{random variable} $\bm{D}$, a \gls{factor} $\phi$ is a function from $Val(\bm{D})$ to $\realnumbers$ and it is called nonnegative if all its entries are nonnegative~\citep{koller2009probabilistic}.
+$\bm{D}$ is called the \glslink{factor scope}{scope} of $\phi$, denoted by $Scope[\phi]$.
 For an example of a factor see \todo{add}.
+In order to represent a \gls{markov network} $\mathcal{H}$ with a set of \glspl{factor} $\Phi$, we assign a \gls{factor} $\phi_i(\bm{D}_i)$ to each set of nodes $\bm{D}_i$ which form a complete a complete \gls{subgraph} in $\mathcal{H}$~\citep{koller2009probabilistic}.
+In this case we say that $\Phi$ factorizes over $\mathcal{H}$.
 
-In the following chapters we will see that besides the encoding of practical distributions, \glspl{probabilistic graphical model} also support learning in a data-driven manner and allow effective inference.
 
-\section{Definition of CRFs}\label{sec:definition-crfs}
-% TODO observed & target variables
+In the following we will see that besides the encoding of practical distributions, \glspl{probabilistic graphical model} also support learning in a data-driven manner and allow effective inference.
+
+\section{Encoding of CRFs}\label{sec:definition-crfs}
+A specific kind of \glspl{probabilistic graphical model} are \acrfullpl{crf}.
+They were first defined by \citet{lafferty2001conditional} \dots\\
+
+\Glspl{crf} encode the \gls{conditional probability distribution} $P(\bm{Y}\mid\bm{X})$ where $\bm{Y}$ is a set of \glspl{target variable} and $\bm{X}$ is a set of \glspl{observed variable} with $\bm{X}\cap\bm{Y}=\emptyset$.
+A \gls{crf} is constructed using a \gls{markov network} $\mathcal{H}$ where the nodes correspond to $\bm{Y}\cup\bm{X}$ and the undirected edges model a symmetrical influence between the nodes~\citep{koller2009probabilistic}.
+Given a set of \glspl{factor} $\Phi=\{\phi_1,\dots\phi_m\}$ that factorize over $\mathcal{H}$, a \gls{crf} defines $P(\bm{Y}\mid\bm{X})$ as~\citep{koller2009probabilistic}:
+\begin{equation}
+  \label{equ:crf}
+  \begin{split}
+    P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X}) \\
+    \tilde{P}(\bm{Y},\bm{X}) &= \prod_{i=1}^{m}\phi_i(\bm{D}_i) \\
+    Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
+  \end{split}
+\end{equation}
+
+Here, $Z(\bm{X})$ is a normalizing constant, also referred to as partitioning function~\citep{koller2009probabilistic}.\\
+
+A more concrete example for a \gls{crf} can be derived from our author example\dots
+
+%TODO log-linear model as encoding of set of factors?
+
+\section{Inference of CRFs}\label{sec:inference-crfs}
+
+%exact inference (variable elimination/conditioning?) vs approximate inference (message-passing/optimization problem/particle-based methods?)
+
+\section{Learning of CRFs}\label{sec:learning-crfs}
+
+%TODO see chapter 20 in PGM book
 
 \section{Entity Recognition using CRFs}\label{sec:er-using-crfs}
 

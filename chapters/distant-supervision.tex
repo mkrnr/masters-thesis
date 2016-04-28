@@ -14,5 +14,30 @@ In this chapter we will first summarize how \gls{distant supervision} was used i
 %They considered everything around a line starting with ``Table'' or ``Tab.'' potentially as a potential table.
 
 \section{Distant Supervision in General}
+\section{Distantly Supervised Author Tagging}
 
-\section{Training CRFs using Distant Supervision}
+In the following we will describe how distant supervision can be used to automatically tag author names in research papers.
+For this we first extract author names from a structured data source.
+Using this information we generate a number of variations to write the author names, for example with abbreviated first names.
+This list of variations of author names then gets matched to the extracted text from our research papers.
+For this we will discuss the Aho-Corasick algorithm for efficient dictionary-matching.
+%We will later use the matched data set to train \glspl{crf} (see \todo{ref}).
+
+\subsection{Author Name Extraction}
+
+In order to apply distant supervision to the task of labeling author names, an external source of information is needed.
+For our evaluation we use two different sources.\\
+
+The first one is based on the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)} which is published by the German National Library in cooperation with other library networks and institutions.
+The \gls{gnd}\todo{full acr?} contains information on persons, corporate bodies, conferences and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
+\itodo{which persons are included, statistics}
+We will refer to the second data set as the \gls{gnd} data set.\\
+
+The second one was extracted from the Sociological Abstracts Module\todo{true?} which is part of the \gls{csa} Title Lists\footnote{\url{http://www.proquest.com/customer-care/title-lists/Title-Lists-CSA.html} (accessed April~27,~2016)} published by the company ProQuest\footnote{\url{http://www.proquest.com/about/} (accessed April~27,~2016)}.
+\itodo{statistics, refernces}
+We will refer to the second data set as the \gls{csa} data set.
+
+\subsection{Author Name Matching}
+
+
+
