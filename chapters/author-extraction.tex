@@ -5,13 +5,55 @@ In the following we will discuss the different steps during the author extractio
 \section{Preprocessing}\label{sec:ae-preprocessing}
 
 The corpus that was used in our study consists of \todo{number} research papers that are accessible via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)} as \gls{pdf} documents.
+
 Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
 Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed April~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
 This is done by also taking into account the formatting of the document, for example when the research paper contains two text columns.
 \itodo{statistics about performance}
-\itodo{further preprocessing, e.g.\ scanned pdfs}
+\itodo{reference section extraction using parscit}
 
 \section{Generating Training Sets with Distant Supervision}\label{sec:ae-distant-supervision}
+
+\subsection{Author Name Extraction}
+
+In order to apply distant supervision to the task of labeling author names, an external source of information is needed.
+For our evaluation we use two different sources.\\
+
+The first one is based on the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)} which is published by the German National Library in cooperation with other library networks and institutions.
+The \gls{gnd}\todo{full acr?} contains information on persons, corporate bodies, conferences and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
+\itodo{which persons are included, statistics}
+We will refer to the second data set as the \gls{gnd} data set.\\
+
+The second one was extracted from the Sociological Abstracts Module\todo{true?} which is part of the \gls{csa} Title Lists\footnote{\url{http://www.proquest.com/customer-care/title-lists/Title-Lists-CSA.html} (accessed April~27,~2016)} published by the company ProQuest\footnote{\url{http://www.proquest.com/about/} (accessed April~27,~2016)}.
+\itodo{statistics, refernces}
+We will refer to the second data set as the \gls{csa} data set.o
+
+
+\subsection{Author Name Matching}
+
+\itodo{variations of author names}
+A crucial step for generating the training sets is the matching of author names in the extracted lists to their occurrences in the extracted reference sections.
+This can be separated into two steps.
+Since author names can appear in a number of different formats, we first have to generate for every author in our extracted list a number of variations.
+\todo{ref} contains a list of variations that are generated to cover commonly used formats.
+\itodo{statistics}
+In the second step we have to search the generated variations in the extracted reference sections.
+Due to the potentially high number of both author names and reference sections, the execution of this step is crucial for fulfilling requirement \todo{add}.
+
+Before discussing an appropriate algorithm we first inspect the task in greater detail.
+The generated list of author name variations is a dictionary that has to be matched against a given reference string.
+An author name has a variable length of at least two words and reference strings can contain more than one author.
+In addition, there are several ways of listing authors in a reference.
+\todo{ref} shows several common variations.
+It is thereby not trivial to separate the authors in a given reference and query them against the list of variations.
+This makes it necessary to iterate over the reference string and simultaneously match for all variations in the dictionary.\\
+
+\citet{aho1975efficient} propose a string matching algorithm that allows a matching by performing only one iterating over the reference string.
+This algorithm, called \gls{aho-corasick algorithm}, uses a finite state machine that is generated from the dictionary entries to perform the matching.
+\itodo{explain state machine and its nodes and edges}
+\itodo{example}
+\itodo{statistics}
+
 
 
 \section{Training CRFs}\label{sec:ae-training-crfs}
