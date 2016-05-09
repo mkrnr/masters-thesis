@@ -17,12 +17,16 @@ This is done by also taking into account the formatting of the document, for exa
 \subsection{Author Name Extraction}
 
 In order to apply distant supervision to the task of labeling author names, an external source of information is needed.
-For our evaluation we use two different sources.\\
+For our evaluation we use two different sources.
+
+\bigskip
 
 The first one is based on the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)} which is published by the German National Library in cooperation with other library networks and institutions.
 The \gls{gnd}\todo{full acr?} contains information on persons, corporate bodies, conferences and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
 \itodo{which persons are included, statistics}
-We will refer to the second data set as the \gls{gnd} data set.\\
+We will refer to the second data set as the \gls{gnd} data set.
+
+\bigskip
 
 The second one was extracted from the Sociological Abstracts Module\todo{true?} which is part of the \gls{csa} Title Lists\footnote{\url{http://www.proquest.com/customer-care/title-lists/Title-Lists-CSA.html} (accessed April~27,~2016)} published by the company ProQuest\footnote{\url{http://www.proquest.com/about/} (accessed April~27,~2016)}.
 \itodo{statistics, refernces}
@@ -37,7 +41,9 @@ A crucial step for generating the training sets is the matching of author names 
 One approach is to generate a list of possible ways how author names appear in a reference string.
 A list of examples for such variations is shown in \todo{add}.
 The appearance of such variations then can be searched in the given reference strings.
-Later in this subsection we will discuss the \gls{aho-corasick algorithm} which allows an efficient string matching.\\
+Later in this subsection we will discuss the \gls{aho-corasick algorithm} which allows an efficient string matching.
+
+\bigskip
 
 Yet, such an approach has several disadvantages.
 First, generating a list of name variations as part of an efficient search algorithm can be expensive in terms of memory usage.
@@ -49,7 +55,9 @@ We will discuss this redundancy later in this subsection after introducing the a
 In addition to a \gls{fsm}, the \gls{commentz-walter algorithm} \citep{commentz1979string} requires the computation and storage of shift values based on the variations similar to the \gls{knuth-morris-pratt algorithm} \citep{knuth1977fast}.
 Generating and searching the variations of author names can thereby not be seen as a tractable approach for a high number of author names.
 A way of preventing the generation of redundant variations is to first search for the first names and last names separately.
-For example, \dots\todo{example}.\\
+For example, \dots\todo{example}.
+
+\bigskip
 
 \citet{aho1975efficient} propose an efficient string matching algorithm that allows a matching of first and last names in a reference string.
 This algorithm, called \gls{aho-corasick algorithm}, uses a \gls{fsm} that is generated from the dictionary entries to perform the matching.
@@ -63,7 +71,9 @@ The \gls{fsm} is constructed in the following way.
 In order to perform the matching in only one iteration and without adding additional information to the \gls{fsm}, we can not decide whether a match is a first name or last name.
 There are cases where a match can even be both a first name and a last name.
 Example for such names are ``Arnold'', ``Ernst'', or ``Friedrich''.
-We thereby tag a match with a generic ``name'' XML-tag and move this decision to the next step.\\
+We thereby tag a match with a generic ``name'' XML-tag and move this decision to the next step.
+
+\bigskip
 
 Given the reference strings where first names and last names are marked with a ``name'' tag, we now determine if a tagged name can be a first name, last name, or both.
 For this we use a map that contains as a key the existing names and as value an array containing two Booleans to signal the name type.

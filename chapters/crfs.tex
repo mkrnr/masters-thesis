@@ -4,7 +4,7 @@ As we discussed in the previous chapter, \glspl{crf} are widely used in the rela
 In this chapter we give an introduction to this framework.
 First we provide an overview of relevant concepts in probability theory, graph theory, and graphical models.
 In addition to relevant definitions we will use a simplified example (see \todo{ref to Appendix}) that is based on the extraction of author information from reference strings in research papers.
-Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models for the task of entity recognition.\\
+Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models for the task of entity recognition.
 
 \section{Foundations}\label{sec:foundations}
 \subsection{Probability Theory}\label{subsec:probability-theory}
@@ -26,7 +26,9 @@ Event $secondCapitalized$ contains all word sequences in which the second word o
 
 \glssymbol{measurable set} contains the four defined events and per definition also $\emptyset$ and $\Omega$.
 $P$ now assigns all events in \glssymbol{measurable set} a probability.
-Given the values in \todo{add ref}, $P(firstPeriod)$ is $XXX$ and $P(secondNotCapitalized)$ is $XXX$.\\
+Given the values in \todo{add ref}, $P(firstPeriod)$ is $XXX$ and $P(secondNotCapitalized)$ is $XXX$.
+
+\bigskip
 
 Based on the idea of \glspl{probability distribution}, a \gls{random variable} is a \gls{function} that associates with each outcome in \glssymbol{outcome space} a value~\cite{koller2009probabilistic}.
 A set of \glspl{random variable} is denoted with bold capital letters and assignments of values to the \glspl{random variable} in such sets are denoted with bold lowercase letters~\cite{koller2009probabilistic}.
@@ -43,7 +45,9 @@ Thereby, the \gls{event} $firstPeriod$ can now also be denoted with $Y = period$
 Consequently, $P(firstPeriod)=P(Y=period)$ and $P(firstNotPeriod)=P(Y=period)$.
 $X$ is defined as the function that associates with the second word in a sequence whether or not it is capitalized with $Val(X)=\{capitalized, notCapitalized\}$.
 Given $X$ and $Y$, we can build the \gls{joint distribution} $P(X,Y)$.
-Using the values from \todo{ref}, $P(X=capitalized,Y=period)=XXX$ and $P(X=capitalized,Y=notPeriod)=XXX$.\\
+Using the values from \todo{ref}, $P(X=capitalized,Y=period)=XXX$ and $P(X=capitalized,Y=notPeriod)=XXX$.
+
+\bigskip
 
 The \gls{conditional probability} of an event $\alpha$ given $\beta$ with $P(\beta)>0$ is defined as~\cite{koller2009probabilistic}:
 
@@ -56,7 +60,9 @@ This definition can be extended to \glspl{random variable}.
 Given that all assignments in $Y$ are non-zero, the \gls{conditional probability distribution} $P(X\mid Y)$ assigns each value $Y$ a probability over values of $X$ using the \gls{conditional probability}.
 This can also be extended to sets of \glspl{random variable}.
 
-With our example values from \todo{ref}, $P(X=capitalized\ \mid\ Y=period)=xxx$ and $P(X=capitalized\mid Y=notPeriod)=xxx$.\\
+With our example values from \todo{ref}, $P(X=capitalized\ \mid\ Y=period)=xxx$ and $P(X=capitalized\mid Y=notPeriod)=xxx$.
+
+\bigskip
 
 Another relevant concept is the notion of \gls{independence}.
 An \gls{event} $\alpha$ is \glslink{independence}{independent} of \gls{event} $\beta$ in $P$ if $P(\alpha\mid\beta)=P(\alpha)$ or if $P(\beta)=0$~\cite{koller2009probabilistic}.
@@ -72,7 +78,9 @@ $\alpha$ is \glslink{conditional independence}{conditionally independent} of \gl
 \subsection{Graph Theory}\label{subsec:graph-theory}
 
 %TODO definition graphs, nodes, edges
-This subsection will give brief overview of concepts from graph theory that are needed for describing \glspl{crf} and graphical models in general.\\
+This subsection will give brief overview of concepts from graph theory that are needed for describing \glspl{crf} and graphical models in general.
+
+\bigskip
 
 % TODO add explanation for converting directed graph to undirected by ignoring the directions of the edges?
 A \gls{graph} $\mathcal{K}$ consists of a set of \glspl{node} (also called vertices) $\mathcal{V}$ and a set of \glspl{edge} $\mathcal{E}$.
@@ -89,8 +97,10 @@ In a complete \gls{subgraph}, every two \glspl{node} in $\mathcal{S}$ are connec
 \subsection{Probabilistic Graphical Models}\label{subsec:graphical-models}
 When encoding practical problems with \glspl{probability distribution}, an observation is that ``variables tend to interact only with a very few others''~\citep{koller2009probabilistic}.
 This makes it possible to represent such distributions as graphs in a tractable and transparent way, allowing domain experts to evaluate their properties~\citep{koller2009probabilistic}.
-\Glspl{probabilistic graphical model} are such representations.\\
+\Glspl{probabilistic graphical model} are such representations.
 %TODO edge part more precise
+
+\bigskip
 
 In a \gls{probabilistic graphical model}, the set of \glspl{random variable} $\mathcal{X}=\{X_1,\dots,X_n\}$ of a distribution are modeled as \glspl{node} and \glspl{edge} denote a ``direct probabilistic interaction''~\citep{koller2009probabilistic} between the two neighboring nodes.
 There are two fundamental groups of graphical models, based on the type of edge that are used:
@@ -115,7 +125,9 @@ In the following we will see that besides the encoding of practical distribution
 
 \section{Encoding of CRFs}\label{sec:definition-crfs}
 A specific kind of \glspl{probabilistic graphical model} are \acrfullpl{crf}.
-They were first defined by \citet{lafferty2001conditional} \dots\\
+They were first defined by \citet{lafferty2001conditional} \dots
+
+\bigskip
 
 \Glspl{crf} encode the \gls{conditional probability distribution} $P(\bm{Y}\mid\bm{X})$ where $\bm{Y}$ is a set of \glspl{target variable} and $\bm{X}$ is a set of \glspl{observed variable} with $\bm{X}\cap\bm{Y}=\emptyset$.
 A \gls{crf} is constructed using a \gls{markov network} $\mathcal{H}$ where the nodes correspond to $\bm{Y}\cup\bm{X}$ and the undirected edges model a symmetrical influence between the nodes~\citep{koller2009probabilistic}.
@@ -129,7 +141,9 @@ Given a set of \glspl{factor} $\Phi=\{\phi_1,\dots\phi_m\}$ that factorize over 
   \end{split}
 \end{equation}
 
-Here, $Z(\bm{X})$ is a normalizing constant, also referred to as partitioning function~\citep{koller2009probabilistic}.\\
+Here, $Z(\bm{X})$ is a normalizing constant, also referred to as partitioning function~\citep{koller2009probabilistic}.
+
+\bigskip
 
 A more concrete example for a \gls{crf} can be derived from our author example\dots
 
