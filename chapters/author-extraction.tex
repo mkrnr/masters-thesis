@@ -54,10 +54,22 @@ Generating the \gls{fsm} that is used in the \gls{aho-corasick algorithm} would 
 We will discuss this redundancy later in this subsection after introducing the algorithm.
 In addition to a \gls{fsm}, the \gls{commentz-walter algorithm} \citep{commentz1979string} requires the computation and storage of shift values based on the variations similar to the \gls{knuth-morris-pratt algorithm} \citep{knuth1977fast}.
 Generating and searching the variations of author names can thereby not be seen as a tractable approach for a high number of author names.
-A way of preventing the generation of redundant variations is to first search for the first names and last names separately.
-For example, \dots\todo{example}.
 
 \bigskip
+
+Instead of generating all variations on how an author name can appear, an idea for more scalable approach is the following.
+First, we search for all known first names and first name variations as well as last names separately and label the occurrences in the text.
+Following this we iterate over the text and search for cases where two words appear next to each other and where one word is labeled as first name and the other is labeled as last name.
+We then check whether this name combination appears in our list of author names.
+
+%TODO decisions:
+% * first name = last name
+% * possible overlaps of author names
+
+%TODO statistics
+
+
+
 
 \citet{aho1975efficient} propose an efficient string matching algorithm that allows a matching of first and last names in a reference string.
 This algorithm, called \gls{aho-corasick algorithm}, uses a \gls{fsm} that is generated from the dictionary entries to perform the matching.
@@ -87,5 +99,5 @@ More concrete, the dictionary is a map containing the last names as key and a va
 
 
 
-\section{Training CRFs}\label{sec:ae-training-crfs}
+\section{Training \glsentryshortpl{crf}}\label{sec:ae-training-crfs}
 

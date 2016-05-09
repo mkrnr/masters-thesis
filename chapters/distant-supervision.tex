@@ -2,10 +2,9 @@
 
 A common approach to learning \glspl{crf} is to use manually labeled data.
 This results in an accurate labeling in most cases but is expensive and can thereby only be performed on small data sets.
-The approach of \gls{distant supervision} that we discussed in \cref{cha:related-work} allows the automated labeling large data sets by using heuristics and external sources of information.
-In this chapter we will first summarize how \gls{distant supervision} was used in the past. Based on this we will describe a way of using \gls{distant supervision} on the task of labeling authors in research papers. Finally we will discuss how this distantly supervised data set can be used as a training set for \glspl{crf}.
-
-\bigskip
+The approach of \gls{distant supervision} that we first discussed in \cref{cha:related-work} allows the automated labeling large data sets by using heuristics and external sources of information.
+In this chapter we will first have a closer look to past usages of \gls{distant supervision}.
+Following this we will discuss how \glspl{crf} can be trained using distantly supervised data sets.
 
 % TODO part of related work
 %\section{Past Usages of Distant Supervision}
@@ -15,12 +14,13 @@ In this chapter we will first summarize how \gls{distant supervision} was used i
 %Instead of using a knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables.
 %They considered everything around a line starting with ``Table'' or ``Tab.'' potentially as a potential table.
 
-\section{Distant Supervision in General}
-\section{Distantly Supervised Author Tagging}
+\section{Past Usages of Distant Supervision}
+As discussed in \Cref{cha:related-work}, \gls{distant supervision} was proposed by \citet{mintz2009distant} and applied on relation extraction.
+They used \gls{freebase} as a knowledge base for known relations in order to train their model.
+%TODO explain approach in detail
+%
+Instead of using a knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables in order to build the distantly supervised training set.
+They considered everything around a line starting with ``Table'' or ``Tab.'' as a potential table.
+\section{Distant Supervision and \glsentryshortpl{crf}}
 
-In the following we will describe how distant supervision can be used to automatically tag author names in research papers.
-For this we first extract author names from a structured data source.
-Using this information we generate a number of variations to write the author names, for example with abbreviated first names.
-This list of variations of author names then gets matched to the extracted text from our research papers.
-%We will later use the matched data set to train \glspl{crf} (see \todo{ref}).
 
