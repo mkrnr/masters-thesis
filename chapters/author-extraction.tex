@@ -8,7 +8,7 @@ The corpus that was used in our study consists of \todo{number} research papers 
 
 Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
 Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed April~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
-This is done by also taking into account the formatting of the document, for example when the research paper contains two text columns.
+This is done by also taking into account the formatting of the document, for example when research papers contain two text columns of text.
 \itodo{statistics about performance}
 \itodo{reference section extraction using parscit}
 
@@ -26,33 +26,54 @@ We will refer to the second data set as the \gls{gnd} data set.\\
 
 The second one was extracted from the Sociological Abstracts Module\todo{true?} which is part of the \gls{csa} Title Lists\footnote{\url{http://www.proquest.com/customer-care/title-lists/Title-Lists-CSA.html} (accessed April~27,~2016)} published by the company ProQuest\footnote{\url{http://www.proquest.com/about/} (accessed April~27,~2016)}.
 \itodo{statistics, refernces}
-We will refer to the second data set as the \gls{csa} data set.o
+We will refer to the second data set as the \gls{csa} data set.
 
 
-\subsection{Author Name Matching}
-
+\subsection{Context Extraction and Author Name Matching}
 \itodo{variations of author names}
 A crucial step for generating the training sets is the matching of author names in the extracted lists to their occurrences in the extracted reference sections.
-This can be separated into two steps.
-Since author names can appear in a number of different formats, we first have to generate for every author in our extracted list a number of variations.
-\todo{ref} contains a list of variations that are generated to cover commonly used formats.
-\itodo{statistics}
-In the second step we have to search the generated variations in the extracted reference sections.
-Due to the potentially high number of both author names and reference sections, the execution of this step is crucial for fulfilling requirement \todo{add}.
+%TODO why context extraction at this point
+%     discuss naive approach of generating the full variations and search them
+One approach is to generate a list of possible ways how author names appear in a reference string.
+A list of examples for such variations is shown in \todo{add}.
+The appearance of such variations then can be searched in the given reference strings.
+Later in this subsection we will discuss the \gls{aho-corasick algorithm} which allows an efficient string matching.\\
 
-Before discussing an appropriate algorithm we first inspect the task in greater detail.
-The generated list of author name variations is a dictionary that has to be matched against a given reference string.
-An author name has a variable length of at least two words and reference strings can contain more than one author.
-In addition, there are several ways of listing authors in a reference.
-\todo{ref} shows several common variations.
-It is thereby not trivial to separate the authors in a given reference and query them against the list of variations.
-This makes it necessary to iterate over the reference string and simultaneously match for all variations in the dictionary.\\
+Yet, such an approach has several disadvantages.
+First, generating a list of name variations as part of an efficient search algorithm can be expensive in terms of memory usage.
+The main reason for this is that names in reference strings can appear either as ``first name last name'' or as ``last name, fist name''.
+Efficient string matching algorithms require the computation and storage of values for every variation that is generated.
+For example, the \gls{rabin-karp algorithm} proposed by \citet{karp1987efficient} requires the generation and storage of hash values for every variation.
+Generating the \gls{fsm} that is used in the \gls{aho-corasick algorithm} would result in a high redundancy of last name representations.
+We will discuss this redundancy later in this subsection after introducing the algorithm.
+In addition to a \gls{fsm}, the \gls{commentz-walter algorithm} \citep{commentz1979string} requires the computation and storage of shift values based on the variations similar to the \gls{knuth-morris-pratt algorithm} \citep{knuth1977fast}.
+Generating and searching the variations of author names can thereby not be seen as a tractable approach for a high number of author names.
+A way of preventing the generation of redundant variations is to first search for the first names and last names separately.
+For example, \dots\todo{example}.\\
 
-\citet{aho1975efficient} propose a string matching algorithm that allows a matching by performing only one iterating over the reference string.
-This algorithm, called \gls{aho-corasick algorithm}, uses a finite state machine that is generated from the dictionary entries to perform the matching.
+\citet{aho1975efficient} propose an efficient string matching algorithm that allows a matching of first and last names in a reference string.
+This algorithm, called \gls{aho-corasick algorithm}, uses a \gls{fsm} that is generated from the dictionary entries to perform the matching.
+
+The \gls{fsm} is constructed in the following way.
+
 \itodo{explain state machine and its nodes and edges}
 \itodo{example}
 \itodo{statistics}
+
+In order to perform the matching in only one iteration and without adding additional information to the \gls{fsm}, we can not decide whether a match is a first name or last name.
+There are cases where a match can even be both a first name and a last name.
+Example for such names are ``Arnold'', ``Ernst'', or ``Friedrich''.
+We thereby tag a match with a generic ``name'' XML-tag and move this decision to the next step.\\
+
+Given the reference strings where first names and last names are marked with a ``name'' tag, we now determine if a tagged name can be a first name, last name, or both.
+For this we use a map that contains as a key the existing names and as value an array containing two Booleans to signal the name type.
+If the lookup results in a pair of first name and last name, the names are tagged accordingly and a predefined number of surrounding words is saved.
+
+After generating strings with possible first and last names including their context in a given reference string, we can perform a lookup of the tagged names in a dictionary of author names.
+More concrete, the dictionary is a map containing the last names as key and a variation of possible first names as values.
+
+\itodo{statistics}
+
 
 
 
