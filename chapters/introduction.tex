@@ -6,3 +6,24 @@
 % What is the proposed solution or approach?
 % What can one expect in the rest of the thesis?
 
+
+Citation data provides information on which scholarly work cites with other scholarly work.
+This information is essential for the knowledge discovery process when conducting research and there are several services available that provide citation data for research areas like mathematics and physics\footnote{\url{http://related-work.net/}}, computer science\footnote{\url{http://dblp.uni-trier.de/}}, and medicine\footnote{\url{http://www.ncbi.nlm.nih.gov/pubmed}}.
+Despite its importance, there is a shortage of citation data for German social science research papers~\cite{herb2015open}.
+Even though there are commercial services available which provide citation data for a broad range of research areas, they do not provide a sufficient coverage of smaller academic fields like the German social sciences.
+This could be explained by the low profitability of including such data.
+In addition, commercial services generally do not publicly share their dataset which hinders a full utilization of the citation data.
+The Social Science Citation Index\footnote{\url{http://scientific.thomson.com/products/ssci/}} by Thomson Reuters in particular was criticized for being ideologically biased and containing methodological deficiencies in the citation counting~\cite{klein2004social}.
+Thereby, the motivation of this thesis is to contribute to the effort of extracting citation data from given research papers in order fill the gap regarding the German social sciences and to be less dependent on commercial services.
+
+\bigskip
+
+The different steps for extracting citation data from PDF documents are shown in \todo{add}.
+At first the content of the PDF files is converted to text files to allow easier processing.
+In the second step the reference strings are extracted from the text.
+The strings are then segmented into the different attributes that identify the referenced paper (step three).
+
+Such attributes can be the authors, title, journal, and publication year.
+This information then needs to be matched against existing meta data records in order to assign a unique identifier such as a \gls{doi} to the reference (step four) to generate a citation network.
+This thesis has not the goal of covering the whole pipeline.
+Instead, we focus on the extraction reference strings from a given article in plain text.
