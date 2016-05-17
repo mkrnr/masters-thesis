@@ -1,26 +1,32 @@
 \chapter{Distant Supervision}\label{cha:distant-supervision}
 
-A common approach to learning \glspl{crf} is to use manually labeled data.
-This results in an accurate labeling in most cases but is expensive and can thereby only be performed on small data sets.
-The approach of \gls{distant supervision} that we first discussed in \cref{cha:related-work} allows the automated labeling large data sets by using heuristics and external sources of information.
+A common approach for training \glspl{crf} is to use manually labeled instances.
+Manual labeling results in an accurate labeling in most cases but is expensive and can thereby only be performed on small data sets.
+
+
+The approach of \gls{distant supervision} allows the automated labeling of large data sets by using heuristics and external sources of information.
+
 In this chapter we will first have a closer look to past usages of \gls{distant supervision}.
 Following this we will discuss how \glspl{crf} can be trained using distantly supervised data sets.
 
-% TODO part of related work
-%\section{Past Usages of Distant Supervision}
-%\Gls{distant supervision} was first applied on relation extraction by \citet{mintz2009distant}.
-%They used \gls{freebase} as a knowledge base for known relations in order to train their model.
-%
-%Instead of using a knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables.
-%They considered everything around a line starting with ``Table'' or ``Tab.'' potentially as a potential table.
-
 \section{Past Usages of Distant Supervision}
+
 As discussed in \Cref{cha:related-work}, \gls{distant supervision} was proposed by \citet{mintz2009distant} and applied on relation extraction.
 They used \gls{freebase} as a knowledge base for known relations in order to train their model.
 %TODO explain approach in detail
 %
 Instead of using a knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables in order to build the distantly supervised training set.
 They considered everything around a line starting with ``Table'' or ``Tab.'' as a potential table.
+
 \section{Distant Supervision and \glsentryshortpl{crf}}
+
+\subsection{Marginalization}
+%TODO \citet{tsuboi2008training}: problems with absolute input
+%TODO \citet{tsuboi2008training}: marginalization of CRFs
+
+\subsection{Generalized Expectation (\glsentryshort{ge})}
+%TODO \citet{mann2007simple}, \citet{mann2008generalized}, \citet{mann2010generalized}: generalized expectation
+
+
 
 
