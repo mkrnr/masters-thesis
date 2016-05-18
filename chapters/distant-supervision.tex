@@ -6,17 +6,43 @@ Manual labeling results in an accurate labeling in most cases but is expensive a
 
 The approach of \gls{distant supervision} allows the automated labeling of large data sets by using heuristics and external sources of information.
 
-In this chapter we will first have a closer look to past usages of \gls{distant supervision}.
-Following this we will discuss how \glspl{crf} can be trained using distantly supervised data sets.
+In this chapter we will first give an overview of \gls{distant supervision} by discussing the past usages and giving a definition of the term.
+Following this we will discuss approaches on how \glspl{crf} can be trained using distantly supervised data sets.
 
-\section{Past Usages of Distant Supervision}
 
-As discussed in \Cref{cha:related-work}, \gls{distant supervision} was proposed by \citet{mintz2009distant} and applied on relation extraction.
-They used \gls{freebase} as a knowledge base for known relations in order to train their model.
-%TODO explain approach in detail
-%
-Instead of using a knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables in order to build the distantly supervised training set.
-They considered everything around a line starting with ``Table'' or ``Tab.'' as a potential table.
+
+\section{Overview}
+
+%TODO explain origin
+Before explaining our usage of the term \gls{distant supervision}, we will first examine its origin and how it was previously used.
+
+\bigskip
+
+As discussed in \Cref{cha:related-work}, the term \gls{distant supervision} was introduced by \citet{mintz2009distant} as an approach for relation extraction without labeled data.
+They state that \gls{distant supervision} extends the paradigm used by \citet{snow2005learning} for the extraction of hypernyms.
+This is done by learning dependency paths from hypernym/hyponym word pairs that were extracted from WordNet~\citep{snow2005learning}.
+The dependency paths are then used as features in a logistic regression classifier with the task of identifying hypernym pairs in a corpus~\citep{snow2005learning}.
+Additionally, \citet{mintz2009distant} mention a similarity of \gls{distant supervision} to the usage of weakly labeled data in bioinformatics.
+One mentioned example is how \citet{craven1999constructing} extract relations between biological objects such as proteins, cell-types, and diseases from a text corpus.
+For this they train a Naive Bayes classifier with data from the Yeast Protein Database~\citep{payne1997yeast}.
+\citet{surdeanu2012multi} go as far as saying that distant supervision for \gls{ie} was first introduced by \citet{craven1999constructing}.
+
+While not giving a definition of the term, \citet{mintz2009distant} state that ``[t]he intuition of distant supervision is that any sentence that contains a pair of entities that participate in a known Freebase relation is likely to express that relation in some way.''
+
+There is now a body of research that uses the paradigm of \citet{mintz2009distant} for relation extraction~\citep{benson2011event,ritter2011named}\todo{add papers}.
+
+\bigskip
+
+%TODO twitter sentiment classification analysis, say that distant sup comes from Read
+
+Instead of using an existing knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables in order to build the distantly supervised training set.
+They considered the context around a line starting with ``Table'' or ``Tab.'' as a potential table.
+
+Due to the different applications of \gls{distant supervision}, a precise definition\dots
+
+What all approaches have in common is that they use some heuristic to assign labels to previously unlabeled data. These labelings are are used during the training, either in addition to preexisting labeled data or on their own.
+
+
 
 \section{Distant Supervision and \glsentryshortpl{crf}}
 
