@@ -3,11 +3,13 @@
 A common approach for training \glspl{crf} is to use manually labeled instances.
 Manual labeling results in an accurate labeling in most cases but is expensive and can thereby only be performed on small data sets.
 
+%TODO general words on distant supervision: jiang2012information
 
 The approach of \gls{distant supervision} allows the automated labeling of large data sets by using heuristics and external sources of information.
 
-In this chapter we will first give an overview of \gls{distant supervision} by discussing the past usages and giving a definition of the term.
-Following this we will discuss approaches on how \glspl{crf} can be trained using distantly supervised data sets.
+In this chapter we will first give an overview of \gls{distant supervision} by discussing the past usages.
+Based on this we will give a definition of the term.
+We will then discuss approaches on how \glspl{crf} can be trained using distantly supervised data sets.
 
 
 
@@ -25,18 +27,24 @@ The dependency paths are then used as features in a logistic regression classifi
 Additionally, \citet{mintz2009distant} mention a similarity of \gls{distant supervision} to the usage of weakly labeled data in bioinformatics.
 One mentioned example is how \citet{craven1999constructing} extract relations between biological objects such as proteins, cell-types, and diseases from a text corpus.
 For this they train a Naive Bayes classifier with data from the Yeast Protein Database~\citep{payne1997yeast}.
-\citet{surdeanu2012multi} go as far as saying that distant supervision for \gls{ie} was first introduced by \citet{craven1999constructing}.
+\citet{surdeanu2012multi} go as far as saying that distant supervision for \gls{ie} was introduced by \citet{craven1999constructing}.
 
 While not giving a definition of the term, \citet{mintz2009distant} state that ``[t]he intuition of distant supervision is that any sentence that contains a pair of entities that participate in a known Freebase relation is likely to express that relation in some way.''
 
-There is now a body of research that uses the paradigm of \citet{mintz2009distant} for relation extraction~\citep{benson2011event,ritter2011named}\todo{add papers}.
+There is now a body of research that uses the paradigm of \citet{mintz2009distant} for relation extraction~\citep{benson2011event,ritter2011named,nguyen2011end,takamatsu2012reducing,xu2013filling}.
 
 \bigskip
 
-%TODO twitter sentiment classification analysis, say that distant sup comes from Read
+Another intuition of \gls{distant supervision} that is not based on leveraging an existing knowledge base such as FreeBase.
+\citet{go2009twitter} use emoticons in Twitter\footnote{\url{https://twitter.com/} (accessed May~19,~2016)} tweets as noisy labels to build the training set for sentiment analysis~\citep{go2009twitter}.
 
-Instead of using an existing knowledge base, \citet{fan2015detecting} relied on a simple heuristic for localizing tables in order to build the distantly supervised training set.
-They considered the context around a line starting with ``Table'' or ``Tab.'' as a potential table.
+There is again a body of research that extends this approach to sentiment analysis~\citep{purver2012experimenting,marchetti2012learning,suttles2013distant}.
+
+\citet{fan2015detecting} also apply distant supervision without using a knowledge base.
+They rely on a simple heuristic for localizing tables by considering the context around a line starting with ``Table'' or ``Tab.'' as a potential table.
+
+%TODO ling2012fine on entity recognition using distant supervision
+\bigskip
 
 Due to the different applications of \gls{distant supervision}, a precise definition\dots
 
