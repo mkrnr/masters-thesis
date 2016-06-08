@@ -13,7 +13,7 @@ This is done by also taking into account the formatting of the document, for exa
 
 \section{Generating Training Sets with Distant Supervision}\label{sec:ae-distant-supervision}
 
-\subsection{Author Name Extraction}
+\subsection{Knowledge Base}
 
 In order to apply distant supervision to the task of labeling author names, an external source of information is needed.
 For our evaluation we use two different sources.
@@ -32,12 +32,23 @@ The second one was extracted from the Sociological Abstracts Module\todo{true?} 
 We will refer to the second data set as the \gls{csa} data set.
 
 
-\subsection{Context Extraction and Author Name Matching}
+\subsection{Author Name Matching}
 \itodo{variations of author names}
 A crucial step for generating the training sets is the matching of author names in the extracted lists to their occurrences in the extracted reference sections.
-One approach is to generate a list of possible ways how author names appear in a reference string.
-A list of examples for such variations is shown in \todo{add}.
-The appearance of such variations then can be searched in the given reference strings.
+The goal here is to label all possible matches as such.
+This is especially interesting if possible matches overlap\todo{example}.
+Usually, matches are annotated using markup languages such as XML\todo{examples}.
+Since such markup language use tree based models, they don't allow a direct encoding of overlaps.
+To demonstrate this issue for tree based models, we consider our previous overlap example which we want to encode using XML\@\todo{add tree example}.
+
+There are a number of approaches that try to overcome this limitation of tree based markup languages such as \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}. They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from such documents.
+
+In order to avoid this kind of overhead, it would be preferable to annotate our author matches using a data structure that supports overlapping hierarchies by default.
+\citet{sperberg2000goddag} propose such a data structure named \acrfull{goddag}.
+Being a directed graph, it naturally solves the issue with overlaps by allowing a node to have multiple parents.
+In order to assure a hierarchy, the graph is acyclic
+In addition, it has ordered-descendants, meaning that for a given node, the order of it's child nodes is defined.
+\itodo{goddag example}
 
 %TODO decisions:
 % * first name = last name
