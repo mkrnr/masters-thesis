@@ -1,0 +1,14 @@
+\chapter{Implementation}\label{cha:implementation}
+
+In this chapter we will discuss our implementation of author extraction using \glspl{crf} with \gls{ge} applied on a distantly supervised training set.
+Our approach can be separated into a number of steps.
+One of the first steps is to generate data sets on author names that are used as knowledge bases for the \gls{distant supervision} (\Cref{sec:knowledge-bases}).
+Another initial step is to extract the content of a set of research papers given in the \gls{pdf} format.
+Since we currently focus on the papers' reference section, we will discuss a heuristic for identifying and extracting reference sections.
+We then focus on the annotation of authors in the extracted reference sections using our knowledge base.
+From this annotations we then generate \gls{ge} constraints on a word level.
+Using the extracted reference sections as unlabeled training data together with the \gls{ge} constraints we can perform a \gls{crf} training.
+
+\section{Author Name Knowledge Bases}\label{sec:knowldge-bases}
+
+

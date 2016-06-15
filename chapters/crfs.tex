@@ -209,6 +209,7 @@ Given a set of \glspl{factor} $\Phi=\{\phi_1,\dots\phi_m\}$ that factorize over 
 \end{equation}
 
 Here, $Z(\bm{X})$ is a normalizing constant, also referred to as partitioning function~\citep{koller2009probabilistic}.
+It guarantees that the distribution $P(\bm{Y}\mid\bm{X})$ sums to 1.
 
 \bigskip
 
@@ -220,6 +221,7 @@ After discussing the encoding of \glspl{crf} we can now discuss their inference.
 More precisely we will consider the inferencing task for \glspl{conditional probability query} (see \Cref{subsec:probability-theory}).
 
 %TODO few sentences about complexity
+
 
 %TODO exact inference (variable elimination/conditioning?) vs approximate inference (message-passing/optimization problem/particle-based methods?)
 

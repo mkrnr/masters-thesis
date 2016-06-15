@@ -54,17 +54,45 @@ What all approaches have in common is that they use some heuristic to assign lab
 
 \section{Distant Supervision and \glsentryshortpl{crf}}
 
+Data sets that are used within a distantly supervised learning approach are typically incompletely annotated\todo{cite}.
+This is due to the fact that external knowledge bases in practical scenarios do not cover all observed cases in the training set.
+As a result, conventional \gls{crf} algorithms cannot be directly applied to such data sets since they require a fully annotated input~\citep{tsuboi2008training}.
+In this section we will discuss approaches that apply \glspl{crf} on incompletely annotated data.
+\itodo{sentence on tsuboi approach?}
+A very promising approach, especially for our author extraction use case (see \Cref{cha:author-extraction}), is \gls{ge}, proposed by \citet{mann2007simple}.
+
 \subsection{Marginalization}
 %TODO \citet{tsuboi2008training}: problems with absolute input
-%TODO \citet{tsuboi2008training}: marginalization of CRFs
 %TODO instead: add the same prob distr. to all unknown tags?
+\citet{tsuboi2008training} propose a method of training \glspl{crf} using incomplete annotations.
+They consider two cases of incomplete annotations: Partial and ambiguous annotations.
+By considering all possible label sequences that are with a given incomplete labeled sequence, it is possible to marginalize the unknown labels out.
+Yet, the resulting equations is not a concave function which prevents efficient global maximization~\citep{tsuboi2008training}.
+Instead, they rely on gradient ascent iterations which were proposed by~\citep{sha2003shallow}.
+Another challenge that arises is the amount of label sequences that are generated this way which is exponential in the number of unknown labels~\citep{tsuboi2008training}.
+This problem is addressed by applying the Markov assumption and using a modification of the Forward-Backward algorithm~\citep{tsuboi2008training}.
+\citet{tsuboi2008training} apply their approach on Japanese word segmentation using partial annotations and on \gls{pos} tagging using ambiguous annotations.
+For the word segmentation task the proposed approach was compared with two other methods that can handle partial annotations.
+The first one is filling unknown labels by prediction based on the partial annotations and the second one is training a point-wise classifier that excludes label correlations~\citep{tsuboi2008training}.
+The reported results show that the proposed method outperforms both methods for various sample sizes.
+For the \gls{pos} tagging they used the Penn treebank corpus \citep{marcus1993building} which contains a number of ambiguous \gls{pos} tags.
+The proposed approach was compared with three other heuristics, namely random selection, selecting the first tag in the description order, and selecting the most frequent tag in the corpus.
+In this case, the proposed method only moderately improved the performance which the authors believe it due to the relatively low percentage of ambiguous tags in the corpus~\citep{tsuboi2008training}.
 
 \subsection{Generalized Expectation (\glsentryshort{ge})}
-%TODO \citet{mann2007simple}, \citet{mann2008generalized}, \citet{mann2010generalized}: generalized expectation
 
+Instead of ``filling the gaps'' of incomplete annotations, \citet{mann2008generalized} apply the concept of \gls{ge} on the training of linear-chain \glspl{crf}.
+\Gls{ge} was first proposed in \citet{mann2007simple} under the name \gls{expectation regularization} as a method for semi-supervised learning.
+%TODO definition GE
 
+\citet{mann2008generalized} use \gls{ge} criteria to train \glspl{crf} on labeled features instead of fully labeled instances.
+More precisely, the \gls{ge} criteria are used as an additional regularization term in the log-likelihood\todo{more precise} function during the inferencing task.
+%TODO formula
 
+\itodo{example}
+One advantage is that it requires only the labeling of a number of occurrences of a feature in the data set instead of a full annotation.
+Additionally, \gls{ge} criteria can take \glspl{conditional probability distribution} of labels given a feature as an input in order to train a model that matches this distributions \citep{mann2008generalized}.
 
-
+\bigskip
 
 
