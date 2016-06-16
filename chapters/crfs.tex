@@ -125,30 +125,30 @@ See \todo{add} for such a separation of the \gls{joint distribution} $P(X,Y)$ of
 \Glspl{markov network}, usually denoted with $\mathcal{H}$, use undirected \glspl{edge} to model a symmetrical influence between two \glspl{random variable}.
 Because of this it is not possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into \glspl{prior distribution} and \glspl{cpd}.
 Instead, $P(\mathcal{X})$ is represented as the product of \glspl{factor}.
-Given a set of \glspl{random variable} $\bm{D}$, a \gls{factor} $\phi$ is a function from $Val(\bm{D})$ to $\realnumbers$~\citep{koller2009probabilistic}.
+Given a set of \glspl{random variable} $\bm{D}$, a \gls{factor} $\Psi$ is a function from $Val(\bm{D})$ to $\realnumbers$~\citep{koller2009probabilistic}.
 It is called nonnegative if all its entries are nonnegative and in the following we will consider all our factors to be nonnegative.
-$\bm{D}$ is called the \glslink{factor scope}{scope} of $\phi$, denoted by $Scope[\phi]$.
+$\bm{D}$ is called the \glslink{factor scope}{scope} of $\Psi$, denoted by $Scope[\Psi]$.
 For an example of a factor see \todo{add}.
 
 An important operation on factors is the \gls{factor product}.
-Given three disjoint sets of random variables $\bm{X}$, $\bm{Y}$, and $\bm{Z}$, a \gls{factor product} $\phi_1\times \phi_2$ of the two factors $\phi_1(\bm{X},\bm{Y})$ and $\phi_2(\bm{Y},\bm{Z})$ is a factor $\psi(\bm{X},\bm{Y},\bm{Z})$~\citep{koller2009probabilistic}.
+Given three disjoint sets of random variables $\bm{X}$, $\bm{Y}$, and $\bm{Z}$, a \gls{factor product} $\Psi_1\times \Psi_2$ of the two factors $\Psi_1(\bm{X},\bm{Y})$ and $\Psi_2(\bm{Y},\bm{Z})$ is a factor $\Psi(\bm{X},\bm{Y},\bm{Z})$~\citep{koller2009probabilistic}.
 The intuition is that the two factors are multiplied by aligning their common set of \glspl{random variable} $\bm{Y}$\todo{example}.
 
-Based on the definition of a \gls{factor product}, we can define an undirected parameterization of a \gls{probability distribution}, called \gls{gibbs distribution}.
-A \gls{probability distribution} $P_{\Phi}$ is a Gibbs distribution parameterized by a set of \glspl{factor} $\Phi=\{\phi_1(\bm{D}_1),\dots,\phi_K(\bm{D}_K)\}$ if it is defined as follows:
-\begin{equation*}
-  P_{\Phi}(X_1,\dots,X_n)=\frac{1}{Z}\tilde{P}_{\Phi}(X_1,\dots,X_n),
-\end{equation*}
-where
-\begin{equation*}
-  \tilde{P}_{\Phi}(X_1,\dots,X_n)=\prod_{i=1}^{m}\phi_i(\bm{D}_i)
-\end{equation*}
-is an unnormalized measure and
-\begin{equation*}
-  Z=\sum_{X_1,\ldots,X_n}\tilde{P}_{\Phi}(X_1,\dots,X_n)
-\end{equation*}
-is a normalizing constant called the \gls{partitioning function}~\citep{koller2009probabilistic}.
-Having a \gls{gibbs distribution} $P_\Phi$ where each $\bm{D}_k(k=1,\dots,K)$ in $\Phi$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P_\Phi$ factorizes over $\mathcal{H}$~\citep{koller2009probabilistic}\todo{example?}.
+%Based on the definition of a \gls{factor product}, we can define an undirected parameterization of a \gls{probability distribution}, called \gls{gibbs distribution}.
+%A \gls{probability distribution} $P_{\Phi}$ is a Gibbs distribution parameterized by a set of \glspl{factor} $\Phi=\{\phi_1(\bm{D}_1),\dots,\phi_K(\bm{D}_K)\}$ if it is defined as follows:
+%\begin{equation*}
+%  P_{\Phi}(X_1,\dots,X_n)=\frac{1}{Z}\tilde{P}_{\Phi}(X_1,\dots,X_n),
+%\end{equation*}
+%where
+%\begin{equation*}
+%  \tilde{P}_{\Phi}(X_1,\dots,X_n)=\prod_{i=1}^{m}\phi_i(\bm{D}_i)
+%\end{equation*}
+%is an unnormalized measure and
+%\begin{equation*}
+%  Z=\sum_{X_1,\ldots,X_n}\tilde{P}_{\Phi}(X_1,\dots,X_n)
+%\end{equation*}
+%is a normalizing constant called the \gls{partitioning function}~\citep{koller2009probabilistic}.
+%Having a \gls{gibbs distribution} $P_\Phi$ where each $\bm{D}_k(k=1,\dots,K)$ in $\Phi$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P_\Phi$ factorizes over $\mathcal{H}$~\citep{koller2009probabilistic}\todo{example?}.
 
 One could think that \glspl{factor} are assigned to the edges of a \gls{markov network} in order to parameterize it.
 Yet, such an assignment is only able to capture the pairwise interactions between the two incident nodes~\citep{koller2009probabilistic}.
@@ -157,17 +157,17 @@ In order to model more complex interactions involving multiple nodes, the \glspl
 Since a factor can be assigned to an arbitrary number of nodes, visualizing \glspl{markov network} by only displaying the random variables as nodes and the independence relations as edges is not sufficient.
 Instead, a \gls{factor graph} can be used.
 A \gls{factor graph} $\mathcal{F}$ contains two types of nodes: Oval nodes denote variable nodes and squared nodes denote factor nodes~\citep{koller2009probabilistic}.
-Each factor node is associated with exactly one factor $\phi$ and each variable node is associated with exactly one random variable.
-The graph only contains undirected edges between factor nodes and variable nodes and the scope of $\phi$ is the set of variables that are adjacent to its corresponding factor node~\citep{koller2009probabilistic}\todo{example}.
+Each factor node is associated with exactly one factor $\Psi$ and each variable node is associated with exactly one random variable.
+The graph only contains undirected edges between factor nodes and variable nodes and the scope of $\Psi$ is the set of variables that are adjacent to its corresponding factor node~\citep{koller2009probabilistic}\todo{example}.
 
 As we have discussed before, \glspl{factor} are encoded with tables that contain a nonnegative value for each possible assignments in its \glslink{factor scope}{scope}.
 Having a set of \glspl{factor} that parameterize a graph. A probability distribution
 Another way to parameterize \glspl{factor} is by converting them into log-space~\citep{koller2009probabilistic}.
-We can rewrite a factor $\phi(\bm{D})$ as
+We can rewrite a factor $\Psi(\bm{D})$ as
 \begin{equation*}
-  \phi(\bm{D}) = \exp(-\epsilon(\bm{D}))
+  \Psi(\bm{D}) = \exp(-\epsilon(\bm{D}))
 \end{equation*}
-where $\epsilon(\bm{D})=-\ln\phi(\bm{D})$ is called \gls{energy function}~\citep{koller2009probabilistic}.
+where $\epsilon(\bm{D})=-\ln\Psi(\bm{D})$ is called \gls{energy function}~\citep{koller2009probabilistic}.
 
 Since we are in the log-space, we can calculate a \gls{probability distribution} over a set of \glspl{random variable} the following way~\citep{koller2009probabilistic}:
 \begin{equation*}
@@ -176,14 +176,15 @@ Since we are in the log-space, we can calculate a \gls{probability distribution}
 Compare this with the \gls{factor product} in the definition of a \gls{gibbs distribution}.
 
 Since we only consider nonnegative \glspl{factor} and the results of the \gls{energy function} can be negative, we need a new definition of a \gls{factor} without its negativity property.
-Thereby, given a set of \glspl{random variable} $\bm{D}$, we define a \gls{feature} $f(\bm{D})$ as a function from $\bm{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
+Thereby, given a set of \glspl{random variable} $\bm{D}$, we define a \gls{feature function} $f(\bm{D})$ as a function from $\bm{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
 In \todo{example} we apply the \gls{energy function} to the values of \todo{example}.
 Values that were set to one in \todo{ref} become zero. \dots\todo{differences}
 Consequently following this separation we can define a \gls{probability distribution} $P$ over $\mathcal{H}$ with~\citep{koller2009probabilistic}:
-\begin{equation*}
-  P(X_1,\dots,X_n) = \frac{1}{Z}\exp\left [-\sum_{i=1}^k w_i f_i(\bm{D}_i)\right ]
-\end{equation*}
-where $w_1,\dots,w_k$ are weights and $\{f_1(\bm{D}_1),\dots,f_k(\bm{D}_k)\}$ are features with each $\bm{D}_i$ being a complete subgraph in $\mathcal{H}$.
+\begin{equation}
+  \label{equ:prob-distr-feature}
+  P(X_1,\dots,X_n) = \frac{1}{Z}\exp\left [-\sum_{i=1}^k \theta_i f_i(\bm{D}_i)\right ]
+\end{equation}
+where $\theta_1,\dots,\theta_k$ are weights and $\{f_1(\bm{D}_1),\dots,f_k(\bm{D}_k)\}$ are \glspl{feature function} with each $\bm{D}_i$ being a complete subgraph in $\mathcal{H}$.
 This \gls{probability distribution} is called a \gls{log-linear model}.
 
 \bigskip
@@ -198,27 +199,43 @@ They were first defined by \citet{lafferty2001conditional} \dots
 
 \Glspl{crf} encode the \gls{conditional probability distribution} $P(\bm{Y}\mid\bm{X})$ where $\bm{Y}$ is a set of \glspl{target variable} and $\bm{X}$ is a set of \glspl{observed variable} with $\bm{X}\cap\bm{Y}=\emptyset$.
 A \gls{crf} is constructed using a \gls{markov network} $\mathcal{H}$ where the nodes correspond to $\bm{Y}\cup\bm{X}$ and the undirected edges model a symmetrical influence between the nodes~\citep{koller2009probabilistic}.
-Given a set of \glspl{factor} $\Phi=\{\phi_1,\dots\phi_m\}$ that factorize over $\mathcal{H}$, a \gls{crf} defines $P(\bm{Y}\mid\bm{X})$ as~\citep{koller2009probabilistic}:
+Given a set of $\{\Psi_1,\dots\Psi_m\}$ that factorize over $\mathcal{H}$, a \gls{crf} defines $P(\bm{Y}\mid\bm{X})$ as~\citep{koller2009probabilistic}:
 \begin{equation}
-  \label{equ:crf}
+  \label{equ:crf-factor}
   \begin{split}
     P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X}) \\
-    \tilde{P}(\bm{Y},\bm{X}) &= \prod_{i=1}^{m}\phi_i(\bm{D}_i) \\
+    \tilde{P}(\bm{Y},\bm{X}) &= \prod_{i=1}^{m}\Psi_i(\bm{D}_i) \\
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
 
-Here, $Z(\bm{X})$ is a normalizing constant, also referred to as partitioning function~\citep{koller2009probabilistic}.
+Here, $\tilde{P}(\bm{Y},\bm{X})$ is the unnormalized measure and $Z(\bm{X})$ is a normalizing constant, sometimes referred to as partitioning function~\citep{koller2009probabilistic}.
 It guarantees that the distribution $P(\bm{Y}\mid\bm{X})$ sums to 1.
 
 \bigskip
 
-A more concrete example for a \gls{crf} can be derived from our author example\dots
+Using \Cref{equ:prob-distr-feature} and our definition of \glspl{feature function} we can reformulate the definition of \glspl{crf} in \Cref{equ:crf-factor} as a \gls{log-linear model}:
+\begin{equation}
+  \label{equ:crf-log-linear}
+  \begin{split}
+    P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X})  \\
+    \tilde{P}(\bm{Y},\bm{X}) &= \exp\left\{ -\sum_{i=1}^k \theta_i f_i(\bm{D}_i)\right\}\\
+    Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
+  \end{split}
+\end{equation}
+
+A kind of \glspl{crf} that follows a relatively simple structure are \glspl{linear-chain crf}.
+For given $\bm{X}=\{X_1,\dots,X_k\}$ and $\bm{Y}=\{Y_1,\dots,Y_k\}$, we consider two types of \glspl{feature function}.
+%TODO define two kinds of feature functions combining \cite{sutton2010introduction} and \cite{koller2009probabilistic}
+
+An example for a  \gls{linear-chain crf} can be derived from our author example\dots
 
 \section{Inference of \glsentryshortpl{crf}}\label{sec:inference-crfs}
 
-After discussing the encoding of \glspl{crf} we can now discuss their inference.
-More precisely we will consider the inferencing task for \glspl{conditional probability query} (see \Cref{subsec:probability-theory}).
+After formalizing the encoding of \glspl{crf} we can now discuss their inference.
+%TODO difference conditional probability query and probability query
+More precisely we will consider the inferencing task for \glspl{probability query} (see \Cref{subsec:probability-theory}).
+
 
 %TODO few sentences about complexity
 
