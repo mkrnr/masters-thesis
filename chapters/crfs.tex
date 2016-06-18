@@ -8,8 +8,8 @@ Following this we will introduce the concept of \glspl{crf} and discuss the infe
 
 \section{Foundations}\label{sec:foundations}
 \subsection{Probability Theory}\label{subsec:probability-theory}
-Several concepts from probability theory are crucial for an understanding of \glspl{crf}.
-The notion of \glspl{probability distribution} is one such concept.
+Several concepts from probability theory are crucial for an understanding of \glspl{crf} and they all build on the notion of \glspl{probability distribution}.
+
 A \gls{probability distribution} $P$ is defined over $(\glssymbol{outcome space},\glssymbol{measurable set})$ where \glssymbol{outcome space} is the \gls{outcome space} and \glssymbol{measurable set} is a \gls{measurable set} of \glspl{event} \citep{koller2009probabilistic}.
 $P$ describes a mapping from events in \glssymbol{measurable set} to real values according to the following rules \citep{koller2009probabilistic}:
 \begin{itemize}
@@ -21,6 +21,7 @@ $P$ describes a mapping from events in \glssymbol{measurable set} to real values
 In our example of author information extraction we define \glssymbol{outcome space} as the set of possible word sequences that can appear in a given text line of a research paper.
 For the purpose of illustration we consider four events:
 
+%TODO replace "`firstPeriod"'
 Event $firstPeriod$ contains all word sequences in which the first word of the sequence ends with a period and event $firstNotPeriod$ contains $\Omega\ -\ firstPeriod$.
 Event $secondCapitalized$ contains all word sequences in which the second word of the sequence is capitalized and event $secondNotCapitalized$ is defined accordingly.
 
@@ -33,7 +34,7 @@ Given the values in \todo{add ref}, $P(firstPeriod)$ is $XXX$ and $P(secondNotCa
 Based on the idea of \glspl{probability distribution}, a \gls{random variable} is a \gls{function} that associates with each outcome in \glssymbol{outcome space} a value~\cite{koller2009probabilistic}.
 A set of \glspl{random variable} is denoted with bold capital letters and assignments of values to the \glspl{random variable} in such sets are denoted with bold lowercase letters~\cite{koller2009probabilistic}.
 In addition, $Val(X)$ is the set of values that $X$ can take.
-Given a \gls{random variable} $X$, $P(X)$ is the distribution over \glspl{event} that are described using $X$~\cite{koller2009probabilistic}.
+Given a \gls{random variable} $X$, $P(X)$ is the \gls{probability distribution}{distribution} over \glspl{event} that are described using $X$~\cite{koller2009probabilistic}.
 It is referred to as the \gls{marginal distribution} over $X$.
 Given a set of \glspl{random variable} $\bm{X}$, $P(\bm{X})$ is called \gls{joint distribution} and assigns each \gls{full assignment} to $\bm{X}$ a probability~\cite{koller2009probabilistic}.
 A \gls{full assignment} $\xi$ assigns to every \gls{random variable} in $\bm{X}$ a value and thereby $\xi\in Val(\bm{X})$.
@@ -74,17 +75,16 @@ $\alpha$ is \glslink{conditional independence}{conditionally independent} of \gl
 \itodo{add example for independence and conditional independence}
 
 Given a \glspl{probability distribution} over a set of \glspl{random variable} $\mathcal{X}$, the final goal is to answer specific questions about this distribution.
-These are formulated as queries which are then run against the \glspl{probability distribution}.
+These are formulated as queries which are then run against the \glspl{probability distribution}{distribution}.
 One type of queries are called \glspl{probability query}.
 A \gls{probability query} consists of two disjoint subsets of \glspl{random variable} of $\mathcal{X}$~\citep{koller2009probabilistic}.
 One is called the \gls{evidence}, denoted $\bm{E}$, with its \glspl{random variable} having the instantiation $\bm{e}$.
 The second subset contains the query variable and is denoted with $\bm{Y}$.
 Based on this, the query is formulated as $P(\bm{Y}|\bm{E}=\bm{e})$~\citep{koller2009probabilistic}.
-We thereby want to compute the posterior probability distribution over the assignments $\bm{y}$ to $\bm{Y}$, given the conditioning $\bm{E}=\bm{e}$~\citep{koller2009probabilistic}.
+We thereby want to compute the posterior \gls{probability distribution} over the assignments $\bm{y}$ to $\bm{Y}$, given the conditioning $\bm{E}=\bm{e}$~\citep{koller2009probabilistic}.
 
 \subsection{Graph Theory}\label{subsec:graph-theory}
 
-%TODO definition graphs, nodes, edges
 This subsection will give brief overview of concepts from graph theory that are needed for describing \glspl{crf} and graphical models in general.
 
 \bigskip
@@ -102,15 +102,16 @@ In a complete \gls{subgraph}, every two \glspl{node} in $\mathcal{S}$ are connec
 % TODO add definition of clique?
 
 \subsection{Probabilistic Graphical Models}\label{subsec:graphical-models}
-When encoding practical problems with \glspl{probability distribution}, an observation is that ``variables tend to interact only with a very few others''~\citep{koller2009probabilistic}.
+When encoding practical problems with \glspl{probability distribution}, a key insight is that ``variables tend to interact only with a very few others''~\citep{koller2009probabilistic}.
 This makes it possible to represent such distributions as graphs in a tractable and transparent way, allowing domain experts to evaluate their properties~\citep{koller2009probabilistic}.
 \Glspl{probabilistic graphical model} are such representations.
-%TODO edge part more precise
 
 \bigskip
 
-In a \gls{probabilistic graphical model}, the set of \glspl{random variable} $\mathcal{X}=\{X_1,\dots,X_n\}$ of a distribution are modeled as \glspl{node} and \glspl{edge} denote a ``direct probabilistic interaction''~\citep{koller2009probabilistic} between the two neighboring nodes.
-There are two fundamental groups of graphical models, based on the type of edge that are used:
+In a \gls{probabilistic graphical model}, the \glspl{random variable} $\mathcal{X}$ of a distribution are modeled as \glspl{node} where each \gls{node} represents one \gls{random variable} in $\mathcal{X}$. An \glspl{edge} then denotes a ``direct probabilistic interaction''~\citep{koller2009probabilistic} between its two two incident \glspl{node}.
+
+% TODO edge part more precise
+There are two fundamental groups of graphical models, based on the type of edge that are used: \glspl{bayesian network} and \glspl{markov network}.
 
 \bigskip
 
@@ -134,21 +135,18 @@ An important operation on factors is the \gls{factor product}.
 Given three disjoint sets of random variables $\bm{X}$, $\bm{Y}$, and $\bm{Z}$, a \gls{factor product} $\Psi_1\times \Psi_2$ of the two factors $\Psi_1(\bm{X},\bm{Y})$ and $\Psi_2(\bm{Y},\bm{Z})$ is a factor $\Psi(\bm{X},\bm{Y},\bm{Z})$~\citep{koller2009probabilistic}.
 The intuition is that the two factors are multiplied by aligning their common set of \glspl{random variable} $\bm{Y}$\todo{example}.
 
-%Based on the definition of a \gls{factor product}, we can define an undirected parameterization of a \gls{probability distribution}, called \gls{gibbs distribution}.
-%A \gls{probability distribution} $P_{\Phi}$ is a Gibbs distribution parameterized by a set of \glspl{factor} $\Phi=\{\phi_1(\bm{D}_1),\dots,\phi_K(\bm{D}_K)\}$ if it is defined as follows:
-%\begin{equation*}
-%  P_{\Phi}(X_1,\dots,X_n)=\frac{1}{Z}\tilde{P}_{\Phi}(X_1,\dots,X_n),
-%\end{equation*}
-%where
-%\begin{equation*}
-%  \tilde{P}_{\Phi}(X_1,\dots,X_n)=\prod_{i=1}^{m}\phi_i(\bm{D}_i)
-%\end{equation*}
-%is an unnormalized measure and
-%\begin{equation*}
-%  Z=\sum_{X_1,\ldots,X_n}\tilde{P}_{\Phi}(X_1,\dots,X_n)
-%\end{equation*}
-%is a normalizing constant called the \gls{partitioning function}~\citep{koller2009probabilistic}.
-%Having a \gls{gibbs distribution} $P_\Phi$ where each $\bm{D}_k(k=1,\dots,K)$ in $\Phi$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P_\Phi$ factorizes over $\mathcal{H}$~\citep{koller2009probabilistic}\todo{example?}.
+Based on the definition of a \gls{factor product}, we can define an undirected parameterization of a \gls{probability distribution}, called \gls{gibbs distribution}.
+A \gls{probability distribution} $P(X_1,\dots,X_N)$ is a \gls{gibbs distribution} parameterized by a set of \glspl{factor} $\{\Psi_1(\bm{D}_1),\dots,\Psi_K(\bm{D}_K)\}$ if it is defined as~\citep{koller2009probabilistic}
+\begin{equation}
+  \label{equ:gibbs-distribution}
+  \begin{split}
+  P(X_1,\dots,X_N) & =\frac{1}{Z}\tilde{P}(X_1,\dots,X_N) \\
+  \tilde{P}(X_1,\dots,X_N) & =\prod_{k=1}^{K}\Psi_k(\bm{D}_k) \\
+  Z & =\sum_{X_1,\ldots,X_N}\tilde{P}(X_1,\dots,X_N)
+  \end{split}
+\end{equation}
+where is a $\tilde{P}(X_1,\dots,X_N)$ is an unnormalized measure and $Z$ is a normalizing constant, sometimes called the \gls{partitioning function}, which guarantees that the \gls{probability distribution} sums to 1.
+Having a \gls{gibbs distribution} $P$ where each $\bm{D}_k(k=1,\dots,K)$ in  is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P$ factorizes over $\mathcal{H}$~\citep{koller2009probabilistic}\todo{example?}.
 
 One could think that \glspl{factor} are assigned to the edges of a \gls{markov network} in order to parameterize it.
 Yet, such an assignment is only able to capture the pairwise interactions between the two incident nodes~\citep{koller2009probabilistic}.
@@ -165,15 +163,16 @@ Having a set of \glspl{factor} that parameterize a graph. A probability distribu
 Another way to parameterize \glspl{factor} is by converting them into log-space~\citep{koller2009probabilistic}.
 We can rewrite a factor $\Psi(\bm{D})$ as
 \begin{equation*}
+  \label{equ:energy-function}
   \Psi(\bm{D}) = \exp(-\epsilon(\bm{D}))
 \end{equation*}
 where $\epsilon(\bm{D})=-\ln\Psi(\bm{D})$ is called \gls{energy function}~\citep{koller2009probabilistic}.
 
 Since we are in the log-space, we can calculate a \gls{probability distribution} over a set of \glspl{random variable} the following way~\citep{koller2009probabilistic}:
 \begin{equation*}
-  P(X_1,\dots,X_n) \propto \exp\left [-\sum_{i=1}^m\epsilon_i(\bm{D}_i)\right ]
+  \label{equ:p-energy-function}
+  P(X_1,\dots,X_N) \propto \exp\left [-\sum_{k=1}^K\epsilon_k(\bm{D}_k)\right ]
 \end{equation*}
-Compare this with the \gls{factor product} in the definition of a \gls{gibbs distribution}.
 
 Since we only consider nonnegative \glspl{factor} and the results of the \gls{energy function} can be negative, we need a new definition of a \gls{factor} without its negativity property.
 Thereby, given a set of \glspl{random variable} $\bm{D}$, we define a \gls{feature function} $f(\bm{D})$ as a function from $\bm{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
@@ -181,61 +180,86 @@ In \todo{example} we apply the \gls{energy function} to the values of \todo{exam
 Values that were set to one in \todo{ref} become zero. \dots\todo{differences}
 Consequently following this separation we can define a \gls{probability distribution} $P$ over $\mathcal{H}$ with~\citep{koller2009probabilistic}:
 \begin{equation}
-  \label{equ:prob-distr-feature}
-  P(X_1,\dots,X_n) = \frac{1}{Z}\exp\left [-\sum_{i=1}^k \theta_i f_i(\bm{D}_i)\right ]
+  \label{equ:log-linear-model}
+  P(X_1,\dots,X_N) = \frac{1}{Z}\exp\left [-\sum_{k=1}^K \theta_k f_k(\bm{D}_k)\right ]
 \end{equation}
-where $\theta_1,\dots,\theta_k$ are weights and $\{f_1(\bm{D}_1),\dots,f_k(\bm{D}_k)\}$ are \glspl{feature function} with each $\bm{D}_i$ being a complete subgraph in $\mathcal{H}$.
+where $\theta_1,\dots,\theta_K$ are weights and $\{f_1(\bm{D}_1),\dots,f_K(\bm{D}_K)\}$ are \glspl{feature function} with each $\bm{D}_k$ being a complete subgraph in $\mathcal{H}$.
 This \gls{probability distribution} is called a \gls{log-linear model}.
 
 \bigskip
 
-After discussing some of the fundamental concepts we can now define \glspl{crf}, a type of \glspl{markov network}. In the following we will address how to encode, inference, and learn them.
+After introducing some of the fundamental concepts we can now discuss \glspl{crf}, a type of \glspl{markov network}. In the following we will address how to encode, inference, and learn them.
 
 \section{Encoding of \glsentryshortpl{crf}}\label{sec:definition-crfs}
-A specific kind of \glspl{probabilistic graphical model} are \acrfullpl{crf}.
-They were first defined by \citet{lafferty2001conditional} \dots
+A framework for building \glspl{probabilistic graphical model} are \acrfullpl{crf}.
+They were proposed by \citet{lafferty2001conditional} with the goal of segmenting and labeling sequence data.
 
 \bigskip
 
-\Glspl{crf} encode the \gls{conditional probability distribution} $P(\bm{Y}\mid\bm{X})$ where $\bm{Y}$ is a set of \glspl{target variable} and $\bm{X}$ is a set of \glspl{observed variable} with $\bm{X}\cap\bm{Y}=\emptyset$.
+\Glspl{crf} encode the \gls{conditional probability distribution} $P(\bm{Y}\mid\bm{X})$ where $\bm{Y}$ is a set of \glspl{target variable} and $\bm{X}$ is a set of \glspl{observed variable} with $\bm{Y}\cap\bm{X}=\emptyset$.
 A \gls{crf} is constructed using a \gls{markov network} $\mathcal{H}$ where the nodes correspond to $\bm{Y}\cup\bm{X}$ and the undirected edges model a symmetrical influence between the nodes~\citep{koller2009probabilistic}.
-Given a set of $\{\Psi_1,\dots\Psi_m\}$ that factorize over $\mathcal{H}$, a \gls{crf} defines $P(\bm{Y}\mid\bm{X})$ as~\citep{koller2009probabilistic}:
+Given a set of \glspl{factor} $\{\Psi_1,\dots\Psi_K\}$ that factorize over $\mathcal{H}$, a \gls{crf} defines $P(\bm{Y}\mid\bm{X})$ as~\citep{koller2009probabilistic}
 \begin{equation}
   \label{equ:crf-factor}
   \begin{split}
     P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X}) \\
-    \tilde{P}(\bm{Y},\bm{X}) &= \prod_{i=1}^{m}\Psi_i(\bm{D}_i) \\
+    \tilde{P}(\bm{Y},\bm{X}) &= \prod_{k=1}^{K}\Psi_k(\bm{D}_k) \\
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
-
-Here, $\tilde{P}(\bm{Y},\bm{X})$ is the unnormalized measure and $Z(\bm{X})$ is a normalizing constant, sometimes referred to as partitioning function~\citep{koller2009probabilistic}.
-It guarantees that the distribution $P(\bm{Y}\mid\bm{X})$ sums to 1.
+where, similar to \Cref{equ:gibbs-distribution}, $\tilde{P}(\bm{Y},\bm{X})$ is the unnormalized measure and $Z(\bm{X})$ is a normalizing constant~\citep{koller2009probabilistic}.
 
 \bigskip
 
-Using \Cref{equ:prob-distr-feature} and our definition of \glspl{feature function} we can reformulate the definition of \glspl{crf} in \Cref{equ:crf-factor} as a \gls{log-linear model}:
+Using \Cref{equ:log-linear-model} we can reformulate the definition of \glspl{crf} in \Cref{equ:crf-factor} as a \gls{log-linear model}:
 \begin{equation}
   \label{equ:crf-log-linear}
   \begin{split}
-    P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X})  \\
-    \tilde{P}(\bm{Y},\bm{X}) &= \exp\left\{ -\sum_{i=1}^k \theta_i f_i(\bm{D}_i)\right\}\\
+    P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X}) \\
+    \tilde{P}(\bm{Y},\bm{X}) & = \exp\left\{ -\sum_{k=1}^K \theta_k f_k(\bm{D}_k)\right\} \\
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
 
-A kind of \glspl{crf} that follows a relatively simple structure are \glspl{linear-chain crf}.
-For given $\bm{X}=\{X_1,\dots,X_k\}$ and $\bm{Y}=\{Y_1,\dots,Y_k\}$, we consider two types of \glspl{feature function}.
-%TODO define two kinds of feature functions combining \cite{sutton2010introduction} and \cite{koller2009probabilistic}
+A specific kind of \gls{crf} that follows a rather simple structure are \glspl{linear-chain crf}.
+For given $\bm{X}=\{X_1,\dots,X_N\}$ and $\bm{Y}=\{Y_1,\dots,Y_N\}$, we consider two types of \glspl{factor}: $\Psi_n^1(Y_n,Y_{n-1})$ which models the dependency between the neighboring \glspl{target variable} $Y_n$ and $\Psi_n^2(Y_n,\tilde{X}_1,\dots,\tilde{X}_t)$ which models the dependency between the \gls{target variable} and its context given by the \glspl{observed variable}.\todo{example?}
 
-An example for a  \gls{linear-chain crf} can be derived from our author example\dots
+We can now represent the \glspl{factor} as the \glspl{feature function}
+\begin{equation}
+  \label{equ:linear-chain-crf-feature-functions}
+  \begin{split}
+   f_n^v(Y_n,Y_{n-1}) & = \bm{\mathbbm{1}}\{Y_n=y_n,Y_{n-1}=y_v\}\\
+   f_n^w(Y_n,\bm{\tilde{X}}_w) & = \bm{\mathbbm{1}}\{Y_n=y_n,\tilde{X}_1=\tilde{x}_1,\dots,\tilde{X}_T=\tilde{x}_T\}
+  \end{split}
+\end{equation}
+where $\bm{\tilde{X}}_w=\{\tilde{X}_1,\dots,\tilde{X}_T\}$ with $\bm{\tilde{X}}_w\subseteq \bm{X}$, and the predefined assignments $y_v\in\bm{y}$ as well as $\bm{\tilde{x}}_w=\{\tilde{x}_1,\dots,\tilde{x}_T\}$ with $\bm{\tilde{x}}_w\subseteq\bm{x}$~\citep{koller2009probabilistic}.
+$T$ can be different for every $\bm{\tilde{X}}_w$.
+$\bm{\mathbbm{1}}$ is an indicator function that returns $1$ if all listed \glspl{random variable} match their predefined assignments.
+
+In other words, $f_n^v(Y_n,Y_{n-1})$ models a specific dependency between the neighboring \glspl{target variable} $Y_n$ and $Y_{n-1}$. $f_n^w(Y_n,\bm{\tilde{X}}_w)$ models a specific dependency between the \gls{target variable} $Y_n$ and its context given by the \glspl{observed variable} $\bm{\tilde{X}}_w$.
+
+By inserting the two types of \glspl{feature function} from \Cref{equ:linear-chain-crf-feature-functions} into \Cref{equ:crf-log-linear} we define \glspl{linear-chain crf} as:
+\begin{equation}
+  \label{equ:linear-chain-crf}
+  \begin{split}
+    P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X})  \\
+    \tilde{P}(\bm{Y},\bm{X}) & = \exp\left\{ -\sum_{n=1}^N \Big(\sum_{v=1}^V\theta_v f_n^v(Y_n,Y_{n-1})+\sum_{w=1}^W\theta_w f_n^w(Y_n,\bm{\tilde{X}}_w)\Big) \right\} \\
+    Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
+  \end{split}
+\end{equation}
+Thereby, for every $Y_n$, we have $V$ \glspl{feature function} $f_n^v$ and $W$ \glspl{feature function} $f_n^w$.
+Both $V$ and $W$ can be different for every $Y_n$.
+In order to simplify the notation, we define $Y_0$ as a special start state, denoted \texttt{start}~\citep{lafferty2001conditional}.
+
+\citet{sutton2010introduction} show that \glspl{hmm} are a restricted kind of \gls{linear-chain crf}, namely one where $\bm{\tilde{X}_w}$ in \Cref{equ:linear-chain-crf-feature-functions} only includes the word's identity at the current position $n$.
+
+An example for a  \gls{linear-chain crf} can be derived from our author example\dots\todo{example}
 
 \section{Inference of \glsentryshortpl{crf}}\label{sec:inference-crfs}
 
 After formalizing the encoding of \glspl{crf} we can now discuss their inference.
 %TODO difference conditional probability query and probability query
 More precisely we will consider the inferencing task for \glspl{probability query} (see \Cref{subsec:probability-theory}).
-
 
 %TODO few sentences about complexity
 

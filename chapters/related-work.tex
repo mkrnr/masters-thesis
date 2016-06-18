@@ -67,22 +67,19 @@ The evaluation on two data sets showed that the approach by \citet{fan2015detect
 
 \bigskip
 
-%TODO rewrite
 In summary, several aspects of the information extraction from research papers can be achieved with a considerably good performance.
-Especially the segmentation of a given reference string into it's elements by using \glspl{crf} \citep{peng2004accurate,councill2008parscit,groza2012reference} as well as the combination of citation extraction and citation-reference matching \citep{powley2007evidence} show very promising results.
-Yet, the extraction of reference strings from research papers is currently done with regular expressions that search for a section in the document that is labeled ``References'', ``Bibliography'', or similar.
-In the case of research papers where the reference strings are listed in the footnotes on the page where they are referenced to, this approach is not suitable.
-%TODO extend this based on the introduction
-%Instead of creating another set of regular expressions to cover these cases, we will discuss in the following chapters how \glspl{crf} can be used to correctly label strings in a paper as reference strings.
+Especially the segmentation of a given reference string into its elements by using \glspl{crf} \citep{peng2004accurate,councill2008parscit,groza2012reference} as well as the combination of citation extraction and citation-reference matching \citep{powley2007evidence} show very promising results.
+Yet, all current approaches have in common that they rely on manually labeled data sets for training their models.
+Manually labeled data sets are expensive and thereby usually only exist in smaller quantities.
+In our particular use case of extracting references from German social science research papers, there is currently no such data set available.
 
 \Gls{distant supervision} is a promising approach that allows the reduction of labeling costs by including external sources of information during the generation of partially annotated data sets.
 
 In order to use this data set for training in a \gls{crf} model, two approaches were discussed.
 \citet{tsuboi2008training} marginalize unlabeled tokens by generating sequences for all possible labelings for these tokens.
 Instead of labeled instances, \citet{mann2008generalized} use \gls{ge} criteria and labeled features.
-This way they can also incorporate \glspl{conditional probability distribution} over the labelings.
+In addition they can also incorporate \glspl{conditional probability distribution} over the labelings.
 
-
-%TODO transition sentence
-%In the following chapter we will discuss how \gls{distant supervision} can be applied on our scenario of extracting reference strings from research papers.
+In the following chapter we will first introduce \glspl{crf} as a framework for modeling \glspl{probabilistic graphical model}.
+This will build the foundation of our discussion in \Cref{cha:distant-supervision} about the usage of partially annotated data in \glspl{crf} during \gls{distant supervision}.
 
