@@ -78,8 +78,9 @@ Given a \glspl{probability distribution} over a set of \glspl{random variable} $
 These are formulated as queries which are then run against the \glspl{probability distribution}{distribution}.
 One type of queries are called \glspl{probability query}.
 A \gls{probability query} consists of two disjoint subsets of \glspl{random variable} of $\mathcal{X}$~\citep{koller2009probabilistic}.
-One is called the \gls{evidence}, denoted $\bm{E}$, with its \glspl{random variable} having the instantiation $\bm{e}$.
-The second subset contains the query variable and is denoted with $\bm{Y}$.
+One is called the \gls{evidence}, denoted $\bm{E}$, with its \glspl{random variable} having the assignments $\bm{e}$.
+%TODO better explain assignments (earlier)
+The second subset contains the query variables and is denoted with $\bm{Y}$.
 Based on this, the query is formulated as $P(\bm{Y}|\bm{E}=\bm{e})$~\citep{koller2009probabilistic}.
 We thereby want to compute the posterior \gls{probability distribution} over the assignments $\bm{y}$ to $\bm{Y}$, given the conditioning $\bm{E}=\bm{e}$~\citep{koller2009probabilistic}.
 
@@ -188,11 +189,34 @@ This \gls{probability distribution} is called a \gls{log-linear model}.
 
 \bigskip
 
-After introducing some of the fundamental concepts we can now discuss \glspl{crf}, a type of \glspl{markov network}. In the following we will address how to encode, inference, and learn them.
+In addition to \glspl{bayesian network} and \glspl{markov network} we can further distinguish between \glspl{generative model} and \glspl{discriminative model}.
+Assume a set of input variables, also called \glspl{observed variable}, $\bm{X}$ and a set of output variables, also called \glspl{target variable} $\bm{Y}$ with $\bm{X}\cap\bm{Y}=\emptyset$.
+A \gls{generative model} then encodes the \gls{joint distribution} $P(\bm{Y},\bm{X})$ whereas a \gls{discriminative model} encodes the \gls{conditional probability distribution} $P(\bm{Y}\mid\bm{X})$~\citep{koller2009probabilistic}.
+More precisely, for a \gls{generative model} we have $P(\bm{Y},\bm{X})=P(\bm{Y})P(\bm{X}\mid\bm{Y})$.
+We thereby consider how the output of the model is generated as a function of the input~\citep{sutton2010introduction}.
+
+This leads to the main difference between the two models, namely that for a \gls{discriminative model} we do not need to model $P(\bm{X})$.
+\citet{sutton2010introduction} argue that indeed the modeling of $P(\bm{X})$ in \glspl{generative model} leads to a number of difficulties and limitations.
+According to them, $P(\bm{X})$ often contains a number of highly dependent features which restrict the modeling.
+For example, in \gls{nlp} tasks we often model word-identities as features.
+Having a limited training set, we often have words that were unseen during training.
+In order to still give a reasonable classification for unseen words it would be beneficial to also include other features in addition to just the word-identities~\citep{sutton2010introduction}.
+Such features could be the capitalization, length, and prefixes of a word or even its neighboring words~\citep{sutton2010introduction}.
+Yet, such features are highly dependent to each other and such dependencies would need to be represented in a \gls{generative model} which is often intractable in practice~\citep{sutton2010introduction}.
+\Glspl{discriminative model} on the other hand can leverage such features despite their high dependencies since $P(\bm{X})$ is not modeled~\citep{koller2009probabilistic}.
+%TODO argue about modeling p(Y|X) directly since it represents our probability query (sutton?)
+
+Since in \glspl{generative model} $P(\bm{Y})$ topologically precedes $P(\bm{X}\mid\bm{Y})$, \citet{sutton2010introduction} argue that they are more naturally modeled by a \gls{bayesian network}.
+Since there is no such order in \glspl{discriminative model}, it is argued that they are more naturally modeled by a \gls{markov network}~\citep{sutton2010introduction}.
+
+\bigskip
+
+After introducing some of the fundamental concepts we can now discuss \glspl{crf}. In the following we will address how to encode, inference, and learn them.
 
 \section{Encoding of \glsentryshortpl{crf}}\label{sec:definition-crfs}
 A framework for building \glspl{probabilistic graphical model} are \acrfullpl{crf}.
 They were proposed by \citet{lafferty2001conditional} with the goal of segmenting and labeling sequence data.
+A main motivation for \glspl{crf} was to overcome a label bias problem that other discriminative \glspl{markov network}, such as \glspl{memm}, tend to have~\citep{lafferty2001conditional}.
 
 \bigskip
 
