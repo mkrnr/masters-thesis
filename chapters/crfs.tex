@@ -17,7 +17,6 @@ $P$ describes a mapping from events in \glssymbol{measurable set} to real values
   \item $P(\glssymbol{outcome space})=1$.
   \item If $\alpha,\beta\in \glssymbol{outcome space}$ and $\alpha\cap\beta = \emptyset$, then $P(\alpha\cup\beta)=P(\alpha)+P(\beta)$.
 \end{itemize}
-
 In our example of author information extraction we define \glssymbol{outcome space} as the set of possible word sequences that can appear in a given text line of a research paper.
 For the purpose of illustration we consider four events:
 
@@ -53,10 +52,9 @@ Using the values from \todo{ref}, $P(X=capitalized,Y=period)=XXX$ and $P(X=capit
 The \gls{conditional probability} of an event $\alpha$ given $\beta$ with $P(\beta)>0$ is defined as~\cite{koller2009probabilistic}:
 
 \begin{equation}
-P(\alpha\mid\beta) = \frac{P(\alpha\cap\beta)}{P(\beta)}
 \label{equ:conditional-probability}
+P(\alpha\mid\beta) = \frac{P(\alpha\cap\beta)}{P(\beta)}
 \end{equation}
-
 This definition can be extended to \glspl{random variable}.
 Given that all assignments in $Y$ are non-zero, the \gls{conditional probability distribution} $P(X\mid Y)$ assigns each value $Y$ a probability over values of $X$ using the \gls{conditional probability}.
 This can also be extended to sets of \glspl{random variable}.
@@ -174,7 +172,6 @@ Since we are in the log-space, we can calculate a \gls{probability distribution}
   \label{equ:p-energy-function}
   P(X_1,\dots,X_N) \propto \exp\left [-\sum_{k=1}^K\epsilon_k(\bm{D}_k)\right ]
 \end{equation*}
-
 Since we only consider nonnegative \glspl{factor} and the results of the \gls{energy function} can be negative, we need a new definition of a \gls{factor} without its negativity property.
 Thereby, given a set of \glspl{random variable} $\bm{D}$, we define a \gls{feature function} $f(\bm{D})$ as a function from $\bm{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
 In \todo{example} we apply the \gls{energy function} to the values of \todo{example}.
@@ -214,9 +211,12 @@ Since there is no such order in \glspl{discriminative model}, it is argued that 
 After introducing some of the fundamental concepts we can now discuss \glspl{crf}. In the following we will address how to encode, inference, and learn them.
 
 \section{Encoding of \glsentryshortpl{crf}}\label{sec:definition-crfs}
-A framework for building \glspl{probabilistic graphical model} are \acrfullpl{crf}.
+A popular framework for building \glspl{probabilistic graphical model} are \acrfullpl{crf}.
 They were proposed by \citet{lafferty2001conditional} with the goal of segmenting and labeling sequence data.
 A main motivation for \glspl{crf} was to overcome a label bias problem that other discriminative \glspl{markov network}, such as \glspl{memm}, tend to have~\citep{lafferty2001conditional}.
+\citet{lafferty2001conditional} argue that this is due to the structure in which models such as \glspl{memm} model \glspl{conditional probability} using per-state models.
+This can lead to a bias towards stats which have fewer outgoing transitions~\citep{lafferty2001conditional}.
+In order to overcome this bias, \glspl{crf} do not have per-state models but instead contain a single model to represent ``the \glslink{joint distribution}{joint probability} of the entire sequence of labels given the observation sequence''~\citep{lafferty2001conditional}.
 
 \bigskip
 
@@ -231,7 +231,11 @@ Given a set of \glspl{factor} $\{\Psi_1,\dots\Psi_K\}$ that factorize over $\mat
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
-where, similar to \Cref{equ:gibbs-distribution}, $\tilde{P}(\bm{Y},\bm{X})$ is the unnormalized measure and $Z(\bm{X})$ is a normalizing constant~\citep{koller2009probabilistic}.
+where, similar to \glspl{gibbs distribution} (see \Cref{equ:gibbs-distribution}), $\tilde{P}(\bm{Y},\bm{X})$ is the unnormalized measure and $Z(\bm{X})$ is a normalizing constant~\citep{koller2009probabilistic}.
+In fact, the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above is how the normalizing constant $Z$ is defined~\citep{koller2009probabilistic}.
+In \Cref{equ:gibbs-distribution}, $Z$ normalizes $\tilde{P}(X_1,\dots,X_N)$ with a sum over all possible assignments to $X_1,\dots,X_N$ resulting in a \gls{joint distribution} $P(X_1,\dots,X_N)$.
+In \Cref{equ:crf-factor}, however, $Z(\bm{X})$ normalizes $\tilde{P}(\bm{Y},\bm{X})$ with a sum over the assignments $\bm{y}$ to $\bm{Y}$ over the specified assignments $\bm{x}$ to $\bm{X}$.
+This way of normalizing results in the \gls{conditional probability distribution} $P(\bm{Y}\mid\bm{X})$ (Compare with \Cref{equ:conditional-probability}).
 
 \bigskip
 
@@ -244,11 +248,28 @@ Using \Cref{equ:log-linear-model} we can reformulate the definition of \glspl{cr
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
+This representation allows us to encode a \gls{crf} model more compactly using \glspl{feature function} instead of \glspl{factor}.
+This will become more clear in the following discussion.
+
+\bigskip
 
 A specific kind of \gls{crf} that follows a rather simple structure are \glspl{linear-chain crf}.
-For given $\bm{X}=\{X_1,\dots,X_N\}$ and $\bm{Y}=\{Y_1,\dots,Y_N\}$, we consider two types of \glspl{factor}: $\Psi_n^1(Y_n,Y_{n-1})$ which models the dependency between the neighboring \glspl{target variable} $Y_n$ and $\Psi_n^2(Y_n,\tilde{X}_1,\dots,\tilde{X}_t)$ which models the dependency between the \gls{target variable} and its context given by the \glspl{observed variable}.\todo{example?}
-
-We can now represent the \glspl{factor} as the \glspl{feature function}
+For given $\bm{X}=\{X_1,\dots,X_N\}$ and $\bm{Y}=\{Y_1,\dots,Y_N\}$, we consider two types of \glspl{factor}:
+\begin{itemize}
+  \item $\Psi_n^v(Y_n,Y_{n-1})$ models the dependency between the neighboring \glspl{target variable} $Y_n$.
+  \item $\Psi_n^w(Y_n,\bm{\tilde{X}}_w)$ models the dependency between the \gls{target variable} and its context given by the \glspl{observed variable} $\bm{\tilde{X}}_w=\{\tilde{X}_1,\dots,\tilde{X}_T\}$ with $\bm{\tilde{X}}_w\subseteq\bm{X}$.
+$T$ can be different for every $\bm{\tilde{X}}_w$.
+\end{itemize}
+Inserting the two factors in \Cref{equ:crf-factor} results in:
+\begin{equation}
+  \label{equ:linear-chain-crf-factor}
+  \begin{split}
+    P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X}) \\
+    \tilde{P}(\bm{Y},\bm{X}) &= \prod_{n=1}^{N}\Big(\Psi_n^v(Y_n,Y_{n-1})\times\Psi_n^w(Y_n,\bm{\tilde{X}}_w)\Big) \\
+    Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
+  \end{split}
+\end{equation}
+We now can represent the two \glspl{factor} as the \glspl{feature function}
 \begin{equation}
   \label{equ:linear-chain-crf-feature-functions}
   \begin{split}
@@ -256,42 +277,76 @@ We can now represent the \glspl{factor} as the \glspl{feature function}
    f_n^w(Y_n,\bm{\tilde{X}}_w) & = \bm{\mathbbm{1}}\{Y_n=y_n,\tilde{X}_1=\tilde{x}_1,\dots,\tilde{X}_T=\tilde{x}_T\}
   \end{split}
 \end{equation}
-where $\bm{\tilde{X}}_w=\{\tilde{X}_1,\dots,\tilde{X}_T\}$ with $\bm{\tilde{X}}_w\subseteq \bm{X}$, and the predefined assignments $y_v\in\bm{y}$ as well as $\bm{\tilde{x}}_w=\{\tilde{x}_1,\dots,\tilde{x}_T\}$ with $\bm{\tilde{x}}_w\subseteq\bm{x}$~\citep{koller2009probabilistic}.
-$T$ can be different for every $\bm{\tilde{X}}_w$.
+where $y_v\in\bm{y}$ and $\bm{\tilde{x}}_w=\{\tilde{x}_1,\dots,\tilde{x}_T\}$ with $\bm{\tilde{x}}_w\subseteq\bm{x}$ are predefined assignments to $Y_{n-1}$ and $\bm{\tilde{X}}_w$ respectively~\citep{koller2009probabilistic}.
 $\bm{\mathbbm{1}}$ is an indicator function that returns $1$ if all listed \glspl{random variable} match their predefined assignments.
 
 In other words, $f_n^v(Y_n,Y_{n-1})$ models a specific dependency between the neighboring \glspl{target variable} $Y_n$ and $Y_{n-1}$. $f_n^w(Y_n,\bm{\tilde{X}}_w)$ models a specific dependency between the \gls{target variable} $Y_n$ and its context given by the \glspl{observed variable} $\bm{\tilde{X}}_w$.
 
 By inserting the two types of \glspl{feature function} from \Cref{equ:linear-chain-crf-feature-functions} into \Cref{equ:crf-log-linear} we define \glspl{linear-chain crf} as:
 \begin{equation}
-  \label{equ:linear-chain-crf}
+  \label{equ:linear-chain-crf-log-linear}
   \begin{split}
     P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X})  \\
     \tilde{P}(\bm{Y},\bm{X}) & = \exp\left\{ -\sum_{n=1}^N \Big(\sum_{v=1}^V\theta_v f_n^v(Y_n,Y_{n-1})+\sum_{w=1}^W\theta_w f_n^w(Y_n,\bm{\tilde{X}}_w)\Big) \right\} \\
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
-Thereby, for every $Y_n$, we have $V$ \glspl{feature function} $f_n^v$ and $W$ \glspl{feature function} $f_n^w$.
-Both $V$ and $W$ can be different for every $Y_n$.
+Thereby, for every $Y_n$, we have $V$ \glspl{feature function} $f_n^v$ for the $V$ possible assignments $Y_{n-1}=y_v$.
+Additionally, we have $W$ \glspl{feature function} $f_n^w$ for the $W$ possible contexts $\bm{\tilde{X}}_w$.
+Both $V$ and $W$ can be different for every $Y_n$ and again, $Z(\bm{X})$ is specific to $\bm{X}$.
 In order to simplify the notation, we define $Y_0$ as a special start state, denoted \texttt{start}~\citep{lafferty2001conditional}.
 
-\citet{sutton2010introduction} show that \glspl{hmm} are a restricted kind of \gls{linear-chain crf}, namely one where $\bm{\tilde{X}_w}$ in \Cref{equ:linear-chain-crf-feature-functions} only includes the word's identity at the current position $n$.
-
 An example for a  \gls{linear-chain crf} can be derived from our author example\dots\todo{example}
+
+Returning to our argument that \glspl{feature function} allow are move compact encoding of \glspl{crf} than \glspl{factor}, compare \todo{example}.
+
+\citet{sutton2010introduction} show that \glspl{hmm} are a restricted kind of \gls{linear-chain crf}, namely one where $\bm{\tilde{X}}_w$ in \Cref{equ:linear-chain-crf-feature-functions} only includes the word's identity at the current position $n$.
 
 \section{Inference of \glsentryshortpl{crf}}\label{sec:inference-crfs}
 
 After formalizing the encoding of \glspl{crf} we can now discuss their inference.
-%TODO difference conditional probability query and probability query
-More precisely we will consider the inferencing task for \glspl{probability query} (see \Cref{subsec:probability-theory}).
+Here we consider the inferencing task for \glspl{probability query} $P(\bm{Y}|\bm{X}=\bm{x})$ (see \Cref{subsec:probability-theory}).
+\citet{sutton2010introduction} distinguish two kinds of inference problems:
+\begin{enumerate}
+\item Given a trained model and observed assignments $\bm{X}=\bm{x}$, predict the most likely assignment $\bm{Y}=\bm{y}$:
+    \begin{equation}
+      \label{equ:inference-argmax}
+      \argmax\limits_{\bm{y}} P(\bm{Y}=\bm{y}\mid\bm{X}=\bm{x})
+    \end{equation}
+  \item During the parameter estimation during learning, compute the \gls{marginal distribution} for \dots\todo{add based on learning chapter}
+\end{enumerate}
+%TODO about that 1. and 2. are same fundamental operations (sutton2010, p. 27)
+By replacing the summation operator over $\bm{y}$ in the marginalization in the second case by the $\argmax$ function, we effectively result in the prediction problem in the first case.
+Thereby, the two kinds of inference problems can be seen as fundamentally the same operation~\citep{sutton2010introduction}.
+In the following we will focus on the inference of the normalizing constant $Z(\bm{X})$ in the context of \glspl{linear-chain crf}.
+An approach to the prediction task can be derived from it.
 
-%TODO few sentences about complexity
+\bigskip
+
+In order to show the computational complexity of this inferencing task, we will consider \glspl{linear-chain crf} on a \gls{factor} level.
+According to \Cref{equ:linear-chain-crf-factor} we have:
+\begin{equation}
+  \label{equ:linear-chain-crf-z}
+    Z(\bm{X}) = \sum_{\bm{Y}}\prod_{n=1}^{N}\Big(\Psi_n^v(Y_n,Y_{n-1})\times\Psi_n^w(Y_n,\bm{\tilde{X}}_w)\Big)
+\end{equation}
+Since we calculate the \gls{factor product} for every possible assignment $\bm{Y}=\bm{y}$, the computation of $Z(\bm{X})$ is exponential \dots
+\itodo{show complexity with example?}
+
+Yet, in the case of \glspl{linear-chain crf}, it is possible to reduce the complexity of calculating $Z(\bm{X})$ by using the forward-backward algorithm, sometimes referred to as dynamic programming or variable elimination~\citep{sutton2010introduction,koller2009probabilistic}.
+The key insight of the forward-backward algorithm is that during the na\"{\i}ve calculation of, in our case, $Z(\bm{X})$, partial calculations are repeated exponentially often.
+In order to prevent unnecessary repetitions of the same calculations, intermediate results are stored and reused.
+The following demonstration is based on the calculation of $P(\bm{X})$ for \glspl{hmm} using the forward-backward algorithm in \citet{sutton2010introduction}.
+
+\bigskip
+
+\itodo{calculation}
 
 
 %TODO exact inference (variable elimination/conditioning?) vs approximate inference (message-passing/optimization problem/particle-based methods?)
 
+
 \section{Learning of \glsentryshortpl{crf}}\label{sec:learning-crfs}
 
 %TODO see chapter 20 in PGM book
-%TODO Limited Memory BFGS (also used in Mallet) (``algorithm of choice'' by andrew2007scalable)
+%TODO approximation using Limited Memory BFGS (also used in Mallet) (``algorithm of choice'' by andrew2007scalable)
 
