@@ -256,51 +256,49 @@ This will become more clear in the following discussion.
 A specific kind of \gls{crf} that follows a rather simple structure are \glspl{linear-chain crf}.
 For given $\bm{X}=\{X_1,\dots,X_N\}$ and $\bm{Y}=\{Y_1,\dots,Y_N\}$, we consider two types of \glspl{factor}:
 \begin{itemize}
-  \item $\Psi_n^v(Y_n,Y_{n-1})$ models the dependency between the neighboring \glspl{target variable} $Y_n$.
-  \item $\Psi_n^w(Y_n,\bm{\tilde{X}}_w)$ models the dependency between the \gls{target variable} and its context given by the \glspl{observed variable} $\bm{\tilde{X}}_w=\{\tilde{X}_1,\dots,\tilde{X}_T\}$ with $\bm{\tilde{X}}_w\subseteq\bm{X}$.
-$T$ can be different for every $\bm{\tilde{X}}_w$.
+  \item $\Psi_n(Y_n,Y_{n-1})$ models the dependency between the \gls{target variable} $Y_n$ and its preceding \gls{target variable} $Y_{n-1}$.
+  \item $\Psi_n(Y_n,\bm{\tilde{X}}_n)$ models the dependency between the \gls{target variable} $Y_n$ and its context given by the \glspl{observed variable} $\bm{\tilde{X}}_n=\{\tilde{X}_1,\dots,\tilde{X}_T\}$ with $\bm{\tilde{X}}_n\subseteq\bm{X}$.
+    $T$ can be different for every $\bm{\tilde{X}_n}$.
 \end{itemize}
 Inserting the two factors in \Cref{equ:crf-factor} results in:
 \begin{equation}
   \label{equ:linear-chain-crf-factor}
   \begin{split}
     P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X}) \\
-    \tilde{P}(\bm{Y},\bm{X}) &= \prod_{n=1}^{N}\Big(\Psi_n^v(Y_n,Y_{n-1})\times\Psi_n^w(Y_n,\bm{\tilde{X}}_w)\Big) \\
+    \tilde{P}(\bm{Y},\bm{X}) &= \prod_{n=1}^{N}\Big(\Psi_n(Y_n,Y_{n-1})\times\Psi_n(Y_n,\bm{\tilde{X}}_n)\Big) \\
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
-We now can represent the two \glspl{factor} as the \glspl{feature function}
+We now can represent the two \glspl{factor} using the \glspl{feature function}
 \begin{equation}
   \label{equ:linear-chain-crf-feature-functions}
   \begin{split}
-   f_n^v(Y_n,Y_{n-1}) & = \bm{\mathbbm{1}}\{Y_n=y_n,Y_{n-1}=y_v\}\\
-   f_n^w(Y_n,\bm{\tilde{X}}_w) & = \bm{\mathbbm{1}}\{Y_n=y_n,\tilde{X}_1=\tilde{x}_1,\dots,\tilde{X}_T=\tilde{x}_T\}
+    \tilde{f}_k(Y_n,Y_{n-1})\equalsdef f_{j,i}(Y_n,Y_{n-1}) & = \bm{\mathbbm{1}}\{Y_n=j,Y_{n-1}=i\}\\
+    \tilde{f}_l(Y_n,\tilde{X}_t)\equalsdef f_{j,\tilde{x}_t}(Y_n,\tilde{X}_t) & = \bm{\mathbbm{1}}\{Y_n=j,\tilde{X}_t=\tilde{x}_t\}
   \end{split}
 \end{equation}
-where $y_v\in\bm{y}$ and $\bm{\tilde{x}}_w=\{\tilde{x}_1,\dots,\tilde{x}_T\}$ with $\bm{\tilde{x}}_w\subseteq\bm{x}$ are predefined assignments to $Y_{n-1}$ and $\bm{\tilde{X}}_w$ respectively~\citep{koller2009probabilistic}.
-$\bm{\mathbbm{1}}$ is an indicator function that returns $1$ if all listed \glspl{random variable} match their predefined assignments.
+where $i$, $j$, and $\tilde{x}_t$ are predefined assignments to $Y_{n-1}$, $Y_n$, and $\tilde{X}_t$ respectively. $\bm{\mathbbm{1}}$ is an indicator function that returns $1$ if all listed \glspl{random variable} match their predefined assignments.
+The $\tilde{f}$ notation with its indices will later allow us to iterate over the predefined \glspl{feature function}.
 
-In other words, $f_n^v(Y_n,Y_{n-1})$ models a specific dependency between the neighboring \glspl{target variable} $Y_n$ and $Y_{n-1}$. $f_n^w(Y_n,\bm{\tilde{X}}_w)$ models a specific dependency between the \gls{target variable} $Y_n$ and its context given by the \glspl{observed variable} $\bm{\tilde{X}}_w$.
+In other words, $\tilde{f}_k(Y_n,Y_{n-1})$ models a specific dependency between the neighboring \glspl{target variable} $Y_n$ and $Y_{n-1}$. $\tilde{f}_l(Y_n,\tilde{X}_t)$ models a specific dependency between the \gls{target variable} $Y_n$ and one of the \glspl{observed variable} $\tilde{X}_t$ in context of $Y_n$ given by $\bm{\tilde{X}}_n$.
 
 By inserting the two types of \glspl{feature function} from \Cref{equ:linear-chain-crf-feature-functions} into \Cref{equ:crf-log-linear} we define \glspl{linear-chain crf} as:
 \begin{equation}
   \label{equ:linear-chain-crf-log-linear}
   \begin{split}
     P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X})  \\
-    \tilde{P}(\bm{Y},\bm{X}) & = \exp\left\{ -\sum_{n=1}^N \Big(\sum_{v=1}^V\theta_v f_n^v(Y_n,Y_{n-1})+\sum_{w=1}^W\theta_w f_n^w(Y_n,\bm{\tilde{X}}_w)\Big) \right\} \\
+    \tilde{P}(\bm{Y},\bm{X}) & = \exp\left\{ -\sum_{n=1}^N \Big(\sum_{k=1}^K\theta_k \tilde{f}_k(Y_n,Y_{n-1})+\sum_{l=1}^L\theta_l \tilde{f}_l(Y_n,\tilde{X}_t)\Big) \right\} \\
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
-Thereby, for every $Y_n$, we have $V$ \glspl{feature function} $f_n^v$ for the $V$ possible assignments $Y_{n-1}=y_v$.
-Additionally, we have $W$ \glspl{feature function} $f_n^w$ for the $W$ possible contexts $\bm{\tilde{X}}_w$.
-Both $V$ and $W$ can be different for every $Y_n$ and again, $Z(\bm{X})$ is specific to $\bm{X}$.
+Thereby, for every $Y_n$, we iterate over $K$ predefined \glspl{feature function} $\tilde{f}_k$ and $L$ predefined \glspl{feature function} $\tilde{f}_l$ with $\tilde{X}_t\in\bm{\tilde{X}}_n$.
 In order to simplify the notation, we define $Y_0$ as a special start state, denoted \texttt{start}~\citep{lafferty2001conditional}.
 
 An example for a  \gls{linear-chain crf} can be derived from our author example\dots\todo{example}
 
 Returning to our argument that \glspl{feature function} allow are move compact encoding of \glspl{crf} than \glspl{factor}, compare \todo{example}.
 
-\citet{sutton2010introduction} show that \glspl{hmm} are a restricted kind of \gls{linear-chain crf}, namely one where $\bm{\tilde{X}}_w$ in \Cref{equ:linear-chain-crf-feature-functions} only includes the word's identity at the current position $n$.
+\citet{sutton2010introduction} show that \glspl{hmm} are a restricted kind of \gls{linear-chain crf}, namely one where $\bm{\tilde{X}}_n$ in \Cref{equ:linear-chain-crf-feature-functions} only includes the word's identity at the current position $n$.
 
 \section{Inference of \glsentryshortpl{crf}}\label{sec:inference-crfs}
 
@@ -327,9 +325,9 @@ In order to show the computational complexity of this inferencing task, we will 
 According to \Cref{equ:linear-chain-crf-factor} we have:
 \begin{equation}
   \label{equ:linear-chain-crf-z}
-    Z(\bm{X}) = \sum_{\bm{Y}}\prod_{n=1}^{N}\Big(\Psi_n^v(Y_n,Y_{n-1})\times\Psi_n^w(Y_n,\bm{\tilde{X}}_w)\Big)
+  Z(\bm{X}) = \sum_{\bm{Y}}\bigg(\prod_{n=1}^{N}\Big(\Psi_n(Y_n,Y_{n-1})\times\Psi_n(Y_n,\bm{\tilde{X}}_n)\Big)\bigg)
 \end{equation}
-Since we calculate the \gls{factor product} for every possible assignment $\bm{Y}=\bm{y}$, the computation of $Z(\bm{X})$ is exponential \dots
+Since we calculate the \gls{factor product} for every possible joint assignment $\bm{Y}=\bm{y}$, the computation of $Z(\bm{X})$ is exponential \dots
 \itodo{show complexity with example?}
 
 Yet, in the case of \glspl{linear-chain crf}, it is possible to reduce the complexity of calculating $Z(\bm{X})$ by using the forward-backward algorithm, sometimes referred to as dynamic programming or variable elimination~\citep{sutton2010introduction,koller2009probabilistic}.
@@ -339,8 +337,50 @@ The following demonstration is based on the calculation of $P(\bm{X})$ for \glsp
 
 \bigskip
 
-\itodo{calculation}
+By applying the distributive law on $Z(\bm{X})$ we can reorder \Cref{equ:linear-chain-crf-z} in the following way:
+\begin{equation}
+  \label{equ:linear-chain-crf-z-distributive}
+  \begin{split}
+  Z(\bm{X}) = & \sum_{Y_N}\Bigg(\sum_{Y_{N-1}}\Big(\Psi_N(Y_N,Y_{N-1})\times\Psi_N(Y_N,\bm{\tilde{X}}_N)\Big)\bigg(\sum_{Y_{N-2}}\Big(\Psi_{N-1}(Y_{N-1},Y_{N-2})\\
+  & \times\Psi_{N-1}(Y_{N-1},\bm{\tilde{X}}_{N-1})\Big) \dots\bigg)\Bigg)
+  \end{split}
+\end{equation}
+As we can see, the inner sums are needed multiple times by the outer sums.
+In a na\"{\i}ve approach, these inner sums would be recalculated every time they appear in an outer sum.\todo{example?}
+Instead, our goal is to calculate the inner sums once and store their result for later usage.
 
+\bigskip
+
+Before defining a recursive definition of $Z(\bm{X})$, first look at
+\begin{equation}
+  \label{equ:linear-chain-crf-z-j-1}
+  \begin{split}
+    Z(\bm{X},Y_N=j) = & \sum_{Y_1,\dots Y_{N-1}}\bigg(\Big(\Psi_N(j,Y_{N-1})\times\Psi_N(j,\bm{\tilde{X}}_N)\Big) \\
+    & \times\prod_{t'=1}^{N-1}\Big(\Psi_{t'}(Y_{t'},Y_{t'-1})\times\Psi_{t'}(Y_{t'},\bm{\tilde{X}}_{t'})\Big)\bigg)
+  \end{split}
+\end{equation}
+where we have the assignment $Y_N=j$ and where we isolate the calculations including $j$ from the product over all other calculations.
+
+Since in the two $\Psi_N$ we only use the assignments to $Y_{N-1}$, we can rewrite $Z(\bm{X},Y_N=j)$ as
+\begin{equation}
+  \label{equ:linear-chain-crf-z-j-2}
+  \begin{split}
+    Z(\bm{X},Y_N=j) = & \sum_{Y_{N-1}}\bigg(\Big(\Psi_N(j,Y_{N-1})\times\Psi_N(j,\bm{\tilde{X}}_N)\Big) \\
+    & \times\sum_{Y_1,\dots,Y_{N-1}}\prod_{t'=1}^{N-1}\Big(\Psi_{t'}(Y_{t'},Y_{t'-1})\times\Psi_{t'}(Y_{t'},\bm{\tilde{X}}_{t'})\Big)\bigg)
+  \end{split}
+\end{equation}
+and using \Cref{equ:linear-chain-crf-z} we arrive at
+\begin{equation}
+  \label{equ:linear-chain-crf-z-j-3}
+  Z(\bm{X},Y_N=j) = \sum_{Y_{N-1}}\bigg(\Big(\Psi_N(j,Y_{N-1})\times\Psi_N(j,\bm{\tilde{X}}_N)\Big)\times Z(X_1,\dots,X_{N-1})\bigg).
+  \end{equation}
+Generalizing from this we can now define
+\begin{equation}
+  \label{equ:linear-chain-crf-z-alpha}
+  \alpha_n(j) = \sum_{i\in\bm{Y}}\bigg(\Big(\Psi_n(j,i)\times\Psi_n(j,\bm{\tilde{X}}_n)\Big)\times \alpha_{n-1}(i)\bigg)
+\end{equation}
+where the assignment $i$ \dots\todo{about position of i before j}
+Since the recursion expands to the right, we refer to $\alpha_n$ as a \textit{forward variable}~\citep{sutton2010introduction}.
 
 %TODO exact inference (variable elimination/conditioning?) vs approximate inference (message-passing/optimization problem/particle-based methods?)
 
