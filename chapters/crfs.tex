@@ -337,7 +337,7 @@ The following demonstration is based on the calculation of $P(\bm{X})$ for \glsp
 
 \bigskip
 
-By applying the distributive law on $Z(\bm{X})$ we can reorder \Cref{equ:linear-chain-crf-z} in the following way:
+By applying the distributive law we can reorder \Cref{equ:linear-chain-crf-z} in the following way:
 \begin{equation}
   \label{equ:linear-chain-crf-z-distributive}
   \begin{split}
@@ -351,7 +351,7 @@ Instead, our goal is to calculate the inner sums once and store their result for
 
 \bigskip
 
-Before defining a recursive definition of $Z(\bm{X})$, first look at
+In order to find a recursive definition of $Z(\bm{X})$ that allows the reuse of intermediate calculations, we first consider the following case
 \begin{equation}
   \label{equ:linear-chain-crf-z-j-1}
   \begin{split}
@@ -359,9 +359,9 @@ Before defining a recursive definition of $Z(\bm{X})$, first look at
     & \times\prod_{t'=1}^{N-1}\Big(\Psi_{t'}(Y_{t'},Y_{t'-1})\times\Psi_{t'}(Y_{t'},\bm{\tilde{X}}_{t'})\Big)\bigg)
   \end{split}
 \end{equation}
-where we have the assignment $Y_N=j$ and where we isolate the calculations including $j$ from the product over all other calculations.
+where we have an assignment $Y_N=j$ and where the calculations including $j$ are isolated from the product over all other calculations.
 
-Since in the two $\Psi_N$ we only use the assignments to $Y_{N-1}$, we can rewrite $Z(\bm{X},Y_N=j)$ as
+Since in the two \glspl{factor} $\Psi_N$ we only use the assignments to $Y_{N-1}$ from the sum over $Y_1,\dots,Y_{N-1}$, we can rewrite \Cref{equ:linear-chain-crf-z-j-1} as
 \begin{equation}
   \label{equ:linear-chain-crf-z-j-2}
   \begin{split}
@@ -369,23 +369,59 @@ Since in the two $\Psi_N$ we only use the assignments to $Y_{N-1}$, we can rewri
     & \times\sum_{Y_1,\dots,Y_{N-1}}\prod_{t'=1}^{N-1}\Big(\Psi_{t'}(Y_{t'},Y_{t'-1})\times\Psi_{t'}(Y_{t'},\bm{\tilde{X}}_{t'})\Big)\bigg)
   \end{split}
 \end{equation}
-and using \Cref{equ:linear-chain-crf-z} we arrive at
+and using the definition of $Z(\bm{X})$ in \Cref{equ:linear-chain-crf-z} we arrive at
 \begin{equation}
   \label{equ:linear-chain-crf-z-j-3}
   Z(\bm{X},Y_N=j) = \sum_{Y_{N-1}}\bigg(\Big(\Psi_N(j,Y_{N-1})\times\Psi_N(j,\bm{\tilde{X}}_N)\Big)\times Z(X_1,\dots,X_{N-1})\bigg).
   \end{equation}
-Generalizing from this we can now define
+Generalizing from this case we can now define
 \begin{equation}
   \label{equ:linear-chain-crf-z-alpha}
   \alpha_n(j) = \sum_{i\in\bm{Y}}\bigg(\Big(\Psi_n(j,i)\times\Psi_n(j,\bm{\tilde{X}}_n)\Big)\times \alpha_{n-1}(i)\bigg)
 \end{equation}
-where the assignment $i$ \dots\todo{about position of i before j}
-Since the recursion expands to the right, we refer to $\alpha_n$ as a \textit{forward variable}~\citep{sutton2010introduction}.
+where the position of assignment $i$ in $\bm{Y}$ is derived from the definition $\Psi_n(j,i)$.
+Thereby, if $Y_n=j$ then $i$ is an assignment to $Y_{n-1}$.
+The base case for the recursion is defined as
+\begin{equation}
+  \label{equ:linear-chain-crf-z-alpha-base}
+  \alpha_1(j) = \Psi_1(j,y_0)\times\Psi_1(j,\bm{\tilde{X}}_1)
+\end{equation}
+where $y_0$ again is the \texttt{start} state. Since the calculation is recursive in a way that $\alpha_n$ is calculated using the result of $\alpha_{n-1}$, we refer to $\alpha_n$ as a \textit{forward variable}~\citep{sutton2010introduction}. In order to calculate $Z(\bm{X})$ using $\alpha_n(j)$, we calculate the sum over all assignments to $Y_T$ in $\bm{Y}$, resulting in
+\begin{equation}
+  \label{equ:linear-chain-crf-z-alpha-sum}
+  Z(\bm{X})=\sum_{Y_T\in\bm{Y}}\alpha_T(Y_T).
+\end{equation}
+
+\bigskip
+
+Even though the forward variable $\alpha_n$ is sufficient for calculating $Z(\bm{X})$, other calculations may also require a \textit{backward variable} $\beta_n$. It is defined analogously to $\alpha_n$ but the recursion expands in the opposite direction such that the calculation of $\beta_n$ recursively uses the result of $\beta_{n+1}$:
+\begin{equation}
+  \label{equ:linear-chain-crf-z-beta}
+  \beta_n(i) = \sum_{j\in\bm{Y}}\bigg(\Big(\Psi_{n+1}(j,i)\times\Psi_{n+1}(j,\bm{\tilde{X}}_{n+1})\Big)\times \beta_{n+1}(j)\bigg)
+\end{equation}
+Due to the opposite order, the base case for the recursion is defined as $\beta_N(i)=1$.
+Also, note the inverted usage of $i$ in $\beta_n(i)$ and $j$ in $\beta_{n+1}(j)$ in comparison with the usage in \Cref{equ:linear-chain-crf-z-alpha} for $\alpha_n$.
+It is also possible to calculate $Z(\bm{X})$ using $\beta_n$ with
+\begin{equation}
+  \label{equ:linear-chain-crf-z-beta-sum}
+  Z(\bm{X})=\beta_0(Y_0)\equalsdef\sum_{Y_1\in\bm{Y}}\bigg(\Big(\Psi_1(Y_1,Y_0)\times\Psi_1(Y_1,\bm{\tilde{X}}_1)\Big)\times\beta_1(Y_1)\bigg)
+\end{equation}
+in order to correctly handle the \texttt{start} state $Y_0$.
+Again, the definitions of $\alpha_n$ and $\beta_n$ are derived from \citet{sutton2010introduction} and their example for \glspl{hmm}.
+
+\bigskip
+
+By using both $\alpha_n$ and $\beta_n$ it is possible to approach a calculation from both sides of a sequence\todo{example for $\tilde{P}(\bm{Y},\bm{X})$, sutton2010 p.34 top}
+
+%TODO few words on Viterbi algorithm (sutton2010)
 
 %TODO exact inference (variable elimination/conditioning?) vs approximate inference (message-passing/optimization problem/particle-based methods?)
+\bigskip
 
-
+In the following section we will discuss methods for learning \glspl{crf}.
+In particular we will look into the parameter estimation of the weights $\theta$ that are assigned to \glspl{feature function}, for example in \Cref{equ:linear-chain-crf-log-linear}.
 \section{Learning of \glsentryshortpl{crf}}\label{sec:learning-crfs}
+
 
 %TODO see chapter 20 in PGM book
 %TODO approximation using Limited Memory BFGS (also used in Mallet) (``algorithm of choice'' by andrew2007scalable)
