@@ -418,10 +418,20 @@ By using both $\alpha_n$ and $\beta_n$ it is possible to approach a calculation 
 %TODO exact inference (variable elimination/conditioning?) vs approximate inference (message-passing/optimization problem/particle-based methods?)
 \bigskip
 
+When applying the forward-backward algorithm to \glspl{linear-chain crf}, we exploit their sequential structure.
+Yet, not all \gls{crf} models follow such a structure and thereby we can not always apply this algorithm.
+A number of alternative algorithms for both exact and approximate inference for such general graphs exist.
+\itodo{list algorithms and link them}
+Since our approach on author extraction uses \glspl{linear-chain crf}, we will not further discuss these alternatives.
+Instead, we refer to \citet{koller2009probabilistic} for further readings on this topic.
+
+\bigskip
+
+
 In the following section we will discuss methods for learning \glspl{crf}.
 In particular we will look into the parameter estimation of the weights $\theta$ that are assigned to \glspl{feature function}, for example in \Cref{equ:linear-chain-crf-log-linear}.
-\section{Learning of \glsentryshortpl{crf}}\label{sec:learning-crfs}
 
+\section{Learning of \glsentryshortpl{crf}}\label{sec:learning-crfs}
 
 %TODO see chapter 20 in PGM book
 %TODO approximation using Limited Memory BFGS (also used in Mallet) (``algorithm of choice'' by andrew2007scalable)

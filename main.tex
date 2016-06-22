@@ -1,4 +1,4 @@
-\documentclass[m,binding,scrreprt,master,palatino]{WeSTthesis}
+\documentclass[m,binding,scrreprt,master,palatino,codegpl]{WeSTthesis}
 %\documentclass[m,binding,twoside,scrreprt,master,palatino]{WeSTthesis}
 \usepackage[english,ngerman]{babel}		% English and new German spelling
 \usepackage[utf8]{inputenc}           % correct input encoding
@@ -83,7 +83,6 @@ and Distant Supervision}
 % load local acronyms
 \loadglsentries{frontbackmatter/acronyms.tex}
 
-
 % use italics for the first use of a glossary term
 \defglsdisplayfirst[\glsdefaulttype]{\textit{#1}}
 
@@ -140,6 +139,9 @@ and Distant Supervision}
 \varclearpage{}
 
 \input{chapters/implementation}
+\varclearpage{}
+
+\input{chapters/evaluation}
 \varclearpage{}
 
 \input{chapters/conclusions-and-future-work}
