@@ -101,57 +101,64 @@ and Distant Supervision}
 
 \maketitle
 
+
 \input{frontbackmatter/abstract}
-\varclearpage{}
+\cleardoublepage{}
 
 %TODO add license
 %\input{frontbackmatter/license}
-%\varclearpage
+%\cleardoublepage{}
 
 \tableofcontents
-\varclearpage{}
+\cleardoublepage{}
+
+%TODO add, position?
+%\input{danksagung}
+\cleardoublepage{}
 
 \printglossary[type=\acronymtype,title={List of Abbreviations}]
+\cleardoublepage{}
 
-\varclearpage{}
+% add the following glossaries to the table of contents
+%\glstoctrue{}
+
 
 
 \pagenumbering{arabic}
 % list of figures
 % \listoffigures
-% \varclearpage
+% \cleardoublepage
 
 % beginning of the actual text section
 %\listoftodos
-\clearpage
 \input{chapters/introduction}
-\varclearpage{}
+\cleardoublepage{}
 \input{chapters/related-work}
-\varclearpage{}
+\cleardoublepage{}
 
 \input{chapters/crfs}
-\varclearpage{}
+\cleardoublepage{}
 
 \input{chapters/distant-supervision}
-\varclearpage{}
+\cleardoublepage{}
 
 \input{chapters/author-extraction}
-\varclearpage{}
+\cleardoublepage{}
 
 \input{chapters/implementation}
-\varclearpage{}
+\cleardoublepage{}
 
 \input{chapters/evaluation}
-\varclearpage{}
+\cleardoublepage{}
 
 \input{chapters/conclusions-and-future-work}
-\varclearpage{}
+\cleardoublepage{}
 
 %\appendix
 %\appendixpage
 %\addappheadtotoc
 %\input{appendices/insert-filename-here}
-%\varclearpage
+%\cleardoublepage{}
 
 
 \printglossary[style=altlist]
@@ -160,9 +167,8 @@ and Distant Supervision}
 %\bibliographystyle{plain}
 %\bibliographystyle{alpha}
 
+
 \printbibliography[heading=bibintoc]
-\varclearpage{}
+\cleardoublepage{}
 
-
-%\input{danksagung}
 \end{document}
