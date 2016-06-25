@@ -170,7 +170,7 @@ where $\epsilon(\bm{D})=-\ln\Psi(\bm{D})$ is called \gls{energy function}~\citep
 Since we are in the log-space, we can calculate a \gls{probability distribution} over a set of \glspl{random variable} the following way~\citep{koller2009probabilistic}:
 \begin{equation*}
   \label{equ:p-energy-function}
-  P(X_1,\dots,X_N) \propto \exp\left [-\sum_{k=1}^K\epsilon_k(\bm{D}_k)\right ]
+  P(X_1,\dots,X_N) \propto \exp\Bigg\{-\sum_{k=1}^K\epsilon_k(\bm{D}_k)\Bigg\}
 \end{equation*}
 Since we only consider nonnegative \glspl{factor} and the results of the \gls{energy function} can be negative, we need a new definition of a \gls{factor} without its negativity property.
 Thereby, given a set of \glspl{random variable} $\bm{D}$, we define a \gls{feature function} $f(\bm{D})$ as a function from $\bm{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
@@ -179,7 +179,7 @@ Values that were set to one in \todo{ref} become zero. \dots\todo{differences}
 Consequently following this separation we can define a \gls{probability distribution} $P$ over $\mathcal{H}$ with~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:log-linear-model}
-  P(X_1,\dots,X_N) = \frac{1}{Z}\exp\left [-\sum_{k=1}^K \theta_k f_k(\bm{D}_k)\right ]
+  P(X_1,\dots,X_N) = \frac{1}{Z}\exp\Bigg\{-\sum_{k=1}^K \theta_k f_k(\bm{D}_k)\Bigg\}
 \end{equation}
 where $\theta_1,\dots,\theta_K$ are weights and $\{f_1(\bm{D}_1),\dots,f_K(\bm{D}_K)\}$ are \glspl{feature function} with each $\bm{D}_k$ being a complete subgraph in $\mathcal{H}$.
 This \gls{probability distribution} is called a \gls{log-linear model}.
@@ -244,7 +244,7 @@ Using \Cref{equ:log-linear-model} we can reformulate the definition of \glspl{cr
   \label{equ:crf-log-linear}
   \begin{split}
     P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X}) \\
-    \tilde{P}(\bm{Y},\bm{X}) & = \exp\left\{ -\sum_{k=1}^K \theta_k f_k(\bm{D}_k)\right\} \\
+    \tilde{P}(\bm{Y},\bm{X}) & = \exp\Bigg\{ -\sum_{k=1}^K \theta_k f_k(\bm{D}_k)\Bigg\} \\
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
@@ -274,31 +274,31 @@ We now can represent the two \glspl{factor} using the \glspl{feature function}
   \label{equ:linear-chain-crf-feature-functions}
   \begin{split}
     \tilde{f}_k(Y_n,Y_{n-1})\equalsdef f_{j,i}(Y_n,Y_{n-1}) & = \bm{\mathbbm{1}}\{Y_n=j,Y_{n-1}=i\}\\
-    \tilde{f}_l(Y_n,\tilde{X}_t)\equalsdef f_{j,\tilde{x}_t}(Y_n,\tilde{X}_t) & = \bm{\mathbbm{1}}\{Y_n=j,\tilde{X}_t=\tilde{x}_t\}
+    \tilde{f}_l(Y_n,\bm{\tilde{X}}_n)\equalsdef f_{j,\bm{\tilde{x}}_n}( Y_n,\bm{\tilde{X}}_n) & = \bm{\mathbbm{1}}\{Y_n=j,\bm{\tilde{X}}_n=\bm{\tilde{x}}_n\}
   \end{split}
 \end{equation}
-where $i$, $j$, and $\tilde{x}_t$ are predefined assignments to $Y_{n-1}$, $Y_n$, and $\tilde{X}_t$ respectively. $\bm{\mathbbm{1}}$ is an indicator function that returns $1$ if all listed \glspl{random variable} match their predefined assignments.
+where $i$, $j$, and $\bm{\tilde{x}}_n$ are predefined assignments to $Y_{n-1}$, $Y_n$, and $\bm{\tilde{X}}_n$ respectively. $\bm{\mathbbm{1}}$ is an indicator function that returns $1$ if all listed \glspl{random variable} match their predefined assignments.
 The $\tilde{f}$ notation with its indices will later allow us to iterate over the predefined \glspl{feature function}.
 
-In other words, $\tilde{f}_k(Y_n,Y_{n-1})$ models a specific dependency between the neighboring \glspl{target variable} $Y_n$ and $Y_{n-1}$. $\tilde{f}_l(Y_n,\tilde{X}_t)$ models a specific dependency between the \gls{target variable} $Y_n$ and one of the \glspl{observed variable} $\tilde{X}_t$ in context of $Y_n$ given by $\bm{\tilde{X}}_n$.
+In other words, $\tilde{f}_k(Y_n,Y_{n-1})$ models a specific dependency between the neighboring \glspl{target variable} $Y_n$ and $Y_{n-1}$. $\tilde{f}_l(Y_n,\bm{\tilde{X}}_n)$ models a specific dependencies between the \gls{target variable} $Y_n$ and a set of \glspl{observed variable} $\bm{\tilde{X}}_n$ in context of $Y_n$ where again $\bm{\tilde{X}}_n\subseteq\bm{X}$.
 
 By inserting the two types of \glspl{feature function} from \Cref{equ:linear-chain-crf-feature-functions} into \Cref{equ:crf-log-linear} we define \glspl{linear-chain crf} as:
 \begin{equation}
   \label{equ:linear-chain-crf-log-linear}
   \begin{split}
     P(\bm{Y}\mid\bm{X}) & = \frac{1}{Z(\bm{X})}\tilde{P}(\bm{Y},\bm{X})  \\
-    \tilde{P}(\bm{Y},\bm{X}) & = \exp\left\{ -\sum_{n=1}^N \Big(\sum_{k=1}^K\theta_k \tilde{f}_k(Y_n,Y_{n-1})+\sum_{l=1}^L\theta_l \tilde{f}_l(Y_n,\tilde{X}_t)\Big) \right\} \\
+    \tilde{P}(\bm{Y},\bm{X}) & = \exp\Bigg\{ -\sum_{n=1}^N \Big(\sum_{k=1}^K\theta_k \tilde{f}_k(Y_n,Y_{n-1})+\sum_{l=1}^L\theta_l \tilde{f}_l(Y_n,\bm{\tilde{X}}_n)\Big) \Bigg\} \\
     Z(\bm{X}) & = \sum_{\bm{Y}}\tilde{P}(\bm{Y},\bm{X})
   \end{split}
 \end{equation}
-Thereby, for every $Y_n$, we iterate over $K$ predefined \glspl{feature function} $\tilde{f}_k$ and $L$ predefined \glspl{feature function} $\tilde{f}_l$ with $\tilde{X}_t\in\bm{\tilde{X}}_n$.
+Thereby, for every $Y_n$, we iterate over $K$ predefined \glspl{feature function} $\tilde{f}_k$ and $L$ predefined \glspl{feature function} $\tilde{f}_l$.
 In order to simplify the notation, we define $Y_0$ as a special start state, denoted \texttt{start}~\citep{lafferty2001conditional}.
 
 An example for a  \gls{linear-chain crf} can be derived from our author example\dots\todo{example}
 
 Returning to our argument that \glspl{feature function} allow are move compact encoding of \glspl{crf} than \glspl{factor}, compare \todo{example}.
 
-\citet{sutton2010introduction} show that \glspl{hmm} are a restricted kind of \gls{linear-chain crf}, namely one where $\bm{\tilde{X}}_n$ in \Cref{equ:linear-chain-crf-feature-functions} only includes the word's identity at the current position $n$.
+\citet{sutton2010introduction} show that \glspl{hmm} are a restricted kind of \gls{linear-chain crf}, namely one where $\bm{\tilde{X}}_n$ in \Cref{equ:linear-chain-crf-log-linear} only includes the \gls{observed variable} $X_n$ which corresponds to the words identity at the current position $n$.
 
 \section{Inference of \glsentryshortpl{crf}}\label{sec:inference-crfs}
 
@@ -427,12 +427,86 @@ Instead, we refer to \citet{koller2009probabilistic} for further readings on thi
 
 \bigskip
 
-
 In the following section we will discuss methods for learning \glspl{crf}.
 In particular we will look into the parameter estimation of the weights $\theta$ that are assigned to \glspl{feature function}, for example in \Cref{equ:linear-chain-crf-log-linear}.
 
 \section{Learning of \glsentryshortpl{crf}}\label{sec:learning-crfs}
 
-%TODO see chapter 20 in PGM book
+After discussing the encoding and inference of \glspl{crf}, we now look into their learning.
+The main focus of this section will be on the learning of the parameters $\theta$ in the \gls{log-linear model} representation of \glspl{crf}, such as the one in \Cref{equ:linear-chain-crf-log-linear}.
+
+\bigskip
+
+Constructing \gls{crf} models manually is time costly and requires domain knowledge.
+To acquire such knowledge, often experts from this domain need to be involved.
+In some cases, experts with a sufficient understanding of the domain do not exist~\citep{koller2009probabilistic}.
+Yet, we now often have access to a large body of example instances which originate from the distribution we want to model~\citep{koller2009probabilistic}.
+A promising approach is thereby to learn a model $\mathcal{\tilde{M}}$ based on such a set of examples.
+More formally, given a data set $\mathcal{D}=\{\bm{d}^{(1)},\dots,\bm{d}^{(M)}\}$ of $M$ instances that follow an underlying distribution $P^*$ which is induced by a network $\mathcal{M}^*=(\mathcal{K}^*,\bm{\theta}^*)$ where $K^*$ is a graph and $\bm{\theta}^*$ are model parameters~\citep{koller2009probabilistic}.
+Additionally we assume that the elements in $\mathcal{D}$ sampled independently from $P^*$ and thereby \acrfull{iid}~\citep{koller2009probabilistic}.
+
+\bigskip
+
+Learning a model $\mathcal{\tilde{M}}$ that exactly induces $P^*$ is often unfeasible in practice due to computational limitations and since $\mathcal{D}$ only provide an approximation of $P^*$~\citep{koller2009probabilistic}.
+Instead, the goal is to find a $\mathcal{\tilde{M}}$ which provides the ``best'' approximation to $\mathcal{M}^*$ given our $\mathcal{D}$.
+There exists a number of metrics for deciding which $\mathcal{\tilde{M}}$ ``best'' approximates $\mathcal{M}^*$.
+
+A popular metric that is used for \glspl{crf} is \gls{maximum likelihood}.
+Before discussing it, it is important to clarify which part of $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$ we aim to learn.
+%TODO add forward-backward algorithm to gls
+In order to apply the forward-backward algorithm during inferencing, which is also part of the learning, $\mathcal{\tilde{K}}$ needs to follow a certain sequential structure.
+As a result, we assume $\mathcal{\tilde{K}}$ to be modeled in such a way and given as an input to the learner.
+A relatively simple model for $\mathcal{\tilde{K}}$ can be a log-linear \glspl{linear-chain crf} (see \Cref{equ:linear-chain-crf-log-linear}). For it we have a \gls{feature function} $\tilde{f}_k$ between two neighboring \glspl{target variable} and a \gls{feature function} $\tilde{f}_l$ between a \gls{target variable} and its context given by a set of \glspl{observed variable}.
+Thereby, we will focus on the learning of the set of parameters $\bm{\tilde{\theta}}$ which, in the case of \glspl{linear-chain crf}, consist of the $\theta_k$ and $\theta_l$ for the two \glspl{feature function} from \Cref{equ:linear-chain-crf-log-linear}.
+
+%TODO "`as we will see later"' for log-likelihood
+A common approach is to calculate the \textit{log-likelihood} $\ell$ instead of the likelihood itself for convenience reasons~\citep{koller2009probabilistic,sutton2010introduction,mann2008generalized}.
+The log-likelihood is defined as~\citep{sutton2010introduction}
+\begin{equation}
+  \label{equ:log-likelihood}
+  \ell(\bm{\tilde{\theta}})=\sum_{m=1}^M \Big(\log P(\bm{Y}^{(m)}|\bm{X}^{(m)})\Big)
+\end{equation}
+where $\bm{X}^{(m)}\cup\bm{Y}^{(m)}=\bm{d}^{(m)}$ and $\bm{X}^{(m)}\cap\bm{Y}^{(m)}=\emptyset$.
+Using the example of log-linear \glspl{linear-chain crf} from \Cref{equ:linear-chain-crf-log-linear}, we now substitute $P(\bm{Y}^{(m)}|\bm{X}^{(m)})$ which gives us:
+\begin{equation}
+  \label{equ:log-likelihood-linear-chain-crf-log-linear-1}
+  \begin{split}
+    \ell(\bm{\tilde{\theta}}) = & \sum_{m=1}^M \Bigg(\log \bigg(\frac{1}{Z(\bm{X}^{(m)})}\exp\Bigg\{ -\sum_{n=1}^N \Big(\sum_{k=1}^K\theta_k \tilde{f}_k(Y_n^{(m)},Y_{n-1}^{(m)}) \\
+    & +\sum_{l=1}^L\theta_l \tilde{f}_l(Y_n^{(m)},\bm{\tilde{X}}_n^{(m)})\Big)\Bigg\}\bigg)\Bigg)
+ \end{split}
+\end{equation}
+We can simplify this by resolving the $\log$ statement resulting in:
+\begin{equation}
+  \label{equ:log-likelihood-linear-chain-crf-log-linear-2}
+  \begin{split}
+    \ell(\bm{\tilde{\theta}}) = & \sum_{m=1}^M \bigg(-\sum_{n=1}^N \Big(\sum_{k=1}^K\theta_k \tilde{f}_k(Y_n^{(m)},Y_{n-1}^{(m)})+\sum_{l=1}^L\theta_l \tilde{f}_l(Y_n^{(m)},\bm{\tilde{X}}_n^{(m)})\Big)\Bigg) \\
+    & -\log Z(\bm{X}^{(m)})
+ \end{split}
+\end{equation}
+Using the forward-backward algorithm we can efficiently calculate the normalization constant $Z(\bm{X}^{(m)})$ as shown in \Cref{sec:inference-crfs}.
+
+\bigskip
+
+\citet{sutton2010introduction} discuss that a model $\tilde{\mathcal{M}}$ can overfit the given data set $\mathcal{D}$ when the number of $\bm{\tilde{\theta}}$ is too high.
+It is thereby common to use a \textit{regularization term} that forms a penalty based on the norm of $\bm{\tilde{\theta}}$ where $\bm{\tilde{\theta}}$ is seen as a vector~\citep{koller2009probabilistic,sutton2010introduction}.
+
+An example for such a term is called \textit{Gaussian prior}.
+%TODO continue
+
+\begin{equation}
+  \label{equ:log-likelihood-linear-chain-crf-log-linear-gaussian}
+  \begin{split}
+    \ell(\bm{\tilde{\theta}}) = & \sum_{m=1}^M \bigg(-\sum_{n=1}^N \Big(\sum_{k=1}^K\theta_k \tilde{f}_k(Y_n^{(m)},Y_{n-1}^{(m)})+\sum_{l=1}^L\theta_l \tilde{f}_l(Y_n^{(m)},\bm{\tilde{X}}_n^{(m)})\Big)\bigg) \\
+    & -\log Z(\bm{X}^{(m)})-\Big(\sum_{k=1}^K\frac{\theta_k^2}{2\sigma^2}+\sum_{l=1}^L\frac{\theta_l^2}{2\sigma^2}\Big)
+ \end{split}
+\end{equation}
+
+\bigskip
+
+In \Cref{cha:distant-supervision} we discuss an additional regularization term based on the concept of \gls{generalized expectation}.
+
+\bigskip
+%TODO on max likelihood calculation using derivatives; convex functions
 %TODO approximation using Limited Memory BFGS (also used in Mallet) (``algorithm of choice'' by andrew2007scalable)
+%TODO see chapter 20 in PGM book
 
