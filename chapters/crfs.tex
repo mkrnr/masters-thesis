@@ -232,14 +232,18 @@ Given a set of \glspl{factor} $\{\Psi_1,\dots\Psi_K\}$ that factorize over $\mat
   \end{split}
 \end{equation}
 where, similar to \glspl{gibbs distribution} (see \Cref{equ:gibbs-distribution}), $\tilde{P}(\bm{Y},\bm{X})$ is the unnormalized measure and $Z(\bm{X})$ is a normalizing constant~\citep{koller2009probabilistic}.
-In fact, the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above is how the normalizing constant $Z$ is defined~\citep{koller2009probabilistic}.
+Additionally we have that $\bm{D}_k=\bm{\tilde{X}}\cup\bm{\tilde{Y}}$ and $\bm{D}_k\not\subseteq\bm{X}$ where $\bm{\tilde{X}}\subseteq\bm{X}$ and $\bm{\tilde{Y}}\subseteq\bm{Y}$.
+In other words, $\bm{D}_k$ needs to contain at least one $Y_n\in\bm{Y}$.
+In \todo{add ref and example} we use an example to show that in the case of $\bm{D}_k\subseteq\bm{X}$, the term $\Psi_k(\bm{D}_k)$ ``cancels out'' during the calculation of $P(\bm{Y}\mid\bm{X})$.
+
+This behavior for a $\bm{D}_k\subseteq\bm{X}$ is the result of the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above, namely how the normalizing constant $Z$ is defined~\citep{koller2009probabilistic}.
 In \Cref{equ:gibbs-distribution}, $Z$ normalizes $\tilde{P}(X_1,\dots,X_N)$ with a sum over all possible assignments to $X_1,\dots,X_N$ resulting in a \gls{joint distribution} $P(X_1,\dots,X_N)$.
 In \Cref{equ:crf-factor}, however, $Z(\bm{X})$ normalizes $\tilde{P}(\bm{Y},\bm{X})$ with a sum over the assignments $\bm{y}$ to $\bm{Y}$ over the specified assignments $\bm{x}$ to $\bm{X}$.
 This way of normalizing results in the \gls{conditional probability distribution} $P(\bm{Y}\mid\bm{X})$ (Compare with \Cref{equ:conditional-probability}).
 
 \bigskip
 
-Using \Cref{equ:log-linear-model} we can reformulate the definition of \glspl{crf} in \Cref{equ:crf-factor} as a \gls{log-linear model}:
+Using \Cref{equ:log-linear-model}, we can reformulate the definition of \glspl{crf} in \Cref{equ:crf-factor} as a \gls{log-linear model}:
 \begin{equation}
   \label{equ:crf-log-linear}
   \begin{split}
@@ -258,7 +262,7 @@ For given $\bm{X}=\{X_1,\dots,X_N\}$ and $\bm{Y}=\{Y_1,\dots,Y_N\}$, we consider
 \begin{itemize}
   \item $\Psi_n(Y_n,Y_{n-1})$ models the dependency between the \gls{target variable} $Y_n$ and its preceding \gls{target variable} $Y_{n-1}$.
   \item $\Psi_n(Y_n,\bm{\tilde{X}}_n)$ models the dependency between the \gls{target variable} $Y_n$ and its context given by the \glspl{observed variable} $\bm{\tilde{X}}_n=\{\tilde{X}_1,\dots,\tilde{X}_T\}$ with $\bm{\tilde{X}}_n\subseteq\bm{X}$.
-    $T$ can be different for every $\bm{\tilde{X}_n}$.
+    $T$ can be different for every $\bm{\tilde{X}}_n$.
 \end{itemize}
 Inserting the two factors in \Cref{equ:crf-factor} results in:
 \begin{equation}
@@ -566,3 +570,6 @@ By approximating the Hessian with the \gls{bfgs} algorithm and limiting its memo
 \citet{andrew2007scalable} state that L-BFGS ``is the algorithm of choice for optimizing the parameters of large-scale log-linear models with $L_2$ regularization''~\citep{andrew2007scalable}.
 $L_2$ regularization is an alternative to the Gaussian regularization (see \todo{add ref}).
 
+\bigskip
+
+After giving an introduction to the encoding, inferencing, and learning of \glspl{crf} we will discuss in the following chapter how to incooperate \gls{distant supervision} in the \gls{crf} learning process.

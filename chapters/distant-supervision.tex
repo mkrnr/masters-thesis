@@ -1,6 +1,6 @@
 \chapter{Distant Supervision}\label{cha:distant-supervision}
 
-A common approach for training \glspl{crf} is to use manually labeled instances.
+A common approach to the learning of \glspl{crf} is to use manually labeled instances.
 Manual labeling results in an accurate labeling in most cases but is expensive and can thereby only be performed on small data sets.
 
 %TODO general words on distant supervision: jiang2012information
@@ -8,10 +8,7 @@ Manual labeling results in an accurate labeling in most cases but is expensive a
 The approach of \gls{distant supervision} allows the automated labeling of large data sets by using heuristics and external sources of information.
 
 In this chapter we will first give an overview of \gls{distant supervision} by discussing the past usages.
-Based on this we will give a definition of the term.
-We will then discuss approaches on how \glspl{crf} can be trained using distantly supervised data sets.
-
-
+We will then discuss approaches on how \glspl{crf} can be learned using distantly supervised data sets.
 
 \section{Overview}
 
@@ -54,10 +51,16 @@ What all approaches have in common is that they use some heuristic to assign lab
 
 \section{Distant Supervision and \glsentryshortpl{crf}}
 
-Data sets that are used within a distantly supervised learning approach are typically incompletely annotated\todo{cite}.
-This is due to the fact that external knowledge bases in practical scenarios do not cover all observed cases in the training set.
-As a result, conventional \gls{crf} algorithms cannot be directly applied to such data sets since they require a fully annotated input~\citep{tsuboi2008training}.
-In this section we will discuss approaches that apply \glspl{crf} on incompletely annotated data.
+Data sets that are used within a distantly supervised learning approach are typically incompletely annotated.
+This is due to the fact that, in practice, external knowledge bases can not cover all observed cases in the training set.
+As a result, conventional \gls{crf} learning algorithms cannot be directly applied to such data sets since they require a fully annotated input~\citep{tsuboi2008training}.
+
+To make this more clear, recall that for \glspl{crf} we have $\bm{D}_k\not\subseteq\bm{X}$ for every $k=1,\dots,K$ (see \Cref{sec:definition-crfs}).
+In other words, every set of \glspl{random variable} $\bm{D}_k$ needs to contain at least one $Y_n\in\bm{Y}$.
+Otherwise, the term containing $\bm{D}_k$ cancels out during the calculation of $P(\bm{Y}\mid\bm{X})$ due to the normalization constant $Z(\bm{X})$ (see \todo{add ref} for an example).
+Thereby the question arises on how data sets are handled where not every element is labeled.
+
+In this section we will discuss approaches that use incompletely annotated data for the learning of \glspl{crf}.
 \itodo{sentence on tsuboi approach?}
 A very promising approach, especially for our author extraction use case (see \Cref{cha:author-extraction}), is \gls{ge}, proposed by \citet{mann2007simple}.
 
