@@ -89,8 +89,20 @@ Instead of ``filling the gaps'' of incomplete annotations, \citet{mann2008genera
 %TODO definition GE
 
 \citet{mann2008generalized} use \gls{ge} criteria to train \glspl{crf} on labeled features instead of fully labeled instances.
-More precisely, the \gls{ge} criteria are used as an additional regularization term in the log-likelihood\todo{more precise} function during the inferencing task.
-%TODO formula
+More precisely, the \gls{ge} criteria are used as an additional regularization term in the log-likelihood function during the model learning.
+
+%TODO define \mathcal{U}
+In general, a \gls{ge} criterion $G(\bm{\theta};\mathcal{U})$ is a score function $S$ which is defined as~\citep{mann2010generalized}
+\begin{equation}
+  \label{equ:generalized-expectation}
+  G(\bm{\theta};\mathcal{U})=S\left(E_{\mathcal{U}}\left[E_{P(\bm{Y}\mid\bm{X})}\left[G(\bm{X},\bm{Y})\right]\right]\right)
+\end{equation}
+
+In the following we will consider $\tilde{P}$ to be a \gls{crf} based on the model $\tilde{\mathcal{M}}=\{\tilde{\mathcal{K}},\bm{\tilde{\theta}}\}$.
+
+%target distribution: distribution for every constraint?
+%expectations: calculated for every constraint separately (mallet code)?
+
 
 \itodo{example}
 One advantage is that it requires only the labeling of a number of occurrences of a feature in the data set instead of a full annotation.
