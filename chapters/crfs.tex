@@ -460,8 +460,9 @@ To acquire such knowledge, often experts from this domain need to be involved.
 In some cases, experts with a sufficient understanding of the domain do not exist~\citep{koller2009probabilistic}.
 Yet, we now often have access to a large body of example instances which originate from the distribution we want to model~\citep{koller2009probabilistic}.
 A promising approach is thereby to learn a model $\mathcal{\tilde{M}}$ based on such a set of examples.
-More formally, given a data set $\mathcal{D}=\{\bm{d}^{(1)},\dots,\bm{d}^{(M)}\}$ of $M$ instances that follow an underlying distribution $P^*$ which is induced by a network $\mathcal{M}^*=(\mathcal{K}^*,\bm{\theta}^*)$ where $\mathcal{K}^*$ is a graph and $\bm{\theta}^*$ are model parameters~\citep{koller2009probabilistic}.
-Additionally we assume that the elements in $\mathcal{D}$ sampled independently from $P^*$ and thereby \acrfull{iid}~\citep{koller2009probabilistic}.
+More formally, we assume a given labeled data set $\mathcal{D}=\{\bm{d}^{(1)},\dots,\bm{d}^{(M)}\}$ of $M$ instances with $\bm{d}^{(m)}=\bm{X}^{(m)}\cup\bm{Y}^{(m)}$ and $\bm{X}^{(m)}\cap\bm{Y}^{(m)}=\emptyset$.
+We further assume that $\mathcal{D}$ follows an underlying distribution $P^*$ which is induced by a network $\mathcal{M}^*=(\mathcal{K}^*,\bm{\theta}^*)$ where $\mathcal{K}^*$ is a graph and $\bm{\theta}^*$ are model parameters~\citep{koller2009probabilistic}.
+Lastly, we assume that the elements in $\mathcal{D}$ sampled independently from $P^*$ and thereby \acrfull{iid}~\citep{koller2009probabilistic}.
 
 \bigskip
 
@@ -473,7 +474,7 @@ A popular metric that is used for \glspl{crf} is \gls{maximum likelihood}.
 Before discussing it, it is important to clarify which part of $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$ we aim to learn.
 %TODO add forward-backward algorithm to gls
 In order to apply the forward-backward algorithm during inferencing, which is also part of the learning, $\mathcal{\tilde{K}}$ needs to follow a certain sequential structure.
-As a result, we assume $\mathcal{\tilde{K}}$ to be modeled in such a way and given as an input to the learner.
+In this work we assume $\mathcal{\tilde{K}}$ to be modeled in such a way and given as an input to the learner.
 A relatively simple model for $\mathcal{\tilde{K}}$ can be a log-linear \glspl{linear-chain crf} (see \Cref{equ:linear-chain-crf-log-linear}). For it we have a \gls{feature function} $\tilde{f}_k$ between two neighboring \glspl{target variable} and a \gls{feature function} $\tilde{f}_l$ between a \gls{target variable} and its context given by a set of \glspl{observed variable}.
 Thereby, we will focus on the learning of the set of parameters $\bm{\tilde{\theta}}$ which, in the case of \glspl{linear-chain crf}, are the $\theta_k$ and $\theta_l$ for the two \glspl{feature function} from \Cref{equ:linear-chain-crf-log-linear}.
 
@@ -483,8 +484,7 @@ Given a data set $\mathcal{D}$ we define the likelihood function $L(\bm{\tilde{\
   \label{equ:likelihood}
   \mathcal{L}\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=\prod_{m=1}^M P\left(\bm{Y}^{(m)}|\bm{X}^{(m)}\right)
 \end{equation}
-where $P$ is derived from the graphical model $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$ and where $\bm{X}^{(m)}\cup\bm{Y}^{(m)}=\bm{d}^{(m)}$ and $\bm{X}^{(m)}\cap\bm{Y}^{(m)}=\emptyset$.
-
+where $P$ is derived from the graphical model $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$.
 A common approach is to calculate the \textit{log-likelihood} $\ell$ instead of the likelihood itself.
 This is possible since the log-likelihood is monotonically related to the likelihood and thereby the maximization problems are equivalent~\citep{koller2009probabilistic}.
 An computational advantage of using the log-likelihood is that it is calculated over sums instead of products~\citep{koller2009probabilistic}.
