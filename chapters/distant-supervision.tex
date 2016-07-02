@@ -12,7 +12,6 @@ We will then discuss approaches on how \glspl{crf} can be learned using distantl
 
 \section{Overview}
 
-%TODO explain origin
 Before explaining our usage of the term \gls{distant supervision}, we will first examine its origin and how it was previously used.
 
 \bigskip
@@ -47,8 +46,6 @@ Due to the different applications of \gls{distant supervision}, a precise defini
 
 What all approaches have in common is that they use some heuristic to assign labels to previously unlabeled data. These labelings are are used during the training, either in addition to preexisting labeled data or on their own.
 
-
-
 \section{Distant Supervision and \glsentryshortpl{crf}}
 
 Data sets that are used within a distantly supervised learning approach are typically incompletely annotated.
@@ -60,34 +57,68 @@ In other words, every set of \glspl{random variable} $\bm{D}_k$ needs to contain
 Otherwise, the term containing $\bm{D}_k$ cancels out during the calculation of $P(\bm{Y}\mid\bm{X})$ due to the normalization constant $Z(\bm{X})$ (see \todo{add ref} for an example).
 Thereby the question arises on how data sets are handled where not every element is labeled.
 
-In this section we will discuss approaches that use incompletely annotated data for the learning of \glspl{crf}.
-\itodo{sentence on tsuboi approach?}
-A very promising approach, especially for our author extraction use case (see \Cref{cha:author-extraction}), is \gls{ge}, proposed by \citet{mann2007simple}.
+In this section we will discuss two approaches that use incompletely annotated data for the learning of \glspl{crf}.
+First we look at the approach by \citet{tsuboi2008training} who a marginalization over all possible sequences given an incompletely annotated sequence.
+Then we will present the very promising approach of \acrfull{ge} proposed by \citet{mann2007simple} which provides an alternative \gls{objective function} for unlabeled data based on \gls{label regularization}.
 
 \subsection{Marginalization}
-\citet{tsuboi2008training} propose a method for training \glspl{crf} using incomplete annotations.
-They consider two cases of incomplete annotations: Partial and ambiguous annotations.
-The idea is to firstly generate a set of all possible sequences with respect to the missing or ambiguous data.
-\dots\todo{continue}
 
-Yet, the resulting equations is not a concave function which prevents efficient global maximization~\citep{tsuboi2008training}.
-Another challenge that arises is the amount of label sequences that are generated this way which is exponential in the number of unknown labels~\citep{tsuboi2008training}.
-This problem is addressed by applying the Markov assumption and using a modification of the Forward-Backward algorithm~\citep{tsuboi2008training}.
-\citet{tsuboi2008training} apply their approach on Japanese word segmentation using partial annotations and on \gls{pos} tagging using ambiguous annotations.
-For the word segmentation task the proposed approach was compared with two other methods that can handle partial annotations.
-The first one is filling unknown labels by prediction based on the partial annotations and the second one is training a point-wise classifier that excludes label correlations~\citep{tsuboi2008training}.
-The reported results show that the proposed method outperforms both methods for various sample sizes.
-For the \gls{pos} tagging they used the Penn treebank corpus \citep{marcus1993building} which contains a number of ambiguous \gls{pos} tags.
-The proposed approach was compared with three other heuristics, namely random selection, selecting the first tag in the description order, and selecting the most frequent tag in the corpus.
-In this case, the proposed method only moderately improved the performance which the authors believe it due to the relatively low percentage of ambiguous tags in the corpus~\citep{tsuboi2008training}.
+\citet{tsuboi2008training} propose a method for training \glspl{crf} using incomplete annotations based on marginalization.
+Given a sequence of length $M$, an incomplete annotation $\bm{L}$ is defined as a sequence of subsets of possible assignments to the \gls{target variable} at each position $m$~\citep{tsuboi2008training}:
+\begin{equation}
+  \label{equ:incomplete-annotation}
+  \begin{split}
+  \bm{L}=& \left\{L_1,\dots,L_M\right\}\\
+  L_m=& \left\{\tilde{y}_1,\dots,\tilde{y}_T\right\}\ \ \ \ \ \ \ \ \tilde{y}_t\in Val(Y_t)
+  \end{split}
+\end{equation}
+\itodo{example}
+Using the definition of $\bm{L}$ we can now specify two cases of incomplete annotations: Partial annotations and ambiguous annotations.
+If an element at position $m$ in a sequence is not annotated then the corresponding $L_m$ contains all possible labelings: $L_m=Val(Y_m)$\todo{fix notation?}.
+Ambiguous annotations are represented such that $L_m$ contains the set of ambiguous annotations for the corresponding element.
+\itodo{example}
+
+\bigskip
+
+We can now formalize the marginalization approach which allows the application of an incomplete annotation $\bm{L}$ to a \gls{crf} model~\citep{tsuboi2008training}:
+\begin{equation}
+  \label{equ:crf-marginalization}
+  \begin{split}
+    P\left(\bm{Y}_{\bm{L}}\mid\bm{X}\right)=\sum_{\bm{y}\in\bm{Y}_{\bm{L}}}P\left(\bm{Y}=\bm{y}\mid\bm{X}\right)
+  \end{split}
+\end{equation}
+Here, $\bm{Y}_{\bm{L}}$ is defined as the set of all possible assignments $\bm{y}$ to $\bm{Y}$ which are consistent with $\bm{L}$~\citep{tsuboi2008training}.
+Using this approach, we can still apply all concepts for encoding, inferencing, and learning \glspl{crf} that we discussed in \Cref{cha:crfs}.
+
+\bigskip
+
+Yet, there can be a number of possible issues with this marginalization approach.
+One such issue is that, in case of partial annotations, the number of generated assignments $\bm{y}$ in $\bm{Y}_{\bm{L}}$ is exponential in the number of unannotated elements $U$ in the sequence~\citep{tsuboi2008training}.
+Assuming that every unannotated element $m$ has the same number of possible assignments we have
+\begin{equation}
+  \label{equ:marginalization-number-of-assingments}
+  |\bm{Y}_{\bm{L}}|=T^U
+\end{equation}
+where $T=|Val\left(Y_m\right)|$ for some $1\leq m\leq M$.
+The worst case is $|\bm{Y}_{\bm{L}}|=T^M$ when no element in the sequence is annotated.
+\citep{tsuboi2008training} argue that this problem can be addressed by applying the Markov assumption and using a modification of the forward-backward algorithm (see \Cref{sec:inference-crfs}).
+
+
+Another issue is that the log-likelihood function that is derived from \Cref{equ:crf-marginalization} is not concave~\citep{tsuboi2008training}.
+Thereby, during the maximum log-likelihood estimation, a local maximum is not necessarily a global maximum which needs to be considered during the learning phase.
+
+Further, when considering the marginalization of ambiguous annotations, it is not possible to provide additional information on the distribution of possible assignments.
+In this form, the model does not allow us to specify a \gls{marginal distribution} over the elements in $L_m$ which is considered during the marginalization.
+This is especially problematic when considering the implementation of a distantly supervised approach.
+Distantly supervised labelings will often be ambiguous but it is possible to derive the probabilities for the different possible labels from the external source of information.
+In \Cref{cha:author-extraction} we will discuss a concrete example for such a scenario.
 
 \subsection{Generalized Expectation (\glsentryshort{ge})}
 
-Instead of ``filling the gaps'' of incomplete annotations, \citet{mann2008generalized} apply the concept of \acrfull{ge} on the training of linear-chain \glspl{crf}.
+Instead of marginalizing incomplete annotations, \citet{mann2008generalized} apply the concept of \acrfull{ge} on the training of linear-chain \glspl{crf}.
 \Gls{ge} was first proposed in \citet{mann2007simple} under the name \gls{expectation regularization} as a method for semi-supervised learning.
-%TODO definition GE
 
-\citet{mann2008generalized} use \gls{ge} criteria to train \glspl{crf} on labeled features instead of fully labeled instances.
+%TODO definition GE
 
 %TODO define \mathcal{U}
 In general, a \gls{ge} criterion $G(\bm{\tilde{\theta}}:\mathcal{U})$ is a score function $S$ which is defined as~\citep{mann2010generalized}:
@@ -101,15 +132,21 @@ $G(\bm{X},\bm{Y})$ is given as a constraint function.
 
 \itodo{general text on GE equation}
 
-To clarify this general definition we now look at one possible scoring function $S$, namely the $\text{KL}$-divergence\todo{intro to KL}.
-%TODO intro text on KL
-Applying the $\text{KL}$-divergence as a scoring function to \Cref{equ:generalized-expectation} we have~\citep{mann2010generalized}
+To clarify this general definition we now look at one possible scoring function $S$, namely the \acrshort{kl} divergence.
+The \acrfull{kl} divergence,\dots, is defined as~\citep{mackay2003information}
+\begin{equation}
+  \label{equ:kl-divergence}
+  D_{\text{KL}}(P\mid\mid Q)=\sum_x \frac{P(x)}{Q(x)}
+\end{equation}
+where the \glspl{probability distribution} $P$ and $Q$ are defined over the same alphabet\todo{introduce}.
+
+Applying the $\text{KL}$-divergence as a scoring function $D_{\text{KL}}$ to \Cref{equ:generalized-expectation} we have~\citep{mann2010generalized}
 \begin{equation}
   \label{equ:generalized-expectation-kl}
-  G(\bm{\tilde{\theta}}:\mathcal{U})=D\left(\tilde{g}_{\left(\bm{X},\bm{Y}\right)}\mid\mid E_{\mathcal{U}}\left[P(\bm{Y}\mid\bm{X})G(\bm{X},\bm{Y})\right]\right)
+  G(\bm{\tilde{\theta}}:\mathcal{U})=D_{\text{KL}}\left(\tilde{g}_{\left(\bm{X},\bm{Y}\right)}\mid\mid E_{\mathcal{U}}\left[P(\bm{Y}\mid\bm{X})G(\bm{X},\bm{Y})\right]\right)
 \end{equation}
 where $\tilde{g}_{\left(\bm{X},\bm{Y}\right)}$ expresses an expectation for $\{\bm{X},\bm{Y}\}$, either in the form of a particular value or over a \gls{marginal distribution} $\tilde{P}\left(\bm{Y}\right)$~\citep{mann2010generalized}.
-The result of $D$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\bm{X},\bm{Y}\right)}$ and the expectation over the cases of $\left\{\bm{X},\bm{Y}\right\}$ $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\bm{Y}\mid\bm{X})$\todo{rewrite}.
+The result of $D_{\text{KL}}$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\bm{X},\bm{Y}\right)}$ and the expectation over the cases of $\left\{\bm{X},\bm{Y}\right\}$ $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\bm{Y}\mid\bm{X})$\todo{rewrite}.
 %target distribution: distribution for every constraint?
 %expectations: calculated for every constraint separately (mallet code)?
 \itodo{text on GE not being used with log-likelihood (like in mann2010) but alone}

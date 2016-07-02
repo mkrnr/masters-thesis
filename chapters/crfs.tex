@@ -31,9 +31,9 @@ Given the values in \todo{add ref}, $P(firstPeriod)$ is $XXX$ and $P(secondNotCa
 \bigskip
 
 Based on the idea of \glspl{probability distribution}, a \gls{random variable} is a \gls{function} that associates with each outcome in \glssymbol{outcome space} a value~\cite{koller2009probabilistic}.
-A set of \glspl{random variable} is denoted with bold capital letters and assignments of values to the \glspl{random variable} in such sets are denoted with bold lowercase letters~\cite{koller2009probabilistic}.
+A set of \glspl{random variable} is denoted with bold capital letters and assignments of values to the \glspl{random variable} in such sets are denoted with bold lowercase letters\todo{clarify assignments}~\cite{koller2009probabilistic}.
 In addition, $Val(X)$ is the set of values that $X$ can take.
-Given a \gls{random variable} $X$, $P(X)$ is the \gls{probability distribution}{distribution} over \glspl{event} that are described using $X$~\cite{koller2009probabilistic}.
+Given a \gls{random variable} $X$, $P(X)$ is the \gls{probability distribution} over \glspl{event} that are described using $X$~\cite{koller2009probabilistic}.
 It is referred to as the \gls{marginal distribution} over $X$.
 Given a set of \glspl{random variable} $\bm{X}$, $P(\bm{X})$ is called \gls{joint distribution} and assigns each \gls{full assignment} to $\bm{X}$ a probability~\cite{koller2009probabilistic}.
 A \gls{full assignment} $\xi$ assigns to every \gls{random variable} in $\bm{X}$ a value and thereby $\xi\in Val(\bm{X})$.
@@ -180,10 +180,10 @@ We can rewrite a factor $\Psi(\bm{D})$ as
 where $\epsilon(\bm{D})=-\ln\Psi(\bm{D})$ is called \gls{energy function}~\citep{koller2009probabilistic}.
 
 Since we are in the log-space, we can calculate a \gls{probability distribution} over a set of \glspl{random variable} the following way~\citep{koller2009probabilistic}:
-\begin{equation*}
+\begin{equation}
   \label{equ:p-energy-function}
   P\left(X_1,\dots,X_N\right) \propto \exp\left\{-\sum_{k=1}^K\epsilon_k\left(\bm{D}_k\right)\right\}
-\end{equation*}
+\end{equation}
 Since we only consider nonnegative \glspl{factor} and the results of the \gls{energy function} can be negative, we need a new definition of a \gls{factor} without its negativity property.
 Thereby, given a set of \glspl{random variable} $\bm{D}$, we define a \gls{feature function} $f(\bm{D})$ as a function from $\bm{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
 In \todo{example} we apply the \gls{energy function} to the values of \todo{example}.
@@ -370,28 +370,30 @@ Instead, our goal is to calculate the inner sums once and store their result for
 \bigskip
 
 In order to find a recursive definition of $Z(\bm{X})$ that allows the reuse of intermediate calculations, we first consider the following case
-\begin{equation}
-  \label{equ:linear-chain-crf-z-j-1}
-  \begin{split}
-    Z(\bm{X},Y_N=j) = & \sum_{Y_1,\dots Y_{N-1}}\left(\vphantom{\prod_{t'}^N}\left(\Psi_N\left(\vphantom{\tilde{X}}j,Y_{N-1}\right)\times\Psi_N\left(j,\bm{\tilde{X}}_N\right)\right)\right. \\
-    & \left.\times\prod_{t'=1}^{N-1}\left(\Psi_{t'}\left(\vphantom{\tilde{X}}Y_{t'},Y_{t'-1}\right)\times\Psi_{t'}\left(Y_{t'},\bm{\tilde{X}}_{t'}\right)\right)\right)
-  \end{split}
-\end{equation}
-where we have an assignment $Y_N=j$ and where the calculations including $j$ are isolated from the product over all other calculations.
+\begin{subequations}
+  \begin{equation}
+    \label{equ:linear-chain-crf-z-j-1}
+    \begin{split}
+      Z(\bm{X},Y_N=j) = & \sum_{Y_1,\dots Y_{N-1}}\left(\vphantom{\prod_{t'}^N}\left(\Psi_N\left(\vphantom{\tilde{X}}j,Y_{N-1}\right)\times\Psi_N\left(j,\bm{\tilde{X}}_N\right)\right)\right. \\
+      & \left.\times\prod_{t'=1}^{N-1}\left(\Psi_{t'}\left(\vphantom{\tilde{X}}Y_{t'},Y_{t'-1}\right)\times\Psi_{t'}\left(Y_{t'},\bm{\tilde{X}}_{t'}\right)\right)\right)
+    \end{split}
+  \end{equation}
+  where we have an assignment $Y_N=j$ and where the calculations including $j$ are isolated from the product over all other calculations.
 
-Since in the two \glspl{factor} $\Psi_N$ we only use the assignments to $Y_{N-1}$ from the sum over $Y_1,\dots,Y_{N-1}$, we can rewrite \Cref{equ:linear-chain-crf-z-j-1} as
-\begin{equation}
-  \label{equ:linear-chain-crf-z-j-2}
-  \begin{split}
-    Z\left(\bm{X},Y_N=j\right) = & \sum_{Y_{N-1}}\left(\vphantom{\prod_{t'_N}^N}\left(\Psi_N\left(\vphantom{\tilde{X}}j,Y_{N-1}\right)\times\Psi_N\left(j,\bm{\tilde{X}}_N\right)\right)\right. \\
-    &\left. \times\sum_{Y_1,\dots,Y_{N-1}}\prod_{t'=1}^{N-1}\left(\Psi_{t'}\left(\vphantom{\tilde{X}}Y_{t'},Y_{t'-1}\right)\times\Psi_{t'}\left(Y_{t'},\bm{\tilde{X}}_{t'}\right)\right)\right)
-  \end{split}
-\end{equation}
-and using the definition of $Z(\bm{X})$ in \Cref{equ:linear-chain-crf-z} we arrive at
-\begin{equation}
+  Since in the two \glspl{factor} $\Psi_N$ we only use the assignments to $Y_{N-1}$ from the sum over $Y_1,\dots,Y_{N-1}$, we can rewrite \Cref{equ:linear-chain-crf-z-j-1} as
+  \begin{equation}
+    \label{equ:linear-chain-crf-z-j-2}
+    \begin{split}
+      Z\left(\bm{X},Y_N=j\right) = & \sum_{Y_{N-1}}\left(\vphantom{\prod_{t'_N}^N}\left(\Psi_N\left(\vphantom{\tilde{X}}j,Y_{N-1}\right)\times\Psi_N\left(j,\bm{\tilde{X}}_N\right)\right)\right. \\
+      &\left. \times\sum_{Y_1,\dots,Y_{N-1}}\prod_{t'=1}^{N-1}\left(\Psi_{t'}\left(\vphantom{\tilde{X}}Y_{t'},Y_{t'-1}\right)\times\Psi_{t'}\left(Y_{t'},\bm{\tilde{X}}_{t'}\right)\right)\right)
+    \end{split}
+  \end{equation}
+  and using the definition of $Z(\bm{X})$ in \Cref{equ:linear-chain-crf-z} we arrive at
+  \begin{equation}
   \label{equ:linear-chain-crf-z-j-3}
   Z\left(\bm{X},Y_N=j\right) = \sum_{Y_{N-1}}\left(\left(\Psi_N\left(\vphantom{\tilde{X}}j,Y_{N-1}\right)\times\Psi_N\left(j,\bm{\tilde{X}}_N\right)\right)\times Z\left(X_1,\dots,X_{N-1}\right)\right).
   \end{equation}
+\end{subequations}
 Generalizing from this case we can now define
 \begin{equation}
   \label{equ:linear-chain-crf-z-alpha}
@@ -497,6 +499,7 @@ The log-likelihood function is defined as~\citep{sutton2010introduction}:
 
 In order to illustrate the calculation, we now look at a more concrete example of a log-likelihood function.
 Using the definition of log-linear \glspl{linear-chain crf} from \Cref{equ:linear-chain-crf-log-linear}, we now substitute $P(\bm{Y}^{(m)}|\bm{X}^{(m)})$ in \Cref{equ:log-likelihood} which gives us:
+\begin{subequations}
 \begin{equation}
   \label{equ:log-likelihood-linear-chain-crf-log-linear-1}
   \begin{split}
@@ -504,7 +507,6 @@ Using the definition of log-linear \glspl{linear-chain crf} from \Cref{equ:linea
     &\left.\left.\left.\left. +\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(m)},\bm{\tilde{X}}_n^{(m)}\right)\right)\right\}\right)\right)
  \end{split}
 \end{equation}
-
 We can simplify this by resolving the $\log$ statement which results in:
 \begin{equation}
   \label{equ:log-likelihood-linear-chain-crf-log-linear-2}
@@ -513,6 +515,7 @@ We can simplify this by resolving the $\log$ statement which results in:
     & -\log Z\left(\bm{X}^{(m)}\right)
  \end{split}
 \end{equation}
+\end{subequations}
 Using the forward-backward algorithm we can efficiently calculate the normalization constant $Z(\bm{X}^{(m)})$ as shown in \Cref{sec:inference-crfs}.
 
 \bigskip
