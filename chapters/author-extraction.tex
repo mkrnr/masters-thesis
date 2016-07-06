@@ -1,38 +1,62 @@
 \chapter{Author Extraction}\label{cha:author-extraction}
-In the following we will discuss the different steps during the author extraction process.
+
+In this chapter we will discuss author extraction as a concrete use case for the usage of \glspl{crf} in combination with \gls{distant supervision}.
+This can be broken down into to following steps:
+\begin{enumerate}
+  \item Preprocessing of research papers to extract reference sections as text from \gls{pdf} documents
+  \item Generating tagged training sets for distant supervision
+  \item Building \acrfull{ge} constraints
+  \item Learning a \gls{crf} model using \gls{ge} constraints
+\end{enumerate}
+In the following sections we will describe these steps in more detail.
 
 \section{Preprocessing}\label{sec:ae-preprocessing}
 
-The corpus that was used in our study consists of \todo{number} research papers that are accessible via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)} as \gls{pdf} documents.
+The corpus that was used in our study consists of 32470 research papers that are accessible via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)} as \gls{pdf} documents.
 
 Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
 Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed April~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
-This is done by also taking into account the formatting of the document, for example when research papers contain two text columns of text.
-\itodo{statistics about performance}
+This is done by also taking into account the formatting of the document, for example when a research paper contain two text columns per page.
+
+This way we were able to extract the text of 31795 research papers.
+
+\bigskip
+
+Since we want to learn a model that is able to extract author names in reference sections, it is necessary to remove text that is not part of the reference section.
+Otherwise, the author name matching (see \Cref{subsec:author-name-matching}) would also match names that appear in the text body of the research paper.
+
+The reference string parsing package ParsCit\footnote{\url{http://wing.comp.nus.edu.sg/parsCit/} (accessed July~06,~2016)} uses a \dots
+
+
 \itodo{reference section extraction using parscit}
+
 
 \section{Generating Training Sets with Distant Supervision}\label{sec:ae-distant-supervision}
 
 \subsection{Knowledge Base}
 
-In order to apply distant supervision to the task of labeling author names, an external source of information is needed.
-For our evaluation we use two different sources.
+In order to apply distant supervision to the task of labeling author names, an external source for author names is needed.
+Since the goal is to distinguish between the first name and last name of an author, external sources that provide this distinction are preferable.
+This is due to the fact that determining which part of a name belongs to the first names and which to the last names is not trivial\todo{example}.
+For the evaluation we generated data sets based on two sources for author names which separate the first names and last names of an author.
 
 \bigskip
 
-The first one is based on the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)} which is published by the German National Library in cooperation with other library networks and institutions.
-The \gls{gnd}\todo{full acr?} contains information on persons, corporate bodies, conferences and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
+The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)} which is published by the German National Library in cooperation with other library networks and institutions.
+The \gls{gnd}\todo{full acr?} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
 \itodo{which persons are included, statistics}
-We will refer to the second data set as the \gls{gnd} data set.
+We will refer to the second data set as the \texttt{gnd} data set.
 
 \bigskip
 
-The second one was extracted from the Sociological Abstracts Module\todo{true?} which is part of the \gls{csa} Title Lists\footnote{\url{http://www.proquest.com/customer-care/title-lists/Title-Lists-CSA.html} (accessed April~27,~2016)} published by the company ProQuest\footnote{\url{http://www.proquest.com/about/} (accessed April~27,~2016)}.
-\itodo{statistics, refernces}
-We will refer to the second data set as the \gls{csa} data set.
+The second source is the social science portal Sowiport\footnote{\url{http://sowiport.gesis.org/} (accessed July~5,~2016)} which is maintained by GESIS --- Leibniz Institute for the Social Sciences\footnote{\url{http://www.gesis.org/} (accessed July~5,~2016)}.
+\itodo{statistics, references}
 
 
-\subsection{Author Name Matching}
+We will refer to the second data set as the \texttt{sowiport} data set.
+
+
+\subsection{Author Name Matching}\label{subsec:author-name-matching}
 \itodo{variations of author names}
 A crucial step for generating the training sets is the matching of author names in the extracted lists to their occurrences in the extracted reference sections.
 The goal here is to label all possible matches as such.
@@ -106,6 +130,7 @@ If we matched both the last and first names of an author, we add a non-terminal 
 
 %TODO statistics
 
+\section{Building \glsentryshort{ge} Constraints}\label{sec:ae-training-crfs}
 
-\section{Training \glsentryshortpl{crf}}\label{sec:ae-training-crfs}
+\section{Learning \glsentryshortpl{crf}}\label{sec:ae-training-crfs}
 
