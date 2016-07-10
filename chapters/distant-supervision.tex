@@ -64,18 +64,18 @@ Then we will present the very promising approach of \acrfull{ge} proposed by \ci
 \subsection{Marginalization}
 
 \citet{tsuboi2008training} propose a method for training \glspl{crf} using incomplete annotations based on marginalization.
-Given a sequence of length $M$, an incomplete annotation $\bm{l}$ is defined as a sequence of subsets of possible assignments to the \gls{target variable} at each position $m$~\citep{tsuboi2008training}:
+Given a sequence of length $N$, an incomplete annotation $\bm{l}$ is defined as a sequence of subsets of possible assignments to the \gls{target variable} at each position $n$~\citep{tsuboi2008training}:
 \begin{equation}
   \label{equ:incomplete-annotation}
   \begin{split}
-  \bm{l}=& \left\{l_1,\dots,l_M\right\}\\
-  l_m=& \left\{\tilde{y}_1,\dots,\tilde{y}_T\right\},\ \ \ \ \ \ \ \ \tilde{y}_t\in Val(Y_m)
+  \bm{l}=& \left\{l_1,\dots,l_N\right\}\\
+  l_n=& \left\{\tilde{y}_1,\dots,\tilde{y}_T\right\},\ \ \ \ \ \ \ \ \tilde{y}_t\in Val(Y_n)
   \end{split}
 \end{equation}
 \itodo{example}
 Using the definition of $\bm{l}$ we can now specify two cases of incomplete annotations: Partial annotations and ambiguous annotations.
-If an element at position $m$ in a sequence is not annotated then the corresponding $l_m$ contains all possible labelings: $l_m=Val(Y_m)$.
-Ambiguous annotations are represented such that $l_m$ contains the set of ambiguous annotations for the corresponding element.
+If an element at position $n$ in a sequence is not annotated then the corresponding $l_n$ contains all possible labelings: $l_n=Val(Y_n)$.
+Ambiguous annotations are represented such that $l_n$ contains the set of ambiguous annotations for the corresponding element: $l_n\subset Val(Y_n)$
 \itodo{example}
 
 \bigskip
@@ -87,20 +87,20 @@ We can now formalize the marginalization approach which allows the application o
     P\left(\bm{l}\mid\mathbf{x}\right)=\sum_{\mathbf{\tilde{y}}\in\bm{l}}P\left(\mathbf{\tilde{y}}\mid\mathbf{x}\right)
   \end{split}
 \end{equation}
-\itodo{find notation for subsets of $\bm{l}$ that are used in marginalizing sum}
-Here, $\mathbf{\tilde{y}}_{\mathbf{L}}$ is defined as the set of all possible assignments $\mathbf{y}$ to $\mathbf{Y}$ which are consistent with $\bm{l}$~\citep{tsuboi2008training}.
-Using this approach, we can still apply all concepts for encoding, inferencing, and learning \glspl{crf} that we discussed in \Cref{cha:crfs}.
+\itodo{build set of sets of assignments for the sum}
+Here, $\mathbf{\tilde{y}}$ is a set of assignments to $\mathbf{Y}$ which is consistent with $\bm{l}$\todo{example}~\citep{tsuboi2008training}.
+Using this approach, we can apply all concepts for encoding, inferencing, and learning \glspl{crf} that we discussed in \Cref{cha:crfs}.
 
 \bigskip
 
 Yet, there can be a number of possible issues with this marginalization approach.
-One such issue is that, in case of partial annotations, the number of generated assignments $\mathbf{y}$ in $\mathbf{Y}_{\mathbf{L}}$ is exponential in the number of unannotated elements $U$ in the sequence~\citep{tsuboi2008training}.
-Assuming that every unannotated element $m$ has the same number of possible assignments we have
+One such issue is that, in case of partial annotations, the number of generated assignments $\mathbf{\tilde{y}}$ based on ${\bm{l}}$ is exponential in the number of unannotated elements $U$ in the sequence~\citep{tsuboi2008training}.
+Assuming that every unannotated element has the same number of possible assignments we have
 \begin{equation}
   \label{equ:marginalization-number-of-assingments}
-  |\mathbf{Y}_{\mathbf{L}}|=T^U
+  |\bm{l}|=T^U
 \end{equation}
-where $T=|Val\left(Y_m\right)|$ for some $1\leq m\leq M$.
+where $T=|Val\left(Y_n\right)|$ for some $1\leq n\leq N$.
 The worst case is $|\mathbf{Y}_{\mathbf{L}}|=T^M$ when no element in the sequence is annotated.
 \citep{tsuboi2008training} argue that this problem can be addressed by applying the Markov assumption and using a modification of the forward-backward algorithm (see \Cref{sec:inference-crfs}).
 
@@ -122,14 +122,14 @@ Instead of marginalizing incomplete annotations, \citet{mann2008generalized} app
 %TODO definition GE
 
 %TODO define \mathcal{U}
-In general, a \gls{ge} criterion $G(\mathbf{\tilde{\theta}}:\mathcal{U})$ is a score function $S$ which is defined as~\citep{mann2010generalized}:
+In general, a \gls{ge} criterion $G(\bm{\tilde{\theta}}:\mathcal{U})$ is a score function $S$ which is defined as~\citep{mann2010generalized}:
 \begin{equation}
   \label{equ:generalized-expectation}
-  G(\mathbf{\tilde{\theta}}:\mathcal{U})=S\left(E_{\mathcal{U}}\left[E_{P(\mathbf{Y}\mid\mathbf{X})}\left[G(\mathbf{X},\mathbf{Y})\right]\right]\right)
+  G(\bm{\tilde{\theta}}:\mathcal{U})=S\left(E_{\mathcal{U}}\left[E_{P(\mathbf{y}\mid\mathbf{x})}\left[G(\mathbf{x},\mathbf{y})\right]\right]\right)
 \end{equation}
-Here, $P(\mathbf{Y}\mid\mathbf{X})$ is a \gls{cpd} based on the model $\tilde{\mathcal{M}}=\{\tilde{\mathcal{K}},\mathbf{\tilde{\theta}}\}$.
-$\mathcal{U}=\left\{\mathbf{u}^{(1)},\dots,\mathbf{u}^{(M)}\right\}$ is a data set of $M$ unlabeled instances such that $\mathbf{u}^{(m)}=\mathbf{X}^{(m)}$ (compare with $\mathcal{D}$ in \Cref{sec:learning-crfs}).
-$G(\mathbf{X},\mathbf{Y})$ is given as a constraint function.
+Here, $P(\mathbf{y}\mid\mathbf{x})$ is a \gls{cpd} based on the model $\tilde{\mathcal{M}}=\{\tilde{\mathcal{K}},\bm{\tilde{\theta}}\}$.
+$\mathcal{U}=\left\{\mathpzc{u}^{(1)},\dots,\mathpzc{u}^{(M)}\right\}$ is a data set of $M$ unlabeled instances such that $\mathpzc{u}^{(m)}=\mathbf{X}^{(m)}$ (compare with $\mathcal{D}$ in \Cref{sec:learning-crfs}).
+$G(\mathbf{x},\mathbf{y})$ is given as a constraint function.
 
 \itodo{general text on GE equation}
 
@@ -144,47 +144,47 @@ where the \glspl{probability distribution} $P$ and $Q$ are defined over the same
 Applying the $\text{KL}$-divergence as a scoring function $D_{\text{KL}}$ to \Cref{equ:generalized-expectation} we have~\citep{mann2010generalized}
 \begin{equation}
   \label{equ:generalized-expectation-kl}
-  G(\mathbf{\tilde{\theta}}:\mathcal{U})=D_{\text{KL}}\left(\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}\mid\mid E_{\mathcal{U}}\left[P(\mathbf{Y}\mid\mathbf{X})G(\mathbf{X},\mathbf{Y})\right]\right)
+  G(\bm{\tilde{\theta}}:\mathcal{U})=D_{\text{KL}}\left(\tilde{g}_{\left(\mathbf{x},\mathbf{y}\right)}\mid\mid E_{\mathcal{U}}\left[P(\mathbf{y}\mid\mathbf{x})G(\mathbf{x},\mathbf{y})\right]\right)
 \end{equation}
-where $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$ expresses an expectation for $\{\mathbf{X},\mathbf{Y}\}$, either in the form of a particular value or over a \gls{marginal distribution} $\tilde{P}\left(\mathbf{Y}\right)$~\citep{mann2010generalized}.
-The result of $D_{\text{KL}}$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$ and the expectation over the cases of $\left\{\mathbf{X},\mathbf{Y}\right\}$ $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\mathbf{Y}\mid\mathbf{X})$\todo{rewrite}.
+where $\tilde{g}_{\left(\mathbf{x},\mathbf{y}\right)}$ expresses an expectation for $\{\mathbf{x},\mathbf{y}\}$, either in the form of a particular value or over a \gls{marginal distribution} $\tilde{P}\left(\mathbf{y}\right)$~\citep{mann2010generalized}.
+The result of $D_{\text{KL}}$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\mathbf{x},\mathbf{y}\right)}$ and the expectation over the sets of assignments $\left\{\mathbf{x},\mathbf{y}\right\}$ in $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\mathbf{y}\mid\mathbf{x})$\todo{rewrite}.
 %target distribution: distribution for every constraint?
 %expectations: calculated for every constraint separately (mallet code)?
 \itodo{text on GE not being used with log-likelihood (like in mann2010) but alone}
 Further, \citet{mann2010generalized} use the term \gls{label regularization} for the case when the constraint function
 \begin{equation}
   \label{equ:label-regularization-constraint-function}
-  G(\mathbf{X},\mathbf{Y})=\mathbf{\mathbbm{1}}(\mathbf{Y})
+  G(\mathbf{x},\mathbf{y})=\mathbf{\mathbbm{1}}(\mathbf{y})
 \end{equation}
 and the constraint
 \begin{equation}
   \label{equ:label-regularization-constraints}
-  \tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}=E[\tilde{P}(\mathbf{Y})]
+  \tilde{g}_{\left(\mathbf{x},\mathbf{y}\right)}=E[\tilde{P}(\mathbf{y})]
 \end{equation}
 are used in the \gls{ge} term in \Cref{equ:generalized-expectation-kl}.
-Here, $\tilde{P}(\mathbf{Y})$ is an estimated \gls{marginal distribution} over a set of labels $\mathbf{Y}$ that is given as an input to the learner.
+Here, $\tilde{P}(\mathbf{y})$ is an estimated \gls{marginal distribution} over a set of labels $Val(\mathbf{Y})$ that is given as an input to the learner.
 
 \bigskip
 
 There are a number of ways in which \gls{ge} constraints can be applied to an \gls{objective function}.
-\citet{mann2010generalized} discuss, in the context of semi-supervised learning, the addition of \gls{ge} criteria $G(\mathbf{\tilde{\theta}}:\mathcal{U})$ to a likelihood function $\mathcal{L}(\mathbf{\tilde{\theta}}:\mathcal{D})$:
+\citet{mann2010generalized} discuss, in the context of semi-supervised learning, the addition of \gls{ge} criteria $G(\bm{\tilde{\theta}}:\mathcal{U})$ to a likelihood function $\mathcal{L}(\bm{\tilde{\theta}}:\mathcal{D})$:
 \begin{equation}
   \label{equ:objective-function-l-g}
-  O(\mathbf{\tilde{\theta}}:\mathcal{D},\mathcal{U})=\mathcal{L}(\mathbf{\tilde{\theta}}:\mathcal{D})+G(\mathbf{\tilde{\theta}}:\mathcal{U})
+  O(\bm{\tilde{\theta}}:\mathcal{D},\mathcal{U})=\mathcal{L}(\bm{\tilde{\theta}}:\mathcal{D})+G(\bm{\tilde{\theta}}:\mathcal{U})
 \end{equation}
-This way, both a labeled data set $\mathcal{D}$ and an unlabeled data set $\mathcal{U}$ can be utilized during the learning of $\mathbf{\tilde{\theta}}$.
+This way, both a labeled data set $\mathcal{D}$ and an unlabeled data set $\mathcal{U}$ can be utilized during the learning of $\bm{\tilde{\theta}}$.
 
 It is also possible to build an \gls{objective function} only using an unlabeled data set $\mathcal{U}$.
 For this we use the \gls{ge} criteria\todo{plural?}, combined with a Gaussian prior (see \Cref{equ:gaussian-prior}) to prevent overfitting:
 \begin{equation}
   \label{equ:objective-function-g}
-  O(\mathbf{\tilde{\theta}}:\mathcal{U})=G(\mathbf{\tilde{\theta}}:\mathcal{U})+Gauss(\mathbf{\theta})
+  O(\bm{\tilde{\theta}}:\mathcal{U})=G(\bm{\tilde{\theta}}:\mathcal{U})+Gauss(\bm{\tilde{\theta}})
 \end{equation}
 Such an approach was first discussed in \citet{mann2008generalized}.
 
 Seen from a different perspective, using \gls{ge} as an objective function allows us to express expectations on a subset of elements from an unlabeled data set while other elements remain unconstrained~\citep{mann2010generalized}.
 This is precisely what is needed in order to apply \gls{distant supervision} to the learning of \glspl{crf}.
-The idea is to generate \glspl{marginal distribution} $\tilde{P}(\mathbf{Y})$ (see \Cref{equ:label-regularization-constraints}) for the $\mathbf{Y}$ for which we have information from an external source.
+The idea is to generate \glspl{marginal distribution} $\tilde{P}(\mathbf{y})$ (see \Cref{equ:label-regularization-constraints}) for the $\mathbf{y}$ for which we have information from an external source.
 
 In the following chapter we will elaborate on this idea with the goal of extraction of authors from the reference section of research papers.
 

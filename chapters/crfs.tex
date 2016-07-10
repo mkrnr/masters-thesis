@@ -309,8 +309,8 @@ By inserting the two types of \glspl{feature function} from \Cref{equ:linear-cha
   \end{split}
 \end{equation}
 Thereby, for every $y_n$, we iterate over $K$ predefined \glspl{feature function} $\tilde{f}_k$ and $L$ predefined \glspl{feature function} $\tilde{f}_l$.
-Additionally we have a set of parameters $\mathbf{\theta}$ which are multiplied with the two different feature functions.
-$\mathbf{\theta}$ thereby contains $K+L$ parameters.
+Additionally we have a set of parameters $\bm{\theta}$ which are multiplied with the two different feature functions.
+$\bm{\theta}$ thereby contains $K+L$ parameters.
 In order to simplify the notation, we define $y_0$ as a special start state, denoted \texttt{start}~\citep{lafferty2001conditional}.
 
 An example for a  \gls{linear-chain crf} can be derived from our author example\dots\todo{example}
@@ -449,7 +449,7 @@ Instead, we refer to \citet{koller2009probabilistic} for further readings on thi
 \bigskip
 
 In the following section we will discuss methods for learning \glspl{crf}.
-In particular we will look into the parameter estimation of the weights $\theta$ that are assigned to \glspl{feature function}, for example in \Cref{equ:linear-chain-crf-log-linear}.
+In particular we will look into the parameter estimation of the set of weights $\bm{\theta}$ that are assigned to \glspl{feature function}, for example in \Cref{equ:linear-chain-crf-log-linear}.
 
 \section{Learning of \glsentryshortpl{crf}}\label{sec:learning-crfs}
 
@@ -464,7 +464,7 @@ In some cases, experts with a sufficient understanding of the domain do not exis
 Yet, we now often have access to a large body of example instances which originate from the distribution we want to model~\citep{koller2009probabilistic}.
 A promising approach is thereby to learn a model $\mathcal{\tilde{M}}$ based on such a set of examples.
 More formally, we assume a given labeled data set $\mathcal{D}=\{\mathpzc{d}^{(1)},\dots,\mathpzc{d}^{(M)}\}$ of $M$ instances with $\mathpzc{d}^{(m)}=\mathbf{x}^{(m)}\cup\mathbf{y}^{(m)}$ and $\mathbf{X}^{(m)}\cap\mathbf{Y}^{(m)}=\emptyset$.
-We further assume that $\mathcal{D}$ follows an underlying distribution $P^*$ which is induced by a network $\mathcal{M}^*=(\mathcal{K}^*,\mathbf{\theta}^*)$ where $\mathcal{K}^*$ is a graph and $\mathbf{\theta}^*$ are model parameters~\citep{koller2009probabilistic}.
+We further assume that $\mathcal{D}$ follows an underlying distribution $P^*$ which is induced by a network $\mathcal{M}^*=(\mathcal{K}^*,\bm{\theta}^*)$ where $\mathcal{K}^*$ is a graph and $\bm{\theta}^*$ are model parameters~\citep{koller2009probabilistic}.
 Lastly, we assume that the elements in $\mathcal{D}$ sampled independently from $P^*$ and thereby \acrfull{iid}~\citep{koller2009probabilistic}.
 
 \bigskip
@@ -474,20 +474,20 @@ Instead, the goal is to find a $\mathcal{\tilde{M}}$ which provides the ``best''
 There exists a number of metrics for deciding which $\mathcal{\tilde{M}}$ ``best'' approximates $\mathcal{M}^*$.
 
 A popular metric that is used for \glspl{crf} is \gls{maximum likelihood}.
-Before discussing it, it is important to clarify which part of $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\mathbf{\tilde{\theta}})$ we aim to learn.
+Before discussing it, it is important to clarify which part of $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$ we aim to learn.
 %TODO add forward-backward algorithm to gls
 In order to apply the forward-backward algorithm during inferencing, which is also part of the learning, $\mathcal{\tilde{K}}$ needs to follow a certain sequential structure.
 In this work we assume $\mathcal{\tilde{K}}$ to be modeled in such a way and given as an input to the learner.
 A relatively simple model for $\mathcal{\tilde{K}}$ can be a log-linear \glspl{linear-chain crf} (see \Cref{equ:linear-chain-crf-log-linear}). For it we have a \gls{feature function} $\tilde{f}_k$ between two neighboring \glspl{target variable} and a \gls{feature function} $\tilde{f}_l$ between a \gls{target variable} and its context given by a set of \glspl{observed variable}.
-Thereby, we will focus on the learning of the set of parameters $\mathbf{\tilde{\theta}}$ which, in the case of \glspl{linear-chain crf}, are the $\theta_k$ and $\theta_l$ for the two \glspl{feature function} from \Cref{equ:linear-chain-crf-log-linear}.
+Thereby, we will focus on the learning of the set of parameters $\bm{\tilde{\theta}}$ which, in the case of \glspl{linear-chain crf}, are the $\theta_k$ and $\theta_l$ for the two \glspl{feature function} from \Cref{equ:linear-chain-crf-log-linear}.
 
 \bigskip
-Given a data set $\mathcal{D}$ we define the likelihood function $L(\mathbf{\tilde{\theta}}:\mathcal{D})$ as
+Given a data set $\mathcal{D}$ we define the likelihood function $L(\bm{\tilde{\theta}}:\mathcal{D})$ as
 \begin{equation}
   \label{equ:likelihood}
-  \mathcal{L}\left(\mathbf{\tilde{\theta}}:\mathcal{D}\right)=\prod_{m=1}^M P\left(\mathbf{y}^{(m)}|\mathbf{x}^{(m)}\right)
+  \mathcal{L}\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=\prod_{m=1}^M P\left(\mathbf{y}^{(m)}|\mathbf{x}^{(m)}\right)
 \end{equation}
-where $P$ is derived from the graphical model $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\mathbf{\tilde{\theta}})$.
+where $P$ is derived from the graphical model $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$.
 A common approach is to calculate the \textit{log-likelihood} $\ell$ instead of the likelihood itself.
 This is possible since the log-likelihood is monotonically related to the likelihood and thereby the maximization problems are equivalent~\citep{koller2009probabilistic}.
 An computational advantage of using the log-likelihood is that it is calculated over sums instead of products~\citep{koller2009probabilistic}.
@@ -495,7 +495,7 @@ An computational advantage of using the log-likelihood is that it is calculated 
 The log-likelihood function is defined as~\citep{sutton2010introduction}:
 \begin{equation}
   \label{equ:log-likelihood}
-  \ell\left(\mathbf{\tilde{\theta}}:\mathcal{D}\right)=\sum_{m=1}^M \left(\log P\left(\mathbf{y}^{(m)}|\mathbf{x}^{(m)}\right)\right)
+  \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=\sum_{m=1}^M \left(\log P\left(\mathbf{y}^{(m)}|\mathbf{x}^{(m)}\right)\right)
 \end{equation}
 
 In order to illustrate the calculation, we now look at a more concrete example of a log-likelihood function.
@@ -504,7 +504,7 @@ Using the definition of log-linear \glspl{linear-chain crf} from \Cref{equ:linea
 \begin{equation}
   \label{equ:log-likelihood-linear-chain-crf-log-linear-1}
   \begin{split}
-    \ell\left(\mathbf{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(\log \left(\frac{1}{Z\left(\mathbf{x}^{(m)}\right)}\exp\left\{ -\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(y_n^{(m)},y_{n-1}^{(m)}\right) \right.\right.\right.\right.\\
+    \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(\log \left(\frac{1}{Z\left(\mathbf{x}^{(m)}\right)}\exp\left\{ -\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(y_n^{(m)},y_{n-1}^{(m)}\right) \right.\right.\right.\right.\\
     &\left.\left.\left.\left. +\sum_{l=1}^L\theta_l \tilde{f}_l\left(y_n^{(m)},\mathbf{\tilde{x}}_n^{(m)}\right)\right)\right\}\right)\right)
  \end{split}
 \end{equation}
@@ -512,7 +512,7 @@ We can simplify this by resolving the $\log$ statement which results in:
 \begin{equation}
   \label{equ:log-likelihood-linear-chain-crf-log-linear-2}
   \begin{split}
-    \ell\left(\mathbf{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(y_n^{(m)},y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(y_n^{(m)},\mathbf{\tilde{x}}_n^{(m)}\right)\right)\right) \\
+    \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(y_n^{(m)},y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(y_n^{(m)},\mathbf{\tilde{x}}_n^{(m)}\right)\right)\right) \\
     & -\log Z\left(\mathbf{x}^{(m)}\right)
  \end{split}
 \end{equation}
@@ -521,25 +521,25 @@ Using the forward-backward algorithm we can efficiently calculate the normalizat
 
 \bigskip
 
-\citet{sutton2010introduction} discuss that a model $\tilde{\mathcal{M}}$ can overfit the given data set $\mathcal{D}$ when the number of parameters in $\mathbf{\tilde{\theta}}$ is too high.
-It is thereby common to use a \textit{regularization term} that forms a penalty based on the norm of $\mathbf{\tilde{\theta}}$ where $\mathbf{\tilde{\theta}}$ is seen as a vector~\citep{koller2009probabilistic,sutton2010introduction}.
+\citet{sutton2010introduction} discuss that a model $\tilde{\mathcal{M}}$ can overfit the given data set $\mathcal{D}$ when the number of parameters in $\bm{\tilde{\theta}}$ is too high.
+It is thereby common to use a \textit{regularization term} that forms a penalty based on the norm of $\bm{\tilde{\theta}}$ where $\bm{\tilde{\theta}}$ is seen as a vector~\citep{koller2009probabilistic,sutton2010introduction}.
 
 An example for such a term is called \textit{Gaussian prior}.
 \itodo{understand and explain Gaussian prior}
 \begin{equation}
   \label{equ:gaussian-prior}
-  Gauss(\mathbf{\theta})=\exp\left\{\sum_{i=1}^I\frac{\theta_i^2}{2\sigma^2}\right\}
+  Gauss(\bm{\theta})=\exp\left\{\sum_{i=1}^I\frac{\theta_i^2}{2\sigma^2}\right\}
 \end{equation}
 \begin{equation}
   \label{equ:gaussian-prior}
-  Gauss(\mathbf{\theta})=\sum_{i=1}^I\frac{\theta_i^2}{2\sigma^2}
+  Gauss(\bm{\theta})=\sum_{i=1}^I\frac{\theta_i^2}{2\sigma^2}
 \end{equation}
 %TODO discuss with Rene
 
 \begin{equation}
   \label{equ:log-likelihood-linear-chain-crf-log-linear-gaussian}
   \begin{split}
-    \ell\left(\mathbf{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(\vphantom{\tilde{x}}y_n^{(m)},y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(y_n^{(m)},\mathbf{\tilde{x}}_n^{(m)}\right)\right)\right) \\
+    \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(\vphantom{\tilde{x}}y_n^{(m)},y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(y_n^{(m)},\mathbf{\tilde{x}}_n^{(m)}\right)\right)\right) \\
     & -\log Z\left(\mathbf{x}^{(m)}\right)-\left(\sum_{k=1}^K\frac{\theta_k^2}{2\sigma^2}+\sum_{l=1}^L\frac{\theta_l^2}{2\sigma^2}\right)
  \end{split}
 \end{equation}
@@ -547,37 +547,37 @@ In \Cref{cha:distant-supervision} we discuss an additional regularization term b
 
 \bigskip
 
-After discussing a concrete calculation of $\ell(\mathbf{\tilde{\theta}}:\mathcal{D})$ we now want to find the set of parameters $\mathbf{\hat{\theta}}\in\mathbf{\Theta}$ such that $\ell(\mathbf{\hat{\theta}}:\mathcal{D})$ has the maximum value regarding a predefined graph $\mathcal{\tilde{K}}$.
-Here, $\mathbf{\Theta}$ is the set of all possible sets of parameters $\mathbf{\tilde{\theta}}$.
+After discussing a concrete calculation of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$ we now want to find the set of parameters $\bm{\hat{\theta}}\in\mathbf{\Theta}$ such that $\ell(\bm{\hat{\theta}}:\mathcal{D})$ has the maximum value regarding a predefined graph $\mathcal{\tilde{K}}$.
+Here, $\bm{\Theta}$ is the set of all possible sets of parameters $\bm{\tilde{\theta}}$.
 This task is referred to as \textit{maximum likelihood estimation} and, when considering the log-likelihood function, defined as~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:maximum-log-likelihood-estimation}
-  \ell\left(\mathbf{\hat{\theta}}:\mathcal{D}\right)=\max_{\mathbf{\tilde{\theta}}\in\mathbf{\Theta}}\ell\left(\mathbf{\tilde{\theta}}:\mathcal{D}\right)
+  \ell\left(\bm{\hat{\theta}}:\mathcal{D}\right)=\max_{\bm{\tilde{\theta}}\in\mathbf{\Theta}}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)
 \end{equation}
 When discussing the maximization problem, an important term is the \gls{gradient} of a \gls{function}.
-The \gls{gradient} $\nabla f$ of an objective function\todo{explain obj.\ function} $f_{\text{obj}}(\mathbf{\tilde{\theta}})$ with $\mathbf{\tilde{\theta}}=\tilde{\theta}_1,\dots,\tilde{\theta}_I$ is the vector of the partial derivatives~\citep{koller2009probabilistic}:
+The \gls{gradient} $\nabla f$ of an objective function\todo{explain obj.\ function} $f_{\text{obj}}(\bm{\tilde{\theta}})$ with $\bm{\tilde{\theta}}=\tilde{\theta}_1,\dots,\tilde{\theta}_I$ is the vector of the partial derivatives~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:gradient}
   \nabla f=\left\langle\frac{\partial f}{\partial\tilde{\theta}_1},\dots,\frac{\partial f}{\partial\tilde{\theta}_I}\right\rangle
 \end{equation}
-The first step in finding $\mathbf{\hat{\theta}}$ is to find a $\mathbf{\tilde{\theta}}$ for which $\nabla f=0$.
+The first step in finding $\bm{\hat{\theta}}$ is to find a $\bm{\tilde{\theta}}$ for which $\nabla f=0$.
 Applied to our log-likelihood function we thereby have to solve the following equations:
 \begin{equation}
   \label{equ:log-likelihood-gradient}
-  \frac{\partial}{\partial\theta_i}\ell\left(\mathbf{\tilde{\theta}}:\mathcal{D}\right)=0\ \ \ \ \ \ \ \ \ i=1,\dots,I
+  \frac{\partial}{\partial\theta_i}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=0\ \ \ \ \ \ \ \ \ i=1,\dots,I
 \end{equation}
 We refer to \citet{sutton2010introduction} and \citet{koller2009probabilistic} for further information on how to calculate these partial derivatives.
-The resulting $\mathbf{\tilde{\theta}}$ is called a \textit{stationary point} of the function $\ell$ and can be a local maximum, a local minimum, or a saddle point~\citep{koller2009probabilistic}.
-There are multiple ways of controlling if $\mathbf{\tilde{\theta}}$ is a local maximum, for example by checking the second derivative of $\ell(\mathbf{\tilde{\theta}}:\mathcal{D})$.
-If it is negative then $\mathbf{\tilde{\theta}}$ is a local maximum~\citep{koller2009probabilistic}.
+The resulting $\bm{\tilde{\theta}}$ is called a \textit{stationary point} of the function $\ell$ and can be a local maximum, a local minimum, or a saddle point~\citep{koller2009probabilistic}.
+There are multiple ways of controlling if $\bm{\tilde{\theta}}$ is a local maximum, for example by checking the second derivative of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$.
+If it is negative then $\bm{\tilde{\theta}}$ is a local maximum~\citep{koller2009probabilistic}.
 
-\citep{sutton2010introduction} argue that, in the case of \glspl{linear-chain crf}, the function $\ell(\mathbf{\tilde{\theta}}:\mathcal{D})$ (see \Cref{equ:log-likelihood-linear-chain-crf-log-linear-gaussian}) is concave.
+\citep{sutton2010introduction} argue that, in the case of \glspl{linear-chain crf}, the function $\ell(\bm{\tilde{\theta}}:\mathcal{D})$ (see \Cref{equ:log-likelihood-linear-chain-crf-log-linear-gaussian}) is concave.
 Thereby, during the optimization of $\ell$, every local optimum is also a global optimum~\citep{sutton2010introduction}.
 
 \bigskip
 
 A typical approach to the optimization uses gradient ascent methods~\citep{koller2009probabilistic}.
-Starting with an arbitrary $\mathbf{\tilde{\theta}}$, the goal is to follow the slope of $\mathbf{\tilde{\theta}}$ by iteratively modifying the $\mathbf{\tilde{\theta}}$ and recalculating the gradient $\nabla f$.
+Starting with an arbitrary $\bm{\tilde{\theta}}$, the goal is to follow the slope of $\bm{\tilde{\theta}}$ by iteratively modifying the $\bm{\tilde{\theta}}$ and recalculating the gradient $\nabla f$.
 This is done until the maximum is reached.
 Yet, since this approach requires many calculations of $\nabla f$, it can be infeasible in practice~\citep{sutton2010introduction}.
 
