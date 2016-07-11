@@ -3,7 +3,7 @@
 A common approach to the learning of \glspl{crf} is to use manually labeled instances.
 Manual labeling results in an accurate labeling in most cases but is expensive and can thereby only be performed on small data sets.
 
-%TODO general words on distant supervision: jiang2012information
+\itodo{general words on distant supervision: e.g.\ from \citet{jiang2012information}}
 
 The approach of \gls{distant supervision} allows the automated labeling of large data sets by using heuristics and external sources of information.
 
@@ -39,7 +39,7 @@ There is again a body of research that extends this approach to sentiment analys
 \citet{fan2015detecting} also apply distant supervision without using a knowledge base.
 They rely on a simple heuristic for localizing tables by considering the context around a line starting with ``Table'' or ``Tab.'' as a potential table.
 
-%TODO ling2012fine on entity recognition using distant supervision
+\itodo{\citet{ling2012fine} on entity recognition using distant supervision}
 \bigskip
 
 Due to the different applications of \gls{distant supervision}, a precise definition\dots
@@ -119,9 +119,9 @@ In \Cref{cha:author-extraction} we will discuss a concrete example for such a sc
 Instead of marginalizing incomplete annotations, \citet{mann2008generalized} apply the concept of \acrfull{ge} on the training of linear-chain \glspl{crf}.
 \Gls{ge} was first proposed in \citet{mann2007simple} under the name \gls{expectation regularization} as a method for semi-supervised learning.
 
-%TODO definition GE
+\itodo{define \gls{ge}}
 
-%TODO define \mathcal{U}
+\itodo{define $\mathcal{U}$}
 In general, a \gls{ge} criterion $G(\bm{\tilde{\theta}}:\mathcal{U})$ is a score function $S$ which is defined as~\citep{mann2010generalized}:
 \begin{equation}
   \label{equ:generalized-expectation}

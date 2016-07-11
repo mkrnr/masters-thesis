@@ -9,6 +9,108 @@ We then focus on the annotation of authors in the extracted reference sections u
 From this annotations we then generate \gls{ge} constraints on a word level.
 Using the extracted reference sections as unlabeled training data together with the \gls{ge} constraints we can perform a \gls{crf} training.
 
-\section{Author Name Knowledge Bases}\label{sec:knowldge-bases}
+
+\section{Preprocessing}\label{sec:i-preprocessing}
+
+According to
+The corpus that is used in our study consists of 32,470 research papers that are accessible via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)} as \gls{pdf} documents.
+
+Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
+Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed April~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
+This is done by also taking into account the formatting of the document, for example when a research paper contain two text columns per page.
+
+This way we were able to extract the text of 31,795 research papers.
+
+\bigskip
+
+Otherwise, the author name matching (see \Cref{subsec:author-name-matching}) would also match names that appear in the text body of the research paper.
+
+The reference string parsing package ParsCit\footnote{\url{http://wing.comp.nus.edu.sg/parsCit/} (accessed July~06,~2016)} uses a \dots
+
+\section{Generating Training Sets with Distant Supervision}\label{sec:i-distant-supervision}
+
+\subsection{Knowledge Base}\label{sec:i-knowledge-base}
 
 
+For the evaluation we generated data sets based on two sources for author names which separate the first names and last names of an author.
+
+\bigskip
+
+The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)} which is published by the German National Library in cooperation with other library networks and institutions.
+The \gls{gnd}\todo{full acr?} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
+\itodo{which persons are included, statistics}
+We will refer to the second data set as the \texttt{gnd} data set.
+
+\bigskip
+
+The second source is the social science portal Sowiport\footnote{\url{http://sowiport.gesis.org/} (accessed July~5,~2016)} which is maintained by GESIS --- Leibniz Institute for the Social Sciences\footnote{\url{http://www.gesis.org/} (accessed July~5,~2016)}.
+\itodo{statistics, references}
+
+
+We will refer to the second data set as the \texttt{sowiport} data set.
+
+
+\subsection{Author Name Matching}\label{subsec:i-author-name-matching}
+Usually, matches are annotated using markup languages such as \gls{xml}\todo{examples}.
+Since such markup language use tree based models, they do not allow a direct encoding of overlaps.
+To demonstrate this issue for tree based models, we consider our previous overlap example which we want to encode using \gls{xml}\@\todo{add tree example}.
+
+There are a number of approaches that try to overcome this limitation of tree based markup languages such as \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}. They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from such documents.
+
+In order to avoid this kind of overhead, it would be preferable to annotate our author matches using a data structure that supports overlapping hierarchies by default.
+\citet{sperberg2000goddag} propose such a data structure named \acrfull{goddag}.
+Being a directed graph, it naturally solves the issue of overlaps by allowing a node to have multiple parents.
+The graph has a hierarchy since it it acyclic.
+In addition, it has ordered descendants.
+Thereby, for any given node, the order of it's child nodes is defined.
+\itodo{add properties}
+\itodo{goddag example}
+Given the \gls{goddag} data structure, we will now discuss a concrete way of tagging author names in a given string containing words.
+
+One approach that we pursued was using the \gls{aho-corasick algorithm}, proposed by \citet{aho1975efficient}.
+It uses a \glspl{fsm} to efficiently search a text corpus for all occurrences of a given set of strings.
+I na{\"{\i}}ve approach for the search of occurrences of a set of authors in given text would be the following.
+Since author names can appear in a variety of ways in references, a number of variations has to be created for every author in the list\todo{example}.
+Especially since the authors can be written with the first name appearing before or after the last name, generating these variations results in a considerable data redundancy in the \glspl{fsm}.
+Additionally, only the specified variations, including the punctuation marks between the names, can be found in the text.
+
+Our final approach consists of the following steps.
+First, the author names are split into first names and last names.
+If an author has multiple first names or last names, they are not further separated in this case.
+Thereby, we refer to this lists as \textit{full first names set} and \textit{full last names set}.
+Since first names can be abbreviated in references, a next step is to generated a \textit{abbreviated first names set}.
+For example, \todo{first name example}.
+The matching that we use in a later step only matches single words, separated by white spaces.
+Thereby, in addition to the \textit{abbreviated first names set} we need to split entries with multiple names in both the \textit{full first names set} and \textit{full last names set}.
+This results in two new lists, containing single first names and single last names.
+We call these lists \textit{single first names set} and \textit{single last names set}.
+The \textit{abbreviated first names set} and \textit{single first names set} are then combined to form one \textit{abbreviated and single first names set}.
+
+We now generate an initial \gls{goddag} structure for our given text.
+This structure consists of a root node which has as leaf nodes the words of the text, separated at white space or new line characters.
+Additionally, every leaf node contains a ``word'' property which is the string of the node with removed leading and trailing non-alphabetical characters.
+
+Given this initial \gls{goddag} structure we now match the \textit{abbreviated and single first names set} against the ``word'' properties of the leaf nodes\todo{mention hashset?}.
+If a match is found, a non-terminal node labeled ``FirstName'' is added between the root node and the matched leaf node.
+In a second pass, we match against the \textit{single last names set} and add non-terminal nodes labeled ``LastName'' accordingly.
+We refer to the added nodes as \textit{first name nodes} and \textit{last name nodes}.
+
+As a result of the two iterations, a given leaf node can simultaneously have a first name node and a last name node as a parent.
+This again would not be allowed in a tree structure such as \gls{xml}.
+
+We now want to match our list of authors against the \gls{goddag} structure with identified first names and last names.
+For this we generate an \textit{author name map} that contains as keys the entries from the \textit{full last names set}.
+As values it contains the matching first names and first name abbreviations according to the author list\todo{example}.
+Using this list we now iterate over the leaf nodes.
+If a leaf node has a last name node parent node, we first continue check the preceding and following leaf nodes for first name parent nodes.
+Additionally, we also check for following last name nodes for author names with multiple last names.
+
+Using the ``word'' property of the found leaf nodes, we search the last names in the previously created author name map.
+If the last names were found, we search the values for our found first names.
+If we matched both the last and first names of an author, we add a non-terminal node with the label ``Author'' between the root node and the corresponding parents of the matched leaf nodes\todo{example}.
+
+\itodo{statistics}
+
+\section{Building \glsentryshort{ge} Constraints}\label{sec:i-training-crfs}
+
+\section{Learning \glsentryshortpl{crf}}\label{sec:i-learning-crfs}

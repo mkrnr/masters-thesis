@@ -21,12 +21,12 @@ In our example of author information extraction we define \glssymbol{outcome spa
 For the purpose of illustration we consider four events:
 
 %TODO replace "`firstPeriod"'
-Event $firstPeriod$ contains all word sequences in which the first word of the sequence ends with a period and event $firstNotPeriod$ contains $\Omega\ -\ firstPeriod$.
-Event $secondCapitalized$ contains all word sequences in which the second word of the sequence is capitalized and event $secondNotCapitalized$ is defined accordingly.
+Event $firstComma$ contains all word sequences in which the first word of the sequence ends with a comma and event $firstNotComma$ is defined accordingly.
+Event $secondFirstName$ contains all word sequences in which the second word of the sequence is a first name and event $secondNotFirstName$ again is defined accordingly.
 
 \glssymbol{measurable set} contains the four defined events and per definition also $\emptyset$ and $\Omega$.
 $P$ now assigns all events in \glssymbol{measurable set} a probability.
-Given the values in \todo{add ref}, $P(firstPeriod)$ is $XXX$ and $P(secondNotCapitalized)$ is $XXX$.
+Given the values in \todo{add ref}, $P(firstComma)$ is $XXX$ and $P(secondFirstName)$ is $XXX$.
 
 \bigskip
 
@@ -41,12 +41,12 @@ $Val(\bm{X})$ is the set of possible \glspl{full assignment} to $\mathbf{X}$.
 Any \gls{event} that is described using $\mathbf{X}$ must be a union of \glspl{full assignment} to $\mathbf{X}$\todo{example}.
 This gives us a \gls{canonical outcome space} where each outcome is a joint assignment to the \glspl{random variable} in $\mathbf{X}$.
 
-Following our example we define a \gls{random variable} $Y$ as the \gls{function} that associates with the first word in a sequence whether or not it end with a period.
-Thereby, the \gls{event} $firstPeriod$ can now also be denoted with $Y = period$ and $firstNotPeriod$ with $Y = notPeriod$ resulting in $Val(Y)=\{period, notPeriod\}$.
-Consequently, $P(firstPeriod)=P(Y=period)$ and $P(firstNotPeriod)=P(Y=period)$.
-$X$ is defined as the function that associates with the second word in a sequence whether or not it is capitalized with $Val(X)=\{capitalized, notCapitalized\}$.
-Given $X$ and $Y$, we can build the \gls{joint distribution} $P(X,Y)$.
-Using the values from \todo{ref}, $P(X=capitalized,Y=period)=XXX$ and $P(X=capitalized,Y=notPeriod)=XXX$.
+Following our example we define a \gls{random variable} $X_1$ as the \gls{function} that associates with the first word in a sequence the probability of it ending with a comma.
+Thereby, the \gls{event} $firstComma$ can now also be denoted with $X_1 = comma$ and $firstNotComma$ with $X_1 = notComma$ resulting in $Val(X_1)=\{comma, notComma\}$.
+Consequently, $P(firstComma)=P(X_1{=}comma)$ and $P(firstNotComma)=P(X_1{=}notComma)$.
+$Y_2$ is defined as the function that associates with the second word in a sequence whether or not it is a first name with $Val(Y_2)=\{firstName, notFirstName\}$.
+Given $X_1$ and $Y_2$, we can build the \gls{joint distribution} $P(X_1,Y_2)$.
+Using the values from \todo{ref}, $P(X_1{=}comma,Y_2{=}firstName)=XXX$ and $P(X_1{=}comma,Y_2{=}notFirstName)=XXX$.
 
 \bigskip
 
@@ -60,18 +60,7 @@ This definition can be extended to \glspl{random variable}.
 Given that all assignments in $Y$ are non-zero, the \gls{conditional probability distribution} $P(X\mid Y)$ assigns each value $Y$ a probability over values of $X$ using the \gls{conditional probability}.
 This can also be extended to sets of \glspl{random variable}.
 
-With our example values from \todo{ref}, $P(X=capitalized\ \mid\ Y=period)=xxx$ and $P(X=capitalized\mid Y=notPeriod)=xxx$.
-
-\bigskip
-
-Another relevant concept is the notion of \gls{independence}.
-An \gls{event} $\alpha$ is \glslink{independence}{independent} of \gls{event} $\beta$ in $P$ if $P(\alpha\mid\beta)=P(\alpha)$ or if $P(\beta)=0$~\cite{koller2009probabilistic}.
-The \gls{independence} of $\alpha$ and $\beta$ is denoted with $P\models(\alpha\perp\beta)$.
-Two \glspl{event} can also be \glslink{independence}{independent} given a third \gls{event}, called \gls{conditional independence}:
-$\alpha$ is \glslink{conditional independence}{conditionally independent} of \gls{event} $\beta$ given \gls{event} $\gamma$ in $P$ if $P(\alpha\mid\beta\cap\gamma)=P(\alpha\mid\gamma)$ or if $P(\beta\cap\gamma)=0$~\cite{koller2009probabilistic}.
-\Gls{conditional independence} is denoted with $P\models(\alpha\perp\beta\mid\gamma)$.
-
-\itodo{add example for independence and conditional independence}
+With our example values from \todo{ref}, $P(Y_2{=}firstName\mid X_1{=}comma)=XXX$ and $P(Y_2{=}firstName\mid X_1{=}notComma)=xxx$.
 
 \bigskip
 
@@ -225,8 +214,8 @@ After introducing some of the fundamental concepts we can now discuss \glspl{crf
 
 \section{Encoding of \glsentryshortpl{crf}}\label{sec:definition-crfs}
 A popular framework for building \glspl{probabilistic graphical model} are \acrfullpl{crf}.
-They were proposed by \citet{lafferty2001conditional} with the goal of segmenting and labeling sequence data.
-A main motivation for \glspl{crf} was to overcome a label bias problem that other discriminative \glspl{markov network}, such as \glspl{memm}, tend to have~\citep{lafferty2001conditional}.
+Proposed by \citet{lafferty2001conditional}, the initial goal was the segmentation and labeling sequence data.
+A main motivation for \glspl{crf} is to overcome a label bias problem that other discriminative \glspl{markov network}, such as \glspl{memm}, tend to have~\citep{lafferty2001conditional}.\todo{rewrite}
 \citet{lafferty2001conditional} argue that this is due to the structure in which models such as \glspl{memm} model \glspl{conditional probability} using per-state models.
 This can lead to a bias towards stats which have fewer outgoing transitions~\citep{lafferty2001conditional}.
 In order to overcome this bias, \glspl{crf} do not have per-state models but instead contain a single model to represent ``the \glslink{joint distribution}{joint probability} of the entire sequence of labels given the observation sequence''~\citep{lafferty2001conditional}.
