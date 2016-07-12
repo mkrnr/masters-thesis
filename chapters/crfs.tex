@@ -10,62 +10,140 @@ Following this we will introduce the concept of \glspl{crf} and discuss the infe
 \subsection{Probability Theory}\label{subsec:probability-theory}
 Several concepts from probability theory are crucial for an understanding of \glspl{crf} and they all build on the notion of \glspl{probability distribution}.
 
-A \gls{probability distribution} $P$ is defined over $(\glssymbol{outcome space},\glssymbol{measurable set})$ where \glssymbol{outcome space} is the \gls{outcome space} and \glssymbol{measurable set} is a \gls{measurable set} of \glspl{event} \citep{koller2009probabilistic}.
-$P$ describes a mapping from events in \glssymbol{measurable set} to real values according to the following rules \citep{koller2009probabilistic}:
+A \gls{probability distribution} $P$ is defined over \glssymbol{outcome space} and \glssymbol{measurable set}, where \glssymbol{outcome space} is the \gls{outcome space} and \glssymbol{measurable set} is a \gls{measurable set} of \glspl{event} with $\glssymbol{measurable set}\subseteq \glssymbol{power set} (\glssymbol{outcome space})$ \citep{koller2009probabilistic}.
+$\glssymbol{power set}(\glssymbol{outcome space})$ is the \gls{power set} of \glssymbol{outcome space}:
+\begin{equation}
+  \label{equ:power-set}
+  \glssymbol{power set}(\glssymbol{outcome space})=\left\{U\mid U\subseteq \glssymbol{outcome space}\right\}
+\end{equation}
+$P$ now describes a mapping from events in \glssymbol{measurable set} to real values according to the following rules \citep{koller2009probabilistic}:
 \begin{itemize}
   \item $P(\alpha)\geq 0 $ for all $ \alpha \in S$.
   \item $P(\glssymbol{outcome space})=1$.
-  \item If $\alpha,\beta\in \glssymbol{outcome space}$ and $\alpha\cap\beta = \emptyset$, then $P(\alpha\cup\beta)=P(\alpha)+P(\beta)$.
+  \item If $\alpha,\beta\in \glssymbol{measurable set}$ and $\alpha\cap\beta = \emptyset$, then $P(\alpha\cup\beta)=P(\alpha)+P(\beta)$.
 \end{itemize}
-In our example of author information extraction we define \glssymbol{outcome space} as the set of possible word sequences that can appear in a given text line of a research paper.
-For the purpose of illustration we consider four events:
+An example that we will use and extend throughout this chapter is a simplified version of the author extraction problem that we will discuss in \Cref{cha:author-extraction}.
+For this we define \glssymbol{outcome space} as a set consisting of four reference strings (see \todo{add}).
+A reference string consists of a sequence of words which are separated by whitespaces.
 
-%TODO replace "`firstPeriod"'
-Event $firstComma$ contains all word sequences in which the first word of the sequence ends with a comma and event $firstNotComma$ is defined accordingly.
-Event $secondFirstName$ contains all word sequences in which the second word of the sequence is a first name and event $secondNotFirstName$ again is defined accordingly.
+We now consider two events:
+\begin{itemize}
+  \item $firstComma$ contains all reference strings in \glssymbol{outcome space} in which the first word of the sequence ends with a comma.
+  \item $secondFirstName$ contains all reference strings in \glssymbol{outcome space} in which the second word of the sequence is a first name.
+\end{itemize}
 
-\glssymbol{measurable set} contains the four defined events and per definition also $\emptyset$ and $\Omega$.
-$P$ now assigns all events in \glssymbol{measurable set} a probability.
-Given the values in \todo{add ref}, $P(firstComma)$ is $XXX$ and $P(secondFirstName)$ is $XXX$.
+From this we construct two \glspl{measurable set}:
+\begin{equation*}
+  \label{equ:eg-measurable-sets}
+    \begin{split}
+  \glssymbol{measurable set}_{C}=& \{\emptyset,firstComma, firstNotComma, \glssymbol{outcome space}\}\\
+  \glssymbol{measurable set}_{F}=& \{\emptyset,secondFirstName, secondNotFirstName, \glssymbol{outcome space}\}.
+    \end{split}
+\end{equation*}
+with $firstNotComma=\glssymbol{outcome space}\setminus firstComma$ and $secondNotFirstName$ being defined accordingly.
+
+We now consider two \glspl{probability distribution}.
+The first is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{C}$ and based on \todo{ref} we have:
+\begin{equation*}
+  \label{equ:eg-measurable-sets}
+    \begin{split}
+      P(firstComma)&=1/4=0.25\\
+      P(firstNotComma)&=3/4=0.75
+    \end{split}
+\end{equation*}
+The second \glspl{probability distribution} is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{F}$, giving us:
+\begin{equation*}
+  \label{equ:eg-measurable-sets}
+    \begin{split}
+      P(secondFirstName)&=1/4=0.25\\
+      P(secondNotFirstName)&=3/4=0.75
+    \end{split}
+\end{equation*}
 
 \bigskip
 
 Based on the idea of \glspl{probability distribution}, a \gls{random variable} $X$ is a \gls{function} that associates with each outcome in \glssymbol{outcome space} a value~\cite{koller2009probabilistic}.
 In addition, $Val(X)$ is the set of values that $X$ can take.
-Such a value $x$ is also referred to as an assignment to $X$.
-We can define a vector of \glspl{random variable} $\mathbf{X}=\left\langle X_1,\dots,X_n\right\rangle$ and accordingly a vector of assignments $\mathbf{x}=\left\langle x_1,\dots,x_n\right\rangle$ to $\mathbf{X}$.
+The elements in $Val(X)$ are also called assignments to $X$.
+
+Following our example we define a \gls{random variable} $Comma_1$ as the \gls{function} that associates with the first word in a sequence whether or not it ending with a comma.
+Thereby, the \gls{event} $firstComma$ can now also be denoted with $Comma_1{=}true$ and $firstNotComma$ with $Comma_1{=}false$ resulting in $Val(Comma_1)=\{true, false\}$.
+Similarly, $FirstName_2$ is defined as the function that associates with the second word in a sequence whether or not it is a first name: $Val(FirstName_2)=\{true, false\}$.
+
+\bigskip
+
 Given a \gls{random variable} $X$, $P(X)$ is the \gls{probability distribution} over $Val(X)$~\cite{koller2009probabilistic}.
-It is referred to as the \gls{marginal distribution} over $X$.
-Given a set of \glspl{random variable} $\mathbf{X}$, $P(\mathbf{X})$ is called \gls{joint distribution} and assigns each \gls{full assignment} $\mathbf{x}$ to $\mathbf{X}$ a probability~\cite{koller2009probabilistic}.
-$Val(\bm{X})$ is the set of possible \glspl{full assignment} to $\mathbf{X}$.
-Any \gls{event} that is described using $\mathbf{X}$ must be a union of \glspl{full assignment} to $\mathbf{X}$\todo{example}.
+It is also referred to as the \gls{marginal distribution} over $X$.
+An assignment of a concrete event $x$ to $X$ is denoted as $P(X=x)$ or short $P(x)$.
+
+We can now define our \glspl{probability distribution} on \glspl{random variable} instead of \glspl{event}, for example:
+\begin{equation*}
+  \begin{split}
+    &P(firstComma)= P(Comma_1{=}true)\\
+    &P(secondNotFirstName)= P(FirstName_2{=}false)
+  \end{split}
+\end{equation*}
+
+\bigskip
+
+Given two \glspl{random variable} $X$ and $Y$, $P(X,Y)$ is the \gls{joint distribution} of $X$ and $Y$.
+For the assignments $x$ and $y$, $P(X{=}x,Y{=}y)$ associates a probability with the set of \glspl{event} for which both $x$ and $y$ are true~\cite{koller2009probabilistic}.
+
+In our example, $P(Comma_1,FirstName_2)$ has the following values:
+\begin{equation*}
+  \begin{split}
+    &P(Comma_1{=}false,FirstName_2{=}false)=3/4=0.75\\
+    &P(Comma_1{=}false,FirstName_2{=}true)=0/4=0\\
+    &P(Comma_1{=}true,FirstName_2{=}false)=0/4=0\\
+    &P(Comma_1{=}true,FirstName_2{=}true)=1/4=0.25
+  \end{split}
+\end{equation*}
+
+\bigskip
+
+A notation that is frequently used in this chapter is that of a set of \glspl{random variable} $\mathbf{X}=\left\{ X_1,\dots,X_N\right\}$
+The assignment of \glspl{event} to $\mathbf{X}$ is done via a set of events $\mathbf{x}$ of the same length $N$: $\mathbf{x}=\left\{ x_1,\dots,x_n\right\}$.
+$\mathbf{x}$ is also called a \glspl{full assignment} to $\mathbf{X}$.
+Any \gls{event} that is described using $\mathbf{X}$ must be a union of \glspl{full assignment} to $\mathbf{X}$.
+
 This gives us a \gls{canonical outcome space} where each outcome is a joint assignment to the \glspl{random variable} in $\mathbf{X}$.
 
-Following our example we define a \gls{random variable} $X_1$ as the \gls{function} that associates with the first word in a sequence the probability of it ending with a comma.
-Thereby, the \gls{event} $firstComma$ can now also be denoted with $X_1 = comma$ and $firstNotComma$ with $X_1 = notComma$ resulting in $Val(X_1)=\{comma, notComma\}$.
-Consequently, $P(firstComma)=P(X_1{=}comma)$ and $P(firstNotComma)=P(X_1{=}notComma)$.
-$Y_2$ is defined as the function that associates with the second word in a sequence whether or not it is a first name with $Val(Y_2)=\{firstName, notFirstName\}$.
-Given $X_1$ and $Y_2$, we can build the \gls{joint distribution} $P(X_1,Y_2)$.
-Using the values from \todo{ref}, $P(X_1{=}comma,Y_2{=}firstName)=XXX$ and $P(X_1{=}comma,Y_2{=}notFirstName)=XXX$.
+We demonstrate this by extending our definitions of $Comma_1$ and $FirstName_2$ to consider all positions in a reference string of length $N$.
+This gives us two sets of \glspl{random variable}, $\mathbf{Comma}=\{Comma_1, \dots, Comma_N\}$ and $\mathbf{FirstName}=\{FirstName_1, \dots, FirstName_N\}$.
+The full assignment to $\mathbf{Comma}$ derived from the second reference string in \todo{ref} is:
+\begin{equation*}
+  \mathbf{Comma}=\{true, false, false, false, false, false, true, false, false\}
+\end{equation*}
+
 
 \bigskip
 
-The \gls{conditional probability} of an event $\alpha$ given $\beta$ with $P(\beta)>0$ is defined as~\cite{koller2009probabilistic}:
+The \gls{conditional probability} of an \gls{event} $\alpha$ given an \gls{event} $\beta$ with $P(\alpha)>0$ is defined as~\cite{koller2009probabilistic}:
 
 \begin{equation}
-\label{equ:conditional-probability}
-P(\alpha\mid\beta) = \frac{P(\alpha\cap\beta)}{P(\beta)}
+\label{equ:conditional-probability-event}
+P(\beta\mid\alpha) = \frac{P(\alpha\cap\beta)}{P(\alpha)}
 \end{equation}
 This definition can be extended to \glspl{random variable}.
-Given that all assignments in $Y$ are non-zero, the \gls{conditional probability distribution} $P(X\mid Y)$ assigns each value $Y$ a probability over values of $X$ using the \gls{conditional probability}.
-This can also be extended to sets of \glspl{random variable}.
+Given that the probability for every assignment to $X$ is greater than zero, the \gls{conditional probability distribution} $P(Y\mid X)$ is calculated with
+\begin{equation}
+\label{equ:conditional-probability-random-variable}
+P(Y\mid X) = \frac{P(X,Y)}{P(X)}
+\end{equation}
+This can naturally be extended to sets of \glspl{random variable} $\mathbf{X}$ and $\mathbf{Y}$.
 
-With our example values from \todo{ref}, $P(Y_2{=}firstName\mid X_1{=}comma)=XXX$ and $P(Y_2{=}firstName\mid X_1{=}notComma)=xxx$.
+With the values from \todo{ref} we have for example:
+\begin{equation*}
+  \begin{split}
+    P(FirstName_2&{=}true\mid Comma_1{=}true) = \\
+    &\frac{P(Comma_1{=}true, FirstName_2{=}true)}{P(Comma_1{=}true)}=\frac{0.25}{0.25}=1
+  \end{split}
+\end{equation*}
 
 \bigskip
 
-A value that we will later on use as a metric to compare different \glspl{probability distribution} with each other is called \gls{expectation}.
-Given a discrete \gls{random variable} $X$ we define the expectation $E[X]$ of $X$ under the distribution $P$ as~\cite{koller2009probabilistic}
+A value that we will use as a metric for comparing different \glspl{probability distribution} with each other is called \gls{expectation}.
+Given a discrete \gls{random variable} $X$ we define the expectation $E[X]$ of $X$ under the distribution $P$ as~\cite{koller2009probabilistic}\todo{example?}
 \begin{equation}
   \label{equ:expectation-x}
   E[X]=\sum_{x\in Val(X)} x\cdot P(x)
@@ -75,7 +153,7 @@ where $x$ is an assignment to $X$.
 \bigskip
 
 Given a \glspl{probability distribution} over a set of \glspl{random variable} $\mathcal{X}$, a goal can be to answer specific questions about this distribution.
-These are formulated as queries which are then run against the \glslink{probability distribution}{distributions}.
+These are formulated as queries which are then run against the \glslink{probability distribution}{distributions}\todo{move to inferencing?}.
 One type of queries are called \glspl{probability query}.
 A \gls{probability query} consists of $\mathbf{E}\cup\mathbf{Y}=\mathcal{X}$ with $\mathbf{E}\cap\mathbf{Y}=\emptyset$~\citep{koller2009probabilistic}.
 The set of \glspl{random variable} $\mathbf{E}$ is called the \gls{evidence} and contains the set of observed variables.
