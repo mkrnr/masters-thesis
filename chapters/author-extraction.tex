@@ -21,10 +21,12 @@ Otherwise, the learning (see \Cref{subsec:author-name-matching}) would also cons
 \section{Generating Training Sets with Distant Supervision}\label{sec:ae-distant-supervision}
 
 As discussed in \todo{ref}, distant supervision is \dots
-In this section we discuss our approach of building such a distantly supervised training set in our use case of author name extraction.
-\itodo{extend}
+In this section we discuss our approach of building such a distantly supervised training set for, our use case, author name extraction.
 
-\subsection{Knowledge Base}\label{subsec:ae-knowledge-base}
+
+
+
+\subsection{Knowledge Base Creation}\label{subsec:ae-knowledge-base-creation}
 
 In order to apply distant supervision to the task of labeling author names, an external source for author names is needed.
 Since the goal is to distinguish between the first names and last names of an author, external sources that provide this distinction are preferable.
@@ -39,34 +41,80 @@ More specifically, does labeling the reference sections using an author list fro
 
 \subsection{Author Name Matching}\label{subsec:ae-author-name-matching}
 
-Given a data set of unlabeled reference sections and a knowledge base for author names, generating the distantly supervised training set requires the labeling of author names in the references.
+Given a data set of unlabeled reference sections and a knowledge base for author names, generating the distantly supervised training set $\mathcal{T}$ requires the labeling of author names in the references.
 A number of challenges arise from this task.
 \itodo{variations of author names}
-First, author names can appear in a reference in a variety of ways\todo{example}.
-Another aspect that requires attention is the possible overlapping of matches \todo{example}.
+First, author names can appear in a reference in a variety of ways\todo{example 4?}.
+Another aspect that requires attention is the possible overlapping of matches \todo{example 4?}.
+Instead of deciding for one of the overlapping author names, our goal is to consider all author names.
+In \Cref{subsec:i-author-name-matching} we will discuss that tree based markup languages such as \gls{xml} are less suitable to mark overlapping entries.
+Instead, we will use a graph structure called \gls{goddag} which supports overlapping entries.
+\todo{example}
 
 \section{Building \glsentryshort{ge} Constraints}\label{sec:ae-training-crfs}
 
-After labeling the occurrences of author in our reference sections we now want to derive \gls{ge} constraints that will be used for learning a \gls{crf} model.
+After labeling the occurrences of author in our reference sections, we now want to derive \gls{ge} constraints that will be used for learning a \gls{crf} model.
 
-For this we first need to specify the possible labelings $Val(Y_n)$ for a \gls{target variable} $Y_n$.
-In our scenario we are interested in the first names and last names of authors.
+A first step is to specify the possible labelings $Val(Y_n)$ for a \gls{target variable} $Y_n$.
+One goal in the scenario is to recognize the first names and last names of authors as such.
 For this we use the labels $\texttt{FN}$ and $\texttt{LN}$, respectively.
-Every other token\todo{token?} is marked with the label $\texttt{O}$ for other.
-Since our goal is to identify first names and last names of individual authors, it is important to additionally encode the beginning and the end of an author name in the given sequence.
+Every other word is marked with the label $\texttt{O}$ for other.
+Since our second goal is to group first names and last names together to form author names, it is important to additionally encode the beginning and end of an author name in the given word sequence.
 A common approach is to extend the label by this information~\citep{houngbo2012method}.
 Given the labels \texttt{FN}, \texttt{LN}, and \texttt{O} we add the following prefixes:
 \begin{itemize}
-  \item \texttt{B-} for the beginning word of an author name
-  \item \texttt{I-} for an intermediate word in an author name
-  \item \texttt{E-} for the ending word in an author name (optional)
+  \item \texttt{B-} marks the beginning word of an author name
+  \item \texttt{I-} marks an intermediate word in an author name
+  \item \texttt{E-} marks the ending word in an author name (optional)
 \end{itemize}
-This results in labels such as \texttt{B-LN} when an author name begins with a last name or \texttt{E-FN} when it ends with a first name.
-Instead of marking the end of an author name using the \texttt{E-} prefix, it can also be marked as such using the \texttt{I-} prefix.
-This is possible because the next word following the author name is either the beginning of the next author name (labeled \texttt{B-FN} or \texttt{B-LN}) or a non-author word labeled with \texttt{O}.
-Since the resulting labels either have one of the prefixes \texttt{B-} or \texttt{I-}, or consist of the \texttt{O} label, \citet{houngbo2012method} refer to this as the \gls{bio} format.
+This results in labels such as \texttt{B-LN} which marks a word as last name and the beginning of an author name.
+\itodo{examples}
+We refer to this labeling format as the \acrfull{bieo} format since a label either has one of the three mentioned prefixes or is the \texttt{O} label.
+Instead of marking the ending word of an author name using the \texttt{E-} prefix, it can also be marked as such using the \texttt{I-} prefix.
+This is possible because the word following this ending word is either the beginning of the next author name (labeled with \texttt{B-FN} or \texttt{B-LN}) or a non-author word (labeled with \texttt{O}).
 \itodo{example}
+When leaving out the \texttt{E-} prefix, labels either have one of the two prefixes \texttt{B-} or \texttt{I-}, or consist of the \texttt{O} label.
+Thereby, \citet{houngbo2012method} refer to this as the \acrfull{bio} format.
+
+Having defined the \gls{bieo} and \gls{bio} format, \todo{add research question} in \Cref{cha:evaluation} aims to answer which format performs better in our scenario.
+In the following we will use the \gls{bio} format but the approaches also apply to the \gls{bieo} format.
+
+\bigskip
+
+Given a training data set $\mathcal{T}$ (see \cref{sec:ae-distant-supervision}), we now want to generate \gls{ge} constraints for the \gls{crf} model learning.
+Assuming the \gls{bio} format, a \gls{target variable} $Y_n$ has the following possible assignments:
+\begin{equation*}
+  Val(Y_n)=\{\texttt{B-FN},\texttt{B-LN},\texttt{I-FN},\texttt{I-LN},\texttt{O}\}
+\end{equation*}
+We thereby want to build a \gls{probability distribution} $P$ for $Y_n$ which assigns a probability to each label in $Val(Y_n)$ based on $\mathcal{T}$.
+
+For this we iterate over the sequence of words in $P$.
+For $w$ we distinguish two cases:
+\begin{enumerate}
+  \item $w$ is tagged as part of at least one author
+  \item $w$ is not tagged as part of at least one author
+\end{enumerate}
+
+In the first case, the tagging contributes a probability mass of one to the according labeling of this word.
+\itodo{example}
+
+For the second case we consider two approaches.
+The first approach is to add a probability mass of one to the \texttt{O} label for the given word.
+The second approach is to add a probability mass to the different labels which sum to one.
+Such a distribution can either be predefined for every label in $Val(Y_n)$ or it can be estimated from the distribution of author labels.
+For the estimation we additionally need as an input the proportion of author tags to other tags.
+
+\itodo{example}
+
+From this we derive the following research question:
+\itodo{RQ:\ Which approach on assigning a probability mass to words which are not tagged as part of an author name performs best?}
+
+\bigskip
+
+After generating counts based on the two cases, they are normalized by the total count for each word.
+
 \itodo{discuss given ratio of other to author labels and deriving fn/ln ratios vs.\ assuming unlabeled data to be 100\% other + research question}
+
 \itodo{discuss ratio of labeled tokens vs.\ unlabeled tokens in constraints + research question}
 
 

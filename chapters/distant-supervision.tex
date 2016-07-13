@@ -64,44 +64,46 @@ Then we will present the very promising approach of \acrfull{ge} proposed by \ci
 \subsection{Marginalization}
 
 \citet{tsuboi2008training} propose a method for training \glspl{crf} using incomplete annotations based on marginalization.
-Given a sequence of length $N$, an incomplete annotation $\bm{l}$ is defined as a sequence of subsets of possible assignments to the \gls{target variable} at each position $n$~\citep{tsuboi2008training}:
+Given a sequence of length $N$, an incomplete annotation $\bm{L}$ is defined as a sequence of subsets of possible assignments to the \gls{target variable} at each position $n$~\citep{tsuboi2008training}:
 \begin{equation}
   \label{equ:incomplete-annotation}
   \begin{split}
-  \bm{l}=& \left\{l_1,\dots,l_N\right\}\\
-  l_n=& \left\{\tilde{y}_1,\dots,\tilde{y}_T\right\},\ \ \ \ \ \ \ \ \tilde{y}_t\in Val(Y_n)
+    \bm{L}&= \left\{\mathpzc{L}_1,\dots,\mathpzc{L}_N\right\}\\
+    \mathpzc{L}_n&\in\glssymbol{power set}(\mathbf{\tilde{Y}}_n)\setminus \{\emptyset\}
   \end{split}
 \end{equation}
-\itodo{example}
-Using the definition of $\bm{l}$ we can now specify two cases of incomplete annotations: Partial annotations and ambiguous annotations.
-If an element at position $n$ in a sequence is not annotated then the corresponding $l_n$ contains all possible labelings: $l_n=Val(Y_n)$.
-Ambiguous annotations are represented such that $l_n$ contains the set of ambiguous annotations for the corresponding element: $l_n\subset Val(Y_n)$
+where $\mathbf{\tilde{Y}}_n{=}\{\tilde{Y}_1,\dots\tilde{Y}_T\}$ with $Val(\tilde{Y}_t){=}Val(Y_n)$ and $T{=}|Val(Y_n)|$.
+Using the definition of $\mathcal{L}$ we can now specify two cases of incomplete annotations: Partial annotations and ambiguous annotations.
+If an element at position $n$ in a sequence is not annotated then the corresponding $\mathpzc{L}_n$ contains all possible labelings: $|\mathpzc{L}_n|{=}|Val(Y_n)|$.
+Ambiguous annotations are represented such that the number of \glspl{random variable} in $\mathpzc{L}_n$ equals the number of possible annotations for the corresponding element with $|\mathpzc{L}_n|\leq |Val(Y_n)|$.
 \itodo{example}
 
 \bigskip
 
-We can now formalize the marginalization approach which allows the application of an incomplete annotation $\bm{l}$ to a \gls{crf} model~\citep{tsuboi2008training}:
+We can now formalize the marginalization approach which allows the application of an incomplete annotation $\bm{L}$ to a \gls{crf} model.
+For this we let $\mathbf{Y}_{\bm{T}}$ be the set of all sets of \glspl{target variable} that are consistent with $\bm{L}$~\citep{tsuboi2008training}:
 \begin{equation}
   \label{equ:crf-marginalization}
   \begin{split}
-    P\left(\bm{l}\mid\mathbf{x}\right)=\sum_{\mathbf{\tilde{y}}\in\bm{l}}P\left(\mathbf{\tilde{y}}\mid\mathbf{x}\right)
+    P\left(\bm{L}\mid\mathbf{X}\right)=\sum_{\mathbf{Y}_{\bm{T}}}P\left(\mathbf{Y}_{\bm{T}}\mid\mathbf{X}\right)
   \end{split}
 \end{equation}
+\itodo{fix}
 \itodo{build set of sets of assignments for the sum}
-Here, $\mathbf{\tilde{y}}$ is a set of assignments to $\mathbf{Y}$ which is consistent with $\bm{l}$\todo{example}~\citep{tsuboi2008training}.
 Using this approach, we can apply all concepts for encoding, inferencing, and learning \glspl{crf} that we discussed in \Cref{cha:crfs}.
 
 \bigskip
 
+\itodo{rewrite to state as number of calculations of $P$:}
 Yet, there can be a number of possible issues with this marginalization approach.
 One such issue is that, in case of partial annotations, the number of generated assignments $\mathbf{\tilde{y}}$ based on ${\bm{l}}$ is exponential in the number of unannotated elements $U$ in the sequence~\citep{tsuboi2008training}.
 Assuming that every unannotated element has the same number of possible assignments we have
 \begin{equation}
   \label{equ:marginalization-number-of-assingments}
-  |\bm{l}|=T^U
+  |\mathbf{Y}_{\bm{T}}|=T^U
 \end{equation}
 where $T=|Val\left(Y_n\right)|$ for some $1\leq n\leq N$.
-The worst case is $|\mathbf{Y}_{\mathbf{L}}|=T^M$ when no element in the sequence is annotated.
+The worst case is $|\mathbf{Y}_{\bm{L}}|=T^N$ when no element in the sequence is annotated.
 \citep{tsuboi2008training} argue that this problem can be addressed by applying the Markov assumption and using a modification of the forward-backward algorithm (see \Cref{sec:inference-crfs}).
 
 
@@ -109,7 +111,7 @@ Another issue is that the log-likelihood function that is derived from \Cref{equ
 Thereby, during the maximum log-likelihood estimation, a local maximum is not necessarily a global maximum which needs to be considered during the learning phase.
 
 Further, when considering the marginalization of ambiguous annotations, it is not possible to provide additional information on the distribution of possible assignments.
-In this form, the model does not allow us to specify a \gls{marginal distribution} over the elements in $L_m$ which is considered during the marginalization.
+In this form, the model does not allow us to specify a \gls{marginal distribution} over the elements in $\mathpzc{L}$ which is considered during the marginalization.
 This is especially problematic when considering the implementation of a distantly supervised approach.
 Distantly supervised labelings will often be ambiguous but it is possible to derive the probabilities for the different possible labels from the external source of information.
 In \Cref{cha:author-extraction} we will discuss a concrete example for such a scenario.
