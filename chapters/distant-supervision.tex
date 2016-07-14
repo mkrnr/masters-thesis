@@ -127,44 +127,51 @@ Instead of marginalizing incomplete annotations, \citet{mann2008generalized} app
 In general, a \gls{ge} criterion $G(\bm{\tilde{\theta}}:\mathcal{U})$ is a score function $S$ which is defined as~\citep{mann2010generalized}:
 \begin{equation}
   \label{equ:generalized-expectation}
-  G(\bm{\tilde{\theta}}:\mathcal{U})=S\left(E_{\mathcal{U}}\left[E_{P(\mathbf{y}\mid\mathbf{x})}\left[G(\mathbf{x},\mathbf{y})\right]\right]\right)
+  G(\bm{\tilde{\theta}}:\mathcal{U})=S\left(E_{\mathcal{U}}\left[E_{P(\mathbf{Y}\mid\mathbf{X})}\left[G(\mathbf{X},\mathbf{Y})\right]\right]\right)
 \end{equation}
-Here, $P(\mathbf{y}\mid\mathbf{x})$ is a \gls{cpd} based on the model $\tilde{\mathcal{M}}=\{\tilde{\mathcal{K}},\bm{\tilde{\theta}}\}$.
+Here, $P(\mathbf{Y}\mid\mathbf{X})$ is a \gls{cpd} based on the model $\tilde{\mathcal{M}}=\{\tilde{\mathcal{K}},\bm{\tilde{\theta}}\}$.
 $\mathcal{U}=\left\{\mathpzc{u}^{(1)},\dots,\mathpzc{u}^{(M)}\right\}$ is a data set of $M$ unlabeled instances such that $\mathpzc{u}^{(m)}=\mathbf{X}^{(m)}$ (compare with $\mathcal{D}$ in \Cref{sec:learning-crfs}).
-$G(\mathbf{x},\mathbf{y})$ is given as a constraint function.
+$G(\mathbf{X},\mathbf{Y})$ is given as a constraint function.
 
 \itodo{general text on GE equation}
 
-To clarify this general definition we now look at one possible scoring function $S$, namely the \acrshort{kl} divergence.
-The \acrfull{kl} divergence,\dots, is defined as~\citep{mackay2003information}
+\bigskip
+
+To clarify this general definition we now look at one possible score function $S$, namely the \acrfull{kl}\glsunset{kl} divergence.
+The \gls{kl} divergence $D_{\text{KL}}$ is a measure of ``discrepancy'' between two probability distributions $P(\mathcal{X})$ and $Q(\mathcal{X})$ where $\mathcal{X}$ is a set of \glspl{random variable}~\citep{burnham2003model}.
+This measure is also referred to as a ``distance'' between $P(\mathcal{X})$ and $Q(\mathcal{X})$.
+Yet, this term can be misleading since the measure is not symmetric: $D_{\text{KL}}(P\mid\mid Q)\neq D_{\text{KL}}(Q\mid\mid P)$~\citep{burnham2003model}.
+The \gls{kl} divergence is is defined as~\citep{mackay2003information}
 \begin{equation}
   \label{equ:kl-divergence}
-  D_{\text{KL}}(P\mid\mid Q)=\sum_x \frac{P(x)}{Q(x)}
+  D_{\text{KL}}(P\mid\mid Q)=\sum_\mathcal{X} \frac{P(\mathcal{X})}{Q(\mathcal{X})}
 \end{equation}
-where the \glspl{probability distribution} $P$ and $Q$ are defined over the same alphabet\todo{introduce}.
+where $P$ is seen as the ``true'' distribution and $Q$ as a distribution that models $P$~\citep{burnham2003model}.
 
-Applying the $\text{KL}$-divergence as a scoring function $D_{\text{KL}}$ to \Cref{equ:generalized-expectation} we have~\citep{mann2010generalized}
+\bigskip
+
+When using $\text{KL}$-divergence as the score function $D_{\text{KL}}$ to \Cref{equ:generalized-expectation} we have~\citep{mann2010generalized}
 \begin{equation}
   \label{equ:generalized-expectation-kl}
-  G(\bm{\tilde{\theta}}:\mathcal{U})=D_{\text{KL}}\left(\tilde{g}_{\left(\mathbf{x},\mathbf{y}\right)}\mid\mid E_{\mathcal{U}}\left[P(\mathbf{y}\mid\mathbf{x})G(\mathbf{x},\mathbf{y})\right]\right)
+  G(\bm{\tilde{\theta}}:\mathcal{U})=D_{\text{KL}}\left(\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}\mid\mid E_{\mathcal{U}}\left[P(\mathbf{Y}\mid\mathbf{X})G(\mathbf{X},\mathbf{Y})\right]\right)
 \end{equation}
-where $\tilde{g}_{\left(\mathbf{x},\mathbf{y}\right)}$ expresses an expectation for $\{\mathbf{x},\mathbf{y}\}$, either in the form of a particular value or over a \gls{marginal distribution} $\tilde{P}\left(\mathbf{y}\right)$~\citep{mann2010generalized}.
-The result of $D_{\text{KL}}$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\mathbf{x},\mathbf{y}\right)}$ and the expectation over the sets of assignments $\left\{\mathbf{x},\mathbf{y}\right\}$ in $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\mathbf{y}\mid\mathbf{x})$\todo{rewrite}.
+where $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$ expresses an expectation for $\{\mathbf{X},\mathbf{Y}\}$, either in the form of a particular value or over a \gls{marginal distribution} $\tilde{P}\left(\mathbf{Y}\right)$~\citep{mann2010generalized}.
+The result of $D_{\text{KL}}$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$ and the expectation over the sets of assignments $\left\{\mathbf{X},\mathbf{Y}\right\}$ in $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\mathbf{Y}\mid\mathbf{X})$\todo{rewrite}.
 %target distribution: distribution for every constraint?
 %expectations: calculated for every constraint separately (mallet code)?
 \itodo{text on GE not being used with log-likelihood (like in mann2010) but alone}
 Further, \citet{mann2010generalized} use the term \gls{label regularization} for the case when the constraint function
 \begin{equation}
   \label{equ:label-regularization-constraint-function}
-  G(\mathbf{x},\mathbf{y})=\mathbf{\mathbbm{1}}(\mathbf{y})
+  G(\mathbf{X},\mathbf{Y})=\mathbf{\mathbbm{1}}(\mathbf{Y})
 \end{equation}
 and the constraint
 \begin{equation}
   \label{equ:label-regularization-constraints}
-  \tilde{g}_{\left(\mathbf{x},\mathbf{y}\right)}=E[\tilde{P}(\mathbf{y})]
+  \tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}=E[\tilde{P}(\mathbf{Y})]
 \end{equation}
 are used in the \gls{ge} term in \Cref{equ:generalized-expectation-kl}.
-Here, $\tilde{P}(\mathbf{y})$ is an estimated \gls{marginal distribution} over a set of labels $Val(\mathbf{Y})$ that is given as an input to the learner.
+Here, $\tilde{P}(\mathbf{Y})$ is an estimated \gls{marginal distribution} over a set of labels $Val(\mathbf{Y})$ that is given as an input to the learner.
 
 \bigskip
 
