@@ -547,10 +547,11 @@ There exists a number of metrics for deciding which $\mathcal{\tilde{M}}$ ``best
 A popular metric that is used for \glspl{crf} is \gls{maximum likelihood}.
 Before discussing it, it is important to clarify which part of $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$ we aim to learn.
 %TODO add forward-backward algorithm to gls
-In order to apply the forward-backward algorithm during inferencing, which is also part of the learning, $\mathcal{\tilde{K}}$ needs to follow a certain sequential structure.
-In this work we assume $\mathcal{\tilde{K}}$ to be modeled in such a way and given as an input to the learner.
-A relatively simple model for $\mathcal{\tilde{K}}$ can be a log-linear \glspl{linear-chain crf} (see \Cref{equ:linear-chain-crf-log-linear}). For it we have a \gls{feature function} $\tilde{f}_k$ between two neighboring \glspl{target variable} and a \gls{feature function} $\tilde{f}_l$ between a \gls{target variable} and its context given by a set of \glspl{observed variable}.
-Thereby, we will focus on the learning of the set of parameters $\bm{\tilde{\theta}}$ which, in the case of \glspl{linear-chain crf}, are the $\theta_k$ and $\theta_l$ for the two \glspl{feature function} from \Cref{equ:linear-chain-crf-log-linear}.
+Since we will later perform the parameter estimation by a repeated inferencing on $\mathcal{\tilde{M}}$, efficient inferencing is crucial for the runtime performance of the learning algorithm.
+As discussed in \Cref{sec:inference-crfs}, the forward-backward algorithm for efficient inferencing can only be applied if $\mathcal{\tilde{K}}$ follows a certain sequential structure.
+\Glspl{linear-chain crf} provide such a sequential structure for $\mathcal{\tilde{K}}$ (see \Cref{equ:linear-chain-crf-log-linear}).
+In the following we assume $\mathcal{\tilde{K}}$ to be modeled to form a \gls{linear-chain crf} and given as an input to the learner.
+We will thereby focus on the learning of the set of parameters $\bm{\tilde{\theta}}$ which, in the case of \glspl{linear-chain crf}, are the $\theta_k$ and $\theta_l$ for the two \glspl{feature function} in \Cref{equ:linear-chain-crf-log-linear}.
 
 \bigskip
 Given a data set $\mathcal{D}$ we define the likelihood function $L(\bm{\tilde{\theta}}:\mathcal{D})$ as

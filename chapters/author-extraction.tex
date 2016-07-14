@@ -1,5 +1,23 @@
 \chapter{Author Extraction}\label{cha:author-extraction}
 
+\newcommand\researchquestionformat[1]{\begin{quote}#1\end{quote}}
+
+\newcommand\researchquestionone{\researchquestionformat{%
+  \RQ{1}: Given a set of unlabeled reference sections from the research area of German social sciences, does using an author list that is related to this area improve the performance of the learned \gls{crf} model in comparison with using an unrelated author list?
+}}
+
+\newcommand\researchquestiontwo{\researchquestionformat{%
+  \RQ{2}: Given a set of reference sections from the research area of German social sciences with matched author names, does a labeling using the \gls{bieo} improve the performance of the learned \gls{crf} model in comparison with a labeling using the \gls{bio} format?
+}}
+
+\newcommand\researchquestionthree{\researchquestionformat{%
+  \RQ{3}: Given a set of reference sections from the research area of German social sciences with matched author names, how does, for a word $w_n$ that has no matched author names, modifying the probability mass distribution over the labels in $Val(Y_n)$ impact the performance of a \gls{crf} model that was learned on the resulting \gls{ge} constraints?
+}}
+
+\newcommand\researchquestionfour{\researchquestionformat{%
+  \RQ{4}: Given a set of reference sections from the research area of German social sciences with matched author names, how does changing the number of considered words $w_n$ which do not have matched author names impact the performance of a \gls{crf} model that was learned on the resulting \gls{ge} constraints?
+}}
+
 In this chapter we will discuss author extraction as a concrete use case for the usage of \glspl{crf} in combination with \gls{distant supervision}.
 This can be broken down into to following steps:
 \begin{enumerate}
@@ -8,7 +26,9 @@ This can be broken down into to following steps:
   \item Building \acrfull{ge} constraints
   \item Learning a \gls{crf} model using \gls{ge} constraints
 \end{enumerate}
-In the following sections we will describe these steps in more detail.
+The following sections will describe these steps in more detail.
+In addition we will formulate a number of research questions that we aim to answer in \Cref{cha:evaluation}.
+These research questions will have a focus on the author extraction from research papers in the area of German social sciences.
 
 \section{Preprocessing}\label{sec:ae-preprocessing}
 
@@ -24,20 +44,18 @@ As discussed in \todo{ref}, distant supervision is \dots
 In this section we discuss our approach of building such a distantly supervised training set for, our use case, author name extraction.
 
 
-
-
 \subsection{Knowledge Base Creation}\label{subsec:ae-knowledge-base-creation}
 
 In order to apply distant supervision to the task of labeling author names, an external source for author names is needed.
 Since the goal is to distinguish between the first names and last names of an author, external sources that provide this distinction are preferable.
 This is due to the fact that determining which part of a name belongs to the first names and which to the last names is not trivial\todo{example}.
-In addition to labeling reference sections for the distant supervision, such a knowledge base can also be used to construct features for the \gls{crf} model.
-More precisely, we can derive two feature functions, $f_{\text{firstName}}(x_n)$ and $f_{\text{lastName}}(x_n)$, which return for a given word a likelihood of this word being a first name or a last name respectively.\todo{example}
+In addition to labeling reference sections for the distant supervision, such a knowledge base can also be used to construct features for the \gls{crf} model (see \Cref{subsec:ae-fearture-engineering}).
 
 \bigskip
 
-One question that arises is whether or not the origin of the author list is of importance.
-More specifically, does labeling the reference sections using an author list from a similar research domain improve the performance of the final \gls{crf} model?\todo{ref to eval}
+A question that arises is whether the origin of the author list is of importance.
+We formulate this as the following research question:
+\researchquestionone%
 
 \subsection{Author Name Matching}\label{subsec:ae-author-name-matching}
 
@@ -76,8 +94,10 @@ This is possible because the word following this ending word is either the begin
 When leaving out the \texttt{E-} prefix, labels either have one of the two prefixes \texttt{B-} or \texttt{I-}, or consist of the \texttt{O} label.
 Thereby, \citet{houngbo2012method} refer to this as the \acrfull{bio} format.
 
-Having defined the \gls{bieo} and \gls{bio} format, \todo{add research question} in \Cref{cha:evaluation} aims to answer which format performs better in our scenario.
-In the following we will use the \gls{bio} format but the approaches also apply to the \gls{bieo} format.
+Having defined the \gls{bieo} and \gls{bio} format, the following question arises:
+\researchquestiontwo%
+In the following we will consider the \gls{bio} format for simplicity reasons.
+Yet, the discussed approaches can also be applied to the \gls{bieo} format.
 
 \bigskip
 
@@ -89,10 +109,10 @@ Assuming the \gls{bio} format, a \gls{target variable} $Y_n$ has the following p
 We thereby want to build a \gls{probability distribution} $P$ for $Y_n$ which assigns a probability to each label in $Val(Y_n)$ based on $\mathcal{T}$.
 
 For this we iterate over the sequence of words in $P$.
-For $w$ we distinguish two cases:
+For $w_n$ we distinguish two cases:
 \begin{enumerate}
-  \item $w$ is tagged as part of at least one author
-  \item $w$ is not tagged as part of at least one author
+  \item $w_n$ is tagged as part of at least one author
+  \item $w_n$ is not tagged as part of at least one author
 \end{enumerate}
 
 In the first case, the tagging contributes a probability mass of one to the according labeling of this word.
@@ -106,19 +126,46 @@ For the estimation we additionally need as an input the proportion of author tag
 
 \itodo{example}
 
-From this we derive the following research question:
-\itodo{RQ:\ Which approach on assigning a probability mass to words which are not tagged as part of an author name performs best?}
+The two different approaches for assigning a probability mass to a $w_n$ that was not matched to an author result in the following research question:
+\researchquestionthree%
+
+In our scenario we have that the number of $w_n$ which have at least one matching author name is considerably smaller than the number of $w_n$ which do not have a matching author.
+It is thereby reasonable to consider dropping some of the latter $w_n$ for the construction of \gls{ge} constraints.
+This gives us another research question:
+\researchquestionfour%
 
 \bigskip
 
 After generating counts based on the two cases, they are normalized by the total count for each word.
-
-\itodo{discuss given ratio of other to author labels and deriving fn/ln ratios vs.\ assuming unlabeled data to be 100\% other + research question}
-
-\itodo{discuss ratio of labeled tokens vs.\ unlabeled tokens in constraints + research question}
-
+\itodo{example}
 
 \section{Learning \glsentryshortpl{crf}}\label{sec:ae-learning-crfs}
 
+After generating a number of \gls{ge} constraints we now focus on the \gls{crf} model learning.
+One important aspect is the graphical structure $\mathcal{\tilde{K}}$ which, as stated in \Cref{sec:learning-crfs}, is given as an input to the model learning.
+Another important aspect for the model performance is the selection of suitable textual features.
+
+\subsection{Graph Construction}\label{subsec:ae-graph-construction}
+
+The underlying graph $\mathcal{\tilde{K}}$ of a \gls{crf} model $\mathcal{\tilde{M}}$ has a strong impact on both the runtime performance and the quality of the model.
+As we discussed in \Cref{sec:learning-crfs}, an efficient inferencing is crucial for the learning of \gls{crf}.
+The forward-backward algorithm allows an efficient inferencing but required $\mathcal{\tilde{K}}$ to follow a certain sequential structure.
+Given our scenario, a sequential structure where neighboring words in a reference string are also connected in $\mathcal{\tilde{K}}$ is a popular choice.\todo{other papers, peng\dots}
+
+
+\itodo{on linear chain crfs, markov order 0 and 1, research question}
+\itodo{on $\mathbf{Y}$}
+
+\subsection{Feature Engineering}\label{subsec:ae-fearture-engineering}
+
+Based on the graphical structure of a \gls{linear-chain crf} with its given set of \glspl{target variable} $\mathbf{Y}$, we now consider the construction of the set of \glspl{observed variable} $\mathbf{X}$.
+These \glspl{observed variable} provide information about certain textual features of the given word sequence.
+As discussed in \Cref{sec:definition-crfs}, a key strength of \glspl{crf} is that \glspl{observed variable} in $\mathbf{X}$ can be highly dependent on each other without impacting the model performance.
+
 \itodo{On feature engineering (\citet{purver2012experimenting}), also: conjunctions}
-\itodo{On Markov orders}
+
+Since previous research focused on the extraction of reference string information using \glspl{crf}, there are a number of features that were suggested for this task.
+\citet{peng2004accurate} distinguish between local features, layout features, and external lexicon features.
+
+
+
