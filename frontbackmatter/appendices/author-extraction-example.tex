@@ -1,0 +1,23 @@
+\chapter{Author Extraction Example}\label{app:cha-author-extraction-example}
+\section{Factor Product}\label{app:sec-factor-product}
+\begin{table}[h!]
+\centering
+$\Psi(Comma_2,FirstName_2,LastName_1)$\par
+\smallskip
+\begin{tabular}{c c c c}
+ \toprule
+ $Comma_2$ & $FirstName_2$ & $LastName_1$ & Value \\
+ \midrule
+ $false$ & $false$ & $false$ & $1\cdot20=20$ \\
+ $false$ & $false$ & $true$  & $1\cdot1=1$ \\
+ $false$ & $true$  & $false$ & $10\cdot1=10$ \\
+ $false$ & $true$  & $true$  & $10\cdot20=200$ \\
+ $true$  & $false$ & $false$ & $20\cdot20=400$ \\
+ $true$  & $false$ & $true$  & $20\cdot1=20$ \\
+ $true$  & $true$  & $false$ & $1\cdot1=1$ \\
+ $true$  & $true$  & $true$  & $1\cdot20=20$ \\
+ \bottomrule
+\end{tabular}
+\caption{Results of the \gls{factor product} of the two \glspl{factor} in \Cref{tab:example-factors}.}
+\label{tab:example-factor-product}
+\end{table}

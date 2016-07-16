@@ -1,11 +1,19 @@
 \chapter{Conditional Random Fields (\glsentryshortpl{crf})}\label{cha:crfs}
 
-As we discussed in the previous chapter, \glspl{crf} are widely used in the related work for learning probabilistic models on given data.
-In this chapter we give an introduction to this framework.
-First we provide an overview of relevant concepts in probability theory, graph theory, and graphical models.
-In addition to relevant definitions we will use a simplified example (see \todo{ref to Appendix}) that is based on the extraction of author information from reference strings in research papers.
+In this chapter we give an introduction to \acrfull{crf} framework.
+For this we provide an overview of relevant concepts in probability theory, graph theory, and graphical models.
 Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models for the task of entity recognition.
 
+In addition to relevant definitions we use a simplified example of the author extraction problem that we will discuss in \Cref{cha:author-extraction}.
+This example is based on the set of four reference strings given in \Cref{fig:example-reference-strings}.
+
+\begin{figure}[t]
+\begin{framed}
+  \input{figures/example-reference-strings.txt}
+\end{framed}
+\caption{Example of four reference strings.}
+\label{fig:example-reference-strings}
+\end{figure}
 \section{Foundations}\label{sec:foundations}
 \subsection{Probability Theory}\label{subsec:probability-theory}
 Several concepts from probability theory are crucial for an understanding of \glspl{crf} and they all build on the notion of \glspl{probability distribution}.
@@ -22,27 +30,31 @@ $P$ now describes a mapping from events in \glssymbol{measurable set} to real va
   \item $P(\glssymbol{outcome space})=1$.
   \item If $\alpha,\beta\in \glssymbol{measurable set}$ and $\alpha\cap\beta = \emptyset$, then $P(\alpha\cup\beta)=P(\alpha)+P(\beta)$.
 \end{itemize}
-An example that we will use and extend throughout this chapter is a simplified version of the author extraction problem that we will discuss in \Cref{cha:author-extraction}.
-For this we define \glssymbol{outcome space} as a set consisting of four reference strings (see \todo{add}).
-A reference string consists of a sequence of words which are separated by whitespaces.
 
+\bigskip
+
+For our author extraction example we define \glssymbol{outcome space} as a set consisting of four reference strings.
+A reference string consists of a sequence of words ``$w_1\ w_2\ \dots\ w_N$'' where words are separated by whitespaces and where $N$ is the number of words in the sequence.
+For simplicity reasons, $N$ is the same for all four reference strings in \Cref{fig:example-reference-strings}.
 We now consider two events:
-\begin{itemize}
-  \item $firstComma$ contains all reference strings in \glssymbol{outcome space} in which the first word of the sequence ends with a comma.
-  \item $secondFirstName$ contains all reference strings in \glssymbol{outcome space} in which the second word of the sequence is a first name.
-\end{itemize}
-
-From this we construct two \glspl{measurable set}:
+\begin{equation*}
+  \begin{split}
+    firstComma&=\left\{w_1\ \dots\ w_N \mid w_1\ \text{ends with a comma}\right\}\\
+    secondFirstName&=\left\{w_1\ \dots\ w_N \mid w_2\ \text{is a first name}\right\}
+  \end{split}
+\end{equation*}
+In other words, $firstComma$ contains all reference strings in \glssymbol{outcome space} in which the first word of the sequence ends with a comma and $secondFirstName$ contains all reference strings in \glssymbol{outcome space} in which the second word of the sequence is a first name.
+From this we construct two \glspl{measurable set}
 \begin{equation*}
     \begin{split}
-  \glssymbol{measurable set}_{C}=& \{\emptyset,firstComma, firstNotComma, \glssymbol{outcome space}\}\\
-  \glssymbol{measurable set}_{F}=& \{\emptyset,secondFirstName, secondNotFirstName, \glssymbol{outcome space}\}.
+  \glssymbol{measurable set}_{C}&= \left\{\emptyset,firstComma, firstNotComma, \glssymbol{outcome space}\right\}\\
+  \glssymbol{measurable set}_{F}&= \left\{\emptyset,secondFirstName, secondNotFirstName, \glssymbol{outcome space}\right\}
     \end{split}
 \end{equation*}
-with $firstNotComma=\glssymbol{outcome space}\setminus firstComma$ and $secondNotFirstName$ being defined accordingly.
-
+with $firstNotComma=\glssymbol{outcome space}\setminus firstComma$ and $secondNotFirstName$ defined accordingly.
 We now consider two \glspl{probability distribution}.
-The first is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{C}$ and based on \todo{ref} we have:
+The first is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{C}$.
+According to our example in \Cref{fig:example-reference-strings} we have:
 \begin{equation*}
     \begin{split}
       P(firstComma)&=1/4=0.25\\
@@ -62,51 +74,50 @@ The second \glspl{probability distribution} is defined over \glssymbol{outcome s
 
 Based on the idea of \glspl{probability distribution}, a \gls{random variable} $X$ is a \gls{function} that associates with each outcome in \glssymbol{outcome space} a value~\cite{koller2009probabilistic}.
 In addition, $Val(X)$ is the set of values that $X$ can take.
-The elements in $Val(X)$ are also called assignments to $X$.
+The elements in $Val(X)$ are also called \glspl{assignment} to $X$.
 
-Following our example we define a \gls{random variable} $Comma_1$ as the \gls{function} that associates with the first word in a sequence whether or not it ending with a comma.
-Thereby, the \gls{event} $firstComma$ can now also be denoted with $Comma_1{=}true$ and $firstNotComma$ with $Comma_1{=}false$ resulting in $Val(Comma_1)=\{true, false\}$.
-Similarly, $FirstName_2$ is defined as the function that associates with the second word in a sequence whether or not it is a first name: $Val(FirstName_2)=\{true, false\}$.
+Following our example we define the \gls{random variable} $Comma_1$ as a \gls{function} that, given a reference string, returns the value $true$ if the first word in the sequence ends with a comma and the value $false$ if it does not.
+This results in: $Val(Comma_1)=\{true, false\}$.
+Similarly, $FirstName_2$ is defined as the function that associates with a reference string the value $true$ if the second word is a first name and $false$ if the second word is not a first name.
 
 \bigskip
 
 Given a \gls{random variable} $X$, $P(X)$ is the \gls{probability distribution} over $Val(X)$~\cite{koller2009probabilistic}.
 It is also referred to as the \gls{marginal distribution} over $X$.
-An assignment of a concrete event $x$ to $X$ is denoted as $P(X=x)$ or short $P(x)$.
+An \gls{assignment} of a concrete value $x\in Val(X)$ to $X$ is denoted as $P(X=x)$ or short $P(x)$.
 
 We can now define our \glspl{probability distribution} on \glspl{random variable} instead of \glspl{event}, for example:
 \begin{equation*}
   \begin{split}
-    &P(firstComma)= P(Comma_1{=}true)\\
-    &P(secondNotFirstName)= P(FirstName_2{=}false)
+    P(firstComma)&= P(Comma_1{=}true)\\
+    P(secondNotFirstName)&= P(FirstName_2{=}false)
   \end{split}
 \end{equation*}
 
 \bigskip
 
 Given two \glspl{random variable} $X$ and $Y$, $P(X,Y)$ is the \gls{joint distribution} of $X$ and $Y$.
-For the assignments $x$ and $y$, $P(X{=}x,Y{=}y)$ associates a probability with the set of \glspl{event} for which both $x$ and $y$ are true~\cite{koller2009probabilistic}.
+For the assignments $x$ and $y$, $P(X{=}x,Y{=}y)$ associates a probability with the subset of $\Omega$ in which both $x$ and $y$ are true for every element~\cite{koller2009probabilistic}.
 
 In our example, $P(Comma_1,FirstName_2)$ has the following values:
 \begin{equation*}
   \begin{split}
-    &P(Comma_1{=}false,FirstName_2{=}false)=3/4=0.75\\
-    &P(Comma_1{=}false,FirstName_2{=}true)=0/4=0\\
-    &P(Comma_1{=}true,FirstName_2{=}false)=0/4=0\\
-    &P(Comma_1{=}true,FirstName_2{=}true)=1/4=0.25
+    P(Comma_1{=}false,FirstName_2{=}false)&=3/4=0.75\\
+    P(Comma_1{=}false,FirstName_2{=}true)&=0/4=0\\
+    P(Comma_1{=}true,FirstName_2{=}false)&=0/4=0\\
+    P(Comma_1{=}true,FirstName_2{=}true)&=1/4=0.25
   \end{split}
 \end{equation*}
 
 \bigskip
 
-A notation that is frequently used in this chapter is that of a set of \glspl{random variable} $\mathbf{X}=\left\{ X_1,\dots,X_N\right\}$
-The assignment of \glspl{event} to $\mathbf{X}$ is done via a set of events $\mathbf{x}$ of the same length $N$: $\mathbf{x}=\left\{ x_1,\dots,x_n\right\}$.
-$\mathbf{x}$ is also called a \glspl{full assignment} to $\mathbf{X}$.
+A notation that is frequently used in this chapter is that of a set of \glspl{random variable} $\mathbf{X}=\left\{ X_1,\dots,X_N\right\}$.
+The set of assignments to $\mathbf{X}$ is denoted with $\mathbf{x}=\left\{ x_1,\dots,x_N\right\}$ where each $x_n$ is an \gls{assignment} to $X_n\in\mathbf{X}$.
+The set of assignments $\mathbf{x}$ is also called a \glspl{full assignment} to $\mathbf{X}$.
 Any \gls{event} that is described using $\mathbf{X}$ must be a union of \glspl{full assignment} to $\mathbf{X}$.
-
 This gives us a \gls{canonical outcome space} where each outcome is a joint assignment to the \glspl{random variable} in $\mathbf{X}$.
 
-We demonstrate this by extending our definitions of $Comma_1$ and $FirstName_2$ to consider all positions in a reference string of length $N$.
+We demonstrate this by extending our definitions of $Comma_1$ and $FirstName_2$ and apply them to all words in a reference string of length $N$.
 This gives us two sets of \glspl{random variable}:
 \begin{equation*}
   \begin{split}
@@ -114,7 +125,7 @@ This gives us two sets of \glspl{random variable}:
     \mathbf{FirstName}=& \{FirstName_1, \dots, FirstName_N\}
   \end{split}
 \end{equation*}
-For example, the full assignment to $\mathbf{Comma}$ derived from the second reference string in \todo{ref} is:
+For example, the full assignment to $\mathbf{Comma}$ derived from the second reference string in \Cref{fig:example-reference-strings} is:
 \begin{equation*}
   \mathbf{Comma}=\{true, false, false, false, false, false, false, true, false, false\}
 \end{equation*}
@@ -133,9 +144,13 @@ Given that the probability for every assignment to $X$ is greater than zero, the
 \label{equ:conditional-probability-random-variable}
 P(Y\mid X) = \frac{P(X,Y)}{P(X)}
 \end{equation}
-This can naturally be extended to sets of \glspl{random variable} $\mathbf{X}$ and $\mathbf{Y}$.
+and for sets of \glspl{random variable} $\mathbf{X}$ and $\mathbf{Y}$ we have:
+\begin{equation}
+\label{equ:conditional-probability-random-variable}
+P(\mathbf{Y}\mid \mathbf{X}) = \frac{P(\mathbf{X},\mathbf{Y})}{P(\mathbf{X})}
+\end{equation}
 
-With the values from \todo{ref} we have for example:
+Again taking the reference strings in \Cref{fig:example-reference-strings}, we have for example:
 \begin{equation*}
   \begin{split}
     P(FirstName_2&{=}true\mid Comma_1{=}true) = \\
@@ -145,25 +160,27 @@ With the values from \todo{ref} we have for example:
 
 \bigskip
 
-A value that we will use as a metric for comparing different \glspl{probability distribution} with each other is called \gls{expectation}.
-Given a discrete \gls{random variable} $X$ we define the expectation $E[X]$ of $X$ under the distribution $P$ as~\cite{koller2009probabilistic}\todo{example?}
+A value that can be used as a metric for comparing different \glspl{probability distribution} with each other is called \gls{expectation}.
+Given a discrete \gls{random variable} $X$ we define the expectation $E[X]$ of $X$ under the distribution $P$ as~\cite{koller2009probabilistic}
 \begin{equation}
   \label{equ:expectation-x}
   E[X]=\sum_{x\in Val(X)} x\cdot P(x)
 \end{equation}
-where $x$ is an assignment to $X$.
+where $x$ is an \gls{assignment} to $X$.
 
-\bigskip
+To apply this definition to our example, we redefine $Val(Comma_1)=\{true,false\}$ as $Val(Comma_1)=\{1,0\}$ where we replace $true$ and $false$ with the values $1$ and $0$, respectively.
+This gives us:
+\begin{equation*}
+  \begin{split}
+  \label{equ:expectation-x}
+  E[Comma_1]&=\sum_{x\in Val(Comma_1)} x\cdot P(Comma_1)\\
+  &=1\cdot P(Comma_1{=}1)+0\cdot P(Comma_1{=}0)\\
+  &=1\cdot 0.25+0\cdot 0.75\\
+  &=0.25
+  \end{split}
+\end{equation*}
 
-Given a \glspl{probability distribution} over a set of \glspl{random variable} $\mathcal{X}$, a goal can be to answer specific questions about this distribution.
-These are formulated as queries which are then run against the \glslink{probability distribution}{distributions}\todo{move to inferencing?}.
-One type of queries are called \glspl{probability query}.
-A \gls{probability query} consists of $\mathbf{E}\cup\mathbf{Y}=\mathcal{X}$ with $\mathbf{E}\cap\mathbf{Y}=\emptyset$~\citep{koller2009probabilistic}.
-The set of \glspl{random variable} $\mathbf{E}$ is called the \gls{evidence} and contains the set of observed variables.
-The second set $\mathbf{Y}$ contains the query variables.
-Based on this, the query is formulated as $P(\mathbf{Y}|\mathbf{E}=\mathbf{e})$~\citep{koller2009probabilistic}\todo{notation?}.
-We thereby want to compute the posterior \gls{probability distribution} over the assignments $\mathbf{y}$ to $\mathbf{Y}$, given the conditioning $\mathbf{E}=\mathbf{e}$~\citep{koller2009probabilistic}.
-\itodo{better explanation}
+
 
 \subsection{Graph Theory}\label{subsec:graph-theory}
 
@@ -177,11 +194,11 @@ In a directed \gls{graph}, a pair of \glspl{node} $(v_i,v_j)$ can be connected b
 We write $v_i\rightleftharpoons v_j$ to denote that there is some directed edge between $v_i$ and $v_j$.
 The \glspl{node} in an undirected graph are connected by undirected \glspl{node} $v_i\undedge v_j$.
 In the following, directed \glspl{graph} are denoted with $\mathcal{G}$ and undirected \glspl{graph} with $\mathcal{H}$.
-% TODO about child and parent?
+\itodo{about child and parent?}
 
 Given a \gls{graph} $\mathcal{K} = (\mathcal{V},\mathcal{E})$ and $\mathcal{S}\in\mathcal{V}$, an induced \gls{subgraph} $\mathcal{K}[\mathcal{S}]$ is the \gls{graph} consisting of $(\mathcal{S},\mathcal{E'})$ where $\mathcal{E'}$ is the set of all \glspl{edge} between \glspl{node} in $\mathcal{S}$.
 In a complete \gls{subgraph}, every two \glspl{node} in $\mathcal{S}$ are connected by an \gls{edge}.
-% TODO add definition of clique?
+\itodo{add definition of clique?}
 
 \subsection{Probabilistic Graphical Models}\label{subsec:graphical-models}
 When encoding practical problems with \glspl{probability distribution}, a key insight is that ``variables tend to interact only with a very few others''~\citep{koller2009probabilistic}.
@@ -199,9 +216,8 @@ There are two fundamental groups of graphical models, based on the type of edge 
 
 \Glspl{bayesian network}, usually denoted with $\mathcal{G}$, are encoded with directed \glspl{edge} to build a directed acyclic graph~\citep{koller2009probabilistic}.
 An \gls{edge} $X_i\to X_j$ thereby models a direct influence of $X_i$ on $X_j$.
-Referring to the example from \Cref{subsec:probability-theory}, $X\to Y$ denotes the influence of the first word in a sequence ending with a period on the second word being capitalized.
-Using the chain rule from \todo{add chain rule} it is possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into a set of \glspl{prior distribution} and \glspl{cpd} by considering the direct influences between the \glspl{node}.
-See \todo{add} for such a separation of the \gls{joint distribution} $P(X,Y)$ of our example.
+Referring to the example from \Cref{subsec:probability-theory}, $Comma_1\to FirstName_2$ denotes the influence of the first word in a sequence ending with a comma on the second word being a first name.
+For an introduction to \glspl{bayesian network} see for example \citet{koller2009probabilistic}.
 
 \bigskip
 
@@ -211,13 +227,64 @@ Instead, $P(\mathcal{X})$ is represented as the product of \glspl{factor}.
 A \gls{factor} $\Psi(\mathbf{D})$ is a function from a set of \glspl{random variable} $\mathbf{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
 It is called nonnegative if all its entries are nonnegative and in the following we will consider all factors to be nonnegative.
 $\mathbf{D}$ is called the \glslink{factor scope}{scope} of $\Psi$, denoted by $Scope[\Psi]$.
-For an example of a factor see \todo{add}.
+
+Continuing with our author extraction example from \Cref{subsec:probability-theory}, we assume $\mathcal{X}=\left\{\mathbf{X},\mathbf{Y}\right\}$.
+Using this we define the two factors $\Psi(Comma_2,FirstName_2)$ and $\Psi(FirstName_2,LastName_1)$ in \Cref{tab:example-factors}.
+\begin{table}[t]
+\begin{minipage}{0.5\linewidth}
+\centering
+$\Psi(Comma_2,FirstName_2)$\par
+\smallskip
+\begin{tabular}{c c c}
+ \toprule
+ $Comma_2$ & $FirstName_2$ & Value \\
+ \midrule
+ $false$ & $false$ & 1 \\
+ $false$ & $true$ & 10 \\
+ $true$ & $false$ & 20 \\
+ $true$ & $true$ & 1 \\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.5\linewidth}
+\centering
+$\Psi(FirstName_2,LastName_1)$\par
+\smallskip
+\begin{tabular}{c c c}
+ \toprule
+ $FirstName_2$ & $LastName_1$ & Value \\
+ \midrule
+ $false$ & $false$ & 20 \\
+ $false$ & $true$ & 1 \\
+ $true$ & $false$ & 1 \\
+ $true$ & $true$ & 20 \\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\caption{Two factors for the author extraction example}
+\label{tab:example-factors}
+\end{table}
+
+\bigskip
 
 An important operation on factors is the \gls{factor product}.
-Given three disjoint sets of assignments $\left\{\mathbf{X}, \mathbf{Y}, \mathbf{Z}\right\}$, a \gls{factor product} $\Psi_1\times \Psi_2$ of the two factors $\Psi_1(\mathbf{X},\mathbf{Y})$ and $\Psi_2(\mathbf{Y},\mathbf{Z})$ is a factor $\Psi(\mathbf{X},\mathbf{Y},\mathbf{Z})$~\citep{koller2009probabilistic}.
-The intuition is that the two factors are multiplied by aligning their common set of \glspl{random variable} $\mathbf{Y}$\todo{example}.
+Given three disjoint sets of assignments $\left\{\mathbf{X}, \mathbf{Y}, \mathbf{Z}\right\}$, a \gls{factor product} $\Psi_1\times\Psi_2$ of the two factors $\Psi_1(\mathbf{X},\mathbf{Y})$ and $\Psi_2(\mathbf{Y},\mathbf{Z})$ is a factor $\Psi(\mathbf{X},\mathbf{Y},\mathbf{Z})$~\citep{koller2009probabilistic}.
+The intuition is that the two factors are multiplied by aligning their common set of \glspl{random variable} $\mathbf{Y}$.
 
-Based on the definition of a \gls{factor product}, we can define an undirected parameterization of a \gls{probability distribution}, called \gls{gibbs distribution}.
+Calculating the \gls{factor product} of the two \glspl{factor} in \Cref{tab:example-factors} gives us
+\begin{equation*}
+  \begin{split}
+  \Psi(Comma_2,FirstName_2)\times&\Psi(FirstName_2,LastName_1)=\\
+  &\Psi(Comma_2,FirstName_2,LastName_1)
+  \end{split}
+\end{equation*}
+since $FirstName_2$ is the only element in the common set of \glspl{random variable}.
+The concrete values for $\Psi(Comma_2,FirstName_2,LastName_1)$ are shown in \Cref{tab:example-factor-product}.
+
+\bigskip
+
+Using the definition of a \gls{factor product} we can now define an undirected parameterization of a \gls{probability distribution}, called \gls{gibbs distribution}.
 A \gls{probability distribution} $P(X_1,\dots,X_N)$ is a \gls{gibbs distribution} parameterized by a set of \glspl{factor} $\{\Psi_1(\mathbf{D}_1),\dots,\Psi_K(\mathbf{D}_K)\}$ if it is defined as~\citep{koller2009probabilistic}
 \begin{equation}
   \label{equ:gibbs-distribution}
@@ -230,7 +297,10 @@ A \gls{probability distribution} $P(X_1,\dots,X_N)$ is a \gls{gibbs distribution
 where is a $\tilde{P}(X_1,\dots,X_N)$ is an unnormalized measure and $Z$ is a normalizing constant, sometimes called the \gls{partitioning function}, which guarantees that the \gls{probability distribution} sums to 1.\todo{example for normalizing}
 Having a \gls{gibbs distribution} $P$ where each $\mathbf{D}_k$, $1\leq k \leq K$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P$ factorizes over $\mathcal{H}$~\citep{koller2009probabilistic}\todo{example?}.
 
-One could think that \glspl{factor} are assigned to the edges of a \gls{markov network} in order to parameterize it.
+\todo{continue with examples}
+
+
+It could be an intuition that \glspl{factor} are assigned to the edges of a \gls{markov network} in order to parameterize it.
 Yet, such an assignment is only able to capture the pairwise interactions between the two incident nodes~\citep{koller2009probabilistic}.
 In order to model more complex interactions involving multiple nodes, the \glspl{factor scope} needs to allow an arbitrary subset of nodes in $H$.
 
@@ -393,6 +463,20 @@ Returning to our argument that \glspl{feature function} allow are move compact e
 \section{Inference of \glsentryshortpl{crf}}\label{sec:inference-crfs}
 
 After formalizing the encoding of \glspl{crf} we can now discuss their inference.
+
+%TODO rewrite:
+Given a \glspl{probability distribution} over a set of \glspl{random variable} $\mathcal{X}$, a goal can be to answer specific questions about this distribution.
+These are formulated as queries which are then run against the \glslink{probability distribution}{distributions}\todo{move to inferencing?}.
+One type of queries are called \glspl{probability query}.
+A \gls{probability query} consists of $\mathbf{E}\cup\mathbf{Y}=\mathcal{X}$ with $\mathbf{E}\cap\mathbf{Y}=\emptyset$~\citep{koller2009probabilistic}.
+The set of \glspl{random variable} $\mathbf{E}$ is called the \gls{evidence} and contains the set of observed variables.
+The second set $\mathbf{Y}$ contains the query variables.
+Based on this, the query is formulated as $P(\mathbf{Y}|\mathbf{E}=\mathbf{e})$~\citep{koller2009probabilistic}\todo{notation?}.
+We thereby want to compute the posterior \gls{probability distribution} over the assignments $\mathbf{y}$ to $\mathbf{Y}$, given the conditioning $\mathbf{E}=\mathbf{e}$~\citep{koller2009probabilistic}.
+\itodo{better explanation}
+
+
+
 Here we consider the inferencing task for \glspl{probability query} $P(\mathbf{Y}|\mathbf{X}=\mathbf{x})$ (see \Cref{subsec:probability-theory}).
 \citet{sutton2010introduction} distinguish two kinds of inference problems:
 \begin{enumerate}

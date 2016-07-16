@@ -35,7 +35,7 @@ menucolor=blue,
 urlcolor=blue]{hyperref}
 \usepackage{float}                    % additional positions for images
 \usepackage{listings}                 % source code
-\usepackage[font=bf,labelfont=bf]{caption}    % captions
+\usepackage[labelfont=bf]{caption}    % captions
 \usepackage{appendix}                 % appendix
 \usepackage{microtype}
 \usepackage{multirow}% http://ctan.org/pkg/multirow
@@ -48,6 +48,8 @@ urlcolor=blue]{hyperref}
 \usepackage{scrhack}
 \usepackage[style=alphabetic,hyperref=true,backref=true,natbib=true,abbreviate=false]{biblatex}
 \usepackage{csquotes}
+\usepackage{framed}
+\usepackage{booktabs}
 
 \clubpenalty10000
 \widowpenalty10000
@@ -185,11 +187,11 @@ and Distant Supervision}
 \input{chapters/conclusions-and-future-work}
 \cleardoublepage{}
 
-%\appendix
-%\appendixpage
-%\addappheadtotoc
-%\input{appendices/insert-filename-here}
-%\cleardoublepage{}
+\appendix
+\appendixpage%
+\addappheadtotoc%
+\input{frontbackmatter/appendices/author-extraction-example}
+\cleardoublepage{}
 
 
 \printglossary[style=altlist]
