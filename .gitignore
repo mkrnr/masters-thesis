@@ -15,7 +15,9 @@
 *.ist
 *.kilepr
 *.latexmain
+*.lof
 *.log
+*.lot
 *.out
 *.nav
 *.snm

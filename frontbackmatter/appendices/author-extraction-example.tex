@@ -2,11 +2,11 @@
 \section{Factor Product}\label{app:sec-factor-product}
 \begin{table}[h!]
 \centering
-$\Psi(Comma_2,FirstName_2,LastName_1)$\par
+$\Psi(EC_2,FN_2,LN_1)$\par
 \smallskip
 \begin{tabular}{c c c c}
  \toprule
- $Comma_2$ & $FirstName_2$ & $LastName_1$ & Value \\
+ $EC_2$ & $FN_2$ & $LN_1$ & Value \\
  \midrule
  $false$ & $false$ & $false$ & $1\cdot20=20$ \\
  $false$ & $false$ & $true$  & $1\cdot1=1$ \\
@@ -18,6 +18,124 @@ $\Psi(Comma_2,FirstName_2,LastName_1)$\par
  $true$  & $true$  & $true$  & $1\cdot20=20$ \\
  \bottomrule
 \end{tabular}
-\caption{Results of the \gls{factor product} of the two \glspl{factor} in \Cref{tab:example-factors}.}
+\caption{Results of the \gls{factor product} $\Psi(EC_2,FN_2)\times\Psi(FN_2,LN_1)$. For the values of $\Psi(EC_2,FN_2)$ and $\Psi(FN_2,LN_1)$ see \Cref{tab:example-factors}.}
 \label{tab:example-factor-product}
+\end{table}
+\section{Gibbs Distribution}\label{app:sec-gibbs-distribution}
+\subsection{Exemplary Calculation}\label{app:subsec-gd-example-calculation}
+\begin{subequations}
+\begin{equation*}
+\begin{split}
+  \tilde{P}(EC_2{=}false,FN_2{=}true,LN_1{=}true)&=\prod_{k=1}^{K}\Psi_k\left(\mathbf{D}_k\right) \\
+  &=\Psi(EC_2{=}false,FN_2{=}true)\\
+  & \hspace{4em}\times\Psi(FN_2{=}true,LN_1{=}true)\\
+  &=200\\[1em]
+\end{split}
+\end{equation*}
+\begin{equation*}
+\begin{split}
+  Z&=\sum_{EC_2,FN_2,LN_1}\tilde{P}\left(EC_2,FN_2,LastName_2\right)\\
+  &=\Psi(EC_2{=}false,FN_2{=}false,LN_1{=}false)\\
+  &\hspace{4em}+\Psi(EC_2{=}false,FN_2{=}false,LN_1{=}true)\\
+  &\hspace{4em}+\dots\\
+  &\hspace{4em}+\Psi(EC_2{=}true,FN_2{=}true,LN_1{=}true)\\
+  &= 672\\[1em]
+\end{split}
+\end{equation*}
+\begin{equation*}
+\begin{split}
+  P(EC_2{=}false, FN_2{=}true,LN_1{=}true)&=\frac{1}{Z}\tilde{P}\left(EC_2{=}false,FN_2{=}true,LN_1{=}true\right) \\
+  &=\frac{1}{672}\cdot200\approx0.2976\\
+\end{split}
+\end{equation*}
+\end{subequations}
+\subsection{Full Distribution}\label{app:subsec-gd-example-distribution}
+\begin{table}[h!]
+\centering
+$P(EC_2,FN_2,LN_1)$\par
+\smallskip
+\begin{tabular}{c c c r}
+ \toprule
+ $EC_2$ & $FN_2$ & $LN_1$ & Probability \\
+ \midrule
+ $false$ & $false$ & $false$ & $20/672\approx0.0298$ \\
+ $false$ & $false$ & $true$  & $1/672\approx0.0015$ \\
+ $false$ & $true$  & $false$ & $10/672\approx0.0148$ \\
+ $false$ & $true$  & $true$  & $200/672\approx0.2976$ \\
+ $true$  & $false$ & $false$ & $400/672\approx0.5952$ \\
+ $true$  & $false$ & $true$  & $20/672\approx0.0298$ \\
+ $true$  & $true$  & $false$ & $1/672\approx0.0015$ \\
+ $true$  & $true$  & $true$  & $20/672\approx0.0298$ \\
+ \bottomrule
+\end{tabular}
+\caption{Values of the \Gls{gibbs distribution} $P(EC_2,FN_2,LN_1)$ using the two \glspl{factor} in \Cref{tab:example-factors}.}
+\label{tab:example-factor-product}
+\end{table}
+\section{Conditional Random Field}\label{app:sec-gibbs-distribution}
+\subsection{Calculation of Factor With $\mathbf{D}\subseteq\mathbf{X}$}\label{app:subsec-gd-example-calculation}
+\itodo{Add}
+\subsection{Exemplary Calculation}\label{app:subsec-gd-example-calculation}
+\begin{subequations}
+\begin{equation*}
+\begin{split}
+  \tilde{P}(EC_2{=}false,FN_2{=}true,LN_1{=}true)&=\prod_{k=1}^{K}\Psi_k\left(\mathbf{D}_k\right) \\
+  &=\Psi(EC_2{=}false,FN_2{=}true)\\
+  & \hspace{4em}\times\Psi(FN_2{=}true,LN_1{=}true)\\
+  &=200\\[1em]
+\end{split}
+\end{equation*}
+\begin{equation*}
+\begin{split}
+  Z(EC_2{=}false)&=\sum_{FN_2,LN_1}\tilde{P}\left(EC_2{=}false,FN_2,LN_1\right)\\
+  &=\Psi(EC_2{=}false,FN_2{=}false,LN_1{=}false)\\
+  &\hspace{4em}+\Psi(EC_2{=}false,FN_2{=}false,LN_1{=}true)\\
+  &\hspace{4em}+\Psi(EC_2{=}false,FN_2{=}true,LN_1{=}false)\\
+  &\hspace{4em}+\Psi(EC_2{=}false,FN_2{=}true,LN_1{=}true)\\
+  &=231\\[1em]
+\end{split}
+\end{equation*}
+\begin{equation*}
+\begin{split}
+  P(FN_2{=}true,LN_1{=}true \mid EC_2{=}false)&=\frac{1}{Z(EC_2{=}false)}\\
+  &\hspace{2em}\cdot\tilde{P}\left(EC_2{=}false,FN_2{=}true,LN_1{=}true\right)\\
+  &=\frac{1}{231}\cdot200\approx0.8658\\
+\end{split}
+\end{equation*}
+\end{subequations}
+\subsection{Full Distributions}\label{app:subsec-gd-example-distribution}
+
+\begin{table}[h!]
+\begin{minipage}{0.5\linewidth}
+\centering
+$P(FN_2,LN_1 \mid EC_2{=}false)$\par
+\smallskip
+\begin{tabular}{c c l}
+ \toprule
+  $FN_2$ & $LN_1$ & \multicolumn{1}{c}{Value} \\
+ \midrule
+ $false$ & $false$&$20/231\ \ \approx0.0866$\\
+ $false$ & $true$ &$1/231\ \ \ \ \approx0.0043$\\
+ $true$ & $false$ &$10/231\ \ \approx0.0433$\\
+ $true$ & $true$ & $200/231\approx0.8658$\\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.5\linewidth}
+\centering
+$P(FN_2,LN_1 \mid EC_2{=}true)$\par
+\smallskip
+\begin{tabular}{c c l}
+ \toprule
+ $FN_2$ & $LN_1$ & \multicolumn{1}{c}{Value} \\
+ \midrule
+ $false$ & $false$ &$400/441\approx0.9070$\\
+ $false$ & $true$ & $20/441\ \ \approx0.0454$\\
+ $true$ & $false$ & $1/441\ \ \ \ \approx0.0022$\\
+ $true$ & $true$ &  $20/441\ \ \approx0.0454$\\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\caption{\Glspl{conditional probability distribution} for the \gls{crf} based on the \glspl{factor} in \Cref{tab:example-factors}.}
+\label{tab:example-crf-cpds}
 \end{table}

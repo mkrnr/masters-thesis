@@ -31,42 +31,40 @@ $P$ now describes a mapping from events in \glssymbol{measurable set} to real va
   \item If $\alpha,\beta\in \glssymbol{measurable set}$ and $\alpha\cap\beta = \emptyset$, then $P(\alpha\cup\beta)=P(\alpha)+P(\beta)$.
 \end{itemize}
 
-\bigskip
-
 For our author extraction example we define \glssymbol{outcome space} as a set consisting of four reference strings.
 A reference string consists of a sequence of words ``$w_1\ w_2\ \dots\ w_N$'' where words are separated by whitespaces and where $N$ is the number of words in the sequence.
 For simplicity reasons, $N$ is the same for all four reference strings in \Cref{fig:example-reference-strings}.
 We now consider two events:
 \begin{equation*}
   \begin{split}
-    firstComma&=\left\{w_1\ \dots\ w_N \mid w_1\ \text{ends with a comma}\right\}\\
-    secondFirstName&=\left\{w_1\ \dots\ w_N \mid w_2\ \text{is a first name}\right\}
+    firstEC&=\left\{w_1\ \dots\ w_N \mid w_1\ \text{ends with a comma}\right\}\\
+    secondFN&=\left\{w_1\ \dots\ w_N \mid w_2\ \text{is a first name}\right\}
   \end{split}
 \end{equation*}
-In other words, $firstComma$ contains all reference strings in \glssymbol{outcome space} in which the first word of the sequence ends with a comma and $secondFirstName$ contains all reference strings in \glssymbol{outcome space} in which the second word of the sequence is a first name.
+In other words, $firstEC$ contains all reference strings in \glssymbol{outcome space} in which the first word of the sequence ends with a comma and $secondFN$ contains all reference strings in \glssymbol{outcome space} in which the second word of the sequence is a first name.
 From this we construct two \glspl{measurable set}
 \begin{equation*}
     \begin{split}
-  \glssymbol{measurable set}_{C}&= \left\{\emptyset,firstComma, firstNotComma, \glssymbol{outcome space}\right\}\\
-  \glssymbol{measurable set}_{F}&= \left\{\emptyset,secondFirstName, secondNotFirstName, \glssymbol{outcome space}\right\}
+  \glssymbol{measurable set}_{EC_1}&= \left\{\emptyset,firstEC, firstNotEC, \glssymbol{outcome space}\right\}\\
+  \glssymbol{measurable set}_{FN_2}&= \left\{\emptyset,secondFN, secondNotFN, \glssymbol{outcome space}\right\}
     \end{split}
 \end{equation*}
-with $firstNotComma=\glssymbol{outcome space}\setminus firstComma$ and $secondNotFirstName$ defined accordingly.
+with $firstNotEC=\glssymbol{outcome space}\setminus firstC$ and $secondNotFN$ defined accordingly.
 We now consider two \glspl{probability distribution}.
-The first is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{C}$.
+The first is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{EC_1}$.
 According to our example in \Cref{fig:example-reference-strings} we have:
 \begin{equation*}
     \begin{split}
-      P(firstComma)&=1/4=0.25\\
-      P(firstNotComma)&=3/4=0.75
+      P(firstEC)&=1/4=0.25\\
+      P(firstNotEC)&=3/4=0.75
     \end{split}
 \end{equation*}
-The second \glspl{probability distribution} is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{F}$, giving us:
+The second \glspl{probability distribution} is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{FN_2}$, giving us:
 \begin{equation*}
   \label{equ:eg-measurable-sets}
     \begin{split}
-      P(secondFirstName)&=1/4=0.25\\
-      P(secondNotFirstName)&=3/4=0.75
+      P(secondFN)&=1/4=0.25\\
+      P(secondNotFN)&=3/4=0.75
     \end{split}
 \end{equation*}
 
@@ -76,9 +74,9 @@ Based on the idea of \glspl{probability distribution}, a \gls{random variable} $
 In addition, $Val(X)$ is the set of values that $X$ can take.
 The elements in $Val(X)$ are also called \glspl{assignment} to $X$.
 
-Following our example we define the \gls{random variable} $Comma_1$ as a \gls{function} that, given a reference string, returns the value $true$ if the first word in the sequence ends with a comma and the value $false$ if it does not.
-This results in: $Val(Comma_1)=\{true, false\}$.
-Similarly, $FirstName_2$ is defined as the function that associates with a reference string the value $true$ if the second word is a first name and $false$ if the second word is not a first name.
+Following our example we define the \gls{random variable} $EC_1$ as a \gls{function} that, given a reference string, returns the value $true$ if the first word in the sequence ends with a comma and the value $false$ if it does not.
+This results in: $Val(EC_1)=\{true, false\}$.
+Similarly, $FN_2$ is defined as the function that associates with a reference string the value $true$ if the second word is a first name and $false$ if the second word is not a first name.
 
 \bigskip
 
@@ -89,8 +87,8 @@ An \gls{assignment} of a concrete value $x\in Val(X)$ to $X$ is denoted as $P(X=
 We can now define our \glspl{probability distribution} on \glspl{random variable} instead of \glspl{event}, for example:
 \begin{equation*}
   \begin{split}
-    P(firstComma)&= P(Comma_1{=}true)\\
-    P(secondNotFirstName)&= P(FirstName_2{=}false)
+    P(firstEC)&= P(EC_1{=}true)\\
+    P(secondNotFN)&= P(FN_2{=}false)
   \end{split}
 \end{equation*}
 
@@ -99,13 +97,13 @@ We can now define our \glspl{probability distribution} on \glspl{random variable
 Given two \glspl{random variable} $X$ and $Y$, $P(X,Y)$ is the \gls{joint distribution} of $X$ and $Y$.
 For the assignments $x$ and $y$, $P(X{=}x,Y{=}y)$ associates a probability with the subset of $\Omega$ in which both $x$ and $y$ are true for every element~\cite{koller2009probabilistic}.
 
-In our example, $P(Comma_1,FirstName_2)$ has the following values:
+In our example, $P(EC_1,FN_2)$ has the following values:
 \begin{equation*}
   \begin{split}
-    P(Comma_1{=}false,FirstName_2{=}false)&=3/4=0.75\\
-    P(Comma_1{=}false,FirstName_2{=}true)&=0/4=0\\
-    P(Comma_1{=}true,FirstName_2{=}false)&=0/4=0\\
-    P(Comma_1{=}true,FirstName_2{=}true)&=1/4=0.25
+    P(EC_1{=}false,FN_2{=}false)&=3/4=0.75\\
+    P(EC_1{=}false,FN_2{=}true)&=0/4=0\\
+    P(EC_1{=}true,FN_2{=}false)&=0/4=0\\
+    P(EC_1{=}true,FN_2{=}true)&=1/4=0.25
   \end{split}
 \end{equation*}
 
@@ -117,17 +115,17 @@ The set of assignments $\mathbf{x}$ is also called a \glspl{full assignment} to 
 Any \gls{event} that is described using $\mathbf{X}$ must be a union of \glspl{full assignment} to $\mathbf{X}$.
 This gives us a \gls{canonical outcome space} where each outcome is a joint assignment to the \glspl{random variable} in $\mathbf{X}$.
 
-We demonstrate this by extending our definitions of $Comma_1$ and $FirstName_2$ and apply them to all words in a reference string of length $N$.
+We demonstrate this by extending our definitions of $EC_1$ and $FN_2$ and apply them to all words in a reference string of length $N$.
 This gives us two sets of \glspl{random variable}:
 \begin{equation*}
   \begin{split}
-    \mathbf{Comma}=& \{Comma_1, \dots, Comma_N\}\\
-    \mathbf{FirstName}=& \{FirstName_1, \dots, FirstName_N\}
+    \mathbf{EC}=& \{EC_1, \dots, EC_N\}\\
+    \mathbf{FN}=& \{FN_1, \dots, FN_N\}
   \end{split}
 \end{equation*}
-For example, the full assignment to $\mathbf{Comma}$ derived from the second reference string in \Cref{fig:example-reference-strings} is:
+For example, the full assignment to $\mathbf{EC}$ derived from the second reference string in \Cref{fig:example-reference-strings} is:
 \begin{equation*}
-  \mathbf{Comma}=\{true, false, false, false, false, false, false, true, false, false\}
+  \mathbf{EC}=\{true, false, false, false, false, false, false, true, false, false\}
 \end{equation*}
 
 \bigskip
@@ -152,10 +150,7 @@ P(\mathbf{Y}\mid \mathbf{X}) = \frac{P(\mathbf{X},\mathbf{Y})}{P(\mathbf{X})}
 
 Again taking the reference strings in \Cref{fig:example-reference-strings}, we have for example:
 \begin{equation*}
-  \begin{split}
-    P(FirstName_2&{=}true\mid Comma_1{=}true) = \\
-    &\frac{P(Comma_1{=}true, FirstName_2{=}true)}{P(Comma_1{=}true)}=\frac{0.25}{0.25}=1
-  \end{split}
+    P(FN_2{=}true\mid EC_1{=}true)=\frac{P(EC_1{=}true, FN_2{=}true)}{P(EC_1{=}true)}=\frac{0.25}{0.25}=1
 \end{equation*}
 
 \bigskip
@@ -168,13 +163,13 @@ Given a discrete \gls{random variable} $X$ we define the expectation $E[X]$ of $
 \end{equation}
 where $x$ is an \gls{assignment} to $X$.
 
-To apply this definition to our example, we redefine $Val(Comma_1)=\{true,false\}$ as $Val(Comma_1)=\{1,0\}$ where we replace $true$ and $false$ with the values $1$ and $0$, respectively.
+To apply this definition to our example, we redefine $Val(EC_1)=\{true,false\}$ as $Val(EC_1)=\{1,0\}$ where we replace $true$ and $false$ with the values $1$ and $0$, respectively.
 This gives us:
 \begin{equation*}
   \begin{split}
   \label{equ:expectation-x}
-  E[Comma_1]&=\sum_{x\in Val(Comma_1)} x\cdot P(Comma_1)\\
-  &=1\cdot P(Comma_1{=}1)+0\cdot P(Comma_1{=}0)\\
+  E[EC_1]&=\sum_{x\in Val(EC_1)} x\cdot P(x)\\
+  &=1\cdot P(EC_1{=}1)+0\cdot P(EC_1{=}0)\\
   &=1\cdot 0.25+0\cdot 0.75\\
   &=0.25
   \end{split}
@@ -216,49 +211,50 @@ There are two fundamental groups of graphical models, based on the type of edge 
 
 \Glspl{bayesian network}, usually denoted with $\mathcal{G}$, are encoded with directed \glspl{edge} to build a directed acyclic graph~\citep{koller2009probabilistic}.
 An \gls{edge} $X_i\to X_j$ thereby models a direct influence of $X_i$ on $X_j$.
-Referring to the example from \Cref{subsec:probability-theory}, $Comma_1\to FirstName_2$ denotes the influence of the first word in a sequence ending with a comma on the second word being a first name.
+Referring to the example from \Cref{subsec:probability-theory}, $EC_1\to FN_2$ denotes the influence of the first word in a sequence ending with a comma on the second word being a first name.
+\itodo{add text on prior distributions and cpds}
 For an introduction to \glspl{bayesian network} see for example \citet{koller2009probabilistic}.
 
 \bigskip
 
 \Glspl{markov network}, usually denoted with $\mathcal{H}$, use undirected \glspl{edge} to model a symmetrical influence between two \glspl{random variable}.
 Because of this it is not possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into \glspl{prior distribution} and \glspl{cpd}.
-Instead, $P(\mathcal{X})$ is represented as the product of \glspl{factor}.
+Instead, $\mathcal{H}$ is parameterized by a set of \glspl{factor}.
 A \gls{factor} $\Psi(\mathbf{D})$ is a function from a set of \glspl{random variable} $\mathbf{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
 It is called nonnegative if all its entries are nonnegative and in the following we will consider all factors to be nonnegative.
 $\mathbf{D}$ is called the \glslink{factor scope}{scope} of $\Psi$, denoted by $Scope[\Psi]$.
 
 Continuing with our author extraction example from \Cref{subsec:probability-theory}, we assume $\mathcal{X}=\left\{\mathbf{X},\mathbf{Y}\right\}$.
-Using this we define the two factors $\Psi(Comma_2,FirstName_2)$ and $\Psi(FirstName_2,LastName_1)$ in \Cref{tab:example-factors}.
+Using this we define the two factors $\Psi(EC_2,FN_2)$ and $\Psi(FN_2,LN_1)$ in \Cref{tab:example-factors}.
 \begin{table}[t]
 \begin{minipage}{0.5\linewidth}
 \centering
-$\Psi(Comma_2,FirstName_2)$\par
+$\Psi(EC_2,FN_2)$\par
 \smallskip
 \begin{tabular}{c c c}
  \toprule
- $Comma_2$ & $FirstName_2$ & Value \\
+ $EC_2$ & $FN_2$ & Value \\
  \midrule
- $false$ & $false$ & 1 \\
- $false$ & $true$ & 10 \\
- $true$ & $false$ & 20 \\
- $true$ & $true$ & 1 \\
+ $false$ & $false$ & $1$ \\
+ $false$ & $true$ & $10$ \\
+ $true$ & $false$ & $20$ \\
+ $true$ & $true$ & $1$ \\
  \bottomrule
 \end{tabular}
 \end{minipage}
 \hfill
 \begin{minipage}{0.5\linewidth}
 \centering
-$\Psi(FirstName_2,LastName_1)$\par
+$\Psi(FN_2,LN_1)$\par
 \smallskip
 \begin{tabular}{c c c}
  \toprule
- $FirstName_2$ & $LastName_1$ & Value \\
+ $FN_2$ & $LN_1$ & Value \\
  \midrule
- $false$ & $false$ & 20 \\
- $false$ & $true$ & 1 \\
- $true$ & $false$ & 1 \\
- $true$ & $true$ & 20 \\
+ $false$ & $false$ & $20$ \\
+ $false$ & $true$ & $1$ \\
+ $true$ & $false$ & $1$ \\
+ $true$ & $true$ & $20$ \\
  \bottomrule
 \end{tabular}
 \end{minipage}
@@ -274,13 +270,12 @@ The intuition is that the two factors are multiplied by aligning their common se
 
 Calculating the \gls{factor product} of the two \glspl{factor} in \Cref{tab:example-factors} gives us
 \begin{equation*}
-  \begin{split}
-  \Psi(Comma_2,FirstName_2)\times&\Psi(FirstName_2,LastName_1)=\\
-  &\Psi(Comma_2,FirstName_2,LastName_1)
-  \end{split}
+  \Psi(EC_2,FN_2)\times\Psi(FN_2,LN_1)=\Psi(EC_2,FN_2,LN_1)
 \end{equation*}
-since $FirstName_2$ is the only element in the common set of \glspl{random variable}.
-The concrete values for $\Psi(Comma_2,FirstName_2,LastName_1)$ are shown in \Cref{tab:example-factor-product}.
+since $FN_2$ is the only element in the common set of \glspl{random variable}.
+The concrete values for $\Psi(EC_2,FN_2,LN_1)$ are shown in \Cref{tab:example-factor-product}.
+This calculation makes clear why the values in \Cref{tab:example-factors} are set to at least one.
+If a value would be zero, all factor products involving it would also be zero.
 
 \bigskip
 
@@ -294,25 +289,46 @@ A \gls{probability distribution} $P(X_1,\dots,X_N)$ is a \gls{gibbs distribution
   Z & =\sum_{X_1,\ldots,X_N}\tilde{P}\left(X_1,\dots,X_N\right)
   \end{split}
 \end{equation}
-where is a $\tilde{P}(X_1,\dots,X_N)$ is an unnormalized measure and $Z$ is a normalizing constant, sometimes called the \gls{partitioning function}, which guarantees that the \gls{probability distribution} sums to 1.\todo{example for normalizing}
-Having a \gls{gibbs distribution} $P$ where each $\mathbf{D}_k$, $1\leq k \leq K$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P$ factorizes over $\mathcal{H}$~\citep{koller2009probabilistic}\todo{example?}.
+where is a $\tilde{P}(X_1,\dots,X_N)$ is an unnormalized measure and $Z$ is a normalizing constant, sometimes called the \gls{partitioning function}, which guarantees that the \gls{probability distribution} sums to 1.
+Having a \gls{gibbs distribution} $P$ where each $\mathbf{D}_k$, $1\leq k \leq K$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P$ factorizes over $\mathcal{H}$.~\citep{koller2009probabilistic}
 
-\todo{continue with examples}
+Based on the two \glspl{factor} from \Cref{tab:example-factors}, we now use \Cref{equ:gibbs-distribution} to calculate $P(EC_2=false,FN_2=true,LN_1=true)\approx 0.2976$ (see \cref{app:subsec-gd-example-calculation}).
+For the full distribution $P(EC_2,FN_2,LN_1)$ see \cref{app:subsec-gd-example-distribution}.
 
+\bigskip
 
 It could be an intuition that \glspl{factor} are assigned to the edges of a \gls{markov network} in order to parameterize it.
 Yet, such an assignment is only able to capture the pairwise interactions between the two incident nodes~\citep{koller2009probabilistic}.
 In order to model more complex interactions involving multiple nodes, the \glspl{factor scope} needs to allow an arbitrary subset of nodes in $H$.
-
-Since a factor can be assigned to an arbitrary number of nodes, visualizing \glspl{markov network} by only displaying the random variables as nodes and the independence relations as edges is not sufficient.
+Since a factor can be assigned to an arbitrary number of nodes, visualizing \glspl{markov network} by only displaying the random variables as nodes and pairwise interactions as edges is not sufficient.
 Instead, a \gls{factor graph} can be used.
-A \gls{factor graph} $\mathcal{F}$ contains two types of nodes: Oval nodes denote variable nodes and squared nodes denote factor nodes~\citep{koller2009probabilistic}.
-Each factor node is associated with exactly one factor $\Psi$ and each variable node is associated with exactly one random variable.
-The graph only contains undirected edges between factor nodes and variable nodes and the scope of $\Psi$ is the set of variables that are adjacent to its corresponding factor node~\citep{koller2009probabilistic}\todo{example}.
+A \gls{factor graph} $\mathcal{F}$ contains two types of \glspl{node}: Oval \glspl{node} to represent \glspl{random variable} and squared \glspl{node} to represent \glspl{factor}~\citep{koller2009probabilistic}.
+Each factor node is associated with exactly one \gls{factor} $\Psi$ and each variable node is associated with exactly one \gls{random variable}.
+The graph only contains undirected edges between factor nodes and variable nodes and the scope of $\Psi$ is the set of variables that are adjacent to its corresponding factor node~\citep{koller2009probabilistic}.
 
-As we have discussed before, \glspl{factor} are encoded with tables that contain a nonnegative value for each possible assignments in its \glslink{factor scope}{scope}.
-Having a set of \glspl{factor} that parameterize a graph. A probability distribution
-Another way to parameterize \glspl{factor} is by converting them into log-space~\citep{koller2009probabilistic}.
+To demonstrate the necessity of such a notation we consider the two different \glspl{factor graph} and their underlying \gls{markov network} in \Cref{fig:example-factor-graph}:
+\Gls{factor graph} (a) contains the two factors $\Psi(EC_2,FN_2)$ and $\Psi(FN_2,LN_1)$ from \Cref{tab:example-factors} as well as an additional \gls{factor} $\Psi(EC_2,LN_1)$.
+By taking the \gls{factor product} of the three \glspl{factor} we construct \gls{factor graph} (b).
+Note that the resulting \gls{factor} $\Psi(EC_2,FN_2,LN_1)$ does not have the same values as in \Cref{app:sec-factor-product} due to the additional factor $\Psi(EC_2,LN_1)$.
+When analyzing the pairwise interactions between the nodes via the given \glspl{factor} we can see that both (a) and (b) are based on the same \gls{markov network} (c) (see \Cref{fig:example-factor-graph}).
+
+\begin{figure}[t]
+\resizebox{\linewidth}{!}{%
+  \input{figures/example-factor-graphs.tex}
+}
+\caption[Two factor graphs resuling in the same Markov network]{%
+  Two factor graphs resuling in the same Markov network:
+  (a) \Gls{factor graph} with three \glspl{factor}.
+  (b) \Gls{factor graph} with one \gls{factor}.
+  (c) \Gls{markov network} that results from both (a) and (b). (cf. \citep{koller2009probabilistic})
+}
+\label{fig:example-factor-graph}
+\end{figure}
+
+\bigskip
+
+As we discussed before, a graph $\mathcal{H}$ is parameterized by a set of \glspl{factor}.
+Another way to parameterize $\mathcal{H}$ is by converting the set of \glspl{factor} into the log-space~\citep{koller2009probabilistic}.
 We can rewrite a factor $\Psi(\mathbf{D})$ as
 \begin{equation*}
   \label{equ:energy-function}
@@ -320,21 +336,88 @@ We can rewrite a factor $\Psi(\mathbf{D})$ as
 \end{equation*}
 where $\epsilon(\mathbf{D})=-\ln\Psi(\mathbf{D})$ is called \gls{energy function}~\citep{koller2009probabilistic}.
 
-Since we are in the log-space, a \gls{probability distribution} over a set of \glspl{random variable} is proportional to the exponential of the sum of its energy functions~\citep{koller2009probabilistic}:
+Being in the log-space, the \gls{probability distribution} over a set of \glspl{random variable} is proportional to the exponential of the sum of its energy functions~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:p-energy-function}
   P\left(X_1,\dots,X_N\right) \propto \exp\left\{-\sum_{k=1}^K\epsilon_k\left(\mathbf{D}_k\right)\right\}
 \end{equation}
-Since we only consider nonnegative \glspl{factor} and the results of the \gls{energy function} can be negative, we need a new definition of a \gls{factor} without its negativity property.
-Thereby, given a set of \glspl{random variable} $\mathbf{D}$, we define a \gls{feature function} $f(\mathbf{D})$ as a function from $\mathbf{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
-In \todo{example} we apply the \gls{energy function} to the values of \todo{example}.
-Values that were set to one in \todo{ref} become zero. \dots\todo{differences}
-Consequently following this separation we can define a \gls{probability distribution} $P$ over $\mathcal{H}$ with~\citep{koller2009probabilistic}:
+
+In \Cref{tab:example-energy-functions} we apply the \gls{energy function} to $\{EC_2,FN_2\}$ and $\{FN_2,LN_1\}$ using the results from \Cref{tab:example-factors}.
+As we can see, values that were one in \Cref{tab:example-factors} are now zero.
+
+\begin{table}[t]
+\begin{minipage}{0.5\linewidth}
+\centering
+$\epsilon(EC_2,FN_2)$\par
+\smallskip
+\begin{tabular}{c c l}
+ \toprule
+  $EC_2$ & $FN_2$ & \multicolumn{1}{c}{Value} \\
+ \midrule
+ $false$ & $false$ & $-\ln(1)\ \ =0$ \\
+ $false$ & $true$ & $-\ln(10)\approx-2.3026$ \\
+ $true$ & $false$ & $-\ln(20)\approx-2.9957$ \\
+ $true$ & $true$ & $-\ln(1)\ \ =0$ \\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.5\linewidth}
+\centering
+$\epsilon(FN_2,LN_1)$\par
+\smallskip
+\begin{tabular}{c c l}
+ \toprule
+ $FN_2$ & $LN_1$ & \multicolumn{1}{c}{Value} \\
+ \midrule
+ $false$ & $false$ & $-\ln(20)\approx-2.9957$ \\
+ $false$ & $true$ & $-\ln(1)\ \ =0$ \\
+ $true$ & $false$ & $-\ln(1)\ \ =0$ \\
+ $true$ & $true$ & $-\ln(20)\approx-2.9957$ \\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\caption{\Glspl{energy function} for the \glspl{factor} in \Cref{tab:example-factors}.}
+\label{tab:example-energy-functions}
+\end{table}
+
+\bigskip
+
+Using the fact that in practice many values of an \gls{energy function} $\epsilon(\mathbf{D})$ are zero, it is possible to represent its information in a more compact way.
+This is done with a number of \glspl{feature function} $f(\mathbf{D})$ and the same number of weights $\theta$.
+
+For example, we can represent $\epsilon(FN_2,LN_1)$ from \Cref{tab:example-energy-functions} as the sum over the two indicator functions
+\begin{equation*}
+  \begin{split}
+    f_1(FN_2,LN_1)&=\mathbf{\mathbbm{1}}\left\{FN_2{=}false,LN_1{=}false\right\}\\
+    f_2(FN_2,LN_1)&=\mathbf{\mathbbm{1}}\left\{FN_2{=}true,LN_1{=}true\right\}
+  \end{split}
+\end{equation*}
+which are multiplied with the weights $\theta_1{=}\theta_2{=}-\ln(20)$:
+\begin{equation*}
+  \epsilon\left(FN_2,LN_1\right)=\left(-\ln(20)\cdot f_1(FN_2,LN_1)\right)+\left(-\ln(20)\cdot f_2(FN_2,LN_1)\right)
+\end{equation*}
+Given the assignments $FN_1{=}true$ and $LN_1{=}true$ we have:
+\begin{equation*}
+  \begin{split}
+  \epsilon\left(FN_2{=}true,LN_1{=}true\right)&=\left(-\ln(20)\cdot f_1(FN_2{=}true,LN_1{=}true)\right)\\
+  &\hspace{4em}+\left(-\ln(20)\cdot f_2(FN_2{=}true,LN_1{=}true)\right)\\
+  &=\left(-\ln(20)\cdot 0\right)+\left(-\ln(20)\cdot 1\right)\\
+  &=-\ln(20)
+  \end{split}
+\end{equation*}
+
+
+
+\bigskip
+
+Based on \Cref{equ:p-energy-function} we can now define a \gls{probability distribution} $P$ over $\mathcal{H}$ as
 \begin{equation}
   \label{equ:log-linear-model}
   P\left(X_1,\dots,X_N\right) = \frac{1}{Z}\exp\left\{-\sum_{k=1}^K \theta_k f_k\left(\mathbf{D}_k\right)\right\}
 \end{equation}
-where $\theta_1,\dots,\theta_K$ are weights and $\{f_1(\mathbf{D}_1),\dots,f_K(\mathbf{D}_K)\}$ are \glspl{feature function} with each $\mathbf{D}_k$ being a complete subgraph in $\mathcal{H}$.
+where $\theta_1,\dots,\theta_K$ are weights and $f_1(\mathbf{D}_1),\dots,f_K(\mathbf{D}_K)$ are \glspl{feature function} with each $\mathbf{D}_k$ being a complete subgraph in $\mathcal{H}$~\citep{koller2009probabilistic}.
+Note that $K$ in \Cref{equ:log-linear-model} does not have to be equal to $K$ in \Cref{equ:p-energy-function}.
 This \gls{probability distribution} is called a \gls{log-linear model}.
 
 \bigskip
@@ -352,22 +435,21 @@ For example, in \gls{nlp} tasks we often model word-identities as features.
 Having a limited training set, we often have words that were unseen during training.
 In order to still give a reasonable classification for unseen words it would be beneficial to also include other features in addition to just the word-identities~\citep{sutton2010introduction}.
 Such features could be the capitalization, length, and prefixes of a word or even its neighboring words~\citep{sutton2010introduction}.
-Yet, such features are highly dependent to each other and such dependencies would need to be represented in a \gls{generative model} which is often intractable in practice~\citep{sutton2010introduction}.
-\Glspl{discriminative model} on the other hand can leverage such features despite their high dependencies since $P(\mathbf{x})$ is not modeled~\citep{koller2009probabilistic}.
-%TODO argue about modeling p(Y|X) directly since it represents our probability query (sutton?)
+Yet, such features are highly dependent to each other and their dependencies would need to be represented in a \gls{generative model} which is often intractable in practice~\citep{sutton2010introduction}.
+\Glspl{discriminative model} on the other hand can leverage such a combination of features despite their high dependencies since $P(\mathbf{X})$ is not modeled~\citep{koller2009probabilistic}.
 
-Since in \glspl{generative model} $P(\mathbf{y})$ topologically precedes\todo{what?} $P(\mathbf{x}\mid\mathbf{y})$, \citet{sutton2010introduction} argue that they are more naturally modeled by a \gls{bayesian network}.
-Since there is no such order in \glspl{discriminative model}, it is argued that they are more naturally modeled by a \gls{markov network}~\citep{sutton2010introduction}.
+Since in \glspl{generative model} $P(\mathbf{Y})$ topologically precedes $P(\mathbf{X}\mid\mathbf{Y})$, \citet{sutton2010introduction} argue that they are more naturally modeled by the directed \gls{bayesian network}.
+Consequentely, since there is no such order in \glspl{discriminative model}, it is argued that they are more naturally modeled by a \gls{markov network}~\citep{sutton2010introduction}.
 
 \bigskip
 
-After introducing some of the fundamental concepts we can now discuss \glspl{crf}. In the following we will address how to encode, inference, and learn them.
+After introducing some of the fundamental concepts we will now discuss \glspl{crf}. In the following we will address how to encode, inference, and learn them.
 
 \section{Encoding of \glsentryshortpl{crf}}\label{sec:definition-crfs}
 A popular framework for building \glspl{probabilistic graphical model} are \acrfullpl{crf}.
-Proposed by \citet{lafferty2001conditional}, the initial goal was the segmentation and labeling sequence data.
-A main motivation for \glspl{crf} is to overcome a label bias problem that other discriminative \glspl{markov network}, such as \glspl{memm}, tend to have~\citep{lafferty2001conditional}.\todo{rewrite}
-\citet{lafferty2001conditional} argue that this is due to the structure in which models such as \glspl{memm} model \glspl{conditional probability} using per-state models.
+Proposed by \citet{lafferty2001conditional}, the initial goal was the segmentation and labeling of sequential data.
+A main motivation for \glspl{crf} is to overcome a label bias problem that other discriminative \glspl{markov network}, such as \glspl{memm}, tend to have~\citep{lafferty2001conditional}.\
+\citet{lafferty2001conditional} argue that this is due to the per-state models which are used in models such as \glspl{memm} to represent \glspl{conditional probability}.
 This can lead to a bias towards stats which have fewer outgoing transitions~\citep{lafferty2001conditional}.
 In order to overcome this bias, \glspl{crf} do not have per-state models but instead contain a single model to represent ``the \glslink{joint distribution}{joint probability} of the entire sequence of labels given the observation sequence''~\citep{lafferty2001conditional}.
 
@@ -384,15 +466,18 @@ Given a set of \glspl{factor} $\{\Psi_1(\mathbf{D}_1),\dots\Psi_K(\mathbf{D}_K)\
     Z(\mathbf{X}) & = \sum_{\mathbf{Y}}\tilde{P}(\mathbf{Y},\mathbf{X})
   \end{split}
 \end{equation}
-where, similar to \glspl{gibbs distribution} (see \Cref{equ:gibbs-distribution}), $\tilde{P}(\mathbf{Y},\mathbf{X})$ is the unnormalized measure and $Z(\mathbf{X})$ is a normalizing constant~\citep{koller2009probabilistic}.
-Additionally we have that $\mathbf{D}_k=\mathbf{X}\cup\mathbf{Y}$ and $\mathbf{D}_k\not\subseteq\mathbf{X}$.\todo{rewrite}
+where, similar to the \gls{gibbs distribution} in \Cref{equ:gibbs-distribution}, $\tilde{P}(\mathbf{Y},\mathbf{X})$ is the unnormalized measure and $Z(\mathbf{X})$ is a normalizing constant~\citep{koller2009probabilistic}.
+Additionally we have that $\mathbf{D}_k=\mathbf{X}\cup\mathbf{Y}$ and $\mathbf{D}_k\not\subseteq\mathbf{X}$.
 In other words, $\mathbf{D}_k$ needs to contain at least one $Y_n\in \mathbf{Y}$.
-In \todo{add ref and example} we use an example to show that in the case of $\mathbf{D}_k\subseteq \mathbf{X}$, the term $\Psi_k(\mathbf{D}_k)$ ``cancels out'' during the calculation of $P(\mathbf{Y}\mid\mathbf{X})$.
+
+In \todo{add ref and example} we show with an example that in the case of $\mathbf{D}_k\subseteq \mathbf{X}$, the term $\Psi_k(\mathbf{D}_k)$ ``cancels out'' during the calculation of $P(\mathbf{Y}\mid\mathbf{X})$.
 
 This behavior for a $\mathbf{D}_k\subseteq\mathbf{X}$ is the result of the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above, namely how the normalizing constant $Z$ is defined~\citep{koller2009probabilistic}.
 In \Cref{equ:gibbs-distribution}, $Z$ normalizes $\tilde{P}(X_1,\dots,X_N)$ with a sum over all $X_1,\dots,X_N$ resulting in a \gls{joint distribution} $P(X_1,\dots,X_N)$.
 In \Cref{equ:crf-factor}, however, $Z(\mathbf{X})$ normalizes $\tilde{P}(\mathbf{Y},\mathbf{X})$ with a sum over all $\mathbf{Y}$.
 This way of normalizing results in the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$ (Compare with \Cref{equ:conditional-probability-random-variable}).
+
+\Cref{app:subsec-gd-example-calculation} contains the calculation of $P(FN_2{=}true,LN_1{=}true \mid EC_2{=}false)$ and \Cref{tab:example-crf-cpds} shows the \glspl{probability distribution} $P(FN_2,LN_1 \mid EC_2{=}false)$ and $P(FN_2,LN_1 \mid EC_2{=}true)$ for the \gls{crf} according to the \glspl{factor} in \Cref{tab:example-factors}.
 
 \bigskip
 
