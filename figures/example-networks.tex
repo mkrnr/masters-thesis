@@ -1,0 +1,24 @@
+\newcommand{\factorgraphnodes}{%
+  \node[latent] (ln) {$LN_1$}; %
+  \node[latent, right=2.4cm of ln] (fn) {$FN_2$}; %
+  \node[obs, below=2.4cm of fn] (ec) {$EC_2$}; %
+}
+\begin{tabular}{c@{\hskip 0.75cm}c}
+\begin{tikzpicture}
+  \factorgraphnodes
+
+  \edge[] {ln} {fn};
+  \edge[] {fn} {ec};
+  \edge[] {ln} {ec};
+\end{tikzpicture}
+&
+\begin{tikzpicture}
+  \factorgraphnodes
+
+  \edge[-] {ln} {fn};
+  \edge[-] {fn} {ec};
+  \edge[-] {ln} {ec};
+\end{tikzpicture}
+\\
+(a)& (b)\\
+\end{tabular}

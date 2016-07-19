@@ -206,14 +206,42 @@ In a \gls{probabilistic graphical model}, the \glspl{random variable} $\mathcal{
 
 % TODO edge part more precise
 There are two fundamental groups of graphical models, based on the type of edge that are used: \glspl{bayesian network} and \glspl{markov network}.
+Both models have in common that their set of \glspl{random variable} $\mathcal{X}$ can be separated into two subsets:
+$\mathbf{X}$ contains the so-called \glspl{observed variable} which usually represent specific features of the input.
+$\mathbf{Y}$ contains the \glspl{target variable}.
+We thereby have $\mathcal{X}=\{\mathbf{X}\cup\mathbf{Y}\}$ with $\mathbf{X}\cap\mathbf{Y}=\emptyset$.
+Yet, there are fundamental differences between \glspl{bayesian network} and \glspl{markov network}.
+
+Using our author extraction example we can define $\mathcal{X}=\{EC_2,LN_1,FN_2\}$ with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,FN_2\}$.
 
 \bigskip
 
 \Glspl{bayesian network}, usually denoted with $\mathcal{G}$, are encoded with directed \glspl{edge} to build a directed acyclic graph~\citep{koller2009probabilistic}.
-An \gls{edge} $X_i\to X_j$ thereby models a direct influence of $X_i$ on $X_j$.
-Referring to the example from \Cref{subsec:probability-theory}, $EC_1\to FN_2$ denotes the influence of the first word in a sequence ending with a comma on the second word being a first name.
-\itodo{add text on prior distributions and cpds}
-For an introduction to \glspl{bayesian network} see for example \citet{koller2009probabilistic}.
+An \gls{edge} $A\to B$ thereby models a direct influence of $A$ on $B$.
+Since the influence is directed, it is possible to separate the \gls{joint distribution} $P(\mathbf{X},\mathbf{Y})$ based on the \gls{bayesian network} as a product of a \glspl{prior distribution} $P(\mathbf{Y})$ and a \glspl{cpd} $P(\mathbf{X}|\mathbf{Y})$~\citep{sutton2010introduction}:
+\begin{equation}
+  P(\mathbf{X},\mathbf{Y})=P(\mathbf{Y})P(\mathbf{X}|\mathbf{Y})
+\end{equation}
+Here, the \gls{prior distribution} are \glspl{node} in the \gls{bayesian network} which only have outgoing \glspl{edge}.
+Consequently, a \glspl{cpd} $\mathbf{X}$ given $\mathbf{Y}$ results from the \glspl{edge} going from $\mathbf{Y}$ to $\mathbf{X}$.
+
+\Cref{fig:example-networks} shows a \gls{bayesian network} for our author extraction example using the above defined set of \glspl{random variable} $\mathcal{X}$.
+The gray node represents an \gls{observed variable} and the white nodes represent \glspl{target variable}.
+From this we can derive the following \gls{joint distribution}:
+\begin{equation*}
+  P(EC_2,LN_1,FN_2)=P(LN_1)P(FN_2|LN_1)P(EC_2\mid LN_1,FN_2)
+\end{equation*}
+
+\begin{figure}[t]
+\centering
+\input{figures/example-networks.tex}
+\caption[Two networks for $\mathcal{X}=\{EC_2,LN_1,FN_2\}$]{%
+  Two networks for $\mathcal{X}=\{EC_2,LN_1,FN_2\}$:
+  (a) A \gls{bayesian network}.
+  (b) A \gls{markov network}.
+}
+\label{fig:example-networks}
+\end{figure}
 
 \bigskip
 
@@ -222,22 +250,29 @@ Because of this it is not possible to separate the \gls{joint distribution} $P(\
 Instead, $\mathcal{H}$ is parameterized by a set of \glspl{factor}.
 A \gls{factor} $\Psi(\mathbf{D})$ is a function from a set of \glspl{random variable} $\mathbf{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
 It is called nonnegative if all its entries are nonnegative and in the following we will consider all factors to be nonnegative.
-$\mathbf{D}$ is called the \glslink{factor scope}{scope} of $\Psi$, denoted by $Scope[\Psi]$.
+$\mathbf{D}$ is called the \glslink{factor scope}{scope} of $\Psi$, denoted by $Scope[\Psi]$~\citep{koller2009probabilistic}.
 
-Continuing with our author extraction example from \Cref{subsec:probability-theory}, we assume $\mathcal{X}=\left\{\mathbf{X},\mathbf{Y}\right\}$.
-Using this we define the two factors $\Psi(EC_2,FN_2)$ and $\Psi(FN_2,LN_1)$ in \Cref{tab:example-factors}.
+Using the set of \glspl{random variable} $\mathcal{X}$, we define the three factors in \Cref{tab:example-factors}: $\Psi(LN_1,EC_2)$, $\Psi(FN_2,EC_2)$, and $\Psi(LN_1,FN_2)$
+The values for the factors are calculated in the following way.
+For every reference string in \Cref{fig:example-reference-strings} which follows the given \glspl{assignment} to a \gls{factor}, we add $10$ to the corresponding factor value.
+As an example, for three of the four reference strings in \Cref{fig:example-reference-strings} we have $LN_1=false$ and $FN_2=false$.
+Thereby, $\Psi(LN_1=false,FN_2=false)=30$.
+If, on the other hand, no reference string agrees with the \glspl{assignment}, we set the factor value to one.
+The \gls{markov network} that results from the three \glspl{factor} is shown in \Cref{fig:example-networks}.
+Again, the gray \gls{node} marks an \gls{observed variable} and white \glspl{node} mark \glspl{target variable}.
+
 \begin{table}[t]
 \begin{minipage}{0.5\linewidth}
 \centering
-$\Psi(EC_2,FN_2)$\par
+$\Psi(LN_1,EC_2)$\par
 \smallskip
 \begin{tabular}{c c c}
  \toprule
- $EC_2$ & $FN_2$ & Value \\
+ $LN_1$ & $EC_2$ & Value \\
  \midrule
- $false$ & $false$ & $1$ \\
- $false$ & $true$ & $10$ \\
- $true$ & $false$ & $20$ \\
+ $false$ & $false$ & $10$ \\
+ $false$ & $true$ & $20$ \\
+ $true$ & $false$ & $10$ \\
  $true$ & $true$ & $1$ \\
  \bottomrule
 \end{tabular}
@@ -245,20 +280,36 @@ $\Psi(EC_2,FN_2)$\par
 \hfill
 \begin{minipage}{0.5\linewidth}
 \centering
-$\Psi(FN_2,LN_1)$\par
+$\Psi(FN_2,EC_2)$\par
 \smallskip
 \begin{tabular}{c c c}
  \toprule
- $FN_2$ & $LN_1$ & Value \\
+ $FN_2$ & $EC_2$ & Value \\
  \midrule
- $false$ & $false$ & $20$ \\
- $false$ & $true$ & $1$ \\
- $true$ & $false$ & $1$ \\
- $true$ & $true$ & $20$ \\
+ $false$ & $false$ & $10$ \\
+ $false$ & $true$ & $20$ \\
+ $true$ & $false$ & $10$ \\
+ $true$ & $true$ & $1$ \\
  \bottomrule
 \end{tabular}
 \end{minipage}
-\caption{Two factors for the author extraction example}
+\medskip
+\begin{center}
+$\Psi(LN_1,FN_2)$\par
+\smallskip
+\begin{tabular}{c c c}
+ \toprule
+ $LN_1$ & $FN_2$ & Value \\
+ \midrule
+ $false$ & $false$ & $30$ \\
+ $false$ & $true$ & $1$ \\
+ $true$ & $false$ & $1$ \\
+ $true$ & $true$ & $10$ \\
+ \bottomrule
+\end{tabular}
+\end{center}
+
+\caption{Three factors for the author extraction example}
 \label{tab:example-factors}
 \end{table}
 
@@ -268,13 +319,17 @@ An important operation on factors is the \gls{factor product}.
 Given three disjoint sets of assignments $\left\{\mathbf{X}, \mathbf{Y}, \mathbf{Z}\right\}$, a \gls{factor product} $\Psi_1\times\Psi_2$ of the two factors $\Psi_1(\mathbf{X},\mathbf{Y})$ and $\Psi_2(\mathbf{Y},\mathbf{Z})$ is a factor $\Psi(\mathbf{X},\mathbf{Y},\mathbf{Z})$~\citep{koller2009probabilistic}.
 The intuition is that the two factors are multiplied by aligning their common set of \glspl{random variable} $\mathbf{Y}$.
 
-Calculating the \gls{factor product} of the two \glspl{factor} in \Cref{tab:example-factors} gives us
+One way of calculating the \gls{factor product} of the three \glspl{factor} in \Cref{tab:example-factors} is the following:
 \begin{equation*}
-  \Psi(EC_2,FN_2)\times\Psi(FN_2,LN_1)=\Psi(EC_2,FN_2,LN_1)
+  \begin{split}
+  &\Psi(LN_1,EC_2)\times\Psi(FN_2,EC_2)\Psi(LN_1,FN_2)\\
+  &\hspace{4em}=\Psi(LN_1,FN_2,EC_2)\times\Psi(LN_1,FN_2)\\
+  &\hspace{4em}=\Psi(LN_1,FN_2,EC_2)
+  \end{split}
 \end{equation*}
-since $FN_2$ is the only element in the common set of \glspl{random variable}.
-The concrete values for $\Psi(EC_2,FN_2,LN_1)$ are shown in \Cref{tab:example-factor-product}.
-This calculation makes clear why the values in \Cref{tab:example-factors} are set to at least one.
+Note that, in general, the $\Psi(LN_1,FN_2,EC_2)$ in line two and three are not the same.
+The concrete values for $\Psi(LN_1,FN_2,EC_2)$ are shown in \Cref{tab:example-factor-product}.
+This demonstrates why the values in \Cref{tab:example-factors} are set to at least one.
 If a value would be zero, all factor products involving it would also be zero.
 
 \bigskip
@@ -293,7 +348,7 @@ where is a $\tilde{P}(X_1,\dots,X_N)$ is an unnormalized measure and $Z$ is a no
 Having a \gls{gibbs distribution} $P$ where each $\mathbf{D}_k$, $1\leq k \leq K$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P$ factorizes over $\mathcal{H}$.~\citep{koller2009probabilistic}
 
 Based on the two \glspl{factor} from \Cref{tab:example-factors}, we now use \Cref{equ:gibbs-distribution} to calculate $P(EC_2=false,FN_2=true,LN_1=true)\approx 0.2976$ (see \cref{app:subsec-gd-example-calculation}).
-For the full distribution $P(EC_2,FN_2,LN_1)$ see \cref{app:subsec-gd-example-distribution}.
+For the full distribution $P(EC_2,FN_2,LN_1)$ see \cref{app:subsec-gd-full-distribution}.
 
 \bigskip
 
@@ -307,20 +362,20 @@ Each factor node is associated with exactly one \gls{factor} $\Psi$ and each var
 The graph only contains undirected edges between factor nodes and variable nodes and the scope of $\Psi$ is the set of variables that are adjacent to its corresponding factor node~\citep{koller2009probabilistic}.
 
 To demonstrate the necessity of such a notation we consider the two different \glspl{factor graph} and their underlying \gls{markov network} in \Cref{fig:example-factor-graph}:
-\Gls{factor graph} (a) contains the two factors $\Psi(EC_2,FN_2)$ and $\Psi(FN_2,LN_1)$ from \Cref{tab:example-factors} as well as an additional \gls{factor} $\Psi(EC_2,LN_1)$.
-By taking the \gls{factor product} of the three \glspl{factor} we construct \gls{factor graph} (b).
-Note that the resulting \gls{factor} $\Psi(EC_2,FN_2,LN_1)$ does not have the same values as in \Cref{app:sec-factor-product} due to the additional factor $\Psi(EC_2,LN_1)$.
-When analyzing the pairwise interactions between the nodes via the given \glspl{factor} we can see that both (a) and (b) are based on the same \gls{markov network} (c) (see \Cref{fig:example-factor-graph}).
+\Gls{factor graph} (a) contains the three factors from \Cref{tab:example-factors}.
+By taking the \gls{factor product} of these three \glspl{factor} we construct \gls{factor graph} (b).
+When analyzing the pairwise interactions between the nodes via the given \glspl{factor}, we can see that both (a) and (b) are based on the \gls{markov network} shown in  \Cref{fig:example-networks}.
 
 \begin{figure}[t]
-\resizebox{\linewidth}{!}{%
+\centering
+%\resizebox{\linewidth}{!}{%
   \input{figures/example-factor-graphs.tex}
-}
-\caption[Two factor graphs resuling in the same Markov network]{%
-  Two factor graphs resuling in the same Markov network:
+%}
+\caption[Two factor graphs resulting in the same Markov network]{%
+  Two \glspl{factor graph} resulting in the \gls{markov network} in \Cref{fig:example-networks}:
   (a) \Gls{factor graph} with three \glspl{factor}.
   (b) \Gls{factor graph} with one \gls{factor}.
-  (c) \Gls{markov network} that results from both (a) and (b). (cf. \citep{koller2009probabilistic})
+  (cf. \citep{koller2009probabilistic})
 }
 \label{fig:example-factor-graph}
 \end{figure}
@@ -342,41 +397,57 @@ Being in the log-space, the \gls{probability distribution} over a set of \glspl{
   P\left(X_1,\dots,X_N\right) \propto \exp\left\{-\sum_{k=1}^K\epsilon_k\left(\mathbf{D}_k\right)\right\}
 \end{equation}
 
-In \Cref{tab:example-energy-functions} we apply the \gls{energy function} to $\{EC_2,FN_2\}$ and $\{FN_2,LN_1\}$ using the results from \Cref{tab:example-factors}.
+In \Cref{tab:example-energy-functions} we apply the \gls{energy function} to the three factors in \Cref{tab:example-factors}.
 As we can see, values that were one in \Cref{tab:example-factors} are now zero.
 
 \begin{table}[t]
 \begin{minipage}{0.5\linewidth}
 \centering
-$\epsilon(EC_2,FN_2)$\par
+$\epsilon(LN_1,EC_2)$\par
 \smallskip
 \begin{tabular}{c c l}
  \toprule
-  $EC_2$ & $FN_2$ & \multicolumn{1}{c}{Value} \\
+ $LN_1$ & $EC_2$ & \multicolumn{1}{c}{Value} \\
  \midrule
- $false$ & $false$ & $-\ln(1)\ \ =0$ \\
- $false$ & $true$ & $-\ln(10)\approx-2.3026$ \\
- $true$ & $false$ & $-\ln(20)\approx-2.9957$ \\
- $true$ & $true$ & $-\ln(1)\ \ =0$ \\
+ $false$ & $false$ & $-\ln(10)\approx-2.3026$ \\
+ $false$ & $true$ & $-\ln(20)\approx-2.9957$ \\
+ $true$ & $false$ & $-\ln(10)\approx-2.3026$ \\
+ $true$ & $true$ & $-\ln(1)\ \ =\ \ \ 0$ \\
  \bottomrule
 \end{tabular}
 \end{minipage}
 \hfill
 \begin{minipage}{0.5\linewidth}
 \centering
-$\epsilon(FN_2,LN_1)$\par
+$\epsilon(FN_2,EC_2)$\par
 \smallskip
 \begin{tabular}{c c l}
  \toprule
- $FN_2$ & $LN_1$ & \multicolumn{1}{c}{Value} \\
+ $FN_2$ & $EC_2$ & \multicolumn{1}{c}{Value} \\
  \midrule
- $false$ & $false$ & $-\ln(20)\approx-2.9957$ \\
- $false$ & $true$ & $-\ln(1)\ \ =0$ \\
- $true$ & $false$ & $-\ln(1)\ \ =0$ \\
- $true$ & $true$ & $-\ln(20)\approx-2.9957$ \\
+ $false$ & $false$ & $-\ln(10)\approx-2.3026$ \\
+ $false$ & $true$ & $-\ln(20)\approx-2.9957$ \\
+ $true$ & $false$ & $-\ln(10)\approx-2.3026$ \\
+ $true$ & $true$ & $-\ln(1)\ \ = \ \ \ 0$ \\
  \bottomrule
 \end{tabular}
 \end{minipage}
+\medskip
+\begin{center}
+$\epsilon(LN_1,FN_2)$\par
+\smallskip
+\begin{tabular}{c c l}
+ \toprule
+ $LN_1$ & $FN_2$ & \multicolumn{1}{c}{Value} \\
+ \midrule
+ $false$ & $false$ & $-\ln(30)\approx-3.4012$ \\
+ $false$ & $true$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $true$ & $false$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $true$ & $true$ & $-\ln(10)\approx-2.3026$ \\
+ \bottomrule
+\end{tabular}
+\end{center}
+
 \caption{\Glspl{energy function} for the \glspl{factor} in \Cref{tab:example-factors}.}
 \label{tab:example-energy-functions}
 \end{table}
@@ -386,7 +457,8 @@ $\epsilon(FN_2,LN_1)$\par
 Using the fact that in practice many values of an \gls{energy function} $\epsilon(\mathbf{D})$ are zero, it is possible to represent its information in a more compact way.
 This is done with a number of \glspl{feature function} $f(\mathbf{D})$ and the same number of weights $\theta$.
 
-For example, we can represent $\epsilon(FN_2,LN_1)$ from \Cref{tab:example-energy-functions} as the sum over the two indicator functions
+For example, we can represent $\epsilon(LN_1,FN_2)$ from \Cref{tab:example-energy-functions} as the sum over the two indicator functions
+\itodo{fix numbers}
 \begin{equation*}
   \begin{split}
     f_1(FN_2,LN_1)&=\mathbf{\mathbbm{1}}\left\{FN_2{=}false,LN_1{=}false\right\}\\
@@ -424,8 +496,8 @@ This \gls{probability distribution} is called a \gls{log-linear model}.
 
 In addition to \glspl{bayesian network} and \glspl{markov network} we can further distinguish between \glspl{generative model} and \glspl{discriminative model}.
 Assume a set of input variables, also called \glspl{observed variable}, $\mathbf{X}$ and a set of output variables, also called \glspl{target variable} $\mathbf{Y}$ with $\mathbf{X}\cap\mathbf{Y}=\emptyset$.
-A \gls{generative model} then encodes the \gls{joint distribution} $P(\mathbf{Y},\mathbf{X})$ whereas a \gls{discriminative model} encodes the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$~\citep{koller2009probabilistic}.
-More precisely, for a \gls{generative model} we have $P(\mathbf{Y},\mathbf{X})=P(\mathbf{Y})P(\mathbf{X}\mid\mathbf{Y})$.
+A \gls{generative model} then encodes the \gls{joint distribution} $P(\mathbf{Y},\mathbf{X})$ whereas a \gls{discriminative model} encodes the \gls{conditional probability distribution} $P(\mathbf{Y}|\mathbf{X})$~\citep{koller2009probabilistic}.
+More precisely, for a \gls{generative model} we have $P(\mathbf{Y},\mathbf{X})=P(\mathbf{Y})P(\mathbf{X}|\mathbf{Y})$.
 We thereby consider how the output of the model is generated as a function of the input~\citep{sutton2010introduction}.
 
 This leads to the main difference between the two models, namely that for a \gls{discriminative model} we do not need to model $P(\mathbf{X})$.
@@ -438,7 +510,7 @@ Such features could be the capitalization, length, and prefixes of a word or eve
 Yet, such features are highly dependent to each other and their dependencies would need to be represented in a \gls{generative model} which is often intractable in practice~\citep{sutton2010introduction}.
 \Glspl{discriminative model} on the other hand can leverage such a combination of features despite their high dependencies since $P(\mathbf{X})$ is not modeled~\citep{koller2009probabilistic}.
 
-Since in \glspl{generative model} $P(\mathbf{Y})$ topologically precedes $P(\mathbf{X}\mid\mathbf{Y})$, \citet{sutton2010introduction} argue that they are more naturally modeled by the directed \gls{bayesian network}.
+Since in \glspl{generative model} $P(\mathbf{Y})$ topologically precedes $P(\mathbf{X}|\mathbf{Y})$, \citet{sutton2010introduction} argue that they are more naturally modeled by the directed \gls{bayesian network}.
 Consequentely, since there is no such order in \glspl{discriminative model}, it is argued that they are more naturally modeled by a \gls{markov network}~\citep{sutton2010introduction}.
 
 \bigskip
@@ -455,7 +527,7 @@ In order to overcome this bias, \glspl{crf} do not have per-state models but ins
 
 \bigskip
 
-\Glspl{crf} encode the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$ where $\mathbf{Y}$ is a set of \glspl{target variable} and $\mathbf{X}$ is a set of \glspl{observed variable} with $\mathbf{Y}\cap\mathbf{X}=\emptyset$.
+\Glspl{crf} encode the \gls{conditional probability distribution} $P(\mathbf{Y}|\mathbf{X})$ where $\mathbf{Y}$ is a set of \glspl{target variable} and $\mathbf{X}$ is a set of \glspl{observed variable} with $\mathbf{Y}\cap\mathbf{X}=\emptyset$.
 A \gls{crf} is constructed using a \gls{markov network} $\mathcal{H}$ where the nodes correspond to $\mathbf{Y}\cup\mathbf{X}$ and the undirected edges model a symmetrical influence between the nodes~\citep{koller2009probabilistic}.
 Given a set of \glspl{factor} $\{\Psi_1(\mathbf{D}_1),\dots\Psi_K(\mathbf{D}_K)\}$ that factorize over $\mathcal{H}$, a \gls{crf} defines $P(\mathbf{Y}\mid\mathbf{X})$ as~\citep{koller2009probabilistic}
 \begin{equation}
@@ -470,14 +542,14 @@ where, similar to the \gls{gibbs distribution} in \Cref{equ:gibbs-distribution},
 Additionally we have that $\mathbf{D}_k=\mathbf{X}\cup\mathbf{Y}$ and $\mathbf{D}_k\not\subseteq\mathbf{X}$.
 In other words, $\mathbf{D}_k$ needs to contain at least one $Y_n\in \mathbf{Y}$.
 
-In \todo{add ref and example} we show with an example that in the case of $\mathbf{D}_k\subseteq \mathbf{X}$, the term $\Psi_k(\mathbf{D}_k)$ ``cancels out'' during the calculation of $P(\mathbf{Y}\mid\mathbf{X})$.
+In \Cref{app:subsec-gd-example-calculation} we demonstrate that, in the case of $\mathbf{D}_k\subseteq \mathbf{X}$, the term $\Psi_k(\mathbf{D}_k)$ ``cancels out'' during the calculation of $P(\mathbf{Y}\mid\mathbf{X})$.
 
 This behavior for a $\mathbf{D}_k\subseteq\mathbf{X}$ is the result of the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above, namely how the normalizing constant $Z$ is defined~\citep{koller2009probabilistic}.
 In \Cref{equ:gibbs-distribution}, $Z$ normalizes $\tilde{P}(X_1,\dots,X_N)$ with a sum over all $X_1,\dots,X_N$ resulting in a \gls{joint distribution} $P(X_1,\dots,X_N)$.
 In \Cref{equ:crf-factor}, however, $Z(\mathbf{X})$ normalizes $\tilde{P}(\mathbf{Y},\mathbf{X})$ with a sum over all $\mathbf{Y}$.
 This way of normalizing results in the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$ (Compare with \Cref{equ:conditional-probability-random-variable}).
 
-\Cref{app:subsec-gd-example-calculation} contains the calculation of $P(FN_2{=}true,LN_1{=}true \mid EC_2{=}false)$ and \Cref{tab:example-crf-cpds} shows the \glspl{probability distribution} $P(FN_2,LN_1 \mid EC_2{=}false)$ and $P(FN_2,LN_1 \mid EC_2{=}true)$ for the \gls{crf} according to the \glspl{factor} in \Cref{tab:example-factors}.
+\Cref{app:subsec-gd-example-calculation} contains $P(FN_2{=}true \mid LN_1{=}true, EC_2{=}false)$ as an exemplary calculation according to the \glspl{factor} in \Cref{tab:example-factors}.
 
 \bigskip
 
