@@ -1,6 +1,6 @@
 \chapter{Author Extraction Example}\label{app:cha-author-extraction-example}
 \section{Factor Product}\label{app:sec-factor-product}
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 $\Psi(LN_1,FN_2,EC_2)$\par
 \smallskip
@@ -23,13 +23,15 @@ $\Psi(LN_1,FN_2,EC_2)$\par
 \end{table}
 \section{Gibbs Distribution}\label{app:sec-gibbs-distribution}
 \subsection{Exemplary Calculation}\label{app:subsec-gd-example-calculation}
+The following calculation is based on \gls{factor graph} (a) in \Cref{fig:example-factor-graphs} with $\mathcal{X}=\{LN_1,FN_2,EC_2\}$.
+It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
 \begin{subequations}
 \begin{equation*}
 \begin{split}
   \tilde{P}(LN_1{=}true,FN_2{=}true,EC_2{=}false)&=\prod_{k=1}^{K}\Psi_k\left(\mathbf{D}_k\right) \\
   &=(\Psi(LN_1{=}true,EC_2{=}false)\\
-  & \hspace{4em}\times\Psi(FN_2{=}true,EC_2{=}false))\\
-  & \hspace{4em}\times\Psi(LN_1{=}true,FN_2{=}true)\\
+  & \hspace{2em}\times\Psi(FN_2{=}true,EC_2{=}false))\\
+  & \hspace{2em}\times\Psi(LN_1{=}true,FN_2{=}true)\\
   &=(10\cdot10)\cdot10\\
   &=1000\\[1em]
 \end{split}
@@ -38,21 +40,22 @@ $\Psi(LN_1,FN_2,EC_2)$\par
 \begin{split}
   Z&=\sum_{EC_2,FN_2,LN_1}\tilde{P}\left(LN_1,FN_2,EC_2\right)\\
   &=\Psi(LN_1{=}false,FN_2{=}false,EC_2{=}false)\\
-  &\hspace{4em}+\Psi(LN_1{=}false,FN_2{=}false,EC_2{=}true)\\
-  &\hspace{4em}+\dots\\
-  &\hspace{4em}+\Psi(LN_1{=}true,FN_2{=}true,EC_2{=}true)\\
+  &\hspace{2em}+\Psi(LN_1{=}false,FN_2{=}false,EC_2{=}true)\\
+  &\hspace{2em}+\dots\\
+  &\hspace{2em}+\Psi(LN_1{=}true,FN_2{=}true,EC_2{=}true)\\
   &= 16250\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
 \begin{split}
   P(LN_1{=}true,FN_2{=}true,EC_2{=}false)&=\frac{1}{Z}\tilde{P}\left(LN_1{=}true,FN_2{=}true,EC_2{=}false\right) \\
-  &=\frac{1}{16250}\cdot1000\approx0.0615\\
+  &=\frac{1}{16250}\cdot1000\\
+  &\approx0.0615\\
 \end{split}
 \end{equation*}
 \end{subequations}
 \subsection{Full Distribution}\label{app:subsec-gd-full-distribution}
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 $P(LN_1,FN_2,EC_2)$\par
 \smallskip
@@ -73,35 +76,221 @@ $P(LN_1,FN_2,EC_2)$\par
 \caption{Values of the \Gls{gibbs distribution} $P(LN_1,FN_2,EC_2)$ using the two \glspl{factor} in \Cref{tab:example-factors}.}
 \label{tab:example-factor-product}
 \end{table}
-\section{Conditional Random Field}\label{app:sec-conditional-random-field}
+\section{Conditional Random Fields}\label{app:sec-conditional-random-fields}
 \subsection{Calculation of Factor With $\mathbf{D}\subseteq\mathbf{X}$}\label{app:subsec-gd-example-calculation}
 \itodo{Add}
 \subsection{Exemplary Calculation}\label{app:subsec-crf-example-calculation}
+The following calculation is based on \gls{factor graph} (a) in \Cref{fig:example-factor-graphs} with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,FN_2\}$.
+It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
 \begin{subequations}
 \begin{equation*}
 \begin{split}
   \tilde{P}(LN_1{=}true,FN_2{=}true,EC_2{=}false)&=\prod_{k=1}^{K}\Psi_k\left(\mathbf{D}_k\right) \\
   &=(\Psi(LN_1{=}true,EC_2{=}false)\\
-  & \hspace{4em}\times\Psi(FN_2{=}true,EC_2{=}false))\\
-  & \hspace{4em}\times\Psi(LN_1{=}true,FN_2{=}true)\\
+  &\hspace{2em}\times\Psi(FN_2{=}true,EC_2{=}false))\\
+  &\hspace{2em}\times\Psi(LN_1{=}true,FN_2{=}true)\\
   &=(10\cdot10)\cdot10\\
   &=1000\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
 \begin{split}
-  Z(LN_1{=}true,EC_2{=}false)&=\sum_{FN_2,LN_1}\tilde{P}\left(LN_1,FN_2,EC_2{=}false\right)\\
-  &\hspace{4em}+\Psi(LN_1{=}true,FN_2{=}false,EC_2{=}false)\\
-  &\hspace{4em}+\Psi(LN_1{=}true,FN_2{=}true,EC_2{=}false)\\
-  &=100+1000\\
-  &=1100\\[1em]
+  Z(EC_2{=}false)&=\sum_{FN_2}\tilde{P}\left(LN_1,FN_2,EC_2{=}false\right)\\
+  &=\tilde{P}(LN_1{=}false,FN_2{=}false,EC_2{=}false)\\
+  &\hspace{2em}+\tilde{P}(LN_1{=}false,FN_2{=}true,EC_2{=}false)\\
+  &\hspace{2em}+\tilde{P}(LN_1{=}true,FN_2{=}false,EC_2{=}false)\\
+  &\hspace{2em}+\tilde{P}(LN_1{=}true,FN_2{=}true,EC_2{=}false)\\
+  &=3000+100+100+1000\\
+  &=4200\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
 \begin{split}
-  P(FN_2{=}true\mid LN_1{=}true,EC_2{=}false)&=\frac{1}{Z(LN_1{=}true,EC_2{=}false)}\\
-  &\hspace{2em}\cdot\tilde{P}\left(LN_1{=}true,FN_2{=}true,EC_2{=}false\right)\\
-  &=\frac{1}{1100}\cdot1000\approx0.9091\\
+  &P( LN_1{=}true,FN_2{=}true\mid EC_2{=}false)\\
+  &\hspace{2em}=\frac{1}{Z(EC_2{=}false)}\cdot\tilde{P}\left(LN_1{=}true,FN_2{=}true,EC_2{=}false\right)\\
+  &\hspace{2em}=\frac{1}{4200}\cdot1000\\
+  &\hspace{2em}\approx0.2381\\
 \end{split}
 \end{equation*}
 \end{subequations}
+\section{Linear-Chain CRFs}\label{app:sec-linear-chain-crfs}
+\subsection{Additional Factors}\label{app:subsec-lccrf-additional-factors}
+
+\begin{table}[H]
+\begin{minipage}{0.5\linewidth}
+\centering
+$\Psi(\texttt{start},LN_1)$\par
+\smallskip
+\begin{tabular}{c c c}
+ \toprule
+ \texttt{start} & $LN_1$ & Value \\
+ \midrule
+ $false$ & $false$ & $1$ \\
+ $false$ & $true$ & $1$ \\
+ $true$ & $false$ & $30$ \\
+ $true$ & $true$ & $10$ \\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.5\linewidth}
+\centering
+$\Psi(LN_1,EC_1)$\par
+\smallskip
+\begin{tabular}{c c c}
+ \toprule
+ $LN_1$ & $EC_1$ & Value \\
+ \midrule
+ $false$ & $false$ & $30$ \\
+ $false$ & $true$ & $1$ \\
+ $true$ & $false$ & $1$ \\
+ $true$ & $true$ & $10$ \\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\caption{Two additional factors for the author extraction example in \Cref{fig:example-linear-chain-crf}}
+\label{tab:example-linear-chain-crf-factors}
+\end{table}
+
+\subsection{Additional Energy Functions}\label{app:subsec-lccrf-additional-energy-functions}
+\begin{table}[H]
+\begin{minipage}{0.5\linewidth}
+\centering
+$\Psi(\texttt{start},LN_1)$\par
+\smallskip
+\begin{tabular}{c c c}
+ \toprule
+ \texttt{start} & $LN_1$ & Value \\
+ \midrule
+ $false$ & $false$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $false$ & $true$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $true$ & $false$ & $-\ln(30)\approx-3.4012$ \\
+ $true$ & $true$ & $-\ln(10)\approx-2.3026$ \\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}{0.5\linewidth}
+\centering
+$\Psi(LN_1,EC_1)$\par
+\smallskip
+\begin{tabular}{c c c}
+ \toprule
+ $LN_1$ & $EC_1$ & Value \\
+ \midrule
+ $false$ & $false$ & $-\ln(30)\approx-3.4012$ \\
+ $false$ & $true$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $true$ & $false$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $true$ & $true$ & $-\ln(10)\approx-2.3026$ \\
+ \bottomrule
+\end{tabular}
+\end{minipage}
+\caption{\Glspl{energy function} for the additional \glspl{factor} in \Cref{tab:example-linear-chain-crf-factors}.}
+\label{tab:example-linear-chain-crf-energy-functions}
+\end{table}
+
+\subsection{Feature Functions}\label{app:subsec-lccrf-feature-functions}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c l c}
+ \toprule
+ Index & \multicolumn{1}{c}{Feature function $f_k$} & Weight $\theta_k$ \\
+ \midrule
+ $k=1$ & $\identityfun\left\{LN_1{=}false,\texttt{start}{=}true\right\}$ & $-\ln(30)\approx-3.4012$ \\
+ $k=2$ & $\identityfun\left\{LN_1{=}true,\ \ \texttt{start}{=}true\right\}$ & $-\ln(10)\approx-2.3026$ \\
+ $k=3$ & $\identityfun\left\{FN_2{=}false,\ \ \ \ \hspace{-0.1mm}LN_1{=}false\right\}$ & $-\ln(30)\approx-3.4012$ \\
+ $k=4$ & $\identityfun\left\{FN_2{=}true,\ \ \ \ \ \ \hspace{-0.1mm}LN_1{=}true\right\}$ & $-\ln(10)\approx-2.3026$\\
+ \bottomrule
+\end{tabular}
+\caption{\Glspl{feature function} $\tilde{f}_k(Y_n,Y_{n-1})$ representing $\Psi(\texttt{start},LN_1)$ and $\Psi(LN_1,FN_2)$. Note the inverted argument order of $\tilde{f}_k$.}
+\label{tab:example-linear-chain-crf-feature-functions-f-k}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c l c}
+ \toprule
+ Index & \multicolumn{1}{c}{Feature function $f_l$ } & Weight $\theta_l$ \\
+ \midrule
+ $l=1$ & $\identityfun\left\{LN_1{=}false,\hspace{0.4mm}EC_1{=}false\right\}$ & $-\ln(30)\approx-3.4012$ \\
+ $l=2$ & $\identityfun\left\{LN_1{=}true,\ \ \hspace{0.4mm}EC_1{=}true\right\}$ & $-\ln(10)\approx-2.3026$ \\
+ $l=3$ & $\identityfun\left\{FN_2{=}false,EC_2{=}false\right\}$ & $-\ln(10)\approx-2.3026$ \\
+ $l=4$ & $\identityfun\left\{FN_2{=}false,EC_2{=}true\right\}$ & $-\ln(20)\approx-2.9957$ \\
+ $l=5$ & $\identityfun\left\{FN_2{=}true,\ \ EC_2{=}false\right\}$ & $-\ln(10)\approx-2.3026$ \\
+ \bottomrule
+\end{tabular}
+\caption{\Glspl{feature function} $\tilde{f}_l(Y_n,\tilde{\mathbf{X}}_n)$ representing $\Psi(LN_1,EC_1)$ and $\Psi(FN_2,EC_2)$. Note the inverted argument order of $\tilde{f}_l$.}
+\label{tab:example-linear-chain-crf-feature-functions-f-l}
+\end{table}
+
+\subsection{Exemplary Calculation}\label{app:subsec-lccrf-example-calculation}
+The following calculation is based on the \gls{linear-chain crf} from \Cref{fig:example-linear-chain-crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,FN_2\}$.
+It uses the \glspl{feature function} defined in \Cref{app:subsec-lccrf-feature-functions}.
+
+\begin{subequations}
+\begin{equation*}
+\begin{split}
+  &\tilde{P}(\texttt{start}{=}true,LN_1{=}true,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{2em} = \exp\left\{ -\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(\vphantom{\tilde{X}}Y_n,Y_{n-1}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n,\mathbf{\tilde{X}}_n\right)\right) \right\} \\
+  &\hspace{2em} = \exp\Big\{-\Big(\theta_{k=1}f_{k=1}(LN_1{=}true,\texttt{start}{=}true)\\
+  &\hspace{6em}\vphantom{\Big\{}+\cdots+\theta_{k=4}f_{k=4}(LN_1{=}true,\texttt{start}{=}true)\\
+  &\hspace{4em}\vphantom{\Big\{}+\theta_{l=1}f_{l=1}(LN_1{=}true,EC_1{=}true)\\
+  &\hspace{6em}\vphantom{\Big\{}+\cdots+\theta_{l=5}f_{l=5}(LN_1{=}true,EC_1{=}true)\\
+  &\hspace{4em}\vphantom{\Big\{}+\theta_{k=2}f_{k=2}(FN_2,LN_1{=}true)\\
+  &\hspace{6em}\vphantom{\Big\{}+\cdots+\theta_{k=4}f_{k=4}(FN_2{=}true,LN_1{=}true) \\
+  &\hspace{4em}\vphantom{\Big\{}+\theta_{l=2}f_{l=2}(FN_2{=}true,EC_2{=}false)\\
+  &\hspace{6em}\vphantom{\Big\{}+\cdots+\theta_{l=5}f_{l=5}(FN_2{=}true,EC_2{=}false)\Big)\Big\}\\
+  &\hspace{2em} = \exp\Big\{-\Big(-\ln(30)\cdot0+-\ln(10)\cdot1+-\ln(30)\cdot0+-\ln(10)\cdot0\\
+  &\hspace{4em}\vphantom{\Big\{}+-\ln(30)\cdot0+-\ln(10)\cdot1+-\ln(10)\cdot0+-\ln(20)\cdot0+-\ln(10)\cdot0\\
+  &\hspace{4em}\vphantom{\Big\{}+-\ln(30)\cdot0+-\ln(10)\cdot0+-\ln(30)\cdot0+-\ln(10)\cdot1\\
+  &\hspace{4em}\vphantom{\Big\{}+-\ln(30)\cdot0+-\ln(10)\cdot0-\ln(10)\cdot0+-\ln(20)\cdot0+-\ln(10)\cdot1\Big)\Big\}\\
+  &\hspace{2em}=\exp\Big\{-\Big(-\ln(10)+-\ln(10)+-\ln(10)+-\ln(10)\Big)\Big\}\\
+  &\hspace{2em}=\exp\Big\{4\cdot\ln(10)\Big\}\\
+  &\hspace{2em}\vphantom{\Big\{}=10000\\[1em]
+\end{split}
+\end{equation*}
+\begin{equation*}
+\begin{split}
+  &Z(EC_1{=}true,EC_2{=}false)\\
+  &\hspace{2em}=\sum_{FN_2}\tilde{P}\left(start{=}true,LN_1{=}true,FN_2,EC_1{=}true,EC_2{=}false\right)\\
+  &\hspace{2em}=\tilde{P}(start{=}false,LN_1{=}false,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(start{=}false,LN_1{=}false,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(start{=}false,LN_1{=}true,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(start{=}false,LN_1{=}true,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(start{=}true,LN_1{=}false,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(start{=}true,LN_1{=}false,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(start{=}true,LN_1{=}true,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(start{=}true,LN_1{=}true,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  %start  LN_1   FN_2  Result
+  %  F     F      F    1    1    30    10   300
+  %  F     F      T    1    1    1     10   10
+  %  F     T      F    1    10   1     10   100
+  %  F     T      T    1    10   10    10   1000
+  %  T     F      F    30   1    30    10   9000
+  %  T     F      T    30   1    10    10   3000
+  %  T     T      F    10   10   1     10   1000
+  %  T     T      T    10   10   10    10   10000
+  &\hspace{2em}=300+10+100+1000+9000+3000+1000+10000\\
+  &\hspace{2em}=24410\\[1em]
+\end{split}
+\end{equation*}
+\begin{equation*}
+\begin{split}
+  &P(\texttt{start}{=}true,LN_1{=}true,FN_2{=}true\mid EC_1{=}true,EC_2{=}false)\\
+  &\hspace{2em}=\frac{1}{Z(EC_1{=}true,EC_2{=}false)}\\
+  &\hspace{4em}\cdot\tilde{P}\left(\texttt{start}{=}true,LN_1{=}true,FN_2{=}true,EC_1{=}true,EC_2{=}false\right)\\
+  &\hspace{2em}=\frac{1}{24410}\cdot10000\\
+  &\hspace{2em}\approx0.41\\
+\end{split}
+\end{equation*}
+\end{subequations}
+
+\section{Log-Likelihood Function}\label{app:sec-log-likelihood-function}
+\subsection{Exemplary Calculation}\label{app:subsec-llg-example-calculation}
+The following calculation is based on \gls{factor graph} in \Cref{fig:example-linear-chain-crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,FN_2\}$.
+It uses the \glspl{feature function} and corresponding weights from \Cref{app:subsec-lccrf-feature-functions}.
+
+\itodo{add}
+

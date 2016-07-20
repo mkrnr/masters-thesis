@@ -2,7 +2,7 @@
 
 In this chapter we give an introduction to \acrfull{crf} framework.
 For this we provide an overview of relevant concepts in probability theory, graph theory, and graphical models.
-Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models for the task of entity recognition.
+Following this we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models.
 
 In addition to relevant definitions we use a simplified example of the author extraction problem that we will discuss in \Cref{cha:author-extraction}.
 This example is based on the set of four reference strings given in \Cref{fig:example-reference-strings}.
@@ -123,7 +123,7 @@ This gives us two sets of \glspl{random variable}:
     \mathbf{FN}=& \{FN_1, \dots, FN_N\}
   \end{split}
 \end{equation*}
-For example, the full assignment to $\mathbf{EC}$ derived from the second reference string in \Cref{fig:example-reference-strings} is:
+For example, the \gls{full assignment} to $\mathbf{EC}$ derived from the second reference string in \Cref{fig:example-reference-strings} is:
 \begin{equation*}
   \mathbf{EC}=\{true, false, false, false, false, false, false, true, false, false\}
 \end{equation*}
@@ -194,6 +194,7 @@ In the following, directed \glspl{graph} are denoted with $\mathcal{G}$ and undi
 Given a \gls{graph} $\mathcal{K} = (\mathcal{V},\mathcal{E})$ and $\mathcal{S}\in\mathcal{V}$, an induced \gls{subgraph} $\mathcal{K}[\mathcal{S}]$ is the \gls{graph} consisting of $(\mathcal{S},\mathcal{E'})$ where $\mathcal{E'}$ is the set of all \glspl{edge} between \glspl{node} in $\mathcal{S}$.
 In a complete \gls{subgraph}, every two \glspl{node} in $\mathcal{S}$ are connected by an \gls{edge}.
 \itodo{add definition of clique?}
+\itodo{add (reference to) example graphs}
 
 \subsection{Probabilistic Graphical Models}\label{subsec:graphical-models}
 When encoding practical problems with \glspl{probability distribution}, a key insight is that ``variables tend to interact only with a very few others''~\citep{koller2009probabilistic}.
@@ -361,7 +362,7 @@ A \gls{factor graph} $\mathcal{F}$ contains two types of \glspl{node}: Oval \gls
 Each factor node is associated with exactly one \gls{factor} $\Psi$ and each variable node is associated with exactly one \gls{random variable}.
 The graph only contains undirected edges between factor nodes and variable nodes and the scope of $\Psi$ is the set of variables that are adjacent to its corresponding factor node~\citep{koller2009probabilistic}.
 
-To demonstrate the necessity of such a notation we consider the two different \glspl{factor graph} and their underlying \gls{markov network} in \Cref{fig:example-factor-graph}:
+To demonstrate the necessity of such a notation we consider two different \glspl{factor graph} in \Cref{fig:example-factor-graphs} and their underlying \gls{markov network}:
 \Gls{factor graph} (a) contains the three factors from \Cref{tab:example-factors}.
 By taking the \gls{factor product} of these three \glspl{factor} we construct \gls{factor graph} (b).
 When analyzing the pairwise interactions between the nodes via the given \glspl{factor}, we can see that both (a) and (b) are based on the \gls{markov network} shown in  \Cref{fig:example-networks}.
@@ -372,12 +373,12 @@ When analyzing the pairwise interactions between the nodes via the given \glspl{
   \input{figures/example-factor-graphs.tex}
 %}
 \caption[Two factor graphs resulting in the same Markov network]{%
-  Two \glspl{factor graph} resulting in the \gls{markov network} in \Cref{fig:example-networks}:
+  Two \glspl{factor graph}, both resulting in the \gls{markov network} in \Cref{fig:example-networks}:
   (a) \Gls{factor graph} with three \glspl{factor}.
   (b) \Gls{factor graph} with one \gls{factor}.
   (cf. \citep{koller2009probabilistic})
 }
-\label{fig:example-factor-graph}
+\label{fig:example-factor-graphs}
 \end{figure}
 
 \bigskip
@@ -458,24 +459,23 @@ Using the fact that in practice many values of an \gls{energy function} $\epsilo
 This is done with a number of \glspl{feature function} $f(\mathbf{D})$ and the same number of weights $\theta$.
 
 For example, we can represent $\epsilon(LN_1,FN_2)$ from \Cref{tab:example-energy-functions} as the sum over the two indicator functions
-\itodo{fix numbers}
 \begin{equation*}
   \begin{split}
-    f_1(FN_2,LN_1)&=\mathbf{\mathbbm{1}}\left\{FN_2{=}false,LN_1{=}false\right\}\\
-    f_2(FN_2,LN_1)&=\mathbf{\mathbbm{1}}\left\{FN_2{=}true,LN_1{=}true\right\}
+    f_1(FN_2,LN_1)&=\identityfun\left\{FN_2{=}false,LN_1{=}false\right\}\\
+    f_2(FN_2,LN_1)&=\identityfun\left\{FN_2{=}true,LN_1{=}true\right\}
   \end{split}
 \end{equation*}
-which are multiplied with the weights $\theta_1{=}\theta_2{=}-\ln(20)$:
+which are multiplied with the weights $\theta_1{=}-\ln(30)$ and $\theta_2{=}-\ln(10)$:
 \begin{equation*}
-  \epsilon\left(FN_2,LN_1\right)=\left(-\ln(20)\cdot f_1(FN_2,LN_1)\right)+\left(-\ln(20)\cdot f_2(FN_2,LN_1)\right)
+  \epsilon\left(FN_2,LN_1\right)=\left(-\ln(30)\cdot f_1(FN_2,LN_1)\right)+\left(-\ln(10)\cdot f_2(FN_2,LN_1)\right)
 \end{equation*}
 Given the assignments $FN_1{=}true$ and $LN_1{=}true$ we have:
 \begin{equation*}
   \begin{split}
-  \epsilon\left(FN_2{=}true,LN_1{=}true\right)&=\left(-\ln(20)\cdot f_1(FN_2{=}true,LN_1{=}true)\right)\\
-  &\hspace{4em}+\left(-\ln(20)\cdot f_2(FN_2{=}true,LN_1{=}true)\right)\\
-  &=\left(-\ln(20)\cdot 0\right)+\left(-\ln(20)\cdot 1\right)\\
-  &=-\ln(20)
+  \epsilon\left(FN_2{=}true,LN_1{=}true\right)&=\left(-\ln(30)\cdot f_1(FN_2{=}true,LN_1{=}true)\right)\\
+  &\hspace{4em}+\left(-\ln(10)\cdot f_2(FN_2{=}true,LN_1{=}true)\right)\\
+  &=\left(-\ln(30)\cdot 0\right)+\left(-\ln(10)\cdot 1\right)\\
+  &=-\ln(10)
   \end{split}
 \end{equation*}
 
@@ -495,23 +495,21 @@ This \gls{probability distribution} is called a \gls{log-linear model}.
 \bigskip
 
 In addition to \glspl{bayesian network} and \glspl{markov network} we can further distinguish between \glspl{generative model} and \glspl{discriminative model}.
-Assume a set of input variables, also called \glspl{observed variable}, $\mathbf{X}$ and a set of output variables, also called \glspl{target variable} $\mathbf{Y}$ with $\mathbf{X}\cap\mathbf{Y}=\emptyset$.
-A \gls{generative model} then encodes the \gls{joint distribution} $P(\mathbf{Y},\mathbf{X})$ whereas a \gls{discriminative model} encodes the \gls{conditional probability distribution} $P(\mathbf{Y}|\mathbf{X})$~\citep{koller2009probabilistic}.
+Given a set of \glspl{observed variable} $\mathbf{X}$ and a set of \glspl{target variable} $\mathbf{Y}$ with $\mathbf{X}\cap\mathbf{Y}=\emptyset$, a \gls{generative model} encodes the \gls{joint distribution} $P(\mathbf{Y},\mathbf{X})$ whereas a \gls{discriminative model} encodes the \gls{conditional probability distribution} $P(\mathbf{Y}|\mathbf{X})$~\citep{koller2009probabilistic}.
 More precisely, for a \gls{generative model} we have $P(\mathbf{Y},\mathbf{X})=P(\mathbf{Y})P(\mathbf{X}|\mathbf{Y})$.
 We thereby consider how the output of the model is generated as a function of the input~\citep{sutton2010introduction}.
-
 This leads to the main difference between the two models, namely that for a \gls{discriminative model} we do not need to model $P(\mathbf{X})$.
 \citet{sutton2010introduction} argue that indeed the modeling of $P(\mathbf{X})$ in \glspl{generative model} leads to a number of difficulties and limitations.
 According to them, $P(\mathbf{X})$ often contains a number of highly dependent features which restrict the modeling.
 For example, in \gls{nlp} tasks we often model word-identities as features.
 Having a limited training set, we often have words that were unseen during training.
 In order to still give a reasonable classification for unseen words it would be beneficial to also include other features in addition to just the word-identities~\citep{sutton2010introduction}.
-Such features could be the capitalization, length, and prefixes of a word or even its neighboring words~\citep{sutton2010introduction}.
-Yet, such features are highly dependent to each other and their dependencies would need to be represented in a \gls{generative model} which is often intractable in practice~\citep{sutton2010introduction}.
+Such features could be, for example, wether a word is capitalized or if it appears in a name dictionary.
+Yet, such features are highly dependent on each other and their dependencies would need to be represented in a \gls{generative model} which is often intractable in practice~\citep{sutton2010introduction}.
 \Glspl{discriminative model} on the other hand can leverage such a combination of features despite their high dependencies since $P(\mathbf{X})$ is not modeled~\citep{koller2009probabilistic}.
 
-Since in \glspl{generative model} $P(\mathbf{Y})$ topologically precedes $P(\mathbf{X}|\mathbf{Y})$, \citet{sutton2010introduction} argue that they are more naturally modeled by the directed \gls{bayesian network}.
-Consequentely, since there is no such order in \glspl{discriminative model}, it is argued that they are more naturally modeled by a \gls{markov network}~\citep{sutton2010introduction}.
+Since, in \glspl{generative model}, $P(\mathbf{Y})$ is a \gls{prior distribution} an $P(\mathbf{X}|\mathbf{Y})$ a \gls{cpd}, \citet{sutton2010introduction} argue that they are more naturally modeled by the directed \gls{bayesian network}.
+Consequentely, since there is no \gls{prior distribution} in \glspl{discriminative model}, it is argued that they are more naturally modeled by a \gls{markov network}~\citep{sutton2010introduction}.
 
 \bigskip
 
@@ -528,7 +526,7 @@ In order to overcome this bias, \glspl{crf} do not have per-state models but ins
 \bigskip
 
 \Glspl{crf} encode the \gls{conditional probability distribution} $P(\mathbf{Y}|\mathbf{X})$ where $\mathbf{Y}$ is a set of \glspl{target variable} and $\mathbf{X}$ is a set of \glspl{observed variable} with $\mathbf{Y}\cap\mathbf{X}=\emptyset$.
-A \gls{crf} is constructed using a \gls{markov network} $\mathcal{H}$ where the nodes correspond to $\mathbf{Y}\cup\mathbf{X}$ and the undirected edges model a symmetrical influence between the nodes~\citep{koller2009probabilistic}.
+A \gls{crf} is constructed using a \gls{markov network} $\mathcal{H}$ where the nodes correspond to $\mathbf{Y}\cup\mathbf{X}$ and the undirected edges model a symmetrical influence between the nodes (see \Cref{subsec:graphical-models})~\citep{koller2009probabilistic}.
 Given a set of \glspl{factor} $\{\Psi_1(\mathbf{D}_1),\dots\Psi_K(\mathbf{D}_K)\}$ that factorize over $\mathcal{H}$, a \gls{crf} defines $P(\mathbf{Y}\mid\mathbf{X})$ as~\citep{koller2009probabilistic}
 \begin{equation}
   \label{equ:crf-factor}
@@ -546,10 +544,10 @@ In \Cref{app:subsec-gd-example-calculation} we demonstrate that, in the case of 
 
 This behavior for a $\mathbf{D}_k\subseteq\mathbf{X}$ is the result of the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above, namely how the normalizing constant $Z$ is defined~\citep{koller2009probabilistic}.
 In \Cref{equ:gibbs-distribution}, $Z$ normalizes $\tilde{P}(X_1,\dots,X_N)$ with a sum over all $X_1,\dots,X_N$ resulting in a \gls{joint distribution} $P(X_1,\dots,X_N)$.
-In \Cref{equ:crf-factor}, however, $Z(\mathbf{X})$ normalizes $\tilde{P}(\mathbf{Y},\mathbf{X})$ with a sum over all $\mathbf{Y}$.
+In \Cref{equ:crf-factor}, however, $Z(\mathbf{X})$ normalizes $\tilde{P}(\mathbf{Y},\mathbf{X})$ with respect to the given $\mathbf{X}$.
 This way of normalizing results in the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$ (Compare with \Cref{equ:conditional-probability-random-variable}).
 
-\Cref{app:subsec-gd-example-calculation} contains $P(FN_2{=}true \mid LN_1{=}true, EC_2{=}false)$ as an exemplary calculation according to the \glspl{factor} in \Cref{tab:example-factors}.
+\Cref{app:subsec-crf-example-calculation} contains $P(LN_1{=}true,FN_2{=}true\mid EC_2{=}false)$ as an exemplary calculation according to the \glspl{factor} in \Cref{tab:example-factors}.
 
 \bigskip
 
@@ -587,15 +585,14 @@ We now can represent the two \glspl{factor} using the \glspl{feature function}
 \begin{equation}
   \label{equ:linear-chain-crf-feature-functions}
   \begin{split}
-    \tilde{f}_k\left(\vphantom{\tilde{X}}Y_n,Y_{n-1}\right)\equalsdef f_{j,i}\left(\vphantom{\tilde{X}}Y_n,Y_{n-1}\right) & = \mathbf{\mathbbm{1}}\left\{\vphantom{\tilde{X}}Y_n=j,Y_{n-1}=i\right\}\\
-    \tilde{f}_l\left(Y_n,\mathbf{\tilde{X}}_n\right)\equalsdef f_{j,\bm{i}}\left( Y_n,\mathbf{\tilde{X}}_n\right) & = \mathbf{\mathbbm{1}}\left\{Y_n=j,\mathbf{\tilde{X}}_n=\bm{i}\right\}
+    \tilde{f}_k\left(\vphantom{\tilde{X}}Y_n,Y_{n-1}\right)\equalsdef f_{j,i}\left(\vphantom{\tilde{X}}Y_n,Y_{n-1}\right) & = \identityfun\left\{\vphantom{\tilde{X}}Y_n=j,Y_{n-1}=i\right\}\\
+    \tilde{f}_l\left(Y_n,\mathbf{\tilde{X}}_n\right)\equalsdef f_{j,\bm{i}}\left( Y_n,\mathbf{\tilde{X}}_n\right) & = \identityfun\left\{Y_n=j,\mathbf{\tilde{X}}_n=\bm{i}\right\}
   \end{split}
 \end{equation}
-\todo{continue renaming}
-where $i$ and $j$ are predefined values and $\bm{i}$ is a set of predefined values with $|\bm{i}|=|\mathbf{\tilde{X}}_n|$. $\mathbf{\mathbbm{1}}$ is an indicator function that returns $1$ if all listed assignments match the predefined values.
+where $i$ and $j$ are predefined values and $\bm{i}$ is a set of predefined values with $|\bm{i}|=|\mathbf{\tilde{X}}_n|$. $\identityfun$ is an indicator function that returns $1$ if all listed assignments match the predefined values.
 The $\tilde{f}$ notation with its indices will later allow us to iterate over the predefined \glspl{feature function} in a more compact way.
 
-In other words, $\tilde{f}_k(Y_n,Y_{n-1})$ models a specific dependency between the neighboring \glspl{target variable} $Y_n$ and $Y_{n-1}$. $\tilde{f}_l(Y_n,\mathbf{\tilde{X}}_n)$ models a specific dependencies between the \gls{target variable} $Y_n$ and a set of \glspl{observed variable} $\mathbf{\tilde{X}}_n$ in context of $Y_n$ where again $\mathbf{\tilde{X}}_n\subseteq\mathbf{X}$.
+In other words, $\tilde{f}_k(Y_n,Y_{n-1})$ models a specific dependency between the neighboring \glspl{target variable} $Y_n$ and $Y_{n-1}$. $\tilde{f}_l(Y_n,\mathbf{\tilde{X}}_n)$ models a specific dependencies between the \gls{target variable} $Y_n$ and a set of \glspl{observed variable} $\mathbf{\tilde{X}}_n$ in the context of $Y_n$.
 
 By inserting the two types of \glspl{feature function} from \Cref{equ:linear-chain-crf-feature-functions} into \Cref{equ:crf-log-linear} we define \glspl{linear-chain crf} as:
 \begin{equation}
@@ -611,41 +608,64 @@ Additionally we have a set of parameters $\bm{\theta}$ which are multiplied with
 $\bm{\theta}$ thereby contains $K+L$ parameters.
 In order to simplify the notation, we define $Y_0$ as a special start state, denoted \texttt{start}~\citep{lafferty2001conditional}.
 
-An example for a  \gls{linear-chain crf} can be derived from our author example\dots\todo{example}
+An example for a  \gls{linear-chain crf} derived from our author example is shown in \Cref{fig:example-linear-chain-crf}.
+The two added \glspl{factor} $\Psi(\texttt{start},LN_1)$ and $\Psi(LN_1,EC_1)$ are shown in \Cref{app:subsec-lccrf-additional-factors} and their \Cref{app:subsec-lccrf-additional-energy-functions}.
+We do not show the values for the resulting \gls{factor product} due to it's size with $2^5{=}32$ entries.
+Note that in \Cref{fig:example-linear-chain-crf} we do not use $\Psi(LN_1,EC_2)$ in this example.
 
-Returning to our argument that \glspl{feature function} allow are move compact encoding of \glspl{crf} than \glspl{factor}, compare \todo{example}.
+\begin{figure}[t]
+\centering
+\input{figures/example-linear-chain-crf.tex}
+\caption[]{%
+  \Gls{linear-chain crf} derived from the author extraction example.
+}
+\label{fig:example-linear-chain-crf}
+\end{figure}
+
+Returning to our argument that \glspl{feature function} allow are move compact encoding of \glspl{crf} than \glspl{factor}, we show, for the \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}, the \glspl{feature function} and corresponding weights in \Cref{app:subsec-lccrf-feature-functions}.
+This gives us $9$ pairs of \glspl{feature function} and weights instead of the $4\cdot 4=16$ entries in the \gls{factor} tables.
+In \Cref{app:subsec-lccrf-example-calculation} we show an exemplary calculation for the \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf} for
+\begin{equation*}
+P(\texttt{start}{=}true,LN_1{=}true,FN_2{=}true\mid EC_1{=}true,EC_2{=}false).
+\end{equation*}
+\bigskip
 
 \citet{sutton2010introduction} show that \glspl{hmm} are a restricted kind of \gls{linear-chain crf}, namely one where the set of assignments $\mathbf{\tilde{X}}_n$ in \Cref{equ:linear-chain-crf-log-linear} only includes one \gls{observed variable} $X_n$ which corresponds to the words identity at the current position $n$.
 
 \section{Inference of \glsentryshortpl{crf}}\label{sec:inference-crfs}
 
-After formalizing the encoding of \glspl{crf} we can now discuss their inference.
-
-%TODO rewrite:
 Given a \glspl{probability distribution} over a set of \glspl{random variable} $\mathcal{X}$, a goal can be to answer specific questions about this distribution.
-These are formulated as queries which are then run against the \glslink{probability distribution}{distributions}\todo{move to inferencing?}.
+These are formulated as queries which are then run against the \glspl{probability distribution}.
 One type of queries are called \glspl{probability query}.
-A \gls{probability query} consists of $\mathbf{E}\cup\mathbf{Y}=\mathcal{X}$ with $\mathbf{E}\cap\mathbf{Y}=\emptyset$~\citep{koller2009probabilistic}.
-The set of \glspl{random variable} $\mathbf{E}$ is called the \gls{evidence} and contains the set of observed variables.
-The second set $\mathbf{Y}$ contains the query variables.
-Based on this, the query is formulated as $P(\mathbf{Y}|\mathbf{E}=\mathbf{e})$~\citep{koller2009probabilistic}\todo{notation?}.
-We thereby want to compute the posterior \gls{probability distribution} over the assignments $\mathbf{y}$ to $\mathbf{Y}$, given the conditioning $\mathbf{E}=\mathbf{e}$~\citep{koller2009probabilistic}.
-\itodo{better explanation}
+A \gls{probability query} consists of $\mathcal{X}=\mathbf{X}\cup\mathbf{Y}$ with $\mathbf{X}\cap\mathbf{Y}=\emptyset$~\citep{koller2009probabilistic}.
+The set of \glspl{random variable} $\mathbf{X}$ is called the \gls{evidence} and contains the \glspl{observed variable}.
+The second set $\mathbf{Y}$ contains the \glspl{target variable}.
+Based on this, the query is formulated as $P(\mathbf{Y}|\mathbf{X}=\mathbf{x})$ where $\mathbf{x}$ is a \gls{full assignment} to $\mathbf{X}$~\citep{koller2009probabilistic}.
+We thereby want to compute the posterior \gls{probability distribution} over the assignments $\mathbf{y}$ to $\mathbf{Y}$, given the conditioning $\mathbf{X}=\mathbf{x}$~\citep{koller2009probabilistic}.
 
-
-
-Here we consider the inferencing task for \glspl{probability query} $P(\mathbf{Y}|\mathbf{X}=\mathbf{x})$ (see \Cref{subsec:probability-theory}).
+We now consider the inferencing task for \glspl{probability query} $P(\mathbf{Y}|\mathbf{X}=\mathbf{x})$.
 \citet{sutton2010introduction} distinguish two kinds of inference problems:
 \begin{enumerate}
-  \item Given a trained model and observed assignments $\mathbf{X}=\mathbf{x}$, predict the most likely assignment $\mathbf{Y}=\mathbf{\hat{y}}$:
+  \item Given a trained model and $\mathbf{X}=\mathbf{x}$, predict the most likely assignment $\mathbf{Y}=\mathbf{\hat{y}}$ using
+    \begin{subequations}
     \begin{equation}
-      \label{equ:inference-argmax}
+      \label{equ:inference-argmax-1}
       \argmax\limits_{\mathbf{\hat{y}}} P(\mathbf{Y}=\mathbf{\hat{y}}\mid\mathbf{X}=\mathbf{x})
     \end{equation}
-  \item During the parameter estimation during learning, compute the \gls{marginal distribution} for \dots\todo{add based on learning chapter}
+    which, in the case of \glspl{crf}, is equivalent to
+    \begin{equation}
+      \label{equ:inference-argmax-2}
+      \argmax\limits_{\mathbf{\hat{y}}} \tilde{P}(\mathbf{X}=\mathbf{x},\mathbf{Y}=\mathbf{\hat{y}}).
+    \end{equation}
+    \end{subequations}
+  \item Given a trained model and $\mathbf{X}=\mathbf{x}$, compute the normalizing constant
+    \begin{equation}
+      \label{equ:inference-normalizing-constant}
+      Z(\mathbf{X}=\mathbf{x})=\sum_{\mathbf{Y}}\tilde{P}(\mathbf{X}=\mathbf{x},\mathbf{Y}).
+    \end{equation}
 \end{enumerate}
 %TODO about that 1. and 2. are same fundamental operations (sutton2010, p. 27)
-By replacing the summation operator over $\mathbf{Y}$ in the marginalization in the second case by the $\argmax$ function, we effectively result in the prediction problem in the first case.
+By replacing the summation operator over $\mathbf{Y}$ in \Cref{equ:inference-normalizing-constant} with the $\argmax$ function, we effectively result in \Cref{equ:inference-argmax-2}.
 Thereby, the two kinds of inference problems can be seen as fundamentally the same operation~\citep{sutton2010introduction}.
 In the following we will focus on the inference of the normalizing constant $Z(\mathbf{X})$ in the context of \glspl{linear-chain crf}.
 An approach to the prediction task can be derived from it.
@@ -658,8 +678,10 @@ According to \Cref{equ:linear-chain-crf-factor} we have:
   \label{equ:linear-chain-crf-z}
   Z(\mathbf{X}) = \sum_{\mathbf{Y}}\left(\prod_{n=1}^{N}\left(\Psi_n\left(\vphantom{\tilde{x}}Y_n,Y_{n-1}\right)\times\Psi_n\left(Y_n,\mathbf{\tilde{X}}_n\right)\right)\right)
 \end{equation}
-Since we calculate the \gls{factor product} for every possible joint assignment $\mathbf{\tilde{y}}\in Val(\mathbf{Y})$, the computation of $Z(\mathbf{x})$ is exponential \dots\todo{rewrite}
-\itodo{show complexity with example?}
+Since we calculate the \gls{factor product} for every possible joint assignment $\mathbf{\tilde{y}}\in Val(\mathbf{Y})$, the computation of $Z(\mathbf{X})$ is exponential in $N$, the number of \glspl{random variable} in $\mathbf{Y}$:
+\begin{equation}
+  |Val(\mathbf{Y})|=2^{N}
+\end{equation}
 
 Yet, in the case of \glspl{linear-chain crf}, it is possible to reduce the complexity of calculating $Z(\mathbf{X})$ by using the forward-backward algorithm, sometimes referred to as dynamic programming or variable elimination~\citep{sutton2010introduction,koller2009probabilistic}.
 The key insight of the forward-backward algorithm is that during the na\"{\i}ve calculation of, in our case, $Z(\mathbf{X})$, partial calculations are repeated exponentially often.
@@ -670,14 +692,14 @@ The following demonstration is based on the calculation of $P(\mathbf{X})$ for \
 
 By applying the distributive law we can reorder \Cref{equ:linear-chain-crf-z} in the following way:
 \begin{equation}
-  \label{equ:linear-chain-crf-z-distributive}
   \begin{split}
-    Z(\mathbf{X}) = & \sum_{Y_N}\left(\sum_{Y_{N-1}}\left(\Psi_N\left(\vphantom{\tilde{X}}Y_N,Y_{N-1}\right)\times\Psi_N\left(Y_N,\mathbf{\tilde{X}}_N\right)\right)\left(\sum_{Y_{N-2}}\left(\Psi_{N-1}\left(\vphantom{\tilde{X}}Y_{N-1},Y_{N-2}\right)\right.\right.\right.\\
-    & \left.\left.\left.\times\Psi_{N-1}\left(Y_{N-1},\mathbf{\tilde{X}}_{N-1}\right)\right)\dots\vphantom{\sum_{Y_N}}\right)\right)
+    Z(\mathbf{X}) = & \sum_{Y_N}\left(\sum_{Y_{N-1}}\left(\Psi_N\left(\vphantom{\tilde{X}}Y_N,Y_{N-1}\right)\times\Psi_N\left(Y_N,\mathbf{\tilde{X}}_N\right)\right)\right.\\
+    & \times\left.\left(\sum_{Y_{N-2}}\left(\Psi_{N-1}\left(\vphantom{\tilde{X}}Y_{N-1},Y_{N-2}\right)\times\Psi_{N-1}\left(Y_{N-1},\mathbf{\tilde{X}}_{N-1}\right)\right)\dots\vphantom{\sum_{Y_N}}\right)\right)
   \end{split}
+  \label{equ:linear-chain-crf-z-distributive}
 \end{equation}
 As we can see, the inner sums are needed multiple times by the outer sums.
-In a na\"{\i}ve approach, these inner sums would be recalculated every time they appear in an outer sum.\todo{example?}
+In a na\"{\i}ve approach, these inner sums would be recalculated every time they appear in an outer sum.
 Instead, our goal is to calculate the inner sums once and store their result for later usage.
 
 \bigskip
@@ -693,7 +715,7 @@ In order to find a recursive definition of $Z(\mathbf{X})$ that allows the reuse
   \end{equation}
   where we have $Y_N=j$ and where the calculations including $j$ are isolated from the product over all other calculations.
 
-  Since in the two \glspl{factor} $\Psi_N$ we only use the assignments $Y_{N-1}$ from the sum over $Y_1,\dots,Y_{n-1}$, we can rewrite \Cref{equ:linear-chain-crf-z-j-1} as
+  Since in the two \glspl{factor} $\Psi_N$ we only use the assignments $Y_{N-1}$ from the sum over $Y_1,\dots,Y_{N-1}$, we can rewrite \Cref{equ:linear-chain-crf-z-j-1} as
   \begin{equation}
     \label{equ:linear-chain-crf-z-j-2}
     \begin{split}
@@ -704,7 +726,10 @@ In order to find a recursive definition of $Z(\mathbf{X})$ that allows the reuse
   and using the definition of $Z(\mathbf{X})$ in \Cref{equ:linear-chain-crf-z} we arrive at
   \begin{equation}
   \label{equ:linear-chain-crf-z-j-3}
-  Z\left(\mathbf{X},Y_N=j\right) = \sum_{Y_{N-1}}\left(\left(\Psi_N\left(\vphantom{\tilde{X}}j,Y_{N-1}\right)\times\Psi_N\left(j,\mathbf{\tilde{X}}_N\right)\right)\times Z\left(X_1,\dots,X_{N-1}\right)\right).
+    \begin{split}
+      Z\left(\mathbf{X},Y_N=j\right) =& \sum_{Y_{N-1}}\left(\left(\Psi_N\left(\vphantom{\tilde{X}}j,Y_{N-1}\right)\times\Psi_N\left(j,\mathbf{\tilde{X}}_N\right)\right)\right.\\
+      &\left.\times Z\left(\vphantom{\tilde{X}_N}X_1,\dots,X_{N-1}\right)\right).
+    \end{split}
   \end{equation}
 \end{subequations}
 Generalizing from this case we can now define
@@ -719,7 +744,7 @@ The base case for the recursion is defined as
   \label{equ:linear-chain-crf-z-alpha-base}
  \alpha_1(j) = \Psi_1\left(\vphantom{\tilde{X}}j,Y_0\right)\times\Psi_1\left(j,\mathbf{\tilde{X}}_1\right)
 \end{equation}
-where $Y_0$ again is the \texttt{start} state. Since the calculation is recursive in a way that $\alpha_n$ is calculated using the result of $\alpha_{n-1}$, we refer to $\alpha_n$ as a \textit{forward variable}~\citep{sutton2010introduction}. In order to calculate $Z(\mathbf{X})$ using $\alpha_n(j)$, we calculate the sum over all full assignments to $\mathbf{Y}$, resulting in
+where $Y_0$ again is the \texttt{start} state. Since the calculation is recursive in a way that $\alpha_n$ is calculated using the result of $\alpha_{n-1}$, we refer to $\alpha_n$ as a \textit{forward variable}~\citep{sutton2010introduction}. In order to calculate $Z(\mathbf{X})$ using $\alpha_n(j)$, we calculate the sum over all \glspl{full assignment} to $\mathbf{Y}$, resulting in
 \begin{equation}
   \label{equ:linear-chain-crf-z-alpha-sum}
   Z(\mathbf{X})=\sum_{\mathbf{Y}}\alpha_T\left(\mathbf{Y}\right)
@@ -727,7 +752,7 @@ where $Y_0$ again is the \texttt{start} state. Since the calculation is recursiv
 where $T=|\mathbf{Y}|$.
 \bigskip
 
-Even though the forward variable $\alpha_n$ is sufficient for calculating $Z(\mathbf{X})$, other calculations may also require a \textit{backward variable} $\beta_n$. It is defined analogously to $\alpha_n$ but the recursion expands in the opposite direction such that the calculation of $\beta_n$ recursively uses the result of $\beta_{n+1}$:
+Even though the forward variable $\alpha_n$ is sufficient for calculating $Z(\mathbf{X})$, other calculations may also require a \textit{backward variable} $\beta_n$~\citep{sutton2010introduction}. It is defined analogously to $\alpha_n$ but the recursion expands in the opposite direction such that the calculation of $\beta_n$ recursively uses the result of $\beta_{n+1}$:
 \begin{equation}
   \label{equ:linear-chain-crf-z-beta}
   \beta_n(i) = \sum_{j\in\mathbf{Y}}\left(\left(\Psi_{n+1}\left(\vphantom{\tilde{X}}j,i\right)\times\Psi_{n+1}\left(j,\mathbf{\tilde{X}}_{n+1}\right)\right)\times \beta_{n+1}(j)\right)
@@ -744,19 +769,12 @@ Again, the definitions of $\alpha_n$ and $\beta_n$ are derived from \citet{sutto
 
 \bigskip
 
-By using both $\alpha_n$ and $\beta_n$ it is possible to approach a calculation from both sides of a sequence\todo{example for $\tilde{P}(\mathbf{Y},\mathbf{X})$, sutton2010 p.34 top}
-
-%TODO few words on Viterbi algorithm (sutton2010)
-
-%TODO exact inference (variable elimination/conditioning?) vs approximate inference (message-passing/optimization problem/particle-based methods?)
-\bigskip
-
 When applying the forward-backward algorithm to \glspl{linear-chain crf}, we exploit their sequential structure.
 Yet, not all \gls{crf} models follow such a structure and thereby we can not always apply this algorithm.
 A number of alternative algorithms for both exact and approximate inference for such general graphs exist.
-\itodo{list algorithms and link them}
+An example for exact inference is based on \textit{clique trees} and for approximate inferencing an approach is called \textit{loopy belief propagation}~\citep{koller2009probabilistic}.
 Since our approach on author extraction uses \glspl{linear-chain crf}, we will not further discuss these alternatives.
-Instead, we refer to \citet{koller2009probabilistic} for further readings on this topic.
+We refer to \citet{koller2009probabilistic} for further readings on this topic.
 
 \bigskip
 
@@ -787,12 +805,12 @@ There exists a number of metrics for deciding which $\mathcal{\tilde{M}}$ ``best
 
 A popular metric that is used for \glspl{crf} is \gls{maximum likelihood}.
 Before discussing it, it is important to clarify which part of $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$ we aim to learn.
-%TODO add forward-backward algorithm to gls
 Since we will later perform the parameter estimation by a repeated inferencing on $\mathcal{\tilde{M}}$, efficient inferencing is crucial for the runtime performance of the learning algorithm.
 As discussed in \Cref{sec:inference-crfs}, the forward-backward algorithm for efficient inferencing can only be applied if $\mathcal{\tilde{K}}$ follows a certain sequential structure.
 \Glspl{linear-chain crf} provide such a sequential structure for $\mathcal{\tilde{K}}$ (see \Cref{equ:linear-chain-crf-log-linear}).
 In the following we assume $\mathcal{\tilde{K}}$ to be modeled to form a \gls{linear-chain crf} and given as an input to the learner.
 We will thereby focus on the learning of the set of parameters $\bm{\tilde{\theta}}$ which, in the case of \glspl{linear-chain crf}, are the $\theta_k$ and $\theta_l$ for the two \glspl{feature function} in \Cref{equ:linear-chain-crf-log-linear}.
+A function that evaluates the performance of a model $\mathcal{\tilde{M}}$ with $\bm{\tilde{\theta}}$ is called an \gls{objective function}~\citep{koller2009probabilistic}.
 
 \bigskip
 Given a data set $\mathcal{D}$ we define the likelihood function $L(\bm{\tilde{\theta}}:\mathcal{D})$ as
@@ -801,7 +819,7 @@ Given a data set $\mathcal{D}$ we define the likelihood function $L(\bm{\tilde{\
   \mathcal{L}\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=\prod_{m=1}^M P\left(\mathbf{Y}^{(m)}|\mathbf{X}^{(m)}\right)
 \end{equation}
 where $P$ is derived from the graphical model $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$.
-A common approach is to calculate the \textit{log-likelihood} $\ell$ instead of the likelihood itself.
+A common approach is to calculate the \textit{log-likelihood} instead of the likelihood itself~\citep{koller2009probabilistic,sutton2010introduction,mann2010generalized}.
 This is possible since the log-likelihood is monotonically related to the likelihood and thereby the maximization problems are equivalent~\citep{koller2009probabilistic}.
 An computational advantage of using the log-likelihood is that it is calculated over sums instead of products~\citep{koller2009probabilistic}.
 
@@ -812,7 +830,7 @@ The log-likelihood function is defined as~\citep{sutton2010introduction}:
 \end{equation}
 
 In order to illustrate the calculation, we now look at a more concrete example of a log-likelihood function.
-Using the definition of log-linear \glspl{linear-chain crf} from \Cref{equ:linear-chain-crf-log-linear}, we now substitute $P(\mathbf{Y}^{(m)}|\mathbf{X}^{(m)})$ in \Cref{equ:log-likelihood} which gives us:
+Using the definition of \glspl{linear-chain crf} from \Cref{equ:linear-chain-crf-log-linear}, we now substitute $P(\mathbf{Y}^{(m)}|\mathbf{X}^{(m)})$ in \Cref{equ:log-likelihood} which gives us:
 \begin{subequations}
 \begin{equation}
   \label{equ:log-likelihood-linear-chain-crf-log-linear-1}
@@ -832,23 +850,26 @@ We can simplify this by resolving the $\log$ statement which results in:
 \end{subequations}
 Using the forward-backward algorithm we can efficiently calculate the normalization constant $Z(\mathbf{X}^{(m)})$ as shown in \Cref{sec:inference-crfs}.
 
+In \Cref{app:subsec-llg-example-calculation} we demonstrate the calculation of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$ for the \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}.
+For this we have $\mathcal{D}=\{\mathpzc{d}^{(1)}\}$ with $\mathpzc{d}^{(1)}$ consisting of the four reference strings in \Cref{fig:example-reference-strings} and $\bm{\tilde{\theta}}$ given in \Cref{tab:example-linear-chain-crf-feature-functions-f-k} and \Cref{tab:example-linear-chain-crf-feature-functions-f-l}.
+
+
 \bigskip
 
 \citet{sutton2010introduction} discuss that a model $\tilde{\mathcal{M}}$ can overfit the given data set $\mathcal{D}$ when the number of parameters in $\bm{\tilde{\theta}}$ is too high.
 It is thereby common to use a \textit{regularization term} that forms a penalty based on the norm of $\bm{\tilde{\theta}}$ where $\bm{\tilde{\theta}}$ is seen as a vector~\citep{koller2009probabilistic,sutton2010introduction}.
 
 An example for such a term is called \textit{Gaussian prior}.
-\itodo{understand and explain Gaussian prior}
-\begin{equation}
-  \label{equ:gaussian-prior}
-  Gauss(\bm{\theta})=\exp\left\{\sum_{i=1}^I\frac{\theta_i^2}{2\sigma^2}\right\}
-\end{equation}
+Given the parameters $\bm{\theta}$ as a vector, it uses the \textit{Euclidean norm} of $\bm{\theta}$ with a \textit{regularization parameter} $1/2\sigma^2$~\citep{sutton2010introduction}.
+The \textit{regularization parameter} can be empirically estimated from the training data\citep{chen1999gaussian}.
+Additionally, \citet{sutton2010introduction} state that ``the accuracy of the final model is not sensitive to small changes in $\sigma^2$ (e.g., up to a factor of 10)''\citep{sutton2010introduction}.
+This gives us the following definition of a Gaussian prior~\citep{sutton2010introduction}:
 \begin{equation}
   \label{equ:gaussian-prior}
   Gauss(\bm{\theta})=\sum_{i=1}^I\frac{\theta_i^2}{2\sigma^2}
 \end{equation}
-%TODO discuss with Rene
 
+Applying the Gaussian prior to \Cref{equ:log-likelihood-linear-chain-crf-log-linear-2} gives us
 \begin{equation}
   \label{equ:log-likelihood-linear-chain-crf-log-linear-gaussian}
   \begin{split}
@@ -868,7 +889,7 @@ This task is referred to as \textit{maximum likelihood estimation} and, when con
   \ell\left(\bm{\hat{\theta}}:\mathcal{D}\right)=\max_{\bm{\tilde{\theta}}\in\mathbf{\Theta}}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)
 \end{equation}
 When discussing the maximization problem, an important term is the \gls{gradient} of a \gls{function}.
-The \gls{gradient} $\nabla f$ of an objective function\todo{explain obj.\ function} $f_{\text{obj}}(\bm{\tilde{\theta}})$ with $\bm{\tilde{\theta}}=\tilde{\theta}_1,\dots,\tilde{\theta}_I$ is the vector of the partial derivatives~\citep{koller2009probabilistic}:
+The \gls{gradient} $\nabla f$ of an \gls{objective function} $f_{\text{obj}}(\bm{\tilde{\theta}})$ with $\bm{\tilde{\theta}}=\tilde{\theta}_1,\dots,\tilde{\theta}_I$ is the vector of the partial derivatives~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:gradient}
   \nabla f=\left\langle\frac{\partial f}{\partial\tilde{\theta}_1},\dots,\frac{\partial f}{\partial\tilde{\theta}_I}\right\rangle
@@ -895,12 +916,13 @@ This is done until the maximum is reached.
 Yet, since this approach requires many calculations of $\nabla f$, it can be infeasible in practice~\citep{sutton2010introduction}.
 
 A number of improvements to this have been made that aim to reduce the number of such calculations.
-This is often done by taking into account information from the second derivative of the objective function~\citep{sutton2010introduction}.
+This is often done by taking into account information from the second derivative of the \gls{objective function}~\citep{sutton2010introduction}.
 Since the matrix of all second derivatives, called the \textit{Hessian}, is quadratic in the number of parameters, computing the full \textit{Hessian} can again be infeasible~\citep{sutton2010introduction}.
 By approximating the Hessian with the \gls{bfgs} algorithm and limiting its memory requirements, \citet{byrd1994representations} provide an approach, called \textit{L-BFGS}, to the maximization problem that can handle a large number of parameters.
 \citet{andrew2007scalable} state that L-BFGS ``is the algorithm of choice for optimizing the parameters of large-scale log-linear models with $L_2$ regularization''~\citep{andrew2007scalable}.
-$L_2$ regularization is an alternative to the Gaussian regularization (see \todo{add ref}).
+$L_2$ regularization is an alternative to the Gaussian prior in \Cref{equ:gaussian-prior}.
 
 \bigskip
 
-After giving an introduction to the encoding, inferencing, and learning of \glspl{crf} we will discuss in the following chapter how to incooperate \gls{distant supervision} in the \gls{crf} learning process.
+After giving an overview of the encoding, inferencing, and learning of \glspl{crf} we will discuss in the following chapter how to incorporate \gls{distant supervision} in the \gls{crf} learning process.
+
