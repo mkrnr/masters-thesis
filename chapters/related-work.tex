@@ -63,7 +63,7 @@ Three canonical classifiers, namely Logistic Regression, Support Vector Machines
 Their performance was evaluated against a \emph{Heuristics} approach \citep{klampfl2014comparison} that was assumed to be state-of-the-art.
 The evaluation on two data sets showed that the approach by \citet{fan2015detecting} was superior to the Heuristics approach in all cases.
 
-%TODO \citet{lu2013web} distant supervision and GE on name entity recognition
+\itodo{\citet{lu2013web}: distant supervision and GE on name entity recognition}
 
 \bigskip
 
@@ -75,7 +75,7 @@ In our particular use case of extracting references from German social science r
 
 \Gls{distant supervision} is a promising approach that allows the reduction of labeling costs by including external sources of information during the generation of partially annotated data sets.
 
-In order to use this data set for training in a \gls{crf} model, two approaches were discussed.
+In order to use such a data set for the training of a \gls{crf} model, two approaches were discussed.
 \citet{tsuboi2008training} marginalize unlabeled tokens by generating sequences for all possible labelings for these tokens.
 Instead of labeled instances, \citet{mann2008generalized} use \gls{ge} criteria and labeled features.
 In addition they can also incorporate \glspl{conditional probability distribution} over the labelings.
