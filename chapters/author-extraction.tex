@@ -23,7 +23,7 @@ This can be broken down into to following steps:
 \begin{enumerate}
   \item Preprocessing of research papers to extract reference sections as text from \gls{pdf} documents
   \item Generating tagged training sets for distant supervision
-  \item Building \acrfull{ge} constraints
+  \item Building \gls{ge} constraints
   \item Learning a \gls{crf} model using \gls{ge} constraints
 \end{enumerate}
 The following sections will describe these steps in more detail.
@@ -33,10 +33,16 @@ These research questions will have a focus on the author extraction from researc
 \section{Preprocessing}\label{sec:ae-preprocessing}
 
 Before building a training set using \gls{distant supervision}, an unlabeled training data set needs to be generated.
-Since the research papers that we use as the source for our unlabeled data is given in the \gls{pdf} format, a first step is to extract the textual content of the documents.
 
 Since we want to learn a model that is able to extract author names in reference sections, it is crucial to remove the text that is not part of the reference section.
-Otherwise, the learning (see \Cref{subsec:author-name-matching}) would also consider names that appear in the body of the research paper.
+Otherwise, we would also match names that appear in the body of the research paper during the author name matching step (see \Cref{subsec:ae-author-name-matching}).
+In order to incorporate the layout of the research paper, this step of detecting reference sections ideally should be performed before converting the \gls{pdf} document into a textual format.
+This would allow, for example, an accurate detection of headers or page numbers.
+
+\bigskip
+
+Either before or after detecting reference sections, the textual content of the research paper has to be extracted.
+For this, the layout of the document needs to be recognized in order to, for example, correctly extract the text from a research paper that contains two columns of text per page.
 
 \section{Generating Training Sets with Distant Supervision}\label{sec:ae-distant-supervision}
 

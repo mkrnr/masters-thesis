@@ -78,10 +78,41 @@ $P(LN_1,FN_2,EC_2)$\par
 \end{table}
 \section{Conditional Random Fields}\label{app:sec-conditional-random-fields}
 \subsection{Calculation of Factor With $\mathbf{D}\subseteq\mathbf{X}$}\label{app:subsec-gd-example-calculation}
-\itodo{Add}
+With the following calculation we demonstrate that a \gls{factor} $\Psi(\mathbf{D})$ with $\mathbf{D}\subseteq\mathbf{X}$ cancels out during the calculation of $P(\mathbf{Y}|\mathbf{X})$.
+For this we consider two factors, $\Psi(LN_1,EC_1)$ and $\Psi(EC_1,EC_2)$.
+The resulting \gls{factor graph} is shown in \Cref{fig:example-x-only-factor-graph}.
+\begin{figure}[H]
+\centering
+\input{figures/example-x-only-factor-graph.tex}
+\caption{%
+  Factor graph containing two factors where $\Psi(EC_1,EC_2)$ only contains \glspl{observed variable}.
+}
+\label{fig:example-x-only-factor-graph}
+\end{figure}
+Based on the definition of \glspl{crf} in \Cref{equ:crf-factor} we have for example:
+\begin{equation*}
+\begin{split}
+  &P(LN_1{=}true,EC_1{=}true\mid EC_2{=}false)\\
+  &\hspace{2em}=\frac{1}{Z(EC_1{=}true,EC_2{=}false)}\cdot\tilde{P}\left(LN_1{=}true,EC_1{=}true,EC_2{=}false\right)\\[0.25cm]
+  &\hspace{2em}=\frac{\tilde{P}\left(LN_1{=}true,EC_1{=}true,EC_2{=}false\right)}{\splitfrac{\tilde{P}(LN_1{=}false,EC_1{=}true,EC_2{=}false)}
+    {+\tilde{P}(LN_1{=}true,EC_1{=}true,EC_2{=}false)}}\\[0.25cm]
+  &\hspace{2em}=\frac{\Psi(LN_1{=}true,EC_1{=}false)\times\Psi(EC_1{=}true,EC_2{=}false)}{\splitfrac{\Psi(LN_1{=}true,EC_1{=}false)\times\Psi(EC_1{=}true,EC_2{=}false)}
+  {+\Psi(LN_1{=}true,EC_1{=}true)\times\Psi(EC_1{=}true,EC_2{=}false)}}\\[0.25cm]
+  &\hspace{2em}=\frac{\Psi(EC_1{=}true,EC_2{=}false)\times\Psi(LN_1{=}true,EC_1{=}false)}{\splitfrac{\Psi(EC_1{=}true,EC_2{=}false)\times(\Psi(LN_1{=}true,EC_1{=}false)}
+  {+\Psi(LN_1{=}true,EC_1{=}true))}}\\[0.25cm]
+  &\hspace{2em}=\frac{\Psi(LN_1{=}true,EC_1{=}false)}{\Psi(LN_1{=}true,EC_1{=}false)+\Psi(LN_1{=}true,EC_1{=}true)}\\[0.25cm]
+  &\hspace{2em}=\frac{\tilde{P}\left(LN_1{=}true,EC_1{=}true\right)}{\tilde{P}(LN_1{=}false,EC_1{=}true)+\tilde{P}(LN_1{=}true,EC_1{=}true)}\\[0.25cm]
+  &\hspace{2em}={P}\left(LN_1{=}true\mid EC_1{=}true\right).\\
+\end{split}
+\end{equation*}
+
+Thereby, the distributive property allows us to factor out $\Psi(EC_1{=}true,EC_2{=}false)$ in the denominator which allows us to completely remove $\Psi(EC_1{=}true,EC_2{=}false)$ from the equation.
+This example demonstrates that a \gls{factor} with $\mathbf{D}\subseteq\mathbf{X}$ does not have an impact on the result of $P(\mathbf{Y}|\mathbf{X})$.
+
 \subsection{Exemplary Calculation}\label{app:subsec-crf-example-calculation}
 The following calculation is based on \gls{factor graph} (a) in \Cref{fig:example-factor-graphs} with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,FN_2\}$.
 It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
+
 \begin{subequations}
 \begin{equation*}
 \begin{split}
@@ -106,7 +137,7 @@ It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
 \end{equation*}
 \begin{equation*}
 \begin{split}
-  &P( LN_1{=}true,FN_2{=}true\mid EC_2{=}false)\\
+  &P(LN_1{=}true,FN_2{=}true\mid EC_2{=}false)\\
   &\hspace{2em}=\frac{1}{Z(EC_2{=}false)}\cdot\tilde{P}\left(LN_1{=}true,FN_2{=}true,EC_2{=}false\right)\\
   &\hspace{2em}=\frac{1}{4200}\cdot1000\\
   &\hspace{2em}\approx0.2381\\
@@ -242,27 +273,27 @@ It uses the \glspl{feature function} defined in \Cref{app:subsec-lccrf-feature-f
   &\hspace{6em}\vphantom{\Big\{}+\cdots+\theta_{k=4}f_{k=4}(FN_2{=}true,LN_1{=}true) \\
   &\hspace{4em}\vphantom{\Big\{}+\theta_{l=2}f_{l=2}(FN_2{=}true,EC_2{=}false)\\
   &\hspace{6em}\vphantom{\Big\{}+\cdots+\theta_{l=5}f_{l=5}(FN_2{=}true,EC_2{=}false)\Big)\Big\}\\
-  &\hspace{2em} = \exp\Big\{-\Big(-\ln(30)\cdot0+-\ln(10)\cdot1+-\ln(30)\cdot0+-\ln(10)\cdot0\\
-  &\hspace{4em}\vphantom{\Big\{}+-\ln(30)\cdot0+-\ln(10)\cdot1+-\ln(10)\cdot0+-\ln(20)\cdot0+-\ln(10)\cdot0\\
-  &\hspace{4em}\vphantom{\Big\{}+-\ln(30)\cdot0+-\ln(10)\cdot0+-\ln(30)\cdot0+-\ln(10)\cdot1\\
-  &\hspace{4em}\vphantom{\Big\{}+-\ln(30)\cdot0+-\ln(10)\cdot0-\ln(10)\cdot0+-\ln(20)\cdot0+-\ln(10)\cdot1\Big)\Big\}\\
-  &\hspace{2em}=\exp\Big\{-\Big(-\ln(10)+-\ln(10)+-\ln(10)+-\ln(10)\Big)\Big\}\\
-  &\hspace{2em}=\exp\Big\{4\cdot\ln(10)\Big\}\\
+  &\hspace{2em} = \exp\Big\{-\Big(-\log(30)\cdot0+-\log(10)\cdot1+-\log(30)\cdot0+-\log(10)\cdot0\\
+  &\hspace{4em}\vphantom{\Big\{}+-\log(30)\cdot0+-\log(10)\cdot1+-\log(10)\cdot0+-\log(20)\cdot0+-\log(10)\cdot0\\
+  &\hspace{4em}\vphantom{\Big\{}+-\log(30)\cdot0+-\log(10)\cdot0+-\log(30)\cdot0+-\log(10)\cdot1\\
+  &\hspace{4em}\vphantom{\Big\{}+-\log(30)\cdot0+-\log(10)\cdot0-\log(10)\cdot0+-\log(20)\cdot0+-\log(10)\cdot1\Big)\Big\}\\
+  &\hspace{2em}=\exp\Big\{-\Big(-\log(10)+-\log(10)+-\log(10)+-\log(10)\Big)\Big\}\\
+  &\hspace{2em}=\exp\Big\{4\cdot\log(10)\Big\}\\
   &\hspace{2em}\vphantom{\Big\{}=10000\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
 \begin{split}
   &Z(EC_1{=}true,EC_2{=}false)\\
-  &\hspace{2em}=\sum_{FN_2}\tilde{P}\left(start{=}true,LN_1{=}true,FN_2,EC_1{=}true,EC_2{=}false\right)\\
-  &\hspace{2em}=\tilde{P}(start{=}false,LN_1{=}false,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
-  &\hspace{4em}+\tilde{P}(start{=}false,LN_1{=}false,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
-  &\hspace{4em}+\tilde{P}(start{=}false,LN_1{=}true,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
-  &\hspace{4em}+\tilde{P}(start{=}false,LN_1{=}true,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
-  &\hspace{4em}+\tilde{P}(start{=}true,LN_1{=}false,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
-  &\hspace{4em}+\tilde{P}(start{=}true,LN_1{=}false,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
-  &\hspace{4em}+\tilde{P}(start{=}true,LN_1{=}true,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
-  &\hspace{4em}+\tilde{P}(start{=}true,LN_1{=}true,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{2em}=\sum_{\texttt{start},LN_1,FN_2}\tilde{P}\left(\texttt{start},LN_1,FN_2,EC_1{=}true,EC_2{=}false\right)\\
+  &\hspace{2em}=\tilde{P}(\texttt{start}{=}false,LN_1{=}false,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(\texttt{start}{=}false,LN_1{=}false,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(\texttt{start}{=}false,LN_1{=}true,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(\texttt{start}{=}false,LN_1{=}true,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(\texttt{start}{=}true,LN_1{=}false,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(\texttt{start}{=}true,LN_1{=}false,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(\texttt{start}{=}true,LN_1{=}true,FN_2{=}false,EC_1{=}true,EC_2{=}false)\\
+  &\hspace{4em}+\tilde{P}(\texttt{start}{=}true,LN_1{=}true,FN_2{=}true,EC_1{=}true,EC_2{=}false)\\
   %start  LN_1   FN_2  Result
   %  F     F      F    1    1    30    10   300
   %  F     F      T    1    1    1     10   10
@@ -291,6 +322,17 @@ It uses the \glspl{feature function} defined in \Cref{app:subsec-lccrf-feature-f
 \subsection{Exemplary Calculation}\label{app:subsec-llg-example-calculation}
 The following calculation is based on \gls{factor graph} in \Cref{fig:example-linear-chain-crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,FN_2\}$.
 It uses the \glspl{feature function} and corresponding weights from \Cref{app:subsec-lccrf-feature-functions}.
-
-\itodo{add}
-
+Further, we have $\mathcal{D}=\{\mathpzc{d}^{(1)},\dots,\mathpzc{d}^{(4)}\}$ consisting of the four reference strings in \Cref{fig:example-reference-strings}.
+\begin{equation*}
+  \begin{split}
+    \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(m)},Y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(m)},\mathbf{\tilde{X}}_n^{(m)}\right)\right)\right. \\
+    &\left.-\log Z\left(\mathbf{X}^{(m)}\right)\vphantom{\sum_{l=1}^L}\right)\\
+   =&-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(1)},Y_{n-1}^{(1)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(1)},\mathbf{\tilde{X}}_n^{(1)}\right)\right)-\log Z\left(\mathbf{X}^{(1)}\right)\vphantom{\sum_{l=1}^L}\\
+   &+\cdots\\
+   &+-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(4)},Y_{n-1}^{(4)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(4)},\mathbf{\tilde{X}}_n^{(4)}\right)\right)-\log Z\left(\mathbf{X}^{(4)}\right)\vphantom{\sum_{l=1}^L}\\
+   %TODO continue here (also calc other Z(X)...)
+    =&\left(-\log(10)+-\log(10)+-\log(10)+-\log(10)\right)-\log\left(24410\right)\\
+    \approx&-0.8924
+ \end{split}
+\end{equation*}
+The calculation of the term that involves $\mathpzc{d}^{(2)}$ is shown in \Cref{app:subsec-lccrf-example-calculation}.

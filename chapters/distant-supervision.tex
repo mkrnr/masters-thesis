@@ -13,35 +13,33 @@ Before explaining our usage of the term \gls{distant supervision}, we will first
 
 \bigskip
 
-As discussed in \Cref{cha:related-work}, the term \gls{distant supervision} was introduced by \citet{mintz2009distant} as an approach for relation extraction without labeled data.
+The term \gls{distant supervision} was introduced by \citet{mintz2009distant} as an approach for relation extraction without labeled data.
 They state that \gls{distant supervision} extends the paradigm used by \citet{snow2005learning} for the extraction of hypernyms.
 This is done by learning dependency paths from hypernym/hyponym word pairs that were extracted from WordNet\footnote{\url{https://wordnet.princeton.edu/} (accessed Jul.~20,~2016)}~\citep{snow2005learning}.
 The dependency paths are then used as features in a logistic regression classifier with the task of identifying hypernym pairs in a corpus~\citep{snow2005learning}.
 Additionally, \citet{mintz2009distant} mention a similarity of \gls{distant supervision} to the usage of weakly labeled data in bioinformatics.
 One mentioned example is how \citet{craven1999constructing} extract relations between biological objects such as proteins, cell-types, and diseases from a text corpus.
 For this they train a Naive Bayes classifier with data from the Yeast Protein Database~\citep{payne1997yeast}.
-\citet{surdeanu2012multi} go as far as saying that distant supervision for \gls{ie} was introduced by \citet{craven1999constructing}.
+\citet{surdeanu2012multi} go as far as saying that distant supervision for information extraction was introduced by \citet{craven1999constructing}.
 
 While not giving a definition of the term, \citet{mintz2009distant} state that ``[t]he intuition of distant supervision is that any sentence that contains a pair of entities that participate in a known Freebase relation is likely to express that relation in some way.''
-
 There is now a body of research that uses the paradigm of \citet{mintz2009distant} for relation extraction~\citep{benson2011event,ritter2011named,nguyen2011end,takamatsu2012reducing,xu2013filling}.
 
 \bigskip
 
-Another intuition of \gls{distant supervision} that is not based on leveraging existing knowledge bases such as FreeBase.
+There exists another intuition of \gls{distant supervision} which is not based on leveraging existing knowledge bases such as FreeBase.
 \citet{go2009twitter} use emoticons in Twitter\footnote{\url{https://twitter.com/} (accessed May~19,~2016)} tweets as noisy labels to build the training set for sentiment analysis~\citep{go2009twitter}.
-
-There is again a body of research that extends this approach to sentiment analysis~\citep{purver2012experimenting,marchetti2012learning,suttles2013distant}.
+This approach to sentiment analysis was also used in a number of other researches~\citep{purver2012experimenting,marchetti2012learning,suttles2013distant}.
 
 \citet{fan2015detecting} also apply distant supervision without using a knowledge base.
 They rely on a simple heuristic for localizing tables by considering the context around a line starting with ``Table'' or ``Tab.'' as a potential table.
 
 \bigskip
 
-To cover the different applications of \gls{distant supervision}, a definition of the term would needs to be rather generic.
+To cover the different applications of \gls{distant supervision}, a definition of the term would need to be rather generic.
 What all approaches have in common is that they use some heuristic to assign labels to previously unlabeled data. These labelings are are used during the training, either in addition to preexisting labeled data or on their own.
 
-Our usage of the them \gls{distant supervision} focuses on the utilization of an external knowledge base to perform the labeling.
+Our usage of the them \gls{distant supervision}, on the other hand, focuses on the utilization of an external knowledge base to perform the labeling.
 Thereby, we define \gls{distant supervision} as the labeling of a data set using an external knowledge base with the goal of generating a training data set.
 
 \section{Distant Supervision and \glsentryshortpl{crf}}
@@ -68,22 +66,24 @@ Given a sequence of length $N$, an incomplete annotation $\bm{L}$ is defined as 
   \label{equ:incomplete-annotation}
   \begin{split}
     \bm{L}&= \left\{\mathpzc{L}_1,\dots,\mathpzc{L}_N\right\}\\
-    \mathpzc{L}_n&\in\glssymbol{power set}(\mathbf{\tilde{Y}}_n)\setminus \{\emptyset\}
+    \mathpzc{L}_n&\in\glssymbol{power set}(\mathbf{\tilde{Y}}_n)\setminus \{\emptyset\}.
   \end{split}
 \end{equation}
 where $\mathbf{\tilde{Y}}_n{=}\{\tilde{Y}_1,\dots\tilde{Y}_T\}$ with $Val(\tilde{Y}_t){=}Val(Y_n)$ and $T{=}|Val(Y_n)|$.
 $\glssymbol{power set}(\mathbf{\tilde{Y}}_n)$ is the \gls{power set} of $\mathbf{\tilde{Y}}_n$.
 Using the definition of $\mathcal{L}$ we can now specify two cases of incomplete annotations: Partial annotations and ambiguous annotations.
-If an element at position $n$ in a sequence is not annotated then the corresponding $\mathpzc{L}_n$ contains all possible labelings: $|\mathpzc{L}_n|{=}|Val(Y_n)|$.
+A partial annotation refers to a sequence where only a part of the elements is annotated.
+For an element at position $n$ that are not annotated, $\mathpzc{L}_n$ contains all possible annotations and thereby $|\mathpzc{L}_n|=|Val(Y_n)|$.
 Ambiguous annotations are represented such that the number of \glspl{random variable} in $\mathpzc{L}_n$ equals the number of possible annotations for the corresponding element with $|\mathpzc{L}_n|\leq |Val(Y_n)|$.
 
 Again using the author extraction example from \Cref{cha:crfs} we define an incomplete annotation for the \gls{linear-chain crf} based on of the first reference string in \Cref{fig:example-reference-strings}:
 \begin{equation*}
 \begin{split}
-  \bm{L}_1=&\left\{\{\texttt{start}{=}true\},\{LN_1{=}false\},\{FN_2{=}false,FN_2{=}true\}\right\}
+  \bm{L}_1=&\left\{\{\texttt{start}{=}true\},\{LN_1{=}false\},\{FN_2{=}false,FN_2{=}true\}\right\}.
 \end{split}
 \end{equation*}
 Thereby, the word ``Friedrich'' is ambiguously annotated as either a first name or not a first name.
+This can also be seen as a partial annotation since $|\mathpzc{L}_2|=|Val(FN_2)|$.
 
 \bigskip
 
@@ -92,19 +92,19 @@ For this we let $\mathbf{Y}_{\bm{T}}$ be the set of all \glspl{full assignment} 
 \begin{equation}
   \label{equ:crf-marginalization}
   \begin{split}
-    P\left(\bm{L}\mid\mathbf{X}\right)=\sum_{\mathbf{Y}_{\bm{L}}}P\left(\mathbf{Y}_{\bm{L}}\mid\mathbf{X}\right)
+    P\left(\bm{L}\mid\mathbf{X}\right)=\sum_{\mathbf{Y}_{\bm{L}}}P\left(\mathbf{Y}_{\bm{L}}\mid\mathbf{X}\right).
   \end{split}
 \end{equation}
 
-For our example reference string $\bm{L}_1$ we have the following set of \glspl{full assignment} for our \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}:
+For our incompletely annotated reference string $\bm{L}_1$ we have the following set of \glspl{full assignment} for our \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}:
 \begin{equation*}
 \begin{split}
   \mathbf{Y}_{\bm{L}}=&\Big\{\{\text{start}{=}true,LN_1{=}false,FN_2{=}false\},\\
-  &\hphantom{\Big\{}\{\text{start}{=}true,LN_1{=}false,FN_2{=}true\}\Big\}\\
+  &\hphantom{\Big\{}\{\text{start}{=}true,LN_1{=}false,FN_2{=}true\}\Big\}\\.
 \end{split}
 \end{equation*}
 
-Using this approach, we can apply all concepts for encoding, inferencing, and learning \glspl{crf} that we discussed in \Cref{cha:crfs}.
+Using this approach, we can apply all discussed concepts for encoding, inferencing, and learning on $P\left(\mathbf{Y}_{\bm{L}}\mid\mathbf{X}\right)$ in \Cref{equ:crf-marginalization} without changes.
 
 \bigskip
 
@@ -113,7 +113,7 @@ One such issue is that the number of possible \glspl{full assignment} in $\mathb
 \citep{tsuboi2008training} argue that this problem can be addressed by applying the Markov assumption and using a modification of the forward-backward algorithm (see \Cref{sec:inference-crfs}).
 
 Another issue is that the log-likelihood function that is derived from \Cref{equ:crf-marginalization} is not concave~\citep{tsuboi2008training}.
-Thereby, during the maximum log-likelihood estimation, a local maximum is not necessarily a global maximum which needs to be considered during the learning phase.
+Thereby, during the maximum log-likelihood estimation (see \Cref{sec:learning-crfs}), a local maximum is not necessarily a global maximum which needs to be considered during the learning phase.
 
 Further, when considering the marginalization of ambiguous annotations, it is not possible to provide additional information on the distribution of possible assignments.
 In this form, the model does not allow us to specify a \gls{marginal distribution} over the elements in $\mathpzc{L}_n$ which is considered during the marginalization.
@@ -129,24 +129,27 @@ Instead of marginalizing incomplete annotations, \citet{mann2008generalized} app
 In general, a \gls{ge} criterion $G(\bm{\tilde{\theta}}:\mathcal{U})$ is a score function $S$ which is defined as~\citep{mann2010generalized}:
 \begin{equation}
   \label{equ:generalized-expectation}
-  G(\bm{\tilde{\theta}}:\mathcal{U})=S\left(E_{\mathcal{U}}\left[E_{P(\mathbf{Y}\mid\mathbf{X})}\left[G(\mathbf{X},\mathbf{Y})\right]\right]\right)
+  G(\bm{\tilde{\theta}}:\mathcal{U})=S\left(E_{\mathcal{U}}\left[E_{P(\mathbf{Y}\mid\mathbf{X})}\left[G(\mathbf{X},\mathbf{Y})\right]\right]\right).
 \end{equation}
 Here, $P(\mathbf{Y}|\mathbf{X})$ is a \gls{cpd} based on the model $\tilde{\mathcal{M}}=\{\tilde{\mathcal{K}},\bm{\tilde{\theta}}\}$.
 $\mathcal{U}=\left\{\mathpzc{u}^{(1)},\dots,\mathpzc{u}^{(M)}\right\}$ is a data set of $M$ unlabeled instances such that $\mathpzc{u}^{(m)}=\mathbf{X}^{(m)}$ (compare with $\mathcal{D}$ in \Cref{sec:learning-crfs}).
+$E_{\mathcal{U}}$ and $E_{P(\mathbf{Y}|\mathbf{X})}$ are expectations of $\mathcal{U}$ and $P(\mathbf{Y}|\mathbf{X})$, respectively (see \Cref{subsec:probability-theory}).
 $G(\mathbf{X},\mathbf{Y})$ is given as a constraint function.
+Note that, in contrast to the previously discussed \gls{crf} models, we do not necessarily have $|\mathbf{X}|=|\mathbf{Y}|$.
+Instead, we have $|\mathbf{X}|\geq|\mathbf{Y}|$.
 
 \bigskip
 
 To clarify this general definition we now look at one possible score function $S$, namely the \acrfull{kl}\glsunset{kl} divergence.
-The \gls{kl} divergence $D_{\text{KL}}$ is a measure of ``discrepancy'' between two probability distributions $P(\mathcal{X})$ and $Q(\mathcal{X})$ where $\mathcal{X}$ is a set of \glspl{random variable}~\citep{burnham2003model}.
-This measure is also referred to as a ``distance'' between $P_1(\mathcal{X})$ and $P_2(\mathcal{X})$.
+The \gls{kl} divergence $D_{\text{KL}}$ is a measure of ``discrepancy'' between two probability distributions $P_1(\mathcal{X})$ and $P_2(\mathcal{X})$ where $\mathcal{X}$ is a set of \glspl{random variable}~\citep{burnham2003model}.
+This measure is also referred to as a ``distance'' between $P(\mathcal{X})$ and $Q(\mathcal{X})$.
 Yet, this term can be misleading since the measure is not symmetric: $D_{\text{KL}}(P\mid\mid Q)\neq D_{\text{KL}}(Q\mid\mid P)$~\citep{burnham2003model}.
 The \gls{kl} divergence is is defined as~\citep{mackay2003information}
 \begin{equation}
   \label{equ:kl-divergence}
   D_{\text{KL}}(P\mid\mid Q)=\sum_\mathcal{X} \frac{P(\mathcal{X})}{Q(\mathcal{X})}
 \end{equation}
-where $P$ is seen as the ``true'' distribution and $Q$ as a distribution that models $P$~\citep{burnham2003model}.
+where $P$ is seen as the ``true'' distribution and $Q$ as a distribution that models $P_1$~\citep{burnham2003model}.
 
 \bigskip
 
@@ -157,42 +160,42 @@ We now use the $\text{KL}$-divergence as the score function $D_{\text{KL}}$ in \
 \end{equation}
 where $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$ expresses an expectation for $\mathbf{X}\cup\mathbf{Y}$, either in the form of a particular value or as a \gls{marginal distribution}~\citep{mann2010generalized}.
 The result of $D_{\text{KL}}$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$ and the expectation over the sets of assignments $\left\{\mathbf{X},\mathbf{Y}\right\}$ in $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\mathbf{Y}\mid\mathbf{X})$.
-%target distribution: distribution for every constraint?
-%expectations: calculated for every constraint separately (mallet code)?
-Further, \citet{mann2010generalized} use the term \gls{label regularization} for the case when the constraint function
+Further, \citet{mann2010generalized} use the term \gls{label regularization} for the case when using a number constraint functions
 \begin{equation}
   \label{equ:label-regularization-constraint-function}
-  G(\mathbf{X},\mathbf{Y})=\mathbf{\mathbbm{1}}(\mathbf{Y})
+  G(\mathbf{X},Y_n)=\mathbf{\mathbbm{1}}(Y_n)
 \end{equation}
-and the constraint
+and a number of constraints
 \begin{equation}
   \label{equ:label-regularization-constraints}
-  \tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}=E[\tilde{P}(\mathbf{Y})]
+  \tilde{g}_{\left(\mathbf{X},Y_n\right)}=\tilde{P}(Y_n)
 \end{equation}
-are used in the \gls{ge} term in \Cref{equ:generalized-expectation-kl}.
-Here, $\tilde{P}(\mathbf{Y})$ is an estimated \gls{marginal distribution} over a set of labels $Val(\mathbf{Y})$ that is given as an input to the learner.
+in the \gls{ge} term in \Cref{equ:generalized-expectation-kl}.
+
+Here, $\tilde{P}(Y_n)$ is an estimated \gls{marginal distribution} over a \gls{target variable} $Y_n\in\mathbf{Y}$ which is given as an input to the learner.
 
 \bigskip
 
 There are a number of ways in which \gls{ge} constraints can be applied to an \gls{objective function}.
-\citet{mann2010generalized} discuss, in the context of semi-supervised learning, the addition of \gls{ge} criteria $G(\bm{\tilde{\theta}}:\mathcal{U})$ to a likelihood function $\mathcal{L}(\bm{\tilde{\theta}}:\mathcal{D})$:
+\citet{mann2010generalized} discuss, in the context of semi-supervised learning, the addition of \gls{ge} criterion $G(\bm{\tilde{\theta}}:\mathcal{U})$ to a likelihood function $\mathcal{L}(\bm{\tilde{\theta}}:\mathcal{D})$:
 \begin{equation}
   \label{equ:objective-function-l-g}
-  O(\bm{\tilde{\theta}}:\mathcal{D},\mathcal{U})=\mathcal{L}(\bm{\tilde{\theta}}:\mathcal{D})+G(\bm{\tilde{\theta}}:\mathcal{U})
+  O(\bm{\tilde{\theta}}:\mathcal{D},\mathcal{U})=\mathcal{L}(\bm{\tilde{\theta}}:\mathcal{D})+G(\bm{\tilde{\theta}}:\mathcal{U}).
 \end{equation}
 This way, both a labeled data set $\mathcal{D}$ and an unlabeled data set $\mathcal{U}$ can be utilized during the learning of $\bm{\tilde{\theta}}$.
 
 It is also possible to build an \gls{objective function} only using an unlabeled data set $\mathcal{U}$.
-For this we use the \gls{ge} criteria\todo{plural?}, combined with a Gaussian prior (see \Cref{equ:gaussian-prior}) to prevent overfitting:
+For this we use the \gls{ge} criterion, combined with a Gaussian prior (see \Cref{equ:gaussian-prior}) to prevent overfitting:
 \begin{equation}
   \label{equ:objective-function-g}
-  O(\bm{\tilde{\theta}}:\mathcal{U})=G(\bm{\tilde{\theta}}:\mathcal{U})+Gauss(\bm{\tilde{\theta}})
+  O(\bm{\tilde{\theta}}:\mathcal{U})=G(\bm{\tilde{\theta}}:\mathcal{U})+Gauss(\bm{\tilde{\theta}}).
 \end{equation}
 Such an approach was first discussed in \citet{mann2008generalized}.
 
 Seen from a different perspective, using \gls{ge} as an objective function allows us to express expectations on a subset of elements from an unlabeled data set while other elements remain unconstrained~\citep{mann2010generalized}.
 This is precisely what is needed in order to apply \gls{distant supervision} to the learning of \glspl{crf}.
-The idea is to generate \glspl{marginal distribution} $\tilde{P}(\mathbf{y})$ (see \Cref{equ:label-regularization-constraints}) for the $\mathbf{y}$ for which we have information from an external source.
+The idea is to generate \glspl{marginal distribution} $\tilde{P}(\mathbf{Y})$ (see \Cref{equ:label-regularization-constraints}) for the $\mathbf{Y}$ for which we have information from an external source.
 
-In the following chapter we will elaborate on this idea with the goal of extraction of authors from the reference section of research papers.
+In the following chapter we will use this idea for the extraction of authors from the reference section of research papers using a distantly supervised training set.
+We will also compare our approach with the one of \citep{lu2013web}.
 

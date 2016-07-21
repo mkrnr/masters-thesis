@@ -1,0 +1,13 @@
+\newcommand{\factorgraphnodes}{%
+  \node[latent] (ln) {$LN_1$}; %
+  \node[obs, below=1.8cm of ln] (ec1) {$EC_1$}; %
+  \node[obs, right=2.4cm of ec1] (ec2) {$EC_2$}; %
+}
+\begin{tikzpicture}
+  \factorgraphnodes
+
+  \factor[above=0.8cm of ec1] {ec1-ln-f} {right:$\Psi(LN_1,EC_1)$} {} {}; %
+  \factor[right=1.1cm of ec1] {ec1-ec2-f} {above:$\Psi(EC_1,EC_2)$} {} {}; %
+  \edge[-] {ln} {ec1};
+  \edge[-] {ec1} {ec2};
+\end{tikzpicture}

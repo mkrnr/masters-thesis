@@ -9,7 +9,7 @@ This example is based on the set of four reference strings given in \Cref{fig:ex
 
 \begin{figure}[t]
 \begin{framed}
-  \input{figures/example-reference-strings.txt}
+  \input{figures/example-reference-strings.tex}
 \end{framed}
 \caption{Example of four reference strings.}
 \label{fig:example-reference-strings}
@@ -38,7 +38,7 @@ We now consider two events:
 \begin{equation*}
   \begin{split}
     firstEC&=\left\{w_1\ \dots\ w_N \mid w_1\ \text{ends with a comma}\right\}\\
-    secondFN&=\left\{w_1\ \dots\ w_N \mid w_2\ \text{is a first name}\right\}
+    secondFN&=\left\{w_1\ \dots\ w_N \mid w_2\ \text{is a first name}\right\}.
   \end{split}
 \end{equation*}
 In other words, $firstEC$ contains all reference strings in \glssymbol{outcome space} in which the first word of the sequence ends with a comma and $secondFN$ contains all reference strings in \glssymbol{outcome space} in which the second word of the sequence is a first name.
@@ -56,7 +56,7 @@ According to our example in \Cref{fig:example-reference-strings} we have:
 \begin{equation*}
     \begin{split}
       P(firstEC)&=1/4=0.25\\
-      P(firstNotEC)&=3/4=0.75
+      P(firstNotEC)&=3/4=0.75.
     \end{split}
 \end{equation*}
 The second \glspl{probability distribution} is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{FN_2}$, giving us:
@@ -64,7 +64,7 @@ The second \glspl{probability distribution} is defined over \glssymbol{outcome s
   \label{equ:eg-measurable-sets}
     \begin{split}
       P(secondFN)&=1/4=0.25\\
-      P(secondNotFN)&=3/4=0.75
+      P(secondNotFN)&=3/4=0.75.
     \end{split}
 \end{equation*}
 
@@ -88,7 +88,7 @@ We can now define our \glspl{probability distribution} on \glspl{random variable
 \begin{equation*}
   \begin{split}
     P(firstEC)&= P(EC_1{=}true)\\
-    P(secondNotFN)&= P(FN_2{=}false)
+    P(secondNotFN)&= P(FN_2{=}false).
   \end{split}
 \end{equation*}
 
@@ -103,7 +103,7 @@ In our example, $P(EC_1,FN_2)$ has the following values:
     P(EC_1{=}false,FN_2{=}false)&=3/4=0.75\\
     P(EC_1{=}false,FN_2{=}true)&=0/4=0\\
     P(EC_1{=}true,FN_2{=}false)&=0/4=0\\
-    P(EC_1{=}true,FN_2{=}true)&=1/4=0.25
+    P(EC_1{=}true,FN_2{=}true)&=1/4=0.25.
   \end{split}
 \end{equation*}
 
@@ -120,12 +120,12 @@ This gives us two sets of \glspl{random variable}:
 \begin{equation*}
   \begin{split}
     \mathbf{EC}=& \{EC_1, \dots, EC_N\}\\
-    \mathbf{FN}=& \{FN_1, \dots, FN_N\}
+    \mathbf{FN}=& \{FN_1, \dots, FN_N\}.
   \end{split}
 \end{equation*}
 For example, the \gls{full assignment} to $\mathbf{EC}$ derived from the second reference string in \Cref{fig:example-reference-strings} is:
 \begin{equation*}
-  \mathbf{EC}=\{true, false, false, false, false, false, false, true, false, false\}
+  \mathbf{EC}=\{true, false, false, false, false, false, false, true, false, false\}.
 \end{equation*}
 
 \bigskip
@@ -134,7 +134,7 @@ The \gls{conditional probability} of an \gls{event} $\alpha$ given an \gls{event
 
 \begin{equation}
 \label{equ:conditional-probability-event}
-P(\beta\mid\alpha) = \frac{P(\alpha\cap\beta)}{P(\alpha)}
+P(\beta\mid\alpha) = \frac{P(\alpha\cap\beta)}{P(\alpha)}.
 \end{equation}
 This definition can be extended to \glspl{random variable}.
 Given that the probability for every assignment to $X$ is greater than zero, the \gls{conditional probability distribution} $P(Y\mid X)$ is calculated with
@@ -145,12 +145,12 @@ P(Y\mid X) = \frac{P(X,Y)}{P(X)}
 and for sets of \glspl{random variable} $\mathbf{X}$ and $\mathbf{Y}$ we have:
 \begin{equation}
 \label{equ:conditional-probability-random-variable}
-P(\mathbf{Y}\mid \mathbf{X}) = \frac{P(\mathbf{X},\mathbf{Y})}{P(\mathbf{X})}
+P(\mathbf{Y}\mid \mathbf{X}) = \frac{P(\mathbf{X},\mathbf{Y})}{P(\mathbf{X})}.
 \end{equation}
 
 Again taking the reference strings in \Cref{fig:example-reference-strings}, we have for example:
 \begin{equation*}
-    P(FN_2{=}true\mid EC_1{=}true)=\frac{P(EC_1{=}true, FN_2{=}true)}{P(EC_1{=}true)}=\frac{0.25}{0.25}=1
+    P(FN_2{=}true\mid EC_1{=}true)=\frac{P(EC_1{=}true, FN_2{=}true)}{P(EC_1{=}true)}=\frac{0.25}{0.25}=1.
 \end{equation*}
 
 \bigskip
@@ -171,11 +171,9 @@ This gives us:
   E[EC_1]&=\sum_{x\in Val(EC_1)} x\cdot P(x)\\
   &=1\cdot P(EC_1{=}1)+0\cdot P(EC_1{=}0)\\
   &=1\cdot 0.25+0\cdot 0.75\\
-  &=0.25
+  &=0.25.
   \end{split}
 \end{equation*}
-
-
 
 \subsection{Graph Theory}\label{subsec:graph-theory}
 
@@ -221,7 +219,7 @@ Using our author extraction example we can define $\mathcal{X}=\{EC_2,LN_1,FN_2\
 An \gls{edge} $A\to B$ thereby models a direct influence of $A$ on $B$.
 Since the influence is directed, it is possible to separate the \gls{joint distribution} $P(\mathbf{X},\mathbf{Y})$ based on the \gls{bayesian network} as a product of a \glspl{prior distribution} $P(\mathbf{Y})$ and a \glspl{cpd} $P(\mathbf{X}|\mathbf{Y})$~\citep{sutton2010introduction}:
 \begin{equation}
-  P(\mathbf{X},\mathbf{Y})=P(\mathbf{Y})P(\mathbf{X}|\mathbf{Y})
+  P(\mathbf{X},\mathbf{Y})=P(\mathbf{Y})P(\mathbf{X}|\mathbf{Y}).
 \end{equation}
 Here, the \gls{prior distribution} are \glspl{node} in the \gls{bayesian network} which only have outgoing \glspl{edge}.
 Consequently, a \glspl{cpd} $\mathbf{X}$ given $\mathbf{Y}$ results from the \glspl{edge} going from $\mathbf{Y}$ to $\mathbf{X}$.
@@ -230,7 +228,7 @@ Consequently, a \glspl{cpd} $\mathbf{X}$ given $\mathbf{Y}$ results from the \gl
 The gray node represents an \gls{observed variable} and the white nodes represent \glspl{target variable}.
 From this we can derive the following \gls{joint distribution}:
 \begin{equation*}
-  P(EC_2,LN_1,FN_2)=P(LN_1)P(FN_2|LN_1)P(EC_2\mid LN_1,FN_2)
+  P(EC_2,LN_1,FN_2)=P(LN_1)P(FN_2|LN_1)P(EC_2\mid LN_1,FN_2).
 \end{equation*}
 
 \begin{figure}[t]
@@ -309,8 +307,7 @@ $\Psi(LN_1,FN_2)$\par
  \bottomrule
 \end{tabular}
 \end{center}
-
-\caption{Three factors for the author extraction example}
+\caption{Three factors for the author extraction example.}
 \label{tab:example-factors}
 \end{table}
 
@@ -325,7 +322,7 @@ One way of calculating the \gls{factor product} of the three \glspl{factor} in \
   \begin{split}
   &\Psi(LN_1,EC_2)\times\Psi(FN_2,EC_2)\Psi(LN_1,FN_2)\\
   &\hspace{4em}=\Psi(LN_1,FN_2,EC_2)\times\Psi(LN_1,FN_2)\\
-  &\hspace{4em}=\Psi(LN_1,FN_2,EC_2)
+  &\hspace{4em}=\Psi(LN_1,FN_2,EC_2).
   \end{split}
 \end{equation*}
 Note that, in general, the $\Psi(LN_1,FN_2,EC_2)$ in line two and three are not the same.
@@ -395,7 +392,7 @@ where $\epsilon(\mathbf{D})=-\ln\Psi(\mathbf{D})$ is called \gls{energy function
 Being in the log-space, the \gls{probability distribution} over a set of \glspl{random variable} is proportional to the exponential of the sum of its energy functions~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:p-energy-function}
-  P\left(X_1,\dots,X_N\right) \propto \exp\left\{-\sum_{k=1}^K\epsilon_k\left(\mathbf{D}_k\right)\right\}
+  P\left(X_1,\dots,X_N\right) \propto \exp\left\{-\sum_{k=1}^K\epsilon_k\left(\mathbf{D}_k\right)\right\}.
 \end{equation}
 
 In \Cref{tab:example-energy-functions} we apply the \gls{energy function} to the three factors in \Cref{tab:example-factors}.
@@ -467,7 +464,7 @@ For example, we can represent $\epsilon(LN_1,FN_2)$ from \Cref{tab:example-energ
 \end{equation*}
 which are multiplied with the weights $\theta_1{=}-\ln(30)$ and $\theta_2{=}-\ln(10)$:
 \begin{equation*}
-  \epsilon\left(FN_2,LN_1\right)=\left(-\ln(30)\cdot f_1(FN_2,LN_1)\right)+\left(-\ln(10)\cdot f_2(FN_2,LN_1)\right)
+  \epsilon\left(FN_2,LN_1\right)=\left(-\ln(30)\cdot f_1(FN_2,LN_1)\right)+\left(-\ln(10)\cdot f_2(FN_2,LN_1)\right).
 \end{equation*}
 Given the assignments $FN_1{=}true$ and $LN_1{=}true$ we have:
 \begin{equation*}
@@ -475,7 +472,7 @@ Given the assignments $FN_1{=}true$ and $LN_1{=}true$ we have:
   \epsilon\left(FN_2{=}true,LN_1{=}true\right)&=\left(-\ln(30)\cdot f_1(FN_2{=}true,LN_1{=}true)\right)\\
   &\hspace{4em}+\left(-\ln(10)\cdot f_2(FN_2{=}true,LN_1{=}true)\right)\\
   &=\left(-\ln(30)\cdot 0\right)+\left(-\ln(10)\cdot 1\right)\\
-  &=-\ln(10)
+  &=-\ln(10).
   \end{split}
 \end{equation*}
 
@@ -557,7 +554,7 @@ Using \Cref{equ:log-linear-model}, we can reformulate the definition of \glspl{c
   \begin{split}
     P(\mathbf{Y}\mid\mathbf{X}) & = \frac{1}{Z(\mathbf{X})}\tilde{P}(\mathbf{Y},\mathbf{X}) \\
     \tilde{P}(\mathbf{Y},\mathbf{X}) & = \exp\left\{ -\sum_{k=1}^K \theta_k f_k\left(\mathbf{D}_k\right)\right\} \\
-    Z(\mathbf{X}) & = \sum_{\mathbf{Y}}\tilde{P}(\mathbf{Y},\mathbf{X})
+    Z(\mathbf{X}) & = \sum_{\mathbf{Y}}\tilde{P}(\mathbf{Y},\mathbf{X}).
   \end{split}
 \end{equation}
 This representation allows us to encode a \gls{crf} model more compactly using \glspl{feature function} instead of \glspl{factor}.
@@ -578,7 +575,7 @@ Inserting the two factors in \Cref{equ:crf-factor} results in:
   \begin{split}
     P(\mathbf{Y}\mid\mathbf{X}) & = \frac{1}{Z(\mathbf{X})}\tilde{P}(\mathbf{Y},\mathbf{X}) \\
     \tilde{P}(\mathbf{Y},\mathbf{X}) &= \prod_{n=1}^{N}\left(\Psi_n\left(\vphantom{\tilde{X}}Y_n,Y_{n-1}\right)\times\Psi_n\left(Y_n,\mathbf{\tilde{X}}_n\right)\right) \\
-    Z(\mathbf{X}) & = \sum_{\mathbf{Y}}\tilde{P}(\mathbf{Y},\mathbf{X})
+    Z(\mathbf{X}) & = \sum_{\mathbf{Y}}\tilde{P}(\mathbf{Y},\mathbf{X}).
   \end{split}
 \end{equation}
 We now can represent the two \glspl{factor} using the \glspl{feature function}
@@ -600,7 +597,7 @@ By inserting the two types of \glspl{feature function} from \Cref{equ:linear-cha
   \begin{split}
     P(\mathbf{Y}\mid\mathbf{X}) & = \frac{1}{Z(\mathbf{X})}\tilde{P}(\mathbf{Y},\mathbf{X})  \\
     \tilde{P}(\mathbf{Y},\mathbf{X}) & = \exp\left\{ -\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(\vphantom{\tilde{X}}Y_n,Y_{n-1}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n,\mathbf{\tilde{X}}_n\right)\right) \right\} \\
-    Z(\mathbf{X}) & = \sum_{\mathbf{Y}}\tilde{P}(\mathbf{Y},\mathbf{X})
+    Z(\mathbf{X}) & = \sum_{\mathbf{Y}}\tilde{P}(\mathbf{Y},\mathbf{X}).
   \end{split}
 \end{equation}
 Thereby, for every $Y_n$, we iterate over $K$ predefined \glspl{feature function} $\tilde{f}_k$ and $L$ predefined \glspl{feature function} $\tilde{f}_l$.
@@ -616,7 +613,7 @@ Note that in \Cref{fig:example-linear-chain-crf} we do not use $\Psi(LN_1,EC_2)$
 \begin{figure}[t]
 \centering
 \input{figures/example-linear-chain-crf.tex}
-\caption[]{%
+\caption{%
   \Gls{linear-chain crf} derived from the author extraction example.
 }
 \label{fig:example-linear-chain-crf}
@@ -676,11 +673,11 @@ In order to show the computational complexity of this inferencing task, we will 
 According to \Cref{equ:linear-chain-crf-factor} we have:
 \begin{equation}
   \label{equ:linear-chain-crf-z}
-  Z(\mathbf{X}) = \sum_{\mathbf{Y}}\left(\prod_{n=1}^{N}\left(\Psi_n\left(\vphantom{\tilde{x}}Y_n,Y_{n-1}\right)\times\Psi_n\left(Y_n,\mathbf{\tilde{X}}_n\right)\right)\right)
+  Z(\mathbf{X}) = \sum_{\mathbf{Y}}\left(\prod_{n=1}^{N}\left(\Psi_n\left(\vphantom{\tilde{x}}Y_n,Y_{n-1}\right)\times\Psi_n\left(Y_n,\mathbf{\tilde{X}}_n\right)\right)\right).
 \end{equation}
 Since we calculate the \gls{factor product} for every possible joint assignment $\mathbf{\tilde{y}}\in Val(\mathbf{Y})$, the computation of $Z(\mathbf{X})$ is exponential in $N$, the number of \glspl{random variable} in $\mathbf{Y}$:
 \begin{equation}
-  |Val(\mathbf{Y})|=2^{N}
+  |Val(\mathbf{Y})|=2^{N}.
 \end{equation}
 
 Yet, in the case of \glspl{linear-chain crf}, it is possible to reduce the complexity of calculating $Z(\mathbf{X})$ by using the forward-backward algorithm, sometimes referred to as dynamic programming or variable elimination~\citep{sutton2010introduction,koller2009probabilistic}.
@@ -694,7 +691,7 @@ By applying the distributive law we can reorder \Cref{equ:linear-chain-crf-z} in
 \begin{equation}
   \begin{split}
     Z(\mathbf{X}) = & \sum_{Y_N}\left(\sum_{Y_{N-1}}\left(\Psi_N\left(\vphantom{\tilde{X}}Y_N,Y_{N-1}\right)\times\Psi_N\left(Y_N,\mathbf{\tilde{X}}_N\right)\right)\right.\\
-    & \times\left.\left(\sum_{Y_{N-2}}\left(\Psi_{N-1}\left(\vphantom{\tilde{X}}Y_{N-1},Y_{N-2}\right)\times\Psi_{N-1}\left(Y_{N-1},\mathbf{\tilde{X}}_{N-1}\right)\right)\dots\vphantom{\sum_{Y_N}}\right)\right)
+    & \times\left.\left(\sum_{Y_{N-2}}\left(\Psi_{N-1}\left(\vphantom{\tilde{X}}Y_{N-1},Y_{N-2}\right)\times\Psi_{N-1}\left(Y_{N-1},\mathbf{\tilde{X}}_{N-1}\right)\right)\dots\vphantom{\sum_{Y_N}}\right)\right).
   \end{split}
   \label{equ:linear-chain-crf-z-distributive}
 \end{equation}
@@ -755,7 +752,7 @@ where $T=|\mathbf{Y}|$.
 Even though the forward variable $\alpha_n$ is sufficient for calculating $Z(\mathbf{X})$, other calculations may also require a \textit{backward variable} $\beta_n$~\citep{sutton2010introduction}. It is defined analogously to $\alpha_n$ but the recursion expands in the opposite direction such that the calculation of $\beta_n$ recursively uses the result of $\beta_{n+1}$:
 \begin{equation}
   \label{equ:linear-chain-crf-z-beta}
-  \beta_n(i) = \sum_{j\in\mathbf{Y}}\left(\left(\Psi_{n+1}\left(\vphantom{\tilde{X}}j,i\right)\times\Psi_{n+1}\left(j,\mathbf{\tilde{X}}_{n+1}\right)\right)\times \beta_{n+1}(j)\right)
+  \beta_n(i) = \sum_{j\in\mathbf{Y}}\left(\left(\Psi_{n+1}\left(\vphantom{\tilde{X}}j,i\right)\times\Psi_{n+1}\left(j,\mathbf{\tilde{X}}_{n+1}\right)\right)\times \beta_{n+1}(j)\right).
 \end{equation}
 Due to the opposite order, the base case for the recursion is defined as $\beta_N(i)=1$.
 Also, note the inverted usage of $i$ in $\beta_n(i)$ and $j$ in $\beta_{n+1}(j)$ in comparison with the usage in \Cref{equ:linear-chain-crf-z-alpha} for $\alpha_n$.
@@ -823,11 +820,12 @@ A common approach is to calculate the \textit{log-likelihood} instead of the lik
 This is possible since the log-likelihood is monotonically related to the likelihood and thereby the maximization problems are equivalent~\citep{koller2009probabilistic}.
 An computational advantage of using the log-likelihood is that it is calculated over sums instead of products~\citep{koller2009probabilistic}.
 
-The log-likelihood function is defined as~\citep{sutton2010introduction}:
+The log-likelihood function is defined as~\citep{sutton2010introduction}
 \begin{equation}
   \label{equ:log-likelihood}
   \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=\sum_{m=1}^M \left(\log P\left(\mathbf{Y}^{(m)}|\mathbf{X}^{(m)}\right)\right)
 \end{equation}
+where $\log$ refers to the natural logarithm.
 
 In order to illustrate the calculation, we now look at a more concrete example of a log-likelihood function.
 Using the definition of \glspl{linear-chain crf} from \Cref{equ:linear-chain-crf-log-linear}, we now substitute $P(\mathbf{Y}^{(m)}|\mathbf{X}^{(m)})$ in \Cref{equ:log-likelihood} which gives us:
@@ -836,15 +834,15 @@ Using the definition of \glspl{linear-chain crf} from \Cref{equ:linear-chain-crf
   \label{equ:log-likelihood-linear-chain-crf-log-linear-1}
   \begin{split}
     \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(\log \left(\frac{1}{Z\left(\mathbf{X}^{(m)}\right)}\exp\left\{ -\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(m)},Y_{n-1}^{(m)}\right) \right.\right.\right.\right.\\
-    &\left.\left.\left.\left. +\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(m)},\mathbf{\tilde{X}}_n^{(m)}\right)\right)\right\}\right)\right)
+    &\left.\left.\left.\left. +\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(m)},\mathbf{\tilde{X}}_n^{(m)}\right)\right)\right\}\right)\right).
  \end{split}
 \end{equation}
 We can simplify this by resolving the $\log$ statement which results in:
 \begin{equation}
   \label{equ:log-likelihood-linear-chain-crf-log-linear-2}
   \begin{split}
-    \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(m)},Y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(y_n^{(m)},\mathbf{\tilde{X}}_n^{(m)}\right)\right)\right) \\
-    & -\log Z\left(\mathbf{X}^{(m)}\right)
+    \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(m)},Y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(m)},\mathbf{\tilde{X}}_n^{(m)}\right)\right)\right. \\
+    &\left.-\log\left(Z\left(\mathbf{X}^{(m)}\right)\right)\vphantom{\sum_{l=1}^L}\right).
  \end{split}
 \end{equation}
 \end{subequations}
@@ -866,7 +864,7 @@ Additionally, \citet{sutton2010introduction} state that ``the accuracy of the fi
 This gives us the following definition of a Gaussian prior~\citep{sutton2010introduction}:
 \begin{equation}
   \label{equ:gaussian-prior}
-  Gauss(\bm{\theta})=\sum_{i=1}^I\frac{\theta_i^2}{2\sigma^2}
+  Gauss(\bm{\theta})=\sum_{i=1}^I\frac{\theta_i^2}{2\sigma^2}.
 \end{equation}
 
 Applying the Gaussian prior to \Cref{equ:log-likelihood-linear-chain-crf-log-linear-2} gives us:
@@ -874,7 +872,7 @@ Applying the Gaussian prior to \Cref{equ:log-likelihood-linear-chain-crf-log-lin
   \label{equ:log-likelihood-linear-chain-crf-log-linear-gaussian}
   \begin{split}
     \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(\vphantom{\tilde{X}}Y_n^{(m)},Y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(m)},\mathbf{\tilde{X}}_n^{(m)}\right)\right)\right) \\
-    & -\log Z\left(\mathbf{X}^{(m)}\right)-\left(\sum_{k=1}^K\frac{\theta_k^2}{2\sigma^2}+\sum_{l=1}^L\frac{\theta_l^2}{2\sigma^2}\right)
+    & -\log Z\left(\mathbf{X}^{(m)}\right)-\left(\sum_{k=1}^K\frac{\theta_k^2}{2\sigma^2}+\sum_{l=1}^L\frac{\theta_l^2}{2\sigma^2}\right).
  \end{split}
 \end{equation}
 In \Cref{cha:distant-supervision} we discuss an additional regularization term based on the concept of \gls{generalized expectation}.
@@ -886,19 +884,19 @@ Here, $\bm{\Theta}$ is the set of all possible sets of parameters $\bm{\tilde{\t
 This task is referred to as \textit{maximum likelihood estimation} and, when considering the log-likelihood function, defined as~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:maximum-log-likelihood-estimation}
-  \ell\left(\bm{\hat{\theta}}:\mathcal{D}\right)=\max_{\bm{\tilde{\theta}}\in\mathbf{\Theta}}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)
+  \ell\left(\bm{\hat{\theta}}:\mathcal{D}\right)=\max_{\bm{\tilde{\theta}}\in\mathbf{\Theta}}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right).
 \end{equation}
 When discussing the maximization problem, an important term is the \gls{gradient} of a \gls{function}.
 The \gls{gradient} $\nabla f$ of an \gls{objective function} $f_{\text{obj}}(\bm{\tilde{\theta}})$ with $\bm{\tilde{\theta}}=\tilde{\theta}_1,\dots,\tilde{\theta}_I$ is the vector of the partial derivatives~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:gradient}
-  \nabla f=\left\langle\frac{\partial f}{\partial\tilde{\theta}_1},\dots,\frac{\partial f}{\partial\tilde{\theta}_I}\right\rangle
+  \nabla f=\left\langle\frac{\partial f}{\partial\tilde{\theta}_1},\dots,\frac{\partial f}{\partial\tilde{\theta}_I}\right\rangle.
 \end{equation}
 The first step in finding $\bm{\hat{\theta}}$ is to find a $\bm{\tilde{\theta}}$ for which $\nabla f=0$.
 Applied to our log-likelihood function we thereby have to solve the following equations:
 \begin{equation}
   \label{equ:log-likelihood-gradient}
-  \frac{\partial}{\partial\theta_i}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=0\ \ \ \ \ \ \ \ \ i=1,\dots,I
+  \frac{\partial}{\partial\theta_i}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=0\ \ \ \ \ \ \ \ \ i=1,\dots,I.
 \end{equation}
 We refer to \citet{sutton2010introduction} and \citet{koller2009probabilistic} for further information on how to calculate these partial derivatives.
 The resulting $\bm{\tilde{\theta}}$ is called a \textit{stationary point} of the function $\ell$ and can be a local maximum, a local minimum, or a saddle point~\citep{koller2009probabilistic}.
