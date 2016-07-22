@@ -40,14 +40,31 @@ The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standar
 The \gls{gnd}\todo{full acr?} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
 \itodo{which persons are included, statistics}
 We will refer to the second data set as the \texttt{gnd} data set.
+\begin{table}[t]
+  \centering
+\begin{tabular}{c c c c c c}
+ \toprule
+ & \texttt{gnd-full} & \texttt{gnd-diff} &\texttt{swp-trim} &\texttt{swp-full} & \begin{tabular}[c]{@{}c@{}}\texttt{swp-full}\\+\texttt{gnd-full}\end{tabular} \\
+ \midrule
+ \begin{tabular}[c]{@{}c@{}}Extracted\\Authors\end{tabular} & 8,436,468 & 3,684,265 & 3,684,265& 10,796,240 & 19,232,708\\[5mm]
+ \begin{tabular}[c]{@{}c@{}}Individual\\Authors\end{tabular} &6,853,487 & 3,239,116 & 1,617,698 & 3,135,891 & 9,081,885\\
+ %& & & & & \\
+ \bottomrule
+\end{tabular}
+\caption{Statistics on different variations of the \texttt{gnd} and \texttt{swp} knowledge bases.}
+\label{tab:knowledge-base-statistics}
+\end{table}
 
 \bigskip
 
 The second source is the social science portal Sowiport\footnote{\url{http://sowiport.gesis.org/} (accessed July~5,~2016)} which is maintained by GESIS --- Leibniz Institute for the Social Sciences\footnote{\url{http://www.gesis.org/} (accessed July~5,~2016)}.
 \itodo{statistics, references}
 
+We will refer to the second data set as the \texttt{swp} data set.
 
-We will refer to the second data set as the \texttt{sowiport} data set.
+\bigskip
+
+\Cref{tab:knowledge-base-statistics}\todo{swp-full +gnd-full or +gnd-diff?} contains statistics on a number of variations of the \texttt{gnd} and  \texttt{swp} data sets.
 
 
 \subsection{Author Name Matching}\label{subsec:i-author-name-matching}
