@@ -79,11 +79,11 @@ Ambiguous annotations are represented such that the number of \glspl{random vari
 Again using the author extraction example from \Cref{cha:crfs} we define an incomplete annotation for the \gls{linear-chain crf} based on of the first reference string in \Cref{fig:example-reference-strings}:
 \begin{equation*}
 \begin{split}
-  \bm{L}_1=&\left\{\{\texttt{start}{=}true\},\{LN_1{=}false\},\{FN_2{=}false,FN_2{=}true\}\right\}.
+  \bm{L}_1=&\left\{\{\texttt{start}{=}\mathit{true}\},\{LN_1{=}\mathit{false}\},\{F\rs N_2{=}\mathit{false},F\rs N_2{=}\mathit{true}\}\right\}.
 \end{split}
 \end{equation*}
 Thereby, the word ``Friedrich'' is ambiguously annotated as either a first name or not a first name.
-This can also be seen as a partial annotation since $|\mathpzc{L}_2|=|Val(FN_2)|$.
+This can also be seen as a partial annotation since $|\mathpzc{L}_2|=|Val(F\rs N_2)|$.
 
 \bigskip
 
@@ -99,8 +99,8 @@ For this we let $\mathbf{Y}_{\bm{T}}$ be the set of all \glspl{full assignment} 
 For our incompletely annotated reference string $\bm{L}_1$ we have the following set of \glspl{full assignment} for our \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}:
 \begin{equation*}
 \begin{split}
-  \mathbf{Y}_{\bm{L}}=&\Big\{\{\text{start}{=}true,LN_1{=}false,FN_2{=}false\},\\
-  &\hphantom{\Big\{}\{\text{start}{=}true,LN_1{=}false,FN_2{=}true\}\Big\}\\.
+  \mathbf{Y}_{\bm{L}}=&\Big\{\{\text{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{false}\},\\
+  &\hphantom{\Big\{}\{\text{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{true}\}\Big\}\\.
 \end{split}
 \end{equation*}
 
