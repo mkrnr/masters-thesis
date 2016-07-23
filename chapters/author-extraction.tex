@@ -11,14 +11,14 @@
 }}
 
 \newcommand\researchquestionthree{\researchquestionformat{%
-  \RQ{3}: Given a set of reference sections from the research area of German social sciences with matched author names, how does, for a word $w_n$ that has no matched author names, modifying the probability mass distribution over the labels in $Val(Y_n)$ impact the performance of a \gls{crf} model that was learned on the resulting \gls{ge} constraints?
+  \RQ{3}: Given a set of reference sections from the research area of German social sciences with matched author names, how does, for a word $w_n$ that has no matched author names, modifying the probability mass distribution over the labels in $\mathit{Val}(Y_n)$ impact the performance of a \gls{crf} model that was learned on the resulting \gls{ge} constraints?
 }}
 
 \newcommand\researchquestionfour{\researchquestionformat{%
-  \RQ{4}: Given a set of reference sections from the research area of German social sciences with matched author names, how does changing the number of considered words $w_n$ which do not have matched author names impact the performance of a \gls{crf} model that was learned on the resulting \gls{ge} constraints?
+  \RQ{4}: Given a set of reference sections from the research area of German social sciences with matched author names, how does removing a number of unmatched words $w_n$ impact the performance of a \gls{crf} model that was learned on the resulting \gls{ge} constraints?
 }}
 
-In this chapter we will discuss author extraction as a concrete use case for the usage of \glspl{crf} in combination with \gls{distant supervision}.
+In this chapter, we will discuss author extraction as a concrete use case for the usage of \glspl{crf} in combination with \gls{distant supervision}.
 This can be broken down into to following steps:
 \begin{enumerate}
   \item Preprocessing of research papers to extract reference sections as text from \gls{pdf} documents
@@ -27,8 +27,9 @@ This can be broken down into to following steps:
   \item Learning a \gls{crf} model using \gls{ge} constraints
 \end{enumerate}
 The following sections will describe these steps in more detail.
-In addition we will formulate a number of research questions that we aim to answer in \Cref{cha:evaluation}.
-These research questions will have a focus on the author extraction from research papers in the area of German social sciences.
+In addition, we will formulate a number of research questions that we aim to answer in \Cref{cha:evaluation}.
+These research questions will focus on the use case of extracting authors from research papers in the area of German social sciences.
+We will also highlight some of the similarities and differences of our approach to the one of \citet{lu2013web}.
 
 \section{Preprocessing}\label{sec:ae-preprocessing}
 
@@ -37,25 +38,28 @@ Before building a training set using \gls{distant supervision}, an unlabeled tra
 Since we want to learn a model that is able to extract author names in reference sections, it is crucial to remove the text that is not part of the reference section.
 Otherwise, we would also match names that appear in the body of the research paper during the author name matching step (see \Cref{subsec:ae-author-name-matching}).
 In order to incorporate the layout of the research paper, this step of detecting reference sections ideally should be performed before converting the \gls{pdf} document into a textual format.
-This would allow, for example, an accurate detection of headers or page numbers.
+This would, for example, allow an accurate detection of headers or page numbers.
 
 \bigskip
 
 Either before or after detecting reference sections, the textual content of the research paper has to be extracted.
-For this, the layout of the document needs to be recognized in order to, for example, correctly extract the text from a research paper that contains two columns of text per page.
+For this, the layout of the document needs to be recognized in order to correctly extract the text from a research paper.
+For example, research papers can contain two columns of text per page.
+Without considering the layout, it is possible that the two columns are merged during the text extraction.
 
 \section{Generating Training Sets with Distant Supervision}\label{sec:ae-distant-supervision}
 
-As discussed in \todo{ref}, distant supervision is \dots
-In this section we discuss our approach of building such a distantly supervised training set for, our use case, author name extraction.
-
+As discussed in \Cref{cha:distant-supervision}, we refer to distant supervision as the labeling of a data set using an external knowledge base with the goal of generating a training data set.
+In this section, we discuss our approach of building such a distantly supervised training set for the task of author name extraction.
 
 \subsection{Knowledge Base Creation}\label{subsec:ae-knowledge-base-creation}
 
 In order to apply distant supervision to the task of labeling author names, an external source for author names is needed.
 Since the goal is to distinguish between the first names and last names of an author, external sources that provide this distinction are preferable.
-This is due to the fact that determining which part of a name belongs to the first names and which to the last names is not trivial\todo{example}.
-In addition to labeling reference sections for the distant supervision, such a knowledge base can also be used to construct features for the \gls{crf} model (see \Cref{subsec:ae-fearture-engineering}).
+This is because determining which part of a name belongs to the first names and which to the last names is not always a trivial task.
+For example, German last names can consist of words which are also common first names such as ``Friedrich'', ``Otto'', or ``Albrecht''.
+
+In addition to the labeling of reference sections during the distant supervision, such a knowledge base can also be used to construct features for the \gls{crf} model (see \Cref{subsec:ae-fearture-engineering}).
 
 \bigskip
 
@@ -65,26 +69,58 @@ We formulate this as the following research question:
 
 \subsection{Author Name Matching}\label{subsec:ae-author-name-matching}
 
-Given a data set of unlabeled reference sections and a knowledge base for author names, generating the distantly supervised training set $\mathcal{T}$ requires the labeling of author names in the references.
+Given a data set of unlabeled reference sections and a knowledge base for author names, generating a distantly supervised training set requires the labeling of author names in the references.
 A number of challenges arise from this task.
-\itodo{variations of author names}
-First, author names can appear in a reference in a variety of ways\todo{example 4?}.
-Another aspect that requires attention is the possible overlapping of matches \todo{example 4?}.
-Instead of deciding for one of the overlapping author names, our goal is to consider all author names.
-In \Cref{subsec:i-author-name-matching} we will discuss that tree based markup languages such as \gls{xml} are less suitable to mark overlapping entries.
-Instead, we will use a graph structure called \gls{goddag} which supports overlapping entries.
-\todo{example}
+
+First, author names can appear in a reference in a variety of ways.
+As an example, we show eleven possible variations of the name ``Max Friedrich Schmidt'' in \Cref{fig:example-name-variations}.
+We thereby have to consider such variations when matching a given reference string to our author name knowledge base.
+\begin{figure}[t]
+\centering
+\begin{tabular}{l l}
+  \tabitem{}Schmidt, Max Friedrich&\tabitem{}Max Friedrich Schmidt\\
+  \tabitem{}Schmidt, Max F.       &\tabitem{}Max F. Schmidt\\
+  \tabitem{}Schmidt, M. F.        &\tabitem{}M. F. Schmidt\\
+  \tabitem{}Schmidt, M.F.         &\tabitem{}M.F. Schmidt\\
+  \tabitem{}Schmidt, MF           &\tabitem{}MF Schmidt\\
+  \tabitem{}Schmidt MF            &{}
+\end{tabular}
+\caption{Possible ways, the name ``Max Friedrich Schmidt'' can appear in a reference string. Here, ``Friedrich'' is seen as a first name. We omit punctuation marks that separate different authors.}
+\label{fig:example-name-variations}
+\vspace{0.4cm}
+\end{figure}
+
+Another aspect that requires attention is a possible overlapping of matches.
+\Cref{fig:ref-4-example-author-names} shows six possible author names that can be extracted from the fourth reference string in \Cref{fig:example-reference-strings}.
+\begin{figure}[t]
+\centering
+\begin{tabular}{l l}
+  \tabitem{}Mia Wagner,          &\tabitem{}Wagner, Max\\
+  \tabitem{}Wagner, Max Friedrich&\tabitem{}Max Friedrich\\
+  \tabitem{}Max Friedrich Schmidt&\tabitem{}Friedrich Schmidt
+\end{tabular}
+\caption{Possible author names that can be extracted from the fourth reference string in \Cref{fig:example-reference-strings}. Here, ``Friedrich'' can be both part of a first name or a last name. Also, we include punctuation marks that separate different authors.}
+\label{fig:ref-4-example-author-names}
+\end{figure}
+As we can see, possible author names can overlap.
+In our example, the word ``Friedrich'' can be part of four different author names.
+Facing a similar problem when having multiple possible DBpedia entity types for a given text segment, \citet{lu2013web} randomly select one of the DBpedia entity types as the label for this text segment.
+Instead of deciding for one of the overlapping author names, our goal is to consider all possible author names.
+In \Cref{subsec:i-author-name-matching}, we will discuss a data structure that can represent overlapping author names.
 
 \section{Building \glsentryshort{ge} Constraints}\label{sec:ae-training-crfs}
 
 After labeling the occurrences of author in our reference sections, we now want to derive \gls{ge} constraints that will be used for learning a \gls{crf} model.
 
-A first step is to specify the possible labelings $Val(Y_n)$ for a \gls{target variable} $Y_n$.
+A first step is to specify the possible labelings $\mathit{Val}(Y_n)$ for a \gls{target variable} $Y_n$.
 One goal in the scenario is to recognize the first names and last names of authors as such.
 For this we use the labels $\texttt{FN}$ and $\texttt{LN}$, respectively.
 Every other word is marked with the label $\texttt{O}$ for other.
+We thereby do not further distinguish between first names and middle names.
+Analyzing the impact of an additional middle name on the performance could be part of a future work.
+
 Since our second goal is to group first names and last names together to form author names, it is important to additionally encode the beginning and end of an author name in the given word sequence.
-A common approach is to extend the label by this information~\citep{houngbo2012method}.
+A common approach is to extend the label by this information~\citep{ramshaw1995text,houngbo2012method}.
 Given the labels \texttt{FN}, \texttt{LN}, and \texttt{O} we add the following prefixes:
 \begin{itemize}
   \item \texttt{B-} marks the beginning word of an author name
@@ -92,62 +128,101 @@ Given the labels \texttt{FN}, \texttt{LN}, and \texttt{O} we add the following p
   \item \texttt{E-} marks the ending word in an author name (optional)
 \end{itemize}
 This results in labels such as \texttt{B-LN} which marks a word as last name and the beginning of an author name.
-\itodo{examples}
-We refer to this labeling format as the \acrfull{bieo} format since a label either has one of the three mentioned prefixes or is the \texttt{O} label.
+We refer to this labeling format as the \gls{bieo} format since a label either has one of the three mentioned prefixes or is the \texttt{O} label.
+In \Cref{tab:example-tagging}, we demonstrate our \gls{bieo} format using the fourth reference string in \Cref{fig:example-reference-strings} as an example.
+\begin{table}[t]
+\centering
+\begin{tabular}{r c c c c c c c c}
+ \toprule
+ \textbf{Words:} & Mia & Wagner, & Max & Friedrich & Schmidt & (2010): & Fourth & \dots\\
+ \midrule
+ \textbf{\acrshort{bieo}:} & \texttt{B-FN} & \texttt{E-LN} & \texttt{B-FN} & \texttt{I-FN} & \texttt{E-LN} & \texttt{O} & \texttt{O} & \dots\\
+ \textbf{\acrshort{bio}:} & \texttt{B-FN} & \texttt{I-LN} & \texttt{B-FN} & \texttt{I-FN} & \texttt{I-LN} & \texttt{O} & \texttt{O} & \dots\\
+ \bottomrule
+\end{tabular}
+\caption{Tagging example for the fourth reference string in \Cref{fig:example-reference-strings} using the \acrshort{bieo} and \acrshort{bio} format.}
+\label{tab:example-tagging}
+\end{table}
+
 Instead of marking the ending word of an author name using the \texttt{E-} prefix, it can also be marked as such using the \texttt{I-} prefix.
 This is possible because the word following this ending word is either the beginning of the next author name (labeled with \texttt{B-FN} or \texttt{B-LN}) or a non-author word (labeled with \texttt{O}).
-\itodo{example}
 When leaving out the \texttt{E-} prefix, labels either have one of the two prefixes \texttt{B-} or \texttt{I-}, or consist of the \texttt{O} label.
-Thereby, \citet{houngbo2012method} refer to this as the \acrfull{bio} format.
+Thereby, \citet{houngbo2012method} refer to this as the \gls{bio} format.
 
-Having defined the \gls{bieo} and \gls{bio} format, the following question arises:
+In \Cref{tab:example-tagging}, we also apply the \gls{bio} tagging format to the fourth reference string in \Cref{fig:example-reference-strings}.
+
+\bigskip
+
+Having defined the \gls{bieo} and \gls{bio} format, the following research question arises:
 \researchquestiontwo%
-In the following we will consider the \gls{bio} format for simplicity reasons.
+\citet{lu2013web} use the \gls{bio} format to group text sequences that belong to the same DBpedia entity types and in the following illustrations, we will also consider the \gls{bio} format for simplicity reasons.
 Yet, the discussed approaches can also be applied to the \gls{bieo} format.
 
 \bigskip
 
-Given a training data set $\mathcal{T}$ (see \cref{sec:ae-distant-supervision}), we now want to generate \gls{ge} constraints for the \gls{crf} model learning.
+Given an unlabeled set $\mathcal{U}=\{\mathpzc{u}^{(1)},\dots,\mathpzc{u}^{(M)}\}$ of $M$ reference strings, we want to generate \gls{ge} constraints for the \gls{crf} model learning.
+For this we assume that a number of subsequences in the reference strings are matched against a data base of author names (see \cref{sec:ae-distant-supervision}).
 Assuming the \gls{bio} format, a \gls{target variable} $Y_n$ has the following possible assignments:
 \begin{equation*}
-  Val(Y_n)=\{\texttt{B-FN},\texttt{B-LN},\texttt{I-FN},\texttt{I-LN},\texttt{O}\}
+  \mathit{Val}(Y_n)=\{\texttt{B-FN},\texttt{B-LN},\texttt{I-FN},\texttt{I-LN},\texttt{O}\}
 \end{equation*}
-We thereby want to build a \gls{probability distribution} $P$ for $Y_n$ which assigns a probability to each label in $Val(Y_n)$ based on $\mathcal{T}$.
+Our goal is to build constraints that follow the \gls{label regularization} approach proposed by \citet{mann2010generalized} (see \Cref{equ:label-regularization-constraints}).
+Thereby, for every $Y_n$, we build a \gls{probability distribution} $\tilde{P}(Y_n)$ which assigns a probability to each label in $\mathit{Val}(Y_n)$.
 
-For this we iterate over the sequence of words in $P$.
-For $w_n$ we distinguish two cases:
+For this we iterate over the reference strings in $\mathcal{U}$.
+For every word $w_n$ in $\mathpzc{u}^{(m)}$ we distinguish two cases:
 \begin{enumerate}
-  \item $w_n$ is tagged as part of at least one author
-  \item $w_n$ is not tagged as part of at least one author
+  \item $w_n$ is tagged as part of at least one author.
+  \item $w_n$ is not tagged as part of at least one author.
 \end{enumerate}
 
 In the first case, the tagging contributes a probability mass of one to the according labeling of this word.
-\itodo{example}
+To illustrate this, given the fourth reference string in \Cref{fig:example-reference-strings}, we assume that the subsequences ``Mia Wagner,{}'' and ``Wagner, Max'' were matched against an author data base.
+Thereby, we assign the probability mass $1$ to the label \texttt{B-FN} for the word ``Mia'' and to the label \texttt{I-FN} for the word ``Max''.
+For the word ``Wagner'', we assign the probability mass $0.5$ to each of the labels \texttt{I-LN} and \texttt{B-LN}.
 
-For the second case we consider two approaches.
-The first approach is to add a probability mass of one to the \texttt{O} label for the given word.
-The second approach is to add a probability mass to the different labels which sum to one.
-Such a distribution can either be predefined for every label in $Val(Y_n)$ or it can be estimated from the distribution of author labels.
-For the estimation we additionally need as an input the proportion of author tags to other tags.
+We consider two approaches for the second case.
+The first approach is to add a probability mass of $1$ to the \texttt{O} label for the given word.
+The second approach is to distribute the probability mass $1$ over the labels in $\mathit{Val}(Y_n)$.
+Such a distribution can either be predefined or it can be estimated from the set of matched author names.
 
-\itodo{example}
+After iterating over all $\mathpzc{u}^{(M)}$ in $\mathcal{U}$, we build the constraints $\tilde{P}(Y_n)$ by normalizing the aggregated probability masses for every word $w_n$.
+
+\bigskip
 
 The two different approaches for assigning a probability mass to a $w_n$ that was not matched to an author result in the following research question:
 \researchquestionthree%
 
-In our scenario we have that the number of $w_n$ which have at least one matching author name is considerably smaller than the number of $w_n$ which do not have a matching author.
-It is thereby reasonable to consider dropping some of the latter $w_n$ for the construction of \gls{ge} constraints.
-This gives us another research question:
-\researchquestionfour%
+To illustrate the generation of constraints, we assume the following probability masses for the word ``Friedrich'':
+\begin{equation*}
+  \{\texttt{B-FN}{=}0,\texttt{B-LN}{=}0,\texttt{I-FN}{=}2,\texttt{I-LN}{=}1,\texttt{O}{=}1\}.
+\end{equation*}
+The corresponding \gls{probability distribution} of the constraint $\tilde{P}(Y_n)$ is calculated with:
+\itodo{update counts}
+\begin{equation*}
+\begin{split}
+  &\tilde{P}(Y_n{=}\texttt{B-FN})=0/4=0\\
+  &\tilde{P}(Y_n{=}\texttt{B-LN})=0/4=0\\
+  &\tilde{P}(Y_n{=}\texttt{I-FN})=2/4=0.5\\
+  &\tilde{P}(Y_n{=}\texttt{I-LN})=1/4=0.25\\
+  &\tilde{P}(Y_n{=}\texttt{O})=1/4=0.25.
+\end{split}
+\end{equation*}
+This calculation is part of a more extensive example for the generation of \gls{ge} constraints in \Cref{app:subsec-ge-constraints}.
 
 \bigskip
 
-After generating counts based on the two cases, they are normalized by the total count for each word.
-\itodo{example}
+In the case of author name extraction, the number of words $w_n$ in $\mathcal{U}$ which are matched to at least one author name is considerably smaller than the number of $w_n$ which do not have a matching author.
+One reason is that author names only form a relatively small part of a reference string.
+Another reason is that, in practice, not all author names can be matched against a given knowledge base.
+Because of this imbalance, it could be helpful to not consider every unmatched word $w_n$ for the construction of \gls{ge} constraints.
+This gives us the following research question:
+\researchquestionfour%
 
 \section{Learning \glsentryshortpl{crf}}\label{sec:ae-learning-crfs}
 
-After generating a number of \gls{ge} constraints we now focus on the \gls{crf} model learning.
+\itodo{discuss approach by \citet{lu2013web}}
+After generating a number of \gls{ge} constraints, we now focus on the \gls{crf} model learning.
 One important aspect is the graphical structure $\mathcal{\tilde{K}}$ which, as stated in \Cref{sec:learning-crfs}, is given as an input to the model learning.
 Another important aspect for the model performance is the selection of suitable textual features.
 
@@ -155,12 +230,11 @@ Another important aspect for the model performance is the selection of suitable 
 
 The underlying graph $\mathcal{\tilde{K}}$ of a \gls{crf} model $\mathcal{\tilde{M}}$ has a strong impact on both the runtime performance and the quality of the model.
 As we discussed in \Cref{sec:learning-crfs}, an efficient inferencing is crucial for the learning of \gls{crf}.
-The forward-backward algorithm allows an efficient inferencing but required $\mathcal{\tilde{K}}$ to follow a certain sequential structure.
-Given our scenario, a sequential structure where neighboring words in a reference string are also connected in $\mathcal{\tilde{K}}$ is a popular choice.\todo{other papers, peng\dots}
+The \gls{forward-backward algorithm} allows an efficient inferencing but required $\mathcal{\tilde{K}}$ to follow a certain sequential structure.
+For the use case of entity recognition, \glspl{linear-chain crf} are a popular choice~\citep{peng2004accurate,mann2008generalized,ling2012fine,groza2012reference,ohta2014empirical}.
+\citet{lu2013web} also rely on \glspl{linear-chain crf} in their experiments.
 
-
-\itodo{on linear chain crfs, markov order 0 and 1, research question}
-\itodo{on $\mathbf{Y}$}
+\itodo{on Markov order 0 and 1, research question}
 
 \subsection{Feature Engineering}\label{subsec:ae-fearture-engineering}
 

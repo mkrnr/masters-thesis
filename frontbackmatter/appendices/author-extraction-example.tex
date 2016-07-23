@@ -259,6 +259,7 @@ $\Psi(LN_1,EC_1)$\par
 \subsection{Exemplary Calculation}\label{app:subsec-lccrf-example-calculation}
 The following calculation is based on the \gls{linear-chain crf} from \Cref{fig:example-linear-chain-crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,F\rs N_2\}$.
 It uses the \glspl{feature function} defined in \Cref{app:subsec-lccrf-feature-functions}.
+The \glspl{assignment} are based on the second reference string in \Cref{fig:example-reference-strings}.
 
 \begin{subequations}
 \begin{equation*}
@@ -294,7 +295,7 @@ It uses the \glspl{feature function} defined in \Cref{app:subsec-lccrf-feature-f
   &\hspace{4em}+\tilde{P}(\texttt{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{true},EC_1{=}\mathit{true},EC_2{=}\mathit{false})\\
   &\hspace{4em}+\tilde{P}(\texttt{start}{=}\mathit{true},LN_1{=}\mathit{true},F\rs N_2{=}\mathit{false},EC_1{=}\mathit{true},EC_2{=}\mathit{false})\\
   &\hspace{4em}+\tilde{P}(\texttt{start}{=}\mathit{true},LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true},EC_1{=}\mathit{true},EC_2{=}\mathit{false})\\
-  %start  LN_1   F\rs N_2  Result
+  %start  LN_1   FN_2  Result
   %  F     F      F    1    1    30    10   300
   %  F     F      T    1    1    1     10   10
   %  F     T      F    1    10   1     10   100
@@ -330,9 +331,98 @@ Further, we have $\mathcal{D}=\{\mathpzc{d}^{(1)},\dots,\mathpzc{d}^{(4)}\}$ con
    =&-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(1)},Y_{n-1}^{(1)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(1)},\mathbf{\tilde{X}}_n^{(1)}\right)\right)-\log Z\left(\mathbf{X}^{(1)}\right)\vphantom{\sum_{l=1}^L}\\
    &+\cdots\\
    &+-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(4)},Y_{n-1}^{(4)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(4)},\mathbf{\tilde{X}}_n^{(4)}\right)\right)-\log Z\left(\mathbf{X}^{(4)}\right)\vphantom{\sum_{l=1}^L}\\
-   %TODO continue here (also calc other Z(X)...)
-    =&\left(-\log(10)+-\log(10)+-\log(10)+-\log(10)\right)-\log\left(24410\right)\\
-    \approx&-0.8924
+    =&-\Big(-\log(30)+-\log(30)+-\log(30)+-\log(10)\Big)-\log\left(370510\right)\\
+    &+-\Big(-\log(10)+-\log(10)+-\log(10)+-\log(10)\Big)-\log\left(24410\right)\\
+    &+-\Big(-\log(30)+-\log(30)+-\log(30)+-\log(20)\Big)-\log\left(567360\right)\\
+    &+-\Big(-\log(30)+-\log(30)+-\log(30)+-\log(20)\Big)-\log\left(567360\right)\\
+    \approx&12.5062-12.8226\\
+    &+9.2103-10.1027\\
+    &+13.1993-13.2487\\
+    &+13.1993-13.2487\\
+    \approx&-1.3076
  \end{split}
 \end{equation*}
-The calculation of the term that involves $\mathpzc{d}^{(2)}$ is shown in \Cref{app:subsec-lccrf-example-calculation}.
+Note that we calculate the values of
+\begin{equation*}
+   -\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(2)},Y_{n-1}^{(2)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(2)},\mathbf{\tilde{X}}_n^{(2)}\right)\right)
+\end{equation*}
+and
+\begin{equation*}
+Z\left(\mathbf{X}^{(2)}\right)
+\end{equation*}
+in \Cref{app:subsec-lccrf-example-calculation}.
+
+% Z(X) calculations
+% Z(X^1): EC_1=F, EC_2=F
+% Z(X^2): EC_1=T, EC_2=F
+% Z(X^3): EC_1=F, EC_2=T
+% Z(X^4): EC_1=F, EC_2=T
+
+% Z(EC_1=F,EC_2=T):
+  %start  LN_1   FN_2    L1,s   L1,E1    F2,L1   F2,E2
+  %  F     F      F      1      30       30      20   18000
+  %  F     F      T      1      30       1       1    30
+  %  F     T      F      1      1        1       20   20
+  %  F     T      T      1      1        10      1    10
+  %  T     F      F      30     30       30      20   540000
+  %  T     F      T      30     30       10      1    9000
+  %  T     T      F      10     1        1       20   200
+  %  T     T      T      10     1        10      1    100
+
+% Z(EC_1=F,EC_2=F):
+  %start  LN_1   FN_2    L1,s   L1,E1    F2,L1   F2,E2
+  %  F     F      F      1      30       30      10   9000
+  %  F     F      T      1      30       1       10   300
+  %  F     T      F      1      1        1       10   10
+  %  F     T      T      1      1        10      10   100
+  %  T     F      F      30     30       30      10   270000
+  %  T     F      T      30     30       10      10   90000
+  %  T     T      F      10     1        1       10   100
+  %  T     T      T      10     1        10      10   1000
+
+% 1: s=t, ln=f,fn=f,e1=f,e2=f
+% 3: s=t, ln=f,fn=f,el=f,e2=t
+\section{Distantly Supervised Training Sets}\label{app:sec-generalized-expectation}
+\subsection{Author Name Matching}\label{app:author-name-matching}
+For this example we use the four reference strings in \Cref{fig:example-reference-strings} as the unlabeled data set $\mathcal{U}$.
+Further we assume the list of authors in \Cref{fig:example-author-list} for the author matching.
+\Cref{fig:example-goddags} shows the four \glspl{goddag} (see \todo{add goddag ref}) that result from the matching of the four reference strings in $\mathcal{U}$ against the authors in \Cref{fig:example-author-list}.
+\begin{figure}[H]
+\centering
+\begin{tabular}{l l}
+ \toprule
+ First Names & Last Names\\
+ \midrule
+ Friedrich & Müller\\
+ Fritz & Müller\\
+ Mia & Friedrich\\
+ Mia & Wagner\\
+ Max & Wagner\\
+ Max Friedrich & Schmidt\\
+ \bottomrule
+\end{tabular}
+\caption{Example author list for demonstrating the author matching.}
+\label{fig:example-author-list}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{l l}
+ \toprule
+ First Names & Last Names \\
+ \midrule
+ Friedrich & Müller\\
+ Fritz & Müller\\
+ Mia & Friedrich\\
+ Mia & Wagner\\
+ Max & Wagner\\
+ Max Friedrich & Schmidt\\
+ \bottomrule
+\end{tabular}
+\caption{\Glspl{goddag} for the author matching of the authors in \Cref{fig:example-author-list} against the four reference strings in \Cref{fig:example-reference-strings}.}
+\label{fig:example-goddags}
+\end{figure}
+
+\subsection{\Glsentryshort{ge} Constraints}\label{app:subsec-ge-constraints}
+
+

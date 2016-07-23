@@ -448,7 +448,6 @@ $\epsilon(LN_1,F\rs N_2)$\par
  \bottomrule
 \end{tabular}
 \end{center}
-
 \caption{\Glspl{energy function} for the \glspl{factor} in \Cref{tab:example-factors}.}
 \label{tab:example-energy-functions}
 \end{table}
@@ -478,8 +477,6 @@ Given the assignments $F\rs N_1{=}\mathit{true}$ and $LN_1{=}\mathit{true}$, we 
   &=-\ln(10).
   \end{split}
 \end{equation*}
-
-
 
 \bigskip
 
@@ -516,8 +513,6 @@ Consequently, because there is no \gls{prior distribution} in \glspl{discriminat
 \bigskip
 
 After introducing some of the fundamental concepts we will now discuss \glspl{crf}. In the following sections we will address how to encode, inference, and learn them.
-
-%TODO continue adding Michaels remarks\dots.
 
 \section{Encoding of \glsentryshortpl{crf}}\label{sec:definition-crfs}
 A popular framework for building \glspl{probabilistic graphical model} is \acrfullpl{crf}.
@@ -691,11 +686,12 @@ Since we calculate the \gls{factor product} for every possible joint assignment 
 Yet, in the case of \glspl{linear-chain crf}, it is possible to reduce the complexity of calculating $Z(\mathbf{X})$ by using the \gls{forward-backward algorithm}, sometimes referred to as dynamic programming or variable elimination~\citep{sutton2010introduction,koller2009probabilistic}.
 The key insight of the \gls{forward-backward algorithm} is that during the na\"{\i}ve calculation of, in our case, $Z(\mathbf{X})$, partial calculations are repeated exponentially often.
 In order to prevent unnecessary repetitions of the same calculations, intermediate results are stored and reused.
-The following demonstration is based on the calculation of $P(\mathbf{X})$ for \glspl{hmm} using the \gls{forward-backward algorithm} in \citet{sutton2010introduction}.
+The following derivation of the \gls{forward-backward algorithm} for \glspl{linear-chain crf} is based on \citet{sutton2010introduction}.
+They use it for the calculation of $P(\mathbf{X})$ for \glspl{hmm}.
 
 \bigskip
 
-By applying the distributive law we can reorder \Cref{equ:linear-chain-crf-z} the following way:
+First, we reorder \Cref{equ:linear-chain-crf-z} by applying the distributive law:
 \begin{equation}
   \begin{split}
     Z(\mathbf{X}) = & \sum_{Y_N}\left(\sum_{Y_{N-1}}\left(\Psi_N\left(\vphantom{\tilde{X}}Y_N,Y_{N-1}\right)\times\Psi_N\left(Y_N,\mathbf{\tilde{X}}_N\right)\right)\right.\\
@@ -773,6 +769,8 @@ in order to correctly handle the \texttt{start} state $Y_0$.
 Again, the definitions of $\alpha_n$ and $\beta_n$ are derived from \citet{sutton2010introduction} and their example for \glspl{hmm}.
 
 \bigskip
+
+\itodo{few sentences on viterbi algorithm for finding argmax $P(\mathbf{Y}|\mathbf{X})$}
 
 When applying the \gls{forward-backward algorithm} to \glspl{linear-chain crf}, we exploit their sequential structure.
 Yet, not all \gls{crf} models follow such a structure and thereby we can not always apply this algorithm.

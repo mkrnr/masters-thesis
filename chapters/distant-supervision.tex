@@ -4,7 +4,7 @@ A common approach to the learning of \glspl{crf} is to use manually labeled inst
 Manual labeling results in an accurate labeling in most cases but is expensive and can thereby only be performed on small data sets.
 The approach of \gls{distant supervision} allows the automated labeling of large data sets by using heuristics and external sources of information.
 
-In this chapter we will first give an overview of \gls{distant supervision} by discussing the past usages.
+In this chapter, we will first give an overview of \gls{distant supervision} by discussing the past usages.
 We will then discuss approaches on how \glspl{crf} can be learned using distantly supervised data sets.
 
 \section{Overview}
@@ -19,7 +19,7 @@ This is done by learning dependency paths from hypernym/hyponym word pairs that 
 The dependency paths are then used as features in a logistic regression classifier with the task of identifying hypernym pairs in a corpus~\citep{snow2005learning}.
 Additionally, \citet{mintz2009distant} mention a similarity of \gls{distant supervision} to the usage of weakly labeled data in bioinformatics.
 One mentioned example is how \citet{craven1999constructing} extract relations between biological objects such as proteins, cell-types, and diseases from a text corpus.
-For this they train a Naive Bayes classifier with data from the Yeast Protein Database~\citep{payne1997yeast}.
+For this, they train a Naive Bayes classifier with data from the Yeast Protein Database~\citep{payne1997yeast}.
 \citet{surdeanu2012multi} go as far as saying that distant supervision for information extraction was introduced by \citet{craven1999constructing}.
 
 While not giving a definition of the term, \citet{mintz2009distant} state that ``[t]he intuition of distant supervision is that any sentence that contains a pair of entities that participate in a known Freebase relation is likely to express that relation in some way.''
@@ -53,7 +53,7 @@ In other words, every set of \glspl{random variable} $\mathbf{D}_k$ needs to con
 Otherwise, the term containing $\mathbf{D}_k$ cancels out during the calculation of $P(\mathbf{Y}\mid\mathbf{X})$ due to the normalization constant $Z(\mathbf{X})$ (see \Cref{app:subsec-gd-example-calculation} for an exemplary calculation).
 Thereby, the question arises on how data sets are handled where not every element is labeled.
 
-In this section we will discuss two approaches that use incompletely annotated data for the learning of \glspl{crf}.
+In this section, we will discuss two approaches that use incompletely annotated data for the learning of \glspl{crf}.
 First we look at the approach by \citet{tsuboi2008training} who a marginalization over all possible sequences given an incompletely annotated sequence.
 Then we will present the very promising approach of \acrfull{ge} proposed by \citet{mann2007simple} which provides an alternative \gls{objective function} for unlabeled data based on \gls{label regularization}.
 As discussed in \Cref{cha:related-work}, \citet{lu2013web} also apply \gls{ge} to learn \glspl{crf} with distantly supervised data sets.
@@ -66,20 +66,19 @@ Given a sequence of length $N$, an incomplete annotation $\bm{L}$ is defined as 
   \label{equ:incomplete-annotation}
   \begin{split}
     \bm{L}&= \left\{\mathpzc{L}_1,\dots,\mathpzc{L}_N\right\}\\
-    \mathpzc{L}_n&\in\glssymbol{power set}(\mathbf{\tilde{Y}}_n)\setminus \{\emptyset\}.
+    \mathpzc{L}_n&\in\glssymbol{power set}(\mathit{Val}(Y_n))\setminus \{\emptyset\}.
   \end{split}
 \end{equation}
-where $\mathbf{\tilde{Y}}_n{=}\{\tilde{Y}_1,\dots\tilde{Y}_T\}$ with $Val(\tilde{Y}_t){=}Val(Y_n)$ and $T{=}|Val(Y_n)|$.
-$\glssymbol{power set}(\mathbf{\tilde{Y}}_n)$ is the \gls{power set} of $\mathbf{\tilde{Y}}_n$.
-Using the definition of $\mathcal{L}$ we can now specify two cases of incomplete annotations: Partial annotations and ambiguous annotations.
+Here, $\glssymbol{power set}(\textit{Val}(Y_n))$ is the \gls{power set} of the set of possible \glspl{assignment} to $Y_n$.
+Using the definition of $\bm{L}$, we can now specify two cases of incomplete annotations: Partial annotations and ambiguous annotations.
 A partial annotation refers to a sequence where only a part of the elements is annotated.
-For an element at position $n$ that are not annotated, $\mathpzc{L}_n$ contains all possible annotations and thereby $|\mathpzc{L}_n|=|Val(Y_n)|$.
+For an element at position $n$ that is not annotated, $\mathpzc{L}_n$ contains all possible annotations and thereby $|\mathpzc{L}_n|=|Val(Y_n)|$.
 Ambiguous annotations are represented such that the number of \glspl{random variable} in $\mathpzc{L}_n$ equals the number of possible annotations for the corresponding element with $|\mathpzc{L}_n|\leq |Val(Y_n)|$.
 
-Again using the author extraction example from \Cref{cha:crfs} we define an incomplete annotation for the \gls{linear-chain crf} based on of the first reference string in \Cref{fig:example-reference-strings}:
+Again using the author extraction example from \Cref{cha:crfs}, we define an incomplete annotation for the \gls{linear-chain crf} based on of the first reference string in \Cref{fig:example-reference-strings}:
 \begin{equation*}
 \begin{split}
-  \bm{L}_1=&\left\{\{\texttt{start}{=}\mathit{true}\},\{LN_1{=}\mathit{false}\},\{F\rs N_2{=}\mathit{false},F\rs N_2{=}\mathit{true}\}\right\}.
+  \bm{L}_1=&\left\{\{\mathit{true}\},\{\mathit{false}\},\{\mathit{false},\mathit{true}\}\right\}.
 \end{split}
 \end{equation*}
 Thereby, the word ``Friedrich'' is ambiguously annotated as either a first name or not a first name.
@@ -96,23 +95,23 @@ For this we let $\mathbf{Y}_{\bm{T}}$ be the set of all \glspl{full assignment} 
   \end{split}
 \end{equation}
 
-For our incompletely annotated reference string $\bm{L}_1$ we have the following set of \glspl{full assignment} for our \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}:
+Based on our incomplete annotation $\bm{L}_1$, we have the following set of \glspl{full assignment} for our \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}:
 \begin{equation*}
 \begin{split}
-  \mathbf{Y}_{\bm{L}}=&\Big\{\{\text{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{false}\},\\
-  &\hphantom{\Big\{}\{\text{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{true}\}\Big\}\\.
+  \mathbf{Y}_{\bm{L}}=&\left\{\{\text{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{false}\},\right.\\
+  &\hspace{0.15cm}\left.\{\text{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{true}\}\right\}.\\
 \end{split}
 \end{equation*}
 
-Using this approach, we can apply all discussed concepts for encoding, inferencing, and learning on $P\left(\mathbf{Y}_{\bm{L}}\mid\mathbf{X}\right)$ in \Cref{equ:crf-marginalization} without changes.
+Using this approach, we can directly apply all discussed concepts for the encoding, inferencing, and learning of \glspl{crf} on the \gls{cpd} in \Cref{equ:crf-marginalization}.
 
 \bigskip
 
-Yet, there can be a number of possible issues with this marginalization approach.
+Yet, there are a number of possible issues with this marginalization approach.
 One such issue is that the number of possible \glspl{full assignment} in $\mathbf{Y}_{\bm{L}}$ is exponential in the number of incomplete elements $U$ in the sequence~\citep{tsuboi2008training}.
 \citep{tsuboi2008training} argue that this problem can be addressed by applying the Markov assumption and using a modification of the forward-backward algorithm (see \Cref{sec:inference-crfs}).
 
-Another issue is that the log-likelihood function that is derived from \Cref{equ:crf-marginalization} is not concave~\citep{tsuboi2008training}.
+Another issue is that the log-likelihood function derived from \Cref{equ:crf-marginalization} is not concave~\citep{tsuboi2008training}.
 Thereby, during the maximum log-likelihood estimation (see \Cref{sec:learning-crfs}), a local maximum is not necessarily a global maximum which needs to be considered during the learning phase.
 
 Further, when considering the marginalization of ambiguous annotations, it is not possible to provide additional information on the distribution of possible assignments.
@@ -140,7 +139,7 @@ Instead, we have $|\mathbf{X}|\geq|\mathbf{Y}|$.
 
 \bigskip
 
-To clarify this general definition we now look at one possible score function $S$, namely the \acrfull{kl}\glsunset{kl} divergence.
+To clarify this general definition, we now look at one possible score function $S$, namely the \acrfull{kl}\glsunset{kl} divergence.
 The \gls{kl} divergence $D_{\text{KL}}$ is a measure of ``discrepancy'' between two probability distributions $P_1(\mathcal{X})$ and $P_2(\mathcal{X})$ where $\mathcal{X}$ is a set of \glspl{random variable}~\citep{burnham2003model}.
 This measure is also referred to as a ``distance'' between $P(\mathcal{X})$ and $Q(\mathcal{X})$.
 Yet, this term can be misleading since the measure is not symmetric: $D_{\text{KL}}(P\mid\mid Q)\neq D_{\text{KL}}(Q\mid\mid P)$~\citep{burnham2003model}.
@@ -184,7 +183,7 @@ There are a number of ways in which \gls{ge} constraints can be applied to an \g
 \end{equation}
 This way, both a labeled data set $\mathcal{D}$ and an unlabeled data set $\mathcal{U}$ can be utilized during the learning of $\bm{\tilde{\theta}}$.
 
-It is also possible to build an \gls{objective function} only using an unlabeled data set $\mathcal{U}$.
+It is also possible to build an \gls{objective function} by only using an unlabeled data set $\mathcal{U}$.
 For this we use the \gls{ge} criterion, combined with a Gaussian prior (see \Cref{equ:gaussian-prior}) to prevent overfitting:
 \begin{equation}
   \label{equ:objective-function-g}
@@ -197,5 +196,4 @@ This is precisely what is needed in order to apply \gls{distant supervision} to 
 The idea is to generate \glspl{marginal distribution} $\tilde{P}(\mathbf{Y})$ (see \Cref{equ:label-regularization-constraints}) for the $\mathbf{Y}$ for which we have information from an external source.
 
 In the following chapter we will use this idea for the extraction of authors from the reference section of research papers using a distantly supervised training set.
-We will also compare our approach with the one of \citep{lu2013web}.
 
