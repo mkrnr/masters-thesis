@@ -1,0 +1,27 @@
+% Mia Wagner, Max Friedrich Schmidt (2010): Fourth title, Berlin: Springer.
+\begin{tikzpicture}
+  \input{/home/martin/mt/thesis/figures/example-goddag-styles.tex}
+
+  \node[rectanglenode] (l1)                       {\vp Mia};
+  \node[rectanglenode] (l2)  [right=of l1]        {\vp Wagner,};
+  \node[rectanglenode] (l3)  [right=of l2]        {\vp Max};
+  \node[rectanglenode] (l4)  [right=of l3]        {\vp Friedrich};
+  \node[rectanglenode] (l5)  [right=of l4]        {\vp Schmidt};
+  \node                (l6)  [right=0.3cm of l5]  {\vp \textbf{\dots}};
+  \node[rectanglenode] (l7)  [right=0.25cm of l6] {\vp Springer.};
+  \node[ellipsenode]   (fn1) [above=of l1]        {FN};
+  \node[ellipsenode]   (ln1) [above=of l2]        {LN};
+  \node[ellipsenode]   (fn2) [above=of l3]        {FN};
+  \node[ellipsenode]   (ln2) [right=0.5cm of fn2] {LN};
+  \node[ellipsenode]   (fn3) [right=0.5cm of ln2] {FN};
+  \node[ellipsenode]   (ln3) [above=of l5]        {LN};
+  \node[ellipsenode]   (o1)  [above=of l7]        {O};
+  \node[ellipsenode]   (a1)  [above right=of fn1] {AU};
+  \node[ellipsenode]   (a2)  [right=of a1]        {AU};
+  \node[ellipsenode]   (a3)  [right=of a2]        {AU};
+  \node[ellipsenode]   (r)   [above right=of a1]  {root};
+
+  \foreach \from/\to in {r/a1,r/a2,r/a3,r/o1,a1/fn1,a1/ln1,a2/fn2,a2/ln2,a3/fn2,a3/fn3,a3/ln3,fn1/l1,ln1/l2,fn2/l3,ln2/l4,fn3/l4,ln3/l5,o1/l7}
+  \draw[directededge] (\from) -- (\to);
+\end{tikzpicture}
+

@@ -856,9 +856,9 @@ We can simplify this by resolving the $\log$ statement which results in:
 \end{subequations}
 Using the \gls{forward-backward algorithm}, we can efficiently calculate the normalization constant $Z(\mathbf{X}^{(m)})$ as shown in \Cref{sec:inference-crfs}.
 
-In \Cref{app:subsec-llg-example-calculation} we demonstrate the calculation of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$ for the \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}.
-For this we have $\mathcal{D}=\{\mathpzc{d}^{(1)}\}$ with $\mathpzc{d}^{(1)}$ consisting of the four reference strings in \Cref{fig:example-reference-strings} and $\bm{\tilde{\theta}}$ given in \Cref{tab:example-linear-chain-crf-feature-functions-f-k} and \Cref{tab:example-linear-chain-crf-feature-functions-f-l}.
-
+In \Cref{app:subsec-llg-example-calculation}, we demonstrate the calculation of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$ for the \gls{linear-chain crf} shown in \Cref{fig:example-linear-chain-crf}.
+For this, we have $\mathcal{D}=\{\mathpzc{d}^{(1)},\dots,\mathpzc{d}^{(4)}\}$ consisting of the four reference strings in \Cref{fig:example-reference-strings}.
+The set of \glspl{feature function} and corresponding weights $\bm{\tilde{\theta}}$ is given in \Cref{tab:example-linear-chain-crf-feature-functions-f-k} and \Cref{tab:example-linear-chain-crf-feature-functions-f-l}.
 
 \bigskip
 
@@ -900,7 +900,7 @@ The \gls{gradient} $\nabla f$ of an \gls{objective function} $f_{\text{obj}}(\bm
   \nabla f=\left\langle\frac{\partial f}{\partial\tilde{\theta}_1},\dots,\frac{\partial f}{\partial\tilde{\theta}_I}\right\rangle.
 \end{equation}
 The first step in finding $\bm{\hat{\theta}}$ is to find a $\bm{\tilde{\theta}}$ for which $\nabla f=0$.
-Applied to our log-likelihood function we thereby have to solve the following equation:
+Applied to our log-likelihood function, we thereby have to solve the following equation~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:log-likelihood-gradient}
   \frac{\partial}{\partial\theta_i}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=0\ \ \ \ \ \ \ \ \ i=1,\dots,I.

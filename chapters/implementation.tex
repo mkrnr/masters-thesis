@@ -87,9 +87,10 @@ Given the \gls{goddag} data structure, we will now discuss a concrete way of tag
 One approach that we pursued was using the \gls{aho-corasick algorithm}, proposed by \citet{aho1975efficient}.
 It uses a \glspl{fsm} to efficiently search a text corpus for all occurrences of a given set of strings.
 I na{\"{\i}}ve approach for the search of occurrences of a set of authors in given text would be the following.
-Since author names can appear in a variety of ways in references, a number of variations has to be created for every author in the list\todo{example}.
+Since author names can appear in a variety of ways in references, a number of variations has to be created for every author in the list (see \Cref{fig:example-name-variations}).
 Especially since the authors can be written with the first name appearing before or after the last name, generating these variations results in a considerable data redundancy in the \glspl{fsm}.
-Additionally, only the specified variations, including the punctuation marks between the names, can be found in the text.
+Additionally, only the exact specified strings can be found in the text.
+This makes modeling the punctuation marks between the first and last names of an author a crucial step.
 
 Our final approach consists of the following steps.
 First, the author names are split into first names and last names.
@@ -101,14 +102,13 @@ The matching that we use in a later step only matches single words, separated by
 Thereby, in addition to the \textit{abbreviated first names set} we need to split entries with multiple names in both the \textit{full first names set} and \textit{full last names set}.
 This results in two new lists, containing single first names and single last names.
 We call these lists \textit{single first names set} and \textit{single last names set}.
-The \textit{abbreviated first names set} and \textit{single first names set} are then combined to form one \textit{abbreviated and single first names set}.
 
 We now generate an initial \gls{goddag} structure for our given text.
 This structure consists of a root node which has as leaf nodes the words of the text, separated at white space or new line characters.
 Additionally, every leaf node contains a ``word'' property which is the string of the node with removed leading and trailing non-alphabetical characters.
 
 Given this initial \gls{goddag} structure we now match the \textit{abbreviated and single first names set} against the ``word'' properties of the leaf nodes\todo{mention hashset?}.
-If a match is found, a non-terminal node labeled ``FirstName'' is added between the root node and the matched leaf node.
+If a match is found, a non-terminal node labeled ``FN'' is added between the root node and the matched leaf node.
 In a second pass, we match against the \textit{single last names set} and add non-terminal nodes labeled ``LastName'' accordingly.
 We refer to the added nodes as \textit{first name nodes} and \textit{last name nodes}.
 
@@ -117,17 +117,54 @@ This again would not be allowed in a tree structure such as \gls{xml}.
 
 We now want to match our list of authors against the \gls{goddag} structure with identified first names and last names.
 For this we generate an \textit{author name map} that contains as keys the entries from the \textit{full last names set}.
-As values it contains the matching first names and first name abbreviations according to the author list\todo{example}.
+As values it contains the matching first names and first name abbreviations according to the author list in \Cref{tab:example-author-list}.
 Using this list we now iterate over the leaf nodes.
 If a leaf node has a last name node parent node, we first continue check the preceding and following leaf nodes for first name parent nodes.
 Additionally, we also check for following last name nodes for author names with multiple last names.
 
+\Cref{fig:example-goddag-4-names} contains an example for a \gls{goddag} with matched first names and last names.
+\begin{figure}[t]
+  \centering
+%\hspace*{-1.25cm}
+\resizebox{\linewidth}{!}{%
+  \input{/home/martin/mt/thesis/figures/example-goddag-4-names.tex}
+}
+\caption{\gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} with matched first names and last names.}
+\label{fig:example-goddag-4-names}
+\end{figure}
+
 Using the ``word'' property of the found leaf nodes, we search the last names in the previously created author name map.
 If the last names were found, we search the values for our found first names.
-If we matched both the last and first names of an author, we add a non-terminal node with the label ``Author'' between the root node and the corresponding parents of the matched leaf nodes\todo{example}.
+If we matched both the last and first names of an author, we add a non-terminal node with the label ``Author'' between the root node and the corresponding parents of the matched leaf nodes.
 
-\itodo{statistics}
+In \Cref{fig:example-goddag-4-final}, we show a \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} that includes three matches to the author list in \Cref{tab:example-author-list}.
+\Cref{app:author-name-matching} contains the \glspl{goddag} for the three remaining reference strings of \Cref{fig:example-reference-strings}.
+\begin{figure}[t]
+  \centering
+%\hspace*{-1.25cm}
+\resizebox{\linewidth}{!}{%
+  \input{/home/martin/mt/thesis/figures/example-goddag-4-final.tex}
+}
+\caption{Final \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings}.}
+\label{fig:example-goddag-4-final}
+\end{figure}
 
 \section{Building \glsentryshort{ge} Constraints}\label{sec:i-training-crfs}
 
 \section{Learning \glsentryshortpl{crf}}\label{sec:i-learning-crfs}
+
+\subsection{Graph Construction}\label{subsec:i-graph-construction}
+
+  % from MALLET documentation:
+	% * @param orders an array of increasing non-negative numbers giving
+	% * the orders of the features for this CRF. The largest number
+	% * <em>n</em> is the Markov order of the CRF. States are
+	% * <em>n</em>-tuples of output labels. Each of the other numbers
+	% * <em>k</em> in <code>orders</code> represents a weight set shared
+	% * by all destination states whose last (most recent) <em>k</em>
+	% * labels agree. If <code>orders</code> is <code>null</code>, an
+	% * order-0 CRF is built.
+\subsection{Feature Engineering}\label{subsec:i-feature-engineering}
+\itodo{table with our features}
+
+\subsection{Technical Details}\label{subsec:i-technical-details}

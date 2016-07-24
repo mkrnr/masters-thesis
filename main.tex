@@ -1,4 +1,4 @@
-\documentclass[m,binding,scrreprt,master,palatino,codegpl]{WeSTthesis}
+\documentclass[m,binding,scrreprt,master,palatino,codegpl,frames]{WeSTthesis}
 %\documentclass[m,binding,twoside,scrreprt,master,palatino]{WeSTthesis}
 \usepackage[english,ngerman]{babel}		% English and new German spelling
 \usepackage[utf8]{inputenc}           % correct input encoding
@@ -63,12 +63,14 @@ urlcolor=blue]{hyperref}
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 
 \newcommand{\itodo}[1]{\todo[inline]{#1}} %TODO remove
+
 \newcommand{\RQ}[1]{\textbf{\textsf{RQ#1}}}
 \newcommand{\rs}{\hspace{-0.07em}}
+\newcommand{\vp}{\vphantom{\"{O}g}}
 
 \newcommand{\menquote}[1]{\ensuremath{\text{\textquotedbl} #1 \text{\textquotedbl}}}
 
-\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+\newcommand{\tabitem}{~{}~\llap{\textbullet}~{}~}
 
 %TODO add matriculation number to WeSTthesis.cls?
 \author{Martin Körner\\[0.1cm]\normalsize{Matrikelnummer: 210200113}\vspace{-0.685cm}}

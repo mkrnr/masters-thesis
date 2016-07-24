@@ -3,19 +3,23 @@
 \newcommand\researchquestionformat[1]{\begin{quote}#1\end{quote}}
 
 \newcommand\researchquestionone{\researchquestionformat{%
-  \RQ{1}: Given a set of unlabeled reference sections from the research area of German social sciences, does using an author list that is related to this area improve the performance of the learned \gls{crf} model in comparison with using an unrelated author list?
+  \RQ{1}: Given a set of unlabeled reference sections from the research area of German social sciences, does using an author list that is related to this area improve the performance of the learned \gls{linear-chain crf} model in comparison with using an unrelated author list?
 }}
 
 \newcommand\researchquestiontwo{\researchquestionformat{%
-  \RQ{2}: Given a set of reference sections from the research area of German social sciences with matched author names, does a labeling using the \gls{bieo} improve the performance of the learned \gls{crf} model in comparison with a labeling using the \gls{bio} format?
+  \RQ{2}: Given a set of reference sections from the research area of German social sciences with matched author names, does a labeling using the \gls{bieo} improve the performance of the learned \gls{linear-chain crf} model in comparison with a labeling using the \gls{bio} format?
 }}
 
 \newcommand\researchquestionthree{\researchquestionformat{%
-  \RQ{3}: Given a set of reference sections from the research area of German social sciences with matched author names, how does, for a word $w_n$ that has no matched author names, modifying the probability mass distribution over the labels in $\mathit{Val}(Y_n)$ impact the performance of a \gls{crf} model that was learned on the resulting \gls{ge} constraints?
+  \RQ{3}: Given a set of reference sections from the research area of German social sciences with matched author names, how does, for a word $w_n$ that has no matched author names, modifying the probability mass distribution over the labels in $\mathit{Val}(Y_n)$ impact the performance of a \gls{linear-chain crf} model that was learned on the resulting \gls{ge} constraints?
 }}
 
 \newcommand\researchquestionfour{\researchquestionformat{%
-  \RQ{4}: Given a set of reference sections from the research area of German social sciences with matched author names, how does removing a number of unmatched words $w_n$ impact the performance of a \gls{crf} model that was learned on the resulting \gls{ge} constraints?
+  \RQ{4}: Given a set of reference sections from the research area of German social sciences with matched author names, how does removing a number of unmatched words $w_n$ impact the performance of a \gls{linear-chain crf} model that was learned on the resulting \gls{ge} constraints?
+}}
+
+\newcommand\researchquestionfive{\researchquestionformat{%
+  \RQ{5}: Given a set of reference sections from the research area of German social sciences with matched author names, how does changing the Markov order of the \gls{linear-chain crf} impact the performance of the learned model?
 }}
 
 In this chapter, we will discuss author extraction as a concrete use case for the usage of \glspl{crf} in combination with \gls{distant supervision}.
@@ -50,7 +54,7 @@ Without considering the layout, it is possible that the two columns are merged d
 \section{Generating Training Sets with Distant Supervision}\label{sec:ae-distant-supervision}
 
 As discussed in \Cref{cha:distant-supervision}, we refer to distant supervision as the labeling of a data set using an external knowledge base with the goal of generating a training data set.
-In this section, we discuss our approach of building such a distantly supervised training set for the task of author name extraction.
+In this section, we discuss our approach of building such a distantly supervised training set for the task of author extraction.
 
 \subsection{Knowledge Base Creation}\label{subsec:ae-knowledge-base-creation}
 
@@ -59,7 +63,7 @@ Since the goal is to distinguish between the first names and last names of an au
 This is because determining which part of a name belongs to the first names and which to the last names is not always a trivial task.
 For example, German last names can consist of words which are also common first names such as ``Friedrich'', ``Otto'', or ``Albrecht''.
 
-In addition to the labeling of reference sections during the distant supervision, such a knowledge base can also be used to construct features for the \gls{crf} model (see \Cref{subsec:ae-fearture-engineering}).
+In addition to the labeling of reference sections during the distant supervision, such a knowledge base can also be used to construct features for the \gls{crf} model (see \Cref{subsec:ae-feature-engineering}).
 
 \bigskip
 
@@ -118,7 +122,6 @@ For this we use the labels $\texttt{FN}$ and $\texttt{LN}$, respectively.
 Every other word is marked with the label $\texttt{O}$ for other.
 We thereby do not further distinguish between first names and middle names.
 Analyzing the impact of an additional middle name on the performance could be part of a future work.
-
 Since our second goal is to group first names and last names together to form author names, it is important to additionally encode the beginning and end of an author name in the given word sequence.
 A common approach is to extend the label by this information~\citep{ramshaw1995text,houngbo2012method}.
 Given the labels \texttt{FN}, \texttt{LN}, and \texttt{O} we add the following prefixes:
@@ -160,6 +163,10 @@ Yet, the discussed approaches can also be applied to the \gls{bieo} format.
 
 \bigskip
 
+\itodo{Add RQ:\@ Does a labeling (B-FN, I-FN, E-FN\dots) yield better results for a simpler labeling problem (A or O)?}
+
+\bigskip
+
 Given an unlabeled set $\mathcal{U}=\{\mathpzc{u}^{(1)},\dots,\mathpzc{u}^{(M)}\}$ of $M$ reference strings, we want to generate \gls{ge} constraints for the \gls{crf} model learning.
 For this we assume that a number of subsequences in the reference strings are matched against a data base of author names (see \cref{sec:ae-distant-supervision}).
 Assuming the \gls{bio} format, a \gls{target variable} $Y_n$ has the following possible assignments:
@@ -198,7 +205,6 @@ To illustrate the generation of constraints, we assume the following probability
   \{\texttt{B-FN}{=}0,\texttt{B-LN}{=}0,\texttt{I-FN}{=}2,\texttt{I-LN}{=}1,\texttt{O}{=}1\}.
 \end{equation*}
 The corresponding \gls{probability distribution} of the constraint $\tilde{P}(Y_n)$ is calculated with:
-\itodo{update counts}
 \begin{equation*}
 \begin{split}
   &\tilde{P}(Y_n{=}\texttt{B-FN})=0/4=0\\
@@ -208,20 +214,21 @@ The corresponding \gls{probability distribution} of the constraint $\tilde{P}(Y_
   &\tilde{P}(Y_n{=}\texttt{O})=1/4=0.25.
 \end{split}
 \end{equation*}
-This calculation is part of a more extensive example for the generation of \gls{ge} constraints in \Cref{app:subsec-ge-constraints}.
 
 \bigskip
 
-In the case of author name extraction, the number of words $w_n$ in $\mathcal{U}$ which are matched to at least one author name is considerably smaller than the number of $w_n$ which do not have a matching author.
+In the case of author extraction, the number of words $w_n$ in $\mathcal{U}$ which are matched to at least one author name is considerably smaller than the number of $w_n$ which do not have a matching author.
 One reason is that author names only form a relatively small part of a reference string.
 Another reason is that, in practice, not all author names can be matched against a given knowledge base.
 Because of this imbalance, it could be helpful to not consider every unmatched word $w_n$ for the construction of \gls{ge} constraints.
 This gives us the following research question:
 \researchquestionfour%
 
+\Cref{tab:example-ge-constraints} shows the \gls{ge} constraints for the matches of author names in \Cref{tab:example-author-list} with the four reference strings in \Cref{fig:example-reference-strings}.
+For this example, we additionally consider every third unmatched word for the constraint calculation.
+
 \section{Learning \glsentryshortpl{crf}}\label{sec:ae-learning-crfs}
 
-\itodo{discuss approach by \citet{lu2013web}}
 After generating a number of \gls{ge} constraints, we now focus on the \gls{crf} model learning.
 One important aspect is the graphical structure $\mathcal{\tilde{K}}$ which, as stated in \Cref{sec:learning-crfs}, is given as an input to the model learning.
 Another important aspect for the model performance is the selection of suitable textual features.
@@ -231,21 +238,84 @@ Another important aspect for the model performance is the selection of suitable 
 The underlying graph $\mathcal{\tilde{K}}$ of a \gls{crf} model $\mathcal{\tilde{M}}$ has a strong impact on both the runtime performance and the quality of the model.
 As we discussed in \Cref{sec:learning-crfs}, an efficient inferencing is crucial for the learning of \gls{crf}.
 The \gls{forward-backward algorithm} allows an efficient inferencing but required $\mathcal{\tilde{K}}$ to follow a certain sequential structure.
+
 For the use case of entity recognition, \glspl{linear-chain crf} are a popular choice~\citep{peng2004accurate,mann2008generalized,ling2012fine,groza2012reference,ohta2014empirical}.
 \citet{lu2013web} also rely on \glspl{linear-chain crf} in their experiments.
+We discussed the theoretical foundations of \Cref{cha:crfs}.
+To expand on this, \glspl{linear-chain crf} can be modelled to follow different \textit{Markov orders}.
+The concept of Markov orders builds on the \textit{Markov assumption} proposed by \citet{markov1957theory}.
+For our author extraction scenario, the Markov assumption states that the label of a word $w_n$ only depends on the previous $k$ words.
+Following this, a \glspl{linear-chain crf} with Markov order $k$ models dependencies between a \gls{target variable} $Y_n$ and it's $k$ preceding \glspl{target variable}.
 
-\itodo{on Markov order 0 and 1, research question}
+The \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf} thereby has a Markov order of $1$.
+\Cref{fig:example-linear-chain-crf-markov-order-2} shows an example \gls{linear-chain crf} with Markov order $2$.
+\begin{figure}[t]
+\centering
+\input{figures/example-linear-chain-crf-markov-order-2.tex}
+\caption{%
+  \Gls{linear-chain crf} with Markov order $2$, derived from the author extraction example in \Cref{cha:crfs}.}
+\label{fig:example-linear-chain-crf-markov-order-2}
+\end{figure}
 
-\subsection{Feature Engineering}\label{subsec:ae-fearture-engineering}
+From this we derive the following research question:
+\researchquestionfive%
+
+\todo{add RQ on regularization parameter for gaussian prior}
+
+\subsection{Feature Engineering}\label{subsec:ae-feature-engineering}
 
 Based on the graphical structure of a \gls{linear-chain crf} with its given set of \glspl{target variable} $\mathbf{Y}$, we now consider the construction of the set of \glspl{observed variable} $\mathbf{X}$.
 These \glspl{observed variable} provide information about certain textual features of the given word sequence.
 As discussed in \Cref{sec:definition-crfs}, a key strength of \glspl{crf} is that \glspl{observed variable} in $\mathbf{X}$ can be highly dependent on each other without impacting the model performance.
 
-\itodo{On feature engineering (\citet{purver2012experimenting}), also: conjunctions}
+Since there is a large body of research that focuses on the extraction of reference string information using \glspl{crf}, there are a number of features that were suggested for this task.
+\Cref{tab:feature-survey} summarized a survey of the used features in related researches.
+Following the separation of \citet{peng2004accurate}, we distinguish between local features, layout features, and external lexicon features.
+A short description of the individual features is given in \Cref{tab:feature-descriptions}.
+Note that \citet{wu2014citeseerx} use an identical list of feature to \citet{councill2008parscit}.
 
-Since previous research focused on the extraction of reference string information using \glspl{crf}, there are a number of features that were suggested for this task.
-\citet{peng2004accurate} distinguish between local features, layout features, and external lexicon features.
+\bigskip
 
+In \Cref{tab:our-features}, we list the features that we use during our evaluations in \Cref{cha:evaluation}.
+\begin{table}[t]
+\centering
+\begin{tabular}{l l l}
+  \toprule
+  \multicolumn{3}{c}{Feature}\\
+  Type    & Name            & Description\\
+  \midrule
+  Local   & CAPITALIZED     & The first character is capitalized.\\
+          & PERIOD          & Contains exactly one period.\\
+          & PERIODS         & Contains more than one period.\\
+          & CONTAINSPERIOD  & Contains a period (not at beginning or end).\\
+          & ENDSWITHPERIOD  & Ends with a period.\\
+          & CONTAINSCOMMA   & Contains a comma (not at beginning or end).\\
+          & ENDSWITHCOMMA   & Ends with a comma.\\
+          & CONTAINSDASH    & Contains a dash (not at beginning or end).\\
+          & ENDSWITHDASH    & Ends with a dash.\\
+          & NUMBER          & Contains exactly one number.\\
+          & NUMBERS         & Contains as least two separate numbers.\\
+          & ONELETTER       & Consists of one letter.\\
+          & BRACES          & Contains opening and closing braces.\\
+          & BRACKETS        & Contains opening and closing braces.\\
+          & MONTH           & Matches a month word (e.g. Jan.\ or January).\\
+          & YEAR            & Matches a year between 1699 and 2016.\\
+  \midrule
+  Lexicon & FIRSTNAME     & Appears in a first name dictionary.\\
+          & LASTNAME      & Appears in a last name dictionary.\\
+  \bottomrule
+\end{tabular}
+\caption{Descriptions of the features in \Cref{tab:feature-survey} (cf. \citep{peng2004accurate,councill2008parscit,wu2014citeseerx,bellare2007learning})}
+\label{tab:our-features}
+\end{table}
+The selection of features is base both on the feature survey in \Cref{tab:feature-survey} as well as empirical findings during our evaluation.
+Currently, we do not use layout features such as the position of the word in the text line.
+Instead, we concatenate lines by removing line breaks to allow a matching of author names that are separated into two lines.
+More details, for example on the used name dictionaries, are given in \Cref{subsec:i-feature-engineering}.
+
+In addition, we apply so called \glspl{feature conjunction}~\citep{mccallum2002mallet}.
+They allow the learner to assign features to a word containing information about the features of its neighboring words.
+For example, the learner can assign to a word $w_n$ a feature which states that the word $w_{n-1}$ has the feature ENDSWITHPERIOD.{}
+Yet, the learner has the freedom to not include all neighbor features.
 
 

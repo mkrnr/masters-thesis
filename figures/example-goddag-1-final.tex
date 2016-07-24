@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+  \input{/home/martin/mt/thesis/figures/example-goddag-styles.tex}
+
+  \node[rectanglenode] (l1)                       {Mia};
+  \node[rectanglenode] (l2)  [right=of l1]        {Friedrich};
+  \node[rectanglenode] (l3)  [right=of l2]        {(2010):};
+  \node[rectanglenode] (l4)  [right=of l3]        {Title};
+  \node                (l5)  [right=0.25cm of l4]        {\textbf{\dots}};
+  \node[rectanglenode] (l6)  [right=0.25cm of l5]        {Springer.};
+  \node[ellipsenode]   (fn1) [above=of l1]        {FN};
+  \node[ellipsenode]   (ln1) [above=of l2]        {LN};
+  \node[ellipsenode]   (o1)  [above=of l3]        {O};
+  \node[ellipsenode]   (o2)  [above=of l4]        {O};
+  \node[ellipsenode]   (o3)  [above=of l6]        {O};
+  \node[ellipsenode]   (a1)  [above right=of fn1] {AU};
+  \node[ellipsenode]   (r)   [above right=of a1]  {root};
+
+  \foreach \from/\to in {r/a1,r/o1,r/o2,r/o2,r/o3,a1/fn1,a1/ln1,fn1/l1,ln1/l2,o1/l3,o2/l4,o3/l6}
+  \draw[directededge] (\from) -- (\to);
+\end{tikzpicture}
+

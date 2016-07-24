@@ -1,0 +1,27 @@
+\newcommand{\factorgraphnodes}{%
+  \node[latent] (start) {\texttt{start}}; %
+  \node[latent, right=2.4cm of start] (ln) {$LN_1$}; %
+  \node[latent, right=2.4cm of ln] (fn) {$F\rs N_2$}; %
+  \node[latent, right=2.4cm of fn] (ln2) {$LN_3$}; %
+  \node[obs, below=1.8cm of ln] (ec1) {$EC_1$}; %
+  \node[obs, below=1.8cm of fn] (ec2) {$EC_2$}; %
+  \node[obs, below=1.8cm of ln2] (ec3) {$EC_3$}; %
+}
+\begin{tikzpicture}
+  \factorgraphnodes
+
+  \factor[above=0.8cm of ln]  {start-ln-fn-f} {above:$\Psi(\texttt{start},LN_1,F\rs N_2)$} {} {}; %
+  \factor[above=0.8cm of fn]  {ln-fn-ln2-f}   {above:$\Psi(LN_1,F\rs N_2,LN_3)$} {} {}; %
+  \factor[above=0.8cm of ec1] {ec1-ln-f}      {left:$\Psi(LN_1,EC_1)$} {} {}; %
+  \factor[above=0.8cm of ec2] {ec2-fn-f}      {left:$\Psi(F\rs N_2,EC_2)$} {} {}; %
+  \factor[above=0.8cm of ec3] {ec3-ln2-f}     {left:$\Psi(LN_3,EC_3)$} {} {}; %
+  \edge[-] {start} {start-ln-fn-f};
+  \edge[-] {ln}    {start-ln-fn-f};
+  \edge[-] {fn}    {start-ln-fn-f};
+  \edge[-] {ln}    {ln-fn-ln2-f};
+  \edge[-] {fn}    {ln-fn-ln2-f};
+  \edge[-] {ln2}    {ln-fn-ln2-f};
+  \edge[-] {ln}    {ec1};
+  \edge[-] {fn}    {ec2};
+  \edge[-] {ln2}   {ec3};
+\end{tikzpicture}

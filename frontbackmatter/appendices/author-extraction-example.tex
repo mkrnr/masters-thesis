@@ -321,9 +321,10 @@ The \glspl{assignment} are based on the second reference string in \Cref{fig:exa
 
 \section{Log-Likelihood Function}\label{app:sec-log-likelihood-function}
 \subsection{Exemplary Calculation}\label{app:subsec-llg-example-calculation}
-The following calculation is based on \gls{factor graph} in \Cref{fig:example-linear-chain-crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,F\rs N_2\}$.
+The following calculation is based on \gls{factor graph} in \Cref{fig:example-linear-chain-crf} that represents a \gls{linear-chain crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,F\rs N_2\}$.
 It uses the \glspl{feature function} and corresponding weights from \Cref{app:subsec-lccrf-feature-functions}.
 Further, we have $\mathcal{D}=\{\mathpzc{d}^{(1)},\dots,\mathpzc{d}^{(4)}\}$ consisting of the four reference strings in \Cref{fig:example-reference-strings}.
+Based on this, we have the following log-likelihood function:
 \begin{equation*}
   \begin{split}
     \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(m)},Y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(m)},\mathbf{\tilde{X}}_n^{(m)}\right)\right)\right. \\
@@ -342,11 +343,11 @@ Further, we have $\mathcal{D}=\{\mathpzc{d}^{(1)},\dots,\mathpzc{d}^{(4)}\}$ con
     \approx&-1.3076
  \end{split}
 \end{equation*}
-Note that we calculate the values of
+Note that, for the second reference string $\mathpzc{d}^{(2)}$, we calculate the values of the unnormalized measure
 \begin{equation*}
-   -\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(2)},Y_{n-1}^{(2)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(2)},\mathbf{\tilde{X}}_n^{(2)}\right)\right)
+  \tilde{P}(\mathbf{Y}^{(2)}\mid\mathbf{X}^{(2)})=-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(2)},Y_{n-1}^{(2)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(2)},\mathbf{\tilde{X}}_n^{(2)}\right)\right)
 \end{equation*}
-and
+and the corresponding normalizing constant
 \begin{equation*}
 Z\left(\mathbf{X}^{(2)}\right)
 \end{equation*}
@@ -384,10 +385,9 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 % 3: s=t, ln=f,fn=f,el=f,e2=t
 \section{Distantly Supervised Training Sets}\label{app:sec-generalized-expectation}
 \subsection{Author Name Matching}\label{app:author-name-matching}
-For this example we use the four reference strings in \Cref{fig:example-reference-strings} as the unlabeled data set $\mathcal{U}$.
-Further we assume the list of authors in \Cref{fig:example-author-list} for the author matching.
-\Cref{fig:example-goddags} shows the four \glspl{goddag} (see \todo{add goddag ref}) that result from the matching of the four reference strings in $\mathcal{U}$ against the authors in \Cref{fig:example-author-list}.
-\begin{figure}[H]
+\Cref{tab:example-author-list} contains an author list that we use for our author matching example.
+\Cref{fig:example-goddag-1-final}, \Cref{fig:example-goddag-2-final}, and \Cref{fig:example-goddag-3-final} show the final \glspl{goddag} for the first three reference strings in \Cref{fig:example-reference-strings}, matched against the authors in \Cref{tab:example-author-list}.
+\begin{table}[H]
 \centering
 \begin{tabular}{l l}
  \toprule
@@ -402,27 +402,162 @@ Further we assume the list of authors in \Cref{fig:example-author-list} for the 
  \bottomrule
 \end{tabular}
 \caption{Example author list for demonstrating the author matching.}
-\label{fig:example-author-list}
-\end{figure}
-
+\label{tab:example-author-list}
+\end{table}
 \begin{figure}[H]
-\centering
-\begin{tabular}{l l}
- \toprule
- First Names & Last Names \\
- \midrule
- Friedrich & Müller\\
- Fritz & Müller\\
- Mia & Friedrich\\
- Mia & Wagner\\
- Max & Wagner\\
- Max Friedrich & Schmidt\\
- \bottomrule
-\end{tabular}
-\caption{\Glspl{goddag} for the author matching of the authors in \Cref{fig:example-author-list} against the four reference strings in \Cref{fig:example-reference-strings}.}
-\label{fig:example-goddags}
+  \centering
+%\hspace*{-1.25cm}
+%\resizebox{\linewidth}{!}{%
+  \input{/home/martin/mt/thesis/figures/example-goddag-1-final.tex}
+%}
+\caption{Final \gls{goddag} for the first reference string in \Cref{fig:example-reference-strings}.}
+\label{fig:example-goddag-1-final}
+\end{figure}
+\begin{figure}[H]
+  \centering
+%\hspace*{-1.25cm}
+%\resizebox{\linewidth}{!}{%
+  \input{/home/martin/mt/thesis/figures/example-goddag-2-final.tex}
+%}
+\caption{Final \gls{goddag} for the second reference string in \Cref{fig:example-reference-strings}.}
+\label{fig:example-goddag-2-final}
+\end{figure}
+\begin{figure}[H]
+  \centering
+%\hspace*{-1.25cm}
+%\resizebox{\linewidth}{!}{%
+  \input{/home/martin/mt/thesis/figures/example-goddag-3-final.tex}
+%}
+\caption{Final \gls{goddag} for the third reference string in \Cref{fig:example-reference-strings}.}
+\label{fig:example-goddag-3-final}
 \end{figure}
 
-\subsection{\Glsentryshort{ge} Constraints}\label{app:subsec-ge-constraints}
+\subsection{\glsentryshort{ge} Constraints}\label{app:subsec-ge-constraints}
+\begin{table}[H]
+\begin{tabular}{l l l l l l}
+  \toprule
+  Word &\multicolumn{1}{c}{\texttt{B-FN}}&\multicolumn{1}{c}{\texttt{B-LN}}&\multicolumn{1}{c}{\texttt{I-FN}}&\multicolumn{1}{c}{\texttt{I-LN}}&\multicolumn{1}{c}{\texttt{O}}\\
+  \midrule  %    B-FN      I-FN               B-LN         I-LN                O
+  (2010):   & $0/1=0$   & $0/1=0$          & $0/1=0$    & $0/1=0$          & $1/1=1$   \\
+  Berlin    & $0/2=0$   & $0/2=0$          & $0/2=0$    & $0/2=0$          & $2/2=1$   \\
+  Fourth    & $0/1=0$   & $0/1=0$          & $0/1=0$    & $0/1=0$          & $1/1=1$   \\
+  Friedrich & $0/4=0$   & $2/4=0.5$        & $0/4=0$    & $1/4=0.25$       & $1/4=0.25$\\
+  Fritz     & $1/2=0.5$ & $0/2=0$          & $1/2=0.5$  & $0/2=0$          & $0/2=0$   \\
+  Max       & $2/2=1$   & $0/2=0$          & $0/2=0$    & $0/2=0$          & $0/2=0$   \\
+  Mia       & $2/2=1$   & $0/2=0$          & $0/2=0$    & $0/2=0$          & $0/2=0$   \\
+  Müller,   & $0/3=0$   & $2/3\approx0.33$ & $0/3=0$    & $1/3\approx0.67$ & $0/3=0$   \\
+  Schmidt   & $0/1=0$   & $0/1=0$          & $0/1=0$    & $1/1=1$          & $0/1=0$   \\
+  Springer. & $0/2=0$   & $0/2=0$          & $0/2=0$    & $0/2=0$          & $2/2=1$   \\
+  the       & $0/1=0$   & $0/1=0$          & $0/1=0$    & $0/1=0$          & $1/1=1$   \\
+  Wagner,   & $0/2=0$   & $1/2=0.5$        & $0/2=0$    & $1/2=0.5$        & $0/2=0$   \\
+  \bottomrule
+\end{tabular}
+\caption{Example \gls{ge} constraints based on the reference strings in \Cref{fig:example-reference-strings} using the author list in \Cref{tab:example-author-list}. Additionally, every third unmatched word is selected, starting with ``(2010):'' in the first reference string.}
+\label{tab:example-ge-constraints}
+\end{table}
+\clearpage
+\section{Feature Engineering}\label{app:sec-feature-engineering}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l l c c c c}
+  \toprule
+  \multicolumn{2}{c}{Feature} & \multicolumn{4}{c}{Paper}\\
+  Type & Name &\citep{peng2004accurate}&\citep{councill2008parscit}&\citep{wu2014citeseerx}&\citep{bellare2007learning}\\
+  \midrule                  %peng2004 %councill2008   %wu2014   %bellare2007
+  Local   & STARTSWITHCAP        & x       & x           & x        &       \\
+          & ALLCAP               & x       & x           & x        &       \\
+          & MIXEDCAP             &         & x           & x        &       \\
+          & NUMDIGITS            &         & x           & x        & x     \\
+          & DIGITS               & x       & x           & x        &       \\
+          & ALLDIGITS            & x       &             &          & x     \\
+          & PHONEORZIP           & x       &             &          &       \\
+          & DOTS                 & x       &             &          &       \\
+          & DASHES               & x       &             &          &       \\
+          & STARTSWITHQUOTES     &         & x           & x        &       \\
+          & ENDSWITHQUOTES       &         & x           & x        &       \\
+          & ACRONYM              & x       &             &          &       \\
+          & INITIAL              & x       &             &          &       \\
+          & CHARACTER            & x       &             &          &       \\
+          & NUMCHARACTERS        &         &             &          & x     \\
+          & ALLCHARACTERS        & x       &             &          & x     \\
+          & CAPLETTER            & x       &             &          &       \\
+          & PUNCTUATION          & x       &             &          &       \\
+          & CONTPUNCTUATION      &         & x           & x        &       \\
+          & STOPPUNCTUATION      &         & x           & x        &       \\
+          & PAIREDBRACES         &         & x           & x        &       \\
+          & VOLUME               &         & x           & x        &       \\
+          & PAGERANGE            &         & x           & x        &  x    \\
+          & YEAR                 &         & x           & x        &  x    \\
+          & URL                  & x       &             &          &  x    \\
+          & EMAIL                & x       &             &          &       \\
+          & WORD                 & x       & x           & x        &  x    \\
+  \midrule
+  Layout  & BINNUMBER            & 3       & 12          & 12       &       \\
+  \midrule
+  Lexicon & AUTHOR               & x       &             &          &       \\
+          & PUBLISHER            &         & x           & x        & x     \\
+          & FEMALE/MALENAME      &         & x           & x        &       \\
+          & LASTNAME             &         &             &          & x     \\
+          & CITY                 &         &             &          & x     \\
+          & MONTH                & x       & x           & x        &       \\
+          & NOTES                & x       & x           & x        &       \\
+          & AFFILIATION          & x       &             &          &       \\
+  \bottomrule
+\end{tabular}
+\caption{Survey of mentioned features for reference string extraction \citet{peng2004accurate}, \citet{councill2008parscit}, \citet{wu2014citeseerx}, and \citet{bellare2007learning}.}
+\label{tab:feature-survey}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l l l}
+  \toprule
+  \multicolumn{3}{c}{Feature}\\
+  Type & Name & Description\\
+  \midrule
+  Local   & STARTSWITHCAP    & Starts with a capitalized letter.\\
+          & ALLCAP           & All characters are capitalized.\\
+          & MIXEDCAP         & A character, except the first, is capitalized.\\
+          & NUMDIGITS        & Contains a specified number of digits. \\
+          & DIGITS           & Contains at least one digit.\\
+          & ALLDIGITS        & All characters are digits.\\
+          & PHONEORZIP       & Phone number or zip code.\\
+          & DOTS             & Contains at least one dot.\\
+          & DASHES           & Contains at least one dash.\\
+          & STARTSWITHQUOTES & Starts with quotation marks.\\
+          & ENDSWITHQUOTES   & Ends with quotation marks.\\
+          & ACRONYM          & Is an acronym.\\
+          & INITIAL          & Is an initial such as ``A.''.\\
+          & CHARACTER        & Is a single character.\\
+          & NUMCHARACTERS    & Contains a specified number of characters.\\
+          & ALLCHARACTERS    & Contains only characters.\\
+          & CAPLETTER        & Is a single capitalized character.\\
+          & PUNCTUATION      & Contains a punctuation mark.\\
+          & CONTPUNCTUATION  & Contains a punct.\ mark such as  ``,'' or ``;''.\\
+          & STOPPUNCTUATION  & Contains a punct.\ mark such as ``.''.\\
+          & PAIREDBRACES     & Starts and ends with braces.\\
+          & VOLUME           & Matches reg.\ expression for volume number.\\
+          & PAGERANGE        & Matches reg.\ expression for a page range.\\
+          & YEAR             & Matches reg.\ expression for a year number.\\
+          & URL              & Matches reg.\ expression for an URL.\\
+          & EMAIL            & Matches reg.\ expression for an Email.\\
+          & WORD             & The word itself.\\
+  \midrule
+  Layout  & BINNUMBER        & Is assigned to a bin, based on line position.\\
+  \midrule
+  Lexicon & AUTHOR           & Is word in author lexikon.\\
+          & PUBLISHER        & Is word in publisher lexikon.\\
+          & FEMALE/MALENAME  & Is word in a female or male name dictionary.\\
+          & LASTNAME         & Is word in a last name dictionary.\\
+          & CITY             & Is word in a city name dictionary.\\
+          & MONTH            & Is word like ``Jan.'' or ``Feb.''.\\
+          & NOTES            & Is word like ``appeared'' or ``submitted''.\\
+          & AFFILIATION      & Is word like ``institution'' or ``Labs''.\\
+  \bottomrule
+\end{tabular}
+\caption{Descriptions of the features in \Cref{tab:feature-survey} (cf. \citep{peng2004accurate,councill2008parscit,wu2014citeseerx,bellare2007learning})}
+\label{tab:feature-descriptions}
+\end{table}
 
 

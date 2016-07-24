@@ -1,0 +1,25 @@
+% Fritz Müller, Fritz Schmidt (2010): Friedrich in title, Berlin: Springer.
+\begin{tikzpicture}
+  \input{/home/martin/mt/thesis/figures/example-goddag-styles.tex}
+
+  \node[rectanglenode] (l1)                       {Fritz};
+  \node[rectanglenode] (l2)  [right=of l1]        {M\"{u}ller,};
+  \node[rectanglenode] (l3)  [right=of l2]        {Fritz};
+  \node[rectanglenode] (l4)  [right=of l3]        {Schmidt};
+  \node[rectanglenode] (l5)  [right=of l4]        {(2010):};
+  \node                (l6)  [right=0.25cm of l5] {\textbf{\dots}};
+  \node[rectanglenode] (l7)  [right=0.25cm of l6] {Springer.};
+  \node[ellipsenode]   (fn1) [above=of l1]        {FN};
+  \node[ellipsenode]   (ln1) [above=of l2]        {LN};
+  \node[ellipsenode]   (fn2) [above=of l3]        {FN};
+  \node[ellipsenode]   (o1)  [above=of l4]        {O};
+  \node[ellipsenode]   (o2)  [above=of l5]        {O};
+  \node[ellipsenode]   (o3)  [above=of l7]        {O};
+  \node[ellipsenode]   (a1)  [above right=of fn1] {AU};
+  \node[ellipsenode]   (a2)  [right=of a1]        {AU};
+  \node[ellipsenode]   (r)   [above right=of a1]  {root};
+
+  \foreach \from/\to in {r/a1,r/a2,r/o1,r/o2,r/o2,r/o3,a1/fn1,a1/ln1,a2/ln1,a2/fn2,fn1/l1,ln1/l2,fn2/l3,o1/l4,o2/l5,o3/l7}
+  \draw[directededge] (\from) -- (\to);
+\end{tikzpicture}
+
