@@ -3,23 +3,35 @@
 \newcommand\researchquestionformat[1]{\begin{quote}#1\end{quote}}
 
 \newcommand\researchquestionone{\researchquestionformat{%
-  \RQ{1}: Given a set of unlabeled reference sections from the research area of German social sciences, does using an author list that is related to this area improve the performance of the learned \gls{linear-chain crf} model in comparison with using an unrelated author list?
+  \RQ{1}: Given a set of unlabeled reference sections from the research area of German social sciences. Does using an author list that is related to this area improve the performance of the resulting distantly supervised \gls{linear-chain crf} model for the author extraction task in comparison to an unrelated author list?
 }}
 
 \newcommand\researchquestiontwo{\researchquestionformat{%
-  \RQ{2}: Given a set of reference sections from the research area of German social sciences with matched author names, does a labeling using the \gls{bieo} improve the performance of the learned \gls{linear-chain crf} model in comparison with a labeling using the \gls{bio} format?
+  \RQ{2}: Given a set of reference sections from the research area of German social sciences with matched author names. Does a labeling using the \gls{bieo} improve the performance of the resulting distantly supervised \gls{linear-chain crf} model for the author extraction task in comparison to the \gls{bio} format?
 }}
 
 \newcommand\researchquestionthree{\researchquestionformat{%
-  \RQ{3}: Given a set of reference sections from the research area of German social sciences with matched author names, how does, for a word $w_n$ that has no matched author names, modifying the probability mass distribution over the labels in $\mathit{Val}(Y_n)$ impact the performance of a \gls{linear-chain crf} model that was learned on the resulting \gls{ge} constraints?
+  \RQ{3}: Given a set of reference sections from the research area of German social sciences with matched author names. How does, for a word $w_n$ that has no matched author names, modifying the probability mass distribution over the labels in $\mathit{Val}(Y_n)$ impact the performance of a distantly supervised \gls{linear-chain crf} model?
 }}
 
 \newcommand\researchquestionfour{\researchquestionformat{%
-  \RQ{4}: Given a set of reference sections from the research area of German social sciences with matched author names, how does removing a number of unmatched words $w_n$ impact the performance of a \gls{linear-chain crf} model that was learned on the resulting \gls{ge} constraints?
+  \RQ{4}: Given a set of reference sections from the research area of German social sciences with matched author names. How does removing a number of unmatched words $w_n$ impact the performance of a distantly supervised \gls{linear-chain crf} model that was learned on the resulting \gls{ge} constraints?
+}}
+\newcommand\researchquestionfive{\researchquestionformat{%
+  \RQ{5}: Given a set of reference sections from the research area of German social sciences with matched author names. How does a distantly supervised \gls{linear-chain crf} model that recognizes first and last names as well as boundaries between authors perform on the task of labeling a word as being part of an author name, when compared to a distantly supervised \gls{linear-chain crf} model that is directly constructed for this labeling task?
 }}
 
-\newcommand\researchquestionfive{\researchquestionformat{%
-  \RQ{5}: Given a set of reference sections from the research area of German social sciences with matched author names, how does changing the Markov order of the \gls{linear-chain crf} impact the performance of the learned model?
+\newcommand\researchquestionsix{\researchquestionformat{%
+  \RQ{6}: Given a set of reference sections from the research area of German social sciences with matched author names. Does increasing the number of used reference sections for the training of a distantly supervised \gls{linear-chain crf} model improve the performance for the author extraction task?
+}}
+
+
+\newcommand\researchquestionseven{\researchquestionformat{%
+  \RQ{7}: Given a set of reference sections from the research area of German social sciences with matched author names. How does changing the Markov order of the distantly supervised \gls{linear-chain crf} impact the performance of the learned model?
+}}
+
+\newcommand\researchquestioneight{\researchquestionformat{%
+  \RQ{8}: Given a set of reference sections from the research area of German social sciences with matched author names. How does changing the regularization parameter of the Gaussian prior impact the performance of the distantly supervised \gls{linear-chain crf} model?
 }}
 
 In this chapter, we will discuss author extraction as a concrete use case for the usage of \glspl{crf} in combination with \gls{distant supervision}.
@@ -163,10 +175,6 @@ Yet, the discussed approaches can also be applied to the \gls{bieo} format.
 
 \bigskip
 
-\itodo{Add RQ:\@ Does a labeling (B-FN, I-FN, E-FN\dots) yield better results for a simpler labeling problem (A or O)?}
-
-\bigskip
-
 Given an unlabeled set $\mathcal{U}=\{\mathpzc{u}^{(1)},\dots,\mathpzc{u}^{(M)}\}$ of $M$ reference strings, we want to generate \gls{ge} constraints for the \gls{crf} model learning.
 For this we assume that a number of subsequences in the reference strings are matched against a data base of author names (see \cref{sec:ae-distant-supervision}).
 Assuming the \gls{bio} format, a \gls{target variable} $Y_n$ has the following possible assignments:
@@ -197,8 +205,10 @@ After iterating over all $\mathpzc{u}^{(M)}$ in $\mathcal{U}$, we build the cons
 
 \bigskip
 
-The two different approaches for assigning a probability mass to a $w_n$ that was not matched to an author result in the following research question:
+The two different approaches for assigning a probability mass to a $w_n$, that was not matched to an author, result in the following research question:
 \researchquestionthree%
+
+\bigskip
 
 To illustrate the generation of constraints, we assume the following probability masses for the word ``Friedrich'':
 \begin{equation*}
@@ -226,6 +236,28 @@ This gives us the following research question:
 
 \Cref{tab:example-ge-constraints} shows the \gls{ge} constraints for the matches of author names in \Cref{tab:example-author-list} with the four reference strings in \Cref{fig:example-reference-strings}.
 For this example, we additionally consider every third unmatched word for the constraint calculation.
+
+\bigskip
+
+Other approaches to author extraction often do not have a fine grained distinction between first and last names or regarding the borders between different author names.
+When the author extraction is part of a more general reference string extraction, it is only decided whether a given word in a reference string is part of an author name or not~\citep{chen1999gaussian,councill2008parscit,wu2014citeseerx,bellare2007learning}.
+
+Yet, we can also make this decision based on the results from our approach:
+If we assign on the labels \texttt{B-FN}, \texttt{B-LN},\texttt{I-FN}, or \texttt{I-LN} to a word, we classify it as part of an author name.
+Words that have assigned the \texttt{O} label, are classified as not part of an author name.
+
+From this we derive the following research question:
+\researchquestionfive%
+
+
+\bigskip
+
+Since our approach does not rely on manually labelled training data, it is feasible to construct large training sets.
+This leads to a another research question:
+\researchquestionsix%
+
+
+
 
 \section{Learning \glsentryshortpl{crf}}\label{sec:ae-learning-crfs}
 
@@ -258,9 +290,11 @@ The \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf} thereby has a 
 \end{figure}
 
 From this we derive the following research question:
-\researchquestionfive%
+\researchquestionseven%
 
-\todo{add RQ on regularization parameter for gaussian prior}
+We discussed another variable of our distantly supervised \gls{linear-chain crf} in \Cref{sec:learning-crfs}, namely the regularization parameter of the Gaussian prior which penalizes the usage of too many parameters.
+This results in another research question:
+\researchquestioneight%
 
 \subsection{Feature Engineering}\label{subsec:ae-feature-engineering}
 
@@ -317,5 +351,4 @@ In addition, we apply so called \glspl{feature conjunction}~\citep{mccallum2002m
 They allow the learner to assign features to a word containing information about the features of its neighboring words.
 For example, the learner can assign to a word $w_n$ a feature which states that the word $w_{n-1}$ has the feature ENDSWITHPERIOD.{}
 Yet, the learner has the freedom to not include all neighbor features.
-
 
