@@ -1,77 +1,145 @@
 \chapter{Implementation}\label{cha:implementation}
 
-In this chapter we will discuss our implementation of author extraction using \glspl{crf} with \gls{ge} applied on a distantly supervised training set.
-Our approach can be separated into a number of steps.
-One of the first steps is to generate data sets on author names that are used as knowledge bases for the \gls{distant supervision} (\Cref{sec:knowledge-bases}).
-Another initial step is to extract the content of a set of research papers given in the \gls{pdf} format.
-Since we currently focus on the papers' reference section, we will discuss a heuristic for identifying and extracting reference sections.
-We then focus on the annotation of authors in the extracted reference sections using our knowledge base.
-From this annotations we then generate \gls{ge} constraints on a word level.
-Using the extracted reference sections as unlabeled training data together with the \gls{ge} constraints we can perform a \gls{crf} training.
+In this chapter, we discuss our author extraction implementation.
+The following sections are structured similar to \Cref{cha:author-extraction}.
+Thereby, we first look into the preprocessing steps.
+We then consider the generation of distantly supervised training sets which includes creating a author knowledge, and the author name matching.
+Using the reference strings with matched author names, we are able to build \gls{ge} constraints.
+The last section of this chapter describes the learning of \glspl{linear-chain crf} using the reference strings as an unlabeled training set in combination with the generated \gls{ge} constraints.
 
+The source code of the discussed implementation is available on GitHub\footnote{\url{https://github.com/mkrnr/reference-string-extraction} (accessed July~25,~2016)} under a GNU General Public License.
 
 \section{Preprocessing}\label{sec:i-preprocessing}
 
-According to
-The corpus that is used in our study consists of 32,470 research papers that are accessible via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)} as \gls{pdf} documents.
+The corpus that was used for our study consists of 32,470 research papers\footnote{The papers were downloaded on March~16,~2016.} that are accessible as \gls{pdf} documents via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)}.
 
 Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
 Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed April~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
 This is done by also taking into account the formatting of the document, for example when a research paper contain two text columns per page.
-
 This way we were able to extract the text of 31,795 research papers.
 
 \bigskip
 
-Otherwise, the author name matching (see \Cref{subsec:author-name-matching}) would also match names that appear in the text body of the research paper.
+After extracting the text from the \glspl{pdf}, the next step is to identify and extract reference sections.
+As discussed in \Cref{sec:ae-preprocessing}, this is necessary to prevent the author matching algorithm from matching author names in the body of the research paper.
 
-The reference string parsing package ParsCit\footnote{\url{http://wing.comp.nus.edu.sg/parsCit/} (accessed July~06,~2016)} uses a \dots
+The reference string parsing package ParsCit\footnote{\url{http://wing.comp.nus.edu.sg/parsCit/} (accessed July~06,~2016)} uses regular expressions to identify the heading of a reference section by matching against strings such as ``References'', ``Bibliography'', or ``References and Notes''~\citep{councill2008parscit}.
+Further heuristics detect whether a found reference section heading was found too early in the text~\citep{councill2008parscit}.
+After the start is identified, another regular expression is used to search for the end of the reference section.
+
+Yet, the implementation in ParsCit only considers research papers in the English language.
+Thereby, German section headers such as ``Referenzen'' or ``Literaturverzeichnis'' are not covered by the regular expressions.
+After adding a variety of German section headers to the ParsCit implementation, we encountered a high number of false positive matches.
+In other words, many extracted reference sections did not contain reference strings.
+
+As a result, we implemented our own approach which uses similar regular expressions and heuristics as the one of ParsCit.
+Using this implementation, we were able to extract reference sections from 16,513 research papers.
+A manual inspection showed a significantly smaller number of false positive in comparison to the extended ParsCit implementation.
+
+\bigskip
+
+Before using the extracted reference sections as an input for the author matching, we performed one further preprocessing step.
+The reason for this is a reference style in which author names are separated by a slash instead of a space.
+An example for this is the following reference string:
+\begin{quote}
+  Andretta, G./Baethge, M./Dittmer, S. 1994: Übergang wohin? Schwierigkeiten ostdeutscher Industriearbeiter bei ihrer betrieblichen Neuorientierung. In: SOFI-Mitteilungen Nr. 21/März 1994, Göttingen.
+\end{quote}
+Since we use whitespaces to separate words, without a preprocessing we would result in words such as ``G./Beathge,{}'' or ``M./Dittmer,{}''.
+To prevent this, we add spaces around slashes.
+For our example, this gives us:
+\begin{quote}
+  Andretta, G. / Baethge, M. / Dittmer, S. 1994: Übergang wohin? Schwierigkeiten ostdeutscher Industriearbeiter bei ihrer betrieblichen Neuorientierung. In: SOFI-Mitteilungen Nr. 21 / März 1994, Göttingen.
+\end{quote}
 
 \section{Generating Training Sets with Distant Supervision}\label{sec:i-distant-supervision}
 
 \subsection{Knowledge Base Creation}\label{subsec:i-knowledge-base-creation}
 
-
-For the evaluation we generated data sets based on two sources for author names which separate the first names and last names of an author.
+In order to address \RQ{1} during our evaluation, we consider two different sources of author names.
+Both have in common that author names are separated into first names and last names.
 
 \bigskip
 
-The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)} which is published by the German National Library in cooperation with other library networks and institutions.
-The \gls{gnd}\todo{full acr?} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
-\itodo{which persons are included, statistics}
-We will refer to the second data set as the \texttt{gnd} data set.
+The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)}\glsunset{gnd} which is published by the German National Library in cooperation with other library networks and institutions.
+The \gls{gnd} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
+Further, it distinguishes between differentiated and undifferentiated authors~\citep{hochstein2013ihr}.
+A differentiated person is connected to exactly one individual whereas for an undifferentiated person, no such connection is modeled.
+This for example is the case for historical personalities for which no exact records in their identity exist.
+
+The \gls{gnd} data set is available under a Creative Commons Zero 1.0 license and can be downloaded in the following formats: Marc 21, Marc21-xml, RDF/XML, Turtle, and JSON-LD.\@
+
+For our author extraction, we use the Turtle format which is a format for \gls{rdf} data.
+To extract the author names, we used the Apache Jena\footnote{\url{https://jena.apache.org/} (accessed July~25,~2016)} framework.
+After loading the Turtle file into an \gls{rdf} triple store, we extracted the author names using a \gls{sparql} query.
+The used \gls{sparql} query for extracting differentiated persons is shown in \Cref{fig:gnd-sparql-query}.
+\lstset{language=SQL,morekeywords={PREFIX}}
+\begin{figure}[t]
+\begin{lstlisting}[basicstyle=\ttfamily]
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX gndo: <http://d-nb.info/standards/elementset/gnd#>
+SELECT ?forename ?surname WHERE {
+  ?person rdf:type gndo:DifferentiatedPerson .
+  ?person gndo:preferredNameEntityForThePerson ?nameEntity .
+  ?nameEntity gndo:forename ?forename .
+  ?nameEntity gndo:surname ?surname .
+}
+\end{lstlisting}
+\caption{\gls{sparql} query for extracting the preferred name of differentiated persons from the \gls{gnd} file given in a \gls{rdf} format.}
+\label{fig:gnd-sparql-query}
+\end{figure}
+The \gls{gnd} file also contains name variations for some persons.
+Yet, for our evaluation we only consider the name that is marked as ``preferred name''.
+
+Due to the distinction between differentiated and undifferentiated names, we created two different lists of names.
+One that only contains the names of differentiated persons and one that contains the names of both differentiated and undifferentiated persons.
+We refer to the data sets as \texttt{gnd-diff} and \texttt{gnd-full}, respectively.
+General statistics on the number of extracted names is shown in \Cref{tab:knowledge-base-statistics}.
+The table also contains statistics on the number of individual names.
+
 \begin{table}[t]
   \centering
 \begin{tabular}{c c c c c c}
  \toprule
  & \texttt{gnd-full} & \texttt{gnd-diff} &\texttt{swp-trim} &\texttt{swp-full} & \begin{tabular}[c]{@{}c@{}}\texttt{swp-full}\\+\texttt{gnd-full}\end{tabular} \\
  \midrule
- \begin{tabular}[c]{@{}c@{}}Extracted\\Authors\end{tabular} & 8,436,468 & 3,684,265 & 3,684,265& 10,796,240 & 19,232,708\\[5mm]
- \begin{tabular}[c]{@{}c@{}}Individual\\Authors\end{tabular} &6,853,487 & 3,239,116 & 1,617,698 & 3,135,891 & 9,081,885\\
+ \begin{tabular}[c]{@{}c@{}}Extracted\\Names\end{tabular} & 8,436,468 & 3,684,265 & 3,684,265& 10,796,240 & 19,232,708\\[5mm]
+ \begin{tabular}[c]{@{}c@{}}Individual\\Names\end{tabular} &6,853,487 & 3,239,116 & 1,617,698 & 3,135,891 & 9,081,885\\
  %& & & & & \\
  \bottomrule
 \end{tabular}
-\caption{Statistics on different variations of the \texttt{gnd} and \texttt{swp} knowledge bases.}
+\caption{Statistics for different variations of the \texttt{gnd} and \texttt{swp} name lists.}
 \label{tab:knowledge-base-statistics}
 \end{table}
 
 \bigskip
 
-The second source is the social science portal Sowiport\footnote{\url{http://sowiport.gesis.org/} (accessed July~5,~2016)} which is maintained by GESIS --- Leibniz Institute for the Social Sciences\footnote{\url{http://www.gesis.org/} (accessed July~5,~2016)}.
-\itodo{statistics, references}
+The second source is the social science portal Sowiport\footnote{\url{http://sowiport.gesis.org/} (accessed July~5,~2016)} which is maintained by GESIS --- Leibniz Institute for the Social Sciences.
+From this portal, a list of author names was extracted via an Apache Solr\footnote{\url{http://lucene.apache.org/solr/} (accessed July~25,~2016)} query on June~13,~2016.
+The results were provided in a \gls{xml} file.
 
+In this file, an author name is represented as a string in which the last names are separated from the first names with a comma.
+In some cases, multiple author names appear together in one string, which are then separated by semicolons.
+
+The Sowiport portal was chosen because of it's topical similarity to the research papers from the \gls{ssoar}.
 We will refer to the second data set as the \texttt{swp} data set.
+In order to allow a comparison to the \gls{gnd} data set, we additionally generated a version of the \texttt{swp} data set with the same number of authors as the \gls{gnd} data set.
+We refer to this as the \texttt{swp-trim} data set.
 
-\bigskip
-
-\Cref{tab:knowledge-base-statistics}\todo{swp-full +gnd-full or +gnd-diff?} contains statistics on a number of variations of the \texttt{gnd} and  \texttt{swp} data sets.
-
+\Cref{tab:knowledge-base-statistics}\todo{swp-full +gnd-full or +gnd-diff?} contains statistics on the different variations of the \texttt{gnd} and \texttt{swp} data sets.
 
 \subsection{Author Name Matching}\label{subsec:i-author-name-matching}
-Usually, matches are annotated using markup languages such as \gls{xml}\todo{examples}.
+Usually, matches are annotated using markup languages such as \gls{xml}.
+For example, the third reference string in \Cref{fig:example-reference-strings} could be annotated with:
+\begin{equation*}
+  \texttt{<a><fn>}\text{Fritz}\texttt{</fn> <ln>}\text{M\"{u}ller,}\texttt{</ln></a> }\text{Fritz Schmidt (2010): \dots}
+\end{equation*}
+Here, \texttt{<a>\dots</a>} marks an author name, \texttt{<fn>\dots</fn>} a first name, and a last name is marked with \texttt{<ln>\dots</ln>}.
 Since such markup language use tree based models, they do not allow a direct encoding of overlaps.
-To demonstrate this issue for tree based models, we consider our previous overlap example which we want to encode using \gls{xml}\@\todo{add tree example}.
-
+For example, assuming that we want to match all occurrences of the author ``Fritz M\"{u}ller'', the first three words of the previous example would need to be annotated with:
+\begin{equation*}
+  \texttt{<a><fn>}\text{Fritz}\texttt{</fn> <a><ln>}\text{M\"{u}ller,}\texttt{</ln></a> <fn>}\text{Fritz}\texttt{</fn></a>}
+\end{equation*}
+Yet, such a nesting of \gls{xml} tags is not allowed.
 There are a number of approaches that try to overcome this limitation of tree based markup languages such as \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}. They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from such documents.
 
 In order to avoid this kind of overhead, it would be preferable to annotate our author matches using a data structure that supports overlapping hierarchies by default.
@@ -80,65 +148,75 @@ Being a directed graph, it naturally solves the issue of overlaps by allowing a 
 The graph has a hierarchy since it it acyclic.
 In addition, it has ordered descendants.
 Thereby, for any given node, the order of it's child nodes is defined.
-\itodo{add properties}
-\itodo{goddag example}
-Given the \gls{goddag} data structure, we will now discuss a concrete way of tagging author names in a given string containing words.
 
-One approach that we pursued was using the \gls{aho-corasick algorithm}, proposed by \citet{aho1975efficient}.
-It uses a \glspl{fsm} to efficiently search a text corpus for all occurrences of a given set of strings.
-I na{\"{\i}}ve approach for the search of occurrences of a set of authors in given text would be the following.
-Since author names can appear in a variety of ways in references, a number of variations has to be created for every author in the list (see \Cref{fig:example-name-variations}).
-Especially since the authors can be written with the first name appearing before or after the last name, generating these variations results in a considerable data redundancy in the \glspl{fsm}.
-Additionally, only the exact specified strings can be found in the text.
-This makes modeling the punctuation marks between the first and last names of an author a crucial step.
+\bigskip
 
-Our final approach consists of the following steps.
-First, the author names are split into first names and last names.
+Using the \gls{goddag} data structure, we will now discuss a concrete way of tagging author names in a given reference string.
+
+As a first step, several variations of an author list described in \Cref{subsec:i-knowledge-base-creation} are generated.
+For this, the author names are split into a set of first names and a set of last names.
 If an author has multiple first names or last names, they are not further separated in this case.
-Thereby, we refer to this lists as \textit{full first names set} and \textit{full last names set}.
-Since first names can be abbreviated in references, a next step is to generated a \textit{abbreviated first names set}.
-For example, \todo{first name example}.
-The matching that we use in a later step only matches single words, separated by white spaces.
-Thereby, in addition to the \textit{abbreviated first names set} we need to split entries with multiple names in both the \textit{full first names set} and \textit{full last names set}.
-This results in two new lists, containing single first names and single last names.
-We call these lists \textit{single first names set} and \textit{single last names set}.
+Thereby, we refer to them as \textit{full first names set} and \textit{full last names set}.
+Since first names can be abbreviated in a reference, a next step is to generated a \textit{first name variations set}.
+For example, given the full first name ``Max Friedrich'', we add the following variations to the first name variations set:
+\begin{itemize}
+  \itemsep0em
+  \item Max
+  \item Friedrich
+  \item M.F
+  \item MF
+  \item M
+  \item F
+\end{itemize}
+Note that no variation ends with a period.
+This is the case because we later will ignore leading and trailing punctuation marks when matching names.
+
+Further, we split entries in the full last names set that contain multiple last names, resulting in the \textit{single last names set}.
+
+\bigskip
 
 We now generate an initial \gls{goddag} structure for our given text.
-This structure consists of a root node which has as leaf nodes the words of the text, separated at white space or new line characters.
-Additionally, every leaf node contains a ``word'' property which is the string of the node with removed leading and trailing non-alphabetical characters.
+This structure consists of a root node which has as child nodes the words of the reference section, separated at white space or new line characters.
+These words are the leaf nodes of the \gls{goddag}.
+The leaf nodes contain two representations of the word.
+One that contains the word as it appears in the reference string, including it's leading and trailing non-word characters.
+The other one only contains the word itself, without leading and training non-word characters.
+This allows an efficient name lookup in the following steps.
 
-Given this initial \gls{goddag} structure we now match the \textit{abbreviated and single first names set} against the ``word'' properties of the leaf nodes\todo{mention hashset?}.
+Given this initial \gls{goddag} structure, we now match the entries in the \textit{first name variations set} against the ``word'' properties of the leaf nodes.
 If a match is found, a non-terminal node labeled ``FN'' is added between the root node and the matched leaf node.
-In a second pass, we match against the \textit{single last names set} and add non-terminal nodes labeled ``LastName'' accordingly.
-We refer to the added nodes as \textit{first name nodes} and \textit{last name nodes}.
+In a second pass, we match against the \textit{single last names set} and add non-terminal nodes labeled ``LN'' accordingly.
+We refer to the added nodes as \textit{first name nodes} and \textit{last name nodes}, respectively.
 
 As a result of the two iterations, a given leaf node can simultaneously have a first name node and a last name node as a parent.
 This again would not be allowed in a tree structure such as \gls{xml}.
 
-We now want to match our list of authors against the \gls{goddag} structure with identified first names and last names.
-For this we generate an \textit{author name map} that contains as keys the entries from the \textit{full last names set}.
-As values it contains the matching first names and first name abbreviations according to the author list in \Cref{tab:example-author-list}.
-Using this list we now iterate over the leaf nodes.
-If a leaf node has a last name node parent node, we first continue check the preceding and following leaf nodes for first name parent nodes.
-Additionally, we also check for following last name nodes for author names with multiple last names.
-
-\Cref{fig:example-goddag-4-names} contains an example for a \gls{goddag} with matched first names and last names.
+\Cref{fig:example-goddag-4-names} shows a \gls{goddag} with matched first names and last names of the fourth reference string in \Cref{fig:example-reference-strings} against the author list in \Cref{tab:example-author-list}.
+Here, The word ``Friedrich'' is tagged as both a possible first name and a last name.
 \begin{figure}[t]
   \centering
 %\hspace*{-1.25cm}
 \resizebox{\linewidth}{!}{%
   \input{/home/martin/mt/thesis/figures/example-goddag-4-names.tex}
 }
-\caption{\gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} with matched first names and last names.}
+\caption{\gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} with matched first names and last names from \Cref{tab:example-author-list}.}
 \label{fig:example-goddag-4-names}
 \end{figure}
 
-Using the ``word'' property of the found leaf nodes, we search the last names in the previously created author name map.
-If the last names were found, we search the values for our found first names.
-If we matched both the last and first names of an author, we add a non-terminal node with the label ``Author'' between the root node and the corresponding parents of the matched leaf nodes.
+\bigskip
 
-In \Cref{fig:example-goddag-4-final}, we show a \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} that includes three matches to the author list in \Cref{tab:example-author-list}.
-\Cref{app:author-name-matching} contains the \glspl{goddag} for the three remaining reference strings of \Cref{fig:example-reference-strings}.
+The goal now is to match the list of authors against the \gls{goddag} structure with identified first names and last names.
+For this, we generate an \textit{author name map} that contains as keys the entries from the full last names set.
+As values, it contains the first name variations of first names that appear together with the given last names in our original author list.
+
+Given this map, we iterate over the leaf nodes using a sliding window approach.
+First we examine if one or more neighboring leaf nodes have a last name parent node.
+If this is the case, we examine their neighboring leaf nodes for first name parent nodes.
+If both last name parent nodes and neighboring first name parent nodes are found, a lookup in the author name map is performed using the ``word'' property of the leaf nodes.
+
+If a match is found, a non-terminal node with the label ``AU'' for author is inserted between the root node and the corresponding parents of the matched leaf nodes.
+
+In \Cref{fig:example-goddag-4-final}, we show a \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} that includes three matches from the author list in \Cref{tab:example-author-list}.
 \begin{figure}[t]
   \centering
 %\hspace*{-1.25cm}
@@ -148,6 +226,7 @@ In \Cref{fig:example-goddag-4-final}, we show a \gls{goddag} for the fourth refe
 \caption{Final \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings}.}
 \label{fig:example-goddag-4-final}
 \end{figure}
+\Cref{app:author-name-matching} contains the \glspl{goddag} for the three remaining reference strings of \Cref{fig:example-reference-strings}.
 
 \section{Building \glsentryshort{ge} Constraints}\label{sec:i-training-crfs}
 
@@ -166,5 +245,3 @@ In \Cref{fig:example-goddag-4-final}, we show a \gls{goddag} for the fourth refe
 	% * order-0 CRF is built.
 \subsection{Feature Engineering}\label{subsec:i-feature-engineering}
 \itodo{table with our features}
-
-\subsection{Technical Details}\label{subsec:i-technical-details}

@@ -1,4 +1,4 @@
-\documentclass[m,binding,scrreprt,master,palatino,codegpl,frames]{WeSTthesis}
+\documentclass[m,binding,scrreprt,master,palatino,codegpl]{WeSTthesis}
 %\documentclass[m,binding,twoside,scrreprt,master,palatino]{WeSTthesis}
 \usepackage[english,ngerman]{babel}		% English and new German spelling
 \usepackage[utf8]{inputenc}           % correct input encoding
@@ -22,6 +22,7 @@ pdfsubject={Master's Thesis},
 pdfkeywords={},
 breaklinks=true,
 colorlinks=true,
+%TODO set links to black
 %linkcolor=black,
 %anchorcolor=black,
 %citecolor=black,
@@ -51,12 +52,15 @@ urlcolor=blue]{hyperref}
 \usepackage{csquotes}
 \usepackage{framed}
 \usepackage{booktabs}
+\usepackage{listings}
 \usepackage{tikz}
 \usetikzlibrary{bayesnet}
 
 \clubpenalty10000
 \widowpenalty10000
 \displaywidowpenalty=10000
+
+\lstset{language=SQL,morekeywords={PREFIX}}
 
 \DeclareFontFamily{OT1}{pzc}{}
 \DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
