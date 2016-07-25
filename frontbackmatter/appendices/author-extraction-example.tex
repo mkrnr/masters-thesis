@@ -222,7 +222,6 @@ $\Psi(LN_1,EC_1)$\par
 
 \subsection{Feature Functions}\label{app:subsec-lccrf-feature-functions}
 
-
 \begin{table}[H]
 \centering
 \begin{tabular}{c l c}
@@ -387,7 +386,7 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 \subsection{Author Name Matching}\label{app:author-name-matching}
 \Cref{tab:example-author-list} contains an author list that we use for our author matching example.
 \Cref{fig:example-goddag-1-final}, \Cref{fig:example-goddag-2-final}, and \Cref{fig:example-goddag-3-final} show the final \glspl{goddag} for the first three reference strings in \Cref{fig:example-reference-strings}, matched against the authors in \Cref{tab:example-author-list}.
-\begin{table}[H]
+\begin{table}[h]
 \centering
 \begin{tabular}{l l}
  \toprule
@@ -404,7 +403,7 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 \caption{Example author list for demonstrating the author matching.}
 \label{tab:example-author-list}
 \end{table}
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
 %\hspace*{-1.25cm}
 %\resizebox{\linewidth}{!}{%
@@ -413,7 +412,7 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 \caption{Final \gls{goddag} for the first reference string in \Cref{fig:example-reference-strings}.}
 \label{fig:example-goddag-1-final}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
 %\hspace*{-1.25cm}
 %\resizebox{\linewidth}{!}{%
@@ -422,7 +421,7 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 \caption{Final \gls{goddag} for the second reference string in \Cref{fig:example-reference-strings}.}
 \label{fig:example-goddag-2-final}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
 %\hspace*{-1.25cm}
 %\resizebox{\linewidth}{!}{%
@@ -432,8 +431,10 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 \label{fig:example-goddag-3-final}
 \end{figure}
 
+\clearpage
 \subsection{\glsentryshort{ge} Constraints}\label{app:subsec-ge-constraints}
-\begin{table}[H]
+\begin{table}[h]
+\centering
 \begin{tabular}{l l l l l l}
   \toprule
   Word &\multicolumn{1}{c}{\texttt{B-FN}}&\multicolumn{1}{c}{\texttt{B-LN}}&\multicolumn{1}{c}{\texttt{I-FN}}&\multicolumn{1}{c}{\texttt{I-LN}}&\multicolumn{1}{c}{\texttt{O}}\\
@@ -455,11 +456,12 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 \caption{Example \gls{ge} constraints based on the reference strings in \Cref{fig:example-reference-strings} using the author list in \Cref{tab:example-author-list}. Additionally, every third unmatched word is selected, starting with ``(2010):'' in the first reference string.}
 \label{tab:example-ge-constraints}
 \end{table}
-\clearpage
-\section{Feature Engineering}\label{app:sec-feature-engineering}
 
-\begin{table}[H]
+
+\centerline{%
+\begin{minipage}[c]{\linewidth}
 \centering
+\section{Feature Engineering}\label{app:sec-feature-engineering}
 \begin{tabular}{l l c c c c}
   \toprule
   \multicolumn{2}{c}{Feature} & \multicolumn{4}{c}{Paper}\\
@@ -505,11 +507,13 @@ in \Cref{app:subsec-lccrf-example-calculation}.
           & AFFILIATION          & x       &             &          &       \\
   \bottomrule
 \end{tabular}
-\caption{Survey of mentioned features for reference string extraction \citet{peng2004accurate}, \citet{councill2008parscit}, \citet{wu2014citeseerx}, and \citet{bellare2007learning}.}
+\captionof{table}{Survey of mentioned features for reference string extraction \citet{peng2004accurate}, \citet{councill2008parscit}, \citet{wu2014citeseerx}, and \citet{bellare2007learning}.}
 \label{tab:feature-survey}
-\end{table}
+\end{minipage}
+}
 
-\begin{table}[H]
+\centerline{%
+\begin{minipage}[c]{\linewidth}
 \centering
 \begin{tabular}{l l l}
   \toprule
@@ -537,27 +541,28 @@ in \Cref{app:subsec-lccrf-example-calculation}.
           & CONTPUNCTUATION  & Contains a punct.\ mark such as  ``,'' or ``;''.\\
           & STOPPUNCTUATION  & Contains a punct.\ mark such as ``.''.\\
           & PAIREDBRACES     & Starts and ends with braces.\\
-          & VOLUME           & Matches reg.\ expression for volume number.\\
-          & PAGERANGE        & Matches reg.\ expression for a page range.\\
-          & YEAR             & Matches reg.\ expression for a year number.\\
-          & URL              & Matches reg.\ expression for an URL.\\
-          & EMAIL            & Matches reg.\ expression for an Email.\\
+          & VOLUME           & Matches volume number reg.\ expression.\\
+          & PAGERANGE        & Matches page range reg.\ expression.\\
+          & YEAR             & Matches year number reg.\ expression.\\
+          & URL              & Matches URL reg.\ expression.\\
+          & EMAIL            & Matches Email reg.\ expression.\\
           & WORD             & The word itself.\\
   \midrule
   Layout  & BINNUMBER        & Is assigned to a bin, based on line position.\\
   \midrule
-  Lexicon & AUTHOR           & Is word in author lexikon.\\
-          & PUBLISHER        & Is word in publisher lexikon.\\
-          & FEMALE/MALENAME  & Is word in a female or male name dictionary.\\
-          & LASTNAME         & Is word in a last name dictionary.\\
-          & CITY             & Is word in a city name dictionary.\\
+  Lexicon & AUTHOR           & Appears in author lexicon.\\
+          & PUBLISHER        & Appears in publisher lexicon.\\
+          & FEMALE/MALENAME  & Appears in a female or male name lexicon.\\
+          & LASTNAME         & Appears in a last name dictionary.\\
+          & CITY             & Appears in a city name dictionary.\\
           & MONTH            & Is word like ``Jan.'' or ``Feb.''.\\
           & NOTES            & Is word like ``appeared'' or ``submitted''.\\
           & AFFILIATION      & Is word like ``institution'' or ``Labs''.\\
   \bottomrule
 \end{tabular}
-\caption{Descriptions of the features in \Cref{tab:feature-survey} (cf. \citep{peng2004accurate,councill2008parscit,wu2014citeseerx,bellare2007learning})}
+\captionof{table}{Description of the features in \Cref{tab:feature-survey} (cf. \citep{peng2004accurate,councill2008parscit,wu2014citeseerx,bellare2007learning})}
 \label{tab:feature-descriptions}
-\end{table}
+\end{minipage}
+}
 
 
