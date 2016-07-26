@@ -93,7 +93,7 @@ Facing a similar problem when having multiple possible DBpedia entity types for 
 Instead of deciding for one of the overlapping author names, our goal is to consider all possible author names.
 In \Cref{subsec:i-author-name-matching}, we will discuss a data structure that can represent overlapping author names.
 
-\section{Building \glsentryshort{ge} Constraints}\label{sec:ae-training-crfs}
+\section{Building \glsentryshort{ge} Constraints}\label{sec:ae-building-ge-constraints}
 
 After labeling the occurrences of author in our reference sections, we now want to derive \gls{ge} constraints that will be used for learning a \gls{crf} model.
 
@@ -269,7 +269,7 @@ The \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf} thereby has a 
 \centering
 \input{figures/example-linear-chain-crf-markov-order-2.tex}
 \caption{%
-  \Gls{linear-chain crf} with Markov order $2$, derived from the author extraction example in \Cref{cha:crfs}.}
+  \Gls{factor graph} of a \gls{linear-chain crf} with Markov order $2$, derived from the author extraction example in \Cref{cha:crfs}.}
 \label{fig:example-linear-chain-crf-markov-order-2}
 \end{figure}
 
@@ -301,37 +301,37 @@ Note that \citet{wu2014citeseerx} use an identical list of feature to \citet{cou
 \bigskip
 
 In \Cref{tab:our-features}, we list the features that we use during our evaluations in \Cref{cha:evaluation}.
-\begin{table}[t]
-\centering
-\begin{tabular}{l l l}
-  \toprule
-  \multicolumn{3}{c}{Feature}\\
-  Type    & Name            & Description\\
-  \midrule
-  Local   & CAPITALIZED     & The first character is capitalized.\\
-          & PERIOD          & Contains exactly one period.\\
-          & PERIODS         & Contains more than one period.\\
-          & CONTAINSPERIOD  & Contains a period (not at beginning or end).\\
-          & ENDSWITHPERIOD  & Ends with a period.\\
-          & CONTAINSCOMMA   & Contains a comma (not at beginning or end).\\
-          & ENDSWITHCOMMA   & Ends with a comma.\\
-          & CONTAINSDASH    & Contains a dash (not at beginning or end).\\
-          & ENDSWITHDASH    & Ends with a dash.\\
-          & NUMBER          & Contains exactly one number.\\
-          & NUMBERS         & Contains as least two separate numbers.\\
-          & ONELETTER       & Consists of one letter.\\
-          & BRACES          & Contains opening and closing braces.\\
-          & BRACKETS        & Contains opening and closing braces.\\
-          & MONTH           & Matches a month word (e.g. Jan.\ or January).\\
-          & YEAR            & Matches a year between 1699 and 2016.\\
-  \midrule
-  Lexicon & FIRSTNAME     & Appears in a first name dictionary.\\
-          & LASTNAME      & Appears in a last name dictionary.\\
-  \bottomrule
-\end{tabular}
-\caption{Descriptions of the features in \Cref{tab:feature-survey} (cf. \citep{peng2004accurate,councill2008parscit,wu2014citeseerx,bellare2007learning})}
-\label{tab:our-features}
-\end{table}
+%\begin{table}[t]
+%\centering
+%\begin{tabular}{l l l}
+%  \toprule
+%  \multicolumn{3}{c}{Feature}\\
+%  Type    & Name            & Description\\
+%  \midrule
+%  Local   & CAPITALIZED     & The first character is capitalized.\\
+%          & PERIOD          & Contains exactly one period.\\
+%          & PERIODS         & Contains more than one period.\\
+%          & CONTAINSPERIOD  & Contains a period (not at beginning or end).\\
+%          & ENDSWITHPERIOD  & Ends with a period.\\
+%          & CONTAINSCOMMA   & Contains a comma (not at beginning or end).\\
+%          & ENDSWITHCOMMA   & Ends with a comma.\\
+%          & CONTAINSDASH    & Contains a dash (not at beginning or end).\\
+%          & ENDSWITHDASH    & Ends with a dash.\\
+%          & NUMBER          & Contains exactly one number.\\
+%          & NUMBERS         & Contains as least two separate numbers.\\
+%          & ONELETTER       & Consists of one letter.\\
+%          & BRACES          & Contains opening and closing braces.\\
+%          & BRACKETS        & Contains opening and closing braces.\\
+%          & MONTH           & Matches a month word (e.g. Jan.\ or January).\\
+%          & YEAR            & Matches a year between 1699 and 2016.\\
+%  \midrule
+%  Lexicon & FIRSTNAME     & Appears in a first name dictionary.\\
+%          & LASTNAME      & Appears in a last name dictionary.\\
+%  \bottomrule
+%\end{tabular}
+%\caption{Description of the features that we use for our evaluation in \Cref{cha:evaluation}.}
+%\label{tab:our-features}
+%\end{table}
 The selection of features is base both on the feature survey in \Cref{tab:feature-survey} as well as empirical findings during our evaluation.
 Currently, we do not use layout features such as the position of the word in the text line.
 Instead, we concatenate lines by removing line breaks to allow a matching of author names that are separated into two lines.

@@ -60,13 +60,13 @@ Both have in common that author names are separated into first names and last na
 
 \bigskip
 
-The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)}\glsunset{gnd} which is published by the German National Library in cooperation with other library networks and institutions.
+The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)}\glsunset{gnd} -- German for integrated authority file --  which is published by the German National Library in cooperation with other library networks and institutions.
 The \gls{gnd} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
-Further, it distinguishes between differentiated and undifferentiated authors~\citep{hochstein2013ihr}.
+Further, it distinguishes between differentiated and undifferentiated person~\citep{hochstein2013ihr}.
 A differentiated person is connected to exactly one individual whereas for an undifferentiated person, no such connection is modeled.
-This for example is the case for historical personalities for which no exact records in their identity exist.
+This for example is the case for historical personalities for which no precise records on their identity exist.
 
-The \gls{gnd} data set is available under a Creative Commons Zero 1.0 license and can be downloaded in the following formats: Marc 21, Marc21-xml, RDF/XML, Turtle, and JSON-LD.\@
+The \gls{gnd} data set is available under a Creative Commons Zero license and can be downloaded in the following formats: Marc 21, MARCXML, RDF/XML, Turtle, and JSON-LD.\@
 
 For our author extraction, we use the Turtle format which is a format for \gls{rdf} data.
 To extract the author names, we used the Apache Jena\footnote{\url{https://jena.apache.org/} (accessed July~25,~2016)} framework.
@@ -140,9 +140,10 @@ For example, assuming that we want to match all occurrences of the author ``Frit
   \texttt{<a><fn>}\text{Fritz}\texttt{</fn> <a><ln>}\text{M\"{u}ller,}\texttt{</ln></a> <fn>}\text{Fritz}\texttt{</fn></a>}
 \end{equation*}
 Yet, such a nesting of \gls{xml} tags is not allowed.
-There are a number of approaches that try to overcome this limitation of tree based markup languages such as \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}. They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from such documents.
+There are a number of approaches that try to overcome this limitation of tree based markup languages.
+Examples are \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}. They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from such documents.
 
-In order to avoid this kind of overhead, it would be preferable to annotate our author matches using a data structure that supports overlapping hierarchies by default.
+In order to avoid this overhead, it would be preferable to annotate our author matches using a data structure that supports overlapping hierarchies by default.
 \citet{sperberg2000goddag} propose such a data structure named \acrfull{goddag}.
 Being a directed graph, it naturally solves the issue of overlaps by allowing a node to have multiple parents.
 The graph has a hierarchy since it it acyclic.
@@ -169,7 +170,7 @@ For example, given the full first name ``Max Friedrich'', we add the following v
   \item F
 \end{itemize}
 Note that no variation ends with a period.
-This is the case because we later will ignore leading and trailing punctuation marks when matching names.
+This is because we later will ignore leading and trailing punctuation marks when matching names.
 
 Further, we split entries in the full last names set that contain multiple last names, resulting in the \textit{single last names set}.
 
@@ -188,11 +189,12 @@ If a match is found, a non-terminal node labeled ``FN'' is added between the roo
 In a second pass, we match against the \textit{single last names set} and add non-terminal nodes labeled ``LN'' accordingly.
 We refer to the added nodes as \textit{first name nodes} and \textit{last name nodes}, respectively.
 
-As a result of the two iterations, a given leaf node can simultaneously have a first name node and a last name node as a parent.
-This again would not be allowed in a tree structure such as \gls{xml}.
+After the two iterations, a leaf node can simultaneously have a first name node and a last name node as its parent.
+This again is not allowed in a tree-based structure such as \gls{xml}.
 
-\Cref{fig:example-goddag-4-names} shows a \gls{goddag} with matched first names and last names of the fourth reference string in \Cref{fig:example-reference-strings} against the author list in \Cref{tab:example-author-list}.
-Here, The word ``Friedrich'' is tagged as both a possible first name and a last name.
+\Cref{fig:example-goddag-4-names} shows a \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} with matched first names and last names.
+Here, The word ``Friedrich'' is tagged as both a possible first name and last name.
+Note that in our evaluation, we use one \gls{goddag} per reference section.
 \begin{figure}[t]
   \centering
 %\hspace*{-1.25cm}
@@ -210,13 +212,13 @@ For this, we generate an \textit{author name map} that contains as keys the entr
 As values, it contains the first name variations of first names that appear together with the given last names in our original author list.
 
 Given this map, we iterate over the leaf nodes using a sliding window approach.
-First we examine if one or more neighboring leaf nodes have a last name parent node.
+First, we examine if one or more neighboring leaf nodes have a last name parent node.
 If this is the case, we examine their neighboring leaf nodes for first name parent nodes.
 If both last name parent nodes and neighboring first name parent nodes are found, a lookup in the author name map is performed using the ``word'' property of the leaf nodes.
 
 If a match is found, a non-terminal node with the label ``AU'' for author is inserted between the root node and the corresponding parents of the matched leaf nodes.
 
-In \Cref{fig:example-goddag-4-final}, we show a \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} that includes three matches from the author list in \Cref{tab:example-author-list}.
+\Cref{fig:example-goddag-4-final} shows a \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} that includes three matches from the author list in \Cref{tab:example-author-list}.
 \begin{figure}[t]
   \centering
 %\hspace*{-1.25cm}
@@ -226,22 +228,69 @@ In \Cref{fig:example-goddag-4-final}, we show a \gls{goddag} for the fourth refe
 \caption{Final \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings}.}
 \label{fig:example-goddag-4-final}
 \end{figure}
-\Cref{app:author-name-matching} contains the \glspl{goddag} for the three remaining reference strings of \Cref{fig:example-reference-strings}.
+In \Cref{app:author-name-matching}, we present the \glspl{goddag} for the three remaining reference strings of \Cref{fig:example-reference-strings}.
 
-\section{Building \glsentryshort{ge} Constraints}\label{sec:i-training-crfs}
+\section{Building \glsentryshort{ge} Constraints}\label{sec:i-building-ge-constraints}
+
+We now use the created \gls{goddag} structures with matched author names to create \gls{ge} constraints.
+To recall from \Cref{sec:ae-building-ge-constraints}, a \gls{ge} constraint is a \gls{probability distribution} $\tilde{P}(Y_n)$ for a word $w_n$ in the reference section where $\textit{Val}(Y_n)$ is the set of possible labels for this word:
+\begin{equation*}
+  \mathit{Val}(Y_n)=\{\texttt{B-FN},\texttt{B-LN},\texttt{I-FN},\texttt{I-LN},\texttt{O}\}
+\end{equation*}
+We can derive this \gls{probability distribution} from the \glspl{goddag} by iterating over the children of the root node and.
+When reaching an author node, we can add the according probability mass to the probability distributions of of it's children.
+
+For example, the first author node in \Cref{fig:example-goddag-4-final} contains a first name node and a last name node.
+Since the children are ordered, the first name node appears first in the sequence.
+Thereby, we add a probability mass of one to the label \texttt{B-FN} of the word ``Mia'' and to the label \texttt{I-LN} of the word ``Wagner,''.
+This shows the importance of having ordered children in this graph structure.
+
+\Cref{tab:example-ge-constraints} shows the resulting \gls{ge} constraints for the four \glspl{goddag} that were derived from the matched of the author list in \Cref{tab:example-author-list} with the reference strings in \Cref{fig:example-reference-strings}.
+As we discussed in \Cref{sec:ae-building-ge-constraints}, for this example we also include every third word that is not matched to an author name, starting with ``(2010):'' in the first reference string.
 
 \section{Learning \glsentryshortpl{crf}}\label{sec:i-learning-crfs}
 
+After discussing our approach on generating \gls{ge} constraints, we now discuss the implementation for the learning of \glspl{linear-chain crf} which uses an unlabeled set of reference sections and the corresponding \gls{ge} constraints as an input.
+
+We use the \acrfull{mallet}\glsunset{mallet}~\citep{mccallum2002mallet} for most of the implementation discussed in this section.
+\acrfull{mallet} is an open-source Java library that includes tools for tasks such as document classification, sequence tagging, or topic modeling.
+Especially relevant for us is its implementation of \glspl{linear-chain crf} since it can be learned using \gls{ge} constraints.
+\itodo{mention transducer approach}
+
 \subsection{Graph Construction}\label{subsec:i-graph-construction}
 
-  % from MALLET documentation:
-	% * @param orders an array of increasing non-negative numbers giving
-	% * the orders of the features for this CRF. The largest number
-	% * <em>n</em> is the Markov order of the CRF. States are
-	% * <em>n</em>-tuples of output labels. Each of the other numbers
-	% * <em>k</em> in <code>orders</code> represents a weight set shared
-	% * by all destination states whose last (most recent) <em>k</em>
-	% * labels agree. If <code>orders</code> is <code>null</code>, an
-	% * order-0 CRF is built.
+Based on the discussion in \Cref{subsec:ae-graph-construction}, we focus on the construction of \glspl{linear-chain crf}.
+
+In \gls{mallet}, it is possible to create \glspl{linear-chain crf} with different Markov orders (see \Cref{subsec:ae-graph-construction}).
+More specifically, the Markov order is declared using an integer array with non-negative numbers in increasing order.
+The highest integer specifies the Markov order of the \gls{crf}.
+The other numbers represent additional weight sets to also model lower Markov orders in the same model.
+% from MALLET documentation:
+% * @param orders an array of increasing non-negative numbers giving
+% * the orders of the features for this CRF. The largest number
+% * <em>n</em> is the Markov order of the CRF. States are
+% * <em>n</em>-tuples of output labels. Each of the other numbers
+% * <em>k</em> in <code>orders</code> represents a weight set shared
+% * by all destination states whose last (most recent) <em>k</em>
+% * labels agree. If <code>orders</code> is <code>null</code>, an
+% * order-0 CRF is built.
+
+For example, an integer array \texttt{[0,1]} specifies an Markov order $1$ \gls{linear-chain crf} and an additional weight set for the Markov order $0$ states.
+For a word $w_n$, the Markov order $0$ state only includes the \gls{target variable} $Y_n$.
+When applied to the author extraction example from \Cref{cha:crfs}, this specification results in a \gls{factor graph} shown in \Cref{fig:example-linear-chain-crf-markov-order-0-1}.
+\begin{figure}[t]
+\centering
+\input{figures/example-linear-chain-crf-markov-order-0-1.tex}
+\caption{%
+  \Gls{factor graph} of a \gls{linear-chain crf} with both Markov order $0$ and $1$, derived from the author extraction example in \Cref{cha:crfs}.}
+\label{fig:example-linear-chain-crf-markov-order-0-1}
+\end{figure}
+
 \subsection{Feature Engineering}\label{subsec:i-feature-engineering}
-\itodo{table with our features}
+To create features in \gls{mallet}, they are added via so called pipes.
+\itodo{explain pipe system}
+
+All local features that we use for the evaluation (see \Cref{tab:our-features}), are implemented using a variation of the \texttt{cc.mallet.pipe.tsf.RegexMatches} class.
+This class matches words against regular expressions that describe a feature and assigns a feature label if a match was found.
+The used Java regular expressions for the different local features are shown in \Cref{app:sec-feature-engineering}.
+

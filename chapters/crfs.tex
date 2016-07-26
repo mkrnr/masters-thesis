@@ -18,63 +18,95 @@ This example is based on the set of four reference strings given in \Cref{fig:ex
 \subsection{Probability Theory}\label{subsec:probability-theory}
 Several concepts from probability theory are crucial for an understanding of \glspl{crf} and they all build on the notion of \glspl{probability distribution}.
 
-A \gls{probability distribution} $P$ is defined over \glssymbol{outcome space} and \glssymbol{measurable set}, where \glssymbol{outcome space} is the \gls{outcome space} and \glssymbol{measurable set} is a \gls{measurable set} of \glspl{event} with $\glssymbol{measurable set}\subseteq \glssymbol{power set} (\glssymbol{outcome space})$ \citep{koller2009probabilistic}.
-$\glssymbol{power set}(\glssymbol{outcome space})$ is the \gls{power set} of \glssymbol{outcome space}:
+A \gls{probability distribution} $P$ is defined using two sets.
+The first set is the \gls{outcome space} \glssymbol{outcome space}, which contains all possible outcomes of an experiment.
+The second set is called \gls{event space} \glssymbol{event space}.
+It contains measurable \glspl{event} to which we can assign probabilities~\citep{koller2009probabilistic}.
+Such a measurable \gls{event} $\alpha$ is a subset of \glssymbol{outcome space}: $\alpha\subseteq\glssymbol{outcome space}$.
+
+Further, the following four properties must hold true for the \gls{event space}~\citep{koller2009probabilistic}:
+\begin{itemize}
+  \item It contains the \textit{empty \gls{event}} which consists of the empty set $\emptyset$.
+  \item It contains the \textit{trivial \gls{event}} which is the set of all possible outcomes \glssymbol{outcome space}.
+  \item It is closed under union: If \glspl{event} $\alpha$ and $\beta$ are in \glssymbol{event space}, then so is $\alpha\cup\beta$.
+  \item It is closed under complementation: If \gls{event} $\alpha$ is in \glssymbol{event space}, then so is $\glssymbol{outcome space}\setminus\alpha$.
+\end{itemize}
+
+To describe the relation between \glssymbol{event space} and \glssymbol{outcome space}, we first define the \gls{power set}:
+A \gls{power set} of a set $A$ is defined as the set of all possible subsets of $A$, including the empty set $\emptyset$ and the set $A$ itself:
 \begin{equation}
   \label{equ:power-set}
-  \glssymbol{power set}(\glssymbol{outcome space})=\left\{U\mid U\subseteq \glssymbol{outcome space}\right\}
+  \glssymbol{power set}(A)=\left\{B\mid B\subseteq A\right\}
 \end{equation}
-$P$ now describes a mapping from events in \glssymbol{measurable set} to real values according to the following rules \citep{koller2009probabilistic}:
+Using this, we can define \gls{event space} \glssymbol{event space} as a subset of the \gls{power set} of the \gls{outcome space} \glssymbol{outcome space}:
+\begin{equation*}
+  \glssymbol{event space}\subseteq\glssymbol{power set}(\glssymbol{outcome space}).
+\end{equation*}
+
+%TODO remove this?
+\newpage
+
+The \gls{probability distribution} $P$ now describes a mapping from \glspl{event} in \glssymbol{event space} to real numbers according to the following rules \citep{koller2009probabilistic}:
 \begin{itemize}
   \item $P(\alpha)\geq 0 $ for all $ \alpha \in S$.
   \item $P(\glssymbol{outcome space})=1$.
-  \item If $\alpha,\beta\in \glssymbol{measurable set}$ and $\alpha\cap\beta = \emptyset$, then $P(\alpha\cup\beta)=P(\alpha)+P(\beta)$.
+  \item If $\alpha,\beta\in \glssymbol{event space}$ and $\alpha\cap\beta = \emptyset$, then $P(\alpha\cup\beta)=P(\alpha)+P(\beta)$.
 \end{itemize}
 
-For our author extraction example, we define \glssymbol{outcome space} as a set consisting of four reference strings.
-A reference string consists of a sequence of words ``$w_1\ w_2\ \dots\ w_N$'' where words are separated by whitespaces and where $N$ is the number of words in the sequence.
+To clarify this using our author extraction example, we first define the \gls{outcome space} \glssymbol{outcome space} as the set consisting of the four reference strings in \Cref{fig:example-reference-strings}.
+More precisely, a reference string consists of a sequence of words ``$w_1\ w_2\ \dots\ w_N$'' where words are separated by whitespaces and where $N$ is the number of words in the sequence.
 For simplicity reasons, $N$ is the same for all four reference strings in \Cref{fig:example-reference-strings}.
-We now consider two events:
+We now consider two \glspl{event}:
 \begin{equation*}
   \begin{split}
-    \mathit{firstEC}&=\left\{w_1\ \dots\ w_N \mid w_1\ \text{ends with a comma}\right\}\\
-    \mathit{secondFN}&=\left\{w_1\ \dots\ w_N \mid w_2\ \text{is a first name}\right\}.
+    %before:firstEC:
+    \mathit{firstLN}&=\left\{w_1\ \dots\ w_N \mid w_1\ \text{is a last name}\right\}.\\
+    %before:secondFN
+    \mathit{secondEC}&=\left\{w_1\ \dots\ w_N \mid w_2\ \text{ends with a comma}\right\}.
   \end{split}
 \end{equation*}
-In other words, $\mathit{firstEC}$ contains all reference strings in \glssymbol{outcome space} in which the first word of the sequence ends with a comma and $\mathit{secondFN}$ contains all reference strings in \glssymbol{outcome space} in which the second word of the sequence is a first name.
-From this we construct two \glspl{measurable set}
+In other words, $\mathit{firstLN}$ contains all reference strings in \glssymbol{outcome space} in which the first word of the sequence is a last name and $\mathit{secondEC}$ contains all reference strings in \glssymbol{outcome space} in which the second word of the sequence ends with a comma.
+
+To fulfill the three properties of an \gls{event space} \glssymbol{event space}, we need to introduce a number of additional \glspl{event}.
+First, we add the empty \gls{event} $\emptyset$ and the trivial \gls{event} $\Omega$ to \glssymbol{event space}.
+To fulfill the property of \glssymbol{event space} being closed under complementation, we then add the complement of $\mathit{firstLN}$ and $\mathit{secondEC}$:
 \begin{equation*}
-\begin{split}
-  \glssymbol{measurable set}_{EC_1}&= \left\{\emptyset,\mathit{firstEC}, \mathit{firstNotEC}, \glssymbol{outcome space}\right\}\\
-  \glssymbol{measurable set}_{F\rs N_2}&= \left\{\emptyset,\mathit{secondFN}, \mathit{secondNotFN}, \glssymbol{outcome space}\right\}
-\end{split}
+  \begin{split}
+    \mathit{firstNotLN}&=\glssymbol{outcome space}\setminus\textit{firstLN}.\\
+    \mathit{secondNotEC}&=\glssymbol{outcome space}\setminus\textit{secondEC}.\\
+  \end{split}
 \end{equation*}
-with $\mathit{firstNotEC}=\glssymbol{outcome space}\setminus \mathit{firstEC}$ and $\mathit{secondNotFN}$ defined accordingly.
-We now consider two \glspl{probability distribution}.
-The first is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{EC_1}$.
-According to our example in \Cref{fig:example-reference-strings} we have:
+Further, to fulfill the union property of \glssymbol{event space}, we add all unions of \glspl{event}.
+Then, we again need to add the complements of the newly added union of \glspl{event}.
+This repeats until all possible unions and complements are added to \glssymbol{event space}.
+For our example, we show the full \gls{event space} \glssymbol{event space} in \todo{add}.
+Even for this simple example, the resulting \gls{event space} is already considerably big.
+We thereby do not explicitly specify \glssymbol{event space} in the following examples but refer to the shown approach of repeatedly adding the union and complements of \glspl{event} to create the \gls{event space}.
+
+We now consider the resulting \glspl{probability distribution} for this example.
+Based on the four reference strings in \glssymbol{outcome space}, we assign the corresponding probabilities to the events in \glssymbol{event space}.
+Examples for this are:
 \begin{equation*}
     \begin{split}
-      P(\mathit{firstEC})&=1/4=0.25\\
-      P(\mathit{firstNotEC})&=3/4=0.75.
+      P(\mathit{firstLN})&=1/4=0.25.\\
+      P(\mathit{firstNotLN})&=3/4=0.75.\\
+      P(\mathit{secondEC})&=2/4=0.5.\\
+      P(\mathit{secondNotEC})&=2/4=0.5.
     \end{split}
 \end{equation*}
-The second \gls{probability distribution} is defined over \glssymbol{outcome space} and $\glssymbol{measurable set}_{F\rs N_2}$, giving us:
-\begin{equation*}
-  \label{equ:eg-measurable-sets}
-    \begin{split}
-      P(\mathit{secondFN})&=1/4=0.25\\
-      P(\mathit{secondNotFN})&=3/4=0.75.
-    \end{split}
-\end{equation*}
+The full list of assignments is shown in \todo{ref}.
+Note that, when building the sum over all assigned probabilities in P, we result in a number greater than $1$.
+When recalling the rules for \glspl{probability distribution}, we see that the probabilities of two \glspl{event} is only defined if the intersection of the two events is the empty set.
+Thereby, our defined P remains a valid \gls{probability distribution}.
 
 \bigskip
 
-Based on the idea of \glspl{probability distribution}, a \gls{random variable} $X$ is a \gls{function} that associates a value with each outcome in \glssymbol{outcome space}~\cite{koller2009probabilistic}.
+Another important concept in probability theory are \glspl{random variable}.
+A \gls{random variable} $X$ is a \gls{function} that associates a value with each outcome in \glssymbol{outcome space}~\cite{koller2009probabilistic}.
 In addition, $\mathit{Val}(X)$ is the set of values that $X$ can take.
 The elements in $\mathit{Val}(X)$ are also called \glspl{assignment} to $X$.
 
-Following our example we define the \gls{random variable} $EC_1$ as a \gls{function} that, given a reference string, returns the value $\mathit{true}$ if the first word in the sequence ends with a comma and the value $\mathit{false}$ if it does not.
+Following our example, we define the \gls{random variable} $EC_1$ as a \gls{function} that, given a reference string, returns the value $\mathit{true}$ if the first word in the sequence ends with a comma and the value $\mathit{false}$ if it does not.
 This results in: $\mathit{Val}(EC_1)=\{\mathit{true}, \mathit{false}\}$.
 Similarly, $F\rs N_2$ is defined as the function that associates the value $\mathit{true}$ with a reference string if the second word is a first name and $\mathit{false}$ if the second word is not a first name.
 
@@ -87,23 +119,31 @@ An \gls{assignment} of a concrete value $x\in \mathit{Val}(X)$ to $X$ is denoted
 We can now define our \glspl{probability distribution} on \glspl{random variable} instead of \glspl{event}, for example:
 \begin{equation*}
   \begin{split}
-    P(\mathit{firstEC})&= P(EC_1{=}\mathit{true})\\
-    P(\mathit{secondNotFN})&= P(F\rs N_2{=}\mathit{false}).
+    P(\mathit{firstLN})&= P(LN_1{=}\mathit{true})\\
+    P(\mathit{secondNotEC})&= P(EC_2{=}\mathit{false}).
   \end{split}
 \end{equation*}
 
 \bigskip
 
-Given two \glspl{random variable} $X$ and $Y$, $P(X,Y)$ is the \gls{joint distribution} of $X$ and $Y$.
-For the assignments $x$ and $y$, $P(X{=}x,Y{=}y)$ associates a probability with the subset of $\Omega$ in which both $x$ and $y$ are true for every element~\cite{koller2009probabilistic}.
+We now consider the concept of \textit{joint probability}.
+Given two \glspl{event} $\alpha$ and $\beta$, the joint probability $P(\alpha,\beta)$ corresponds to the probability of the intersection of the two events~\citep{teschl2007mathematik}:
+\begin{equation*}
+  P(\alpha,\beta)=\alpha\cap\beta.
+\end{equation*}
 
-In our example, $P(EC_1,F\rs N_2)$ has the following values:
+This concept can also be applied to \glspl{random variable}.
+Given \glspl{random variable} $X$ and $Y$ which are defined on the same \gls{event space} \glssymbol{event space}, we consider their \gls{joint distribution} $P(X,Y)$.
+For the assignments $x$ and $y$, $P(X{=}x,Y{=}y)$ associates a probability with the subset of $\Omega$ which is specified by  $x$ and $y$~\citep{koller2009probabilistic}.
+The \gls{joint distribution} for more than two \glspl{random variable} is defined accordingly.
+
+In our example, $P(LN_1,EC_2)$ has the following values:
 \begin{equation*}
   \begin{split}
-    P(EC_1{=}\mathit{false},F\rs N_2{=}\mathit{false})&=3/4=0.75\\
-    P(EC_1{=}\mathit{false},F\rs N_2{=}\mathit{true})&=0/4=0\\
-    P(EC_1{=}\mathit{true},F\rs N_2{=}\mathit{false})&=0/4=0\\
-    P(EC_1{=}\mathit{true},F\rs N_2{=}\mathit{true})&=1/4=0.25.
+    P(LN_1{=}\mathit{false},EC_2{=}\mathit{false})&=1/4=0.25.\\
+    P(LN_1{=}\mathit{false},EC_2{=}\mathit{true})&=2/4=0.5.\\
+    P(LN_1{=}\mathit{true},EC_2{=}\mathit{false})&=1/4=0.25.\\
+    P(LN_1{=}\mathit{true},EC_2{=}\mathit{true})&=0/4=0.
   \end{split}
 \end{equation*}
 
@@ -115,14 +155,16 @@ The set of assignments $\mathbf{x}$ is also called a \gls{full assignment} to $\
 Any \gls{event} that is described using $\mathbf{X}$ must be a union of \glspl{full assignment} to $\mathbf{X}$.
 This gives us a \gls{canonical outcome space} for which each outcome is a joint assignment to the \glspl{random variable} in $\mathbf{X}$.
 
-We demonstrate this by extending our definitions of $EC_1$ and $F\rs N_2$ and apply them to all words in a reference string of length $N$.
+We demonstrate this by extending our definitions of $LN_1$ and $EC_2$ and apply them to all words in a reference string of length $N$.
 This gives us two sets of \glspl{random variable}:
 \begin{equation*}
   \begin{split}
-    \mathbf{EC}=& \{EC_1, \dots, EC_N\}\\
-    \mathbf{FN}=& \{F\rs N_1, \dots, F\rs N_N\}.
+    \mathbf{LN}=& \{LN_1, \dots, LN_N\}.\\
+    \mathbf{EC}=& \{EC_1, \dots, EC_N\}.
   \end{split}
 \end{equation*}
+This, however, also requires the extension of our \gls{event space} \glssymbol{event space} which has to include all possible unions and complements of the newly defined \glspl{random variable}.
+
 For example, the \gls{full assignment} to $\mathbf{EC}$ derived from the second reference string in \Cref{fig:example-reference-strings} is:
 \begin{equation*}
   \mathbf{EC}=\{\mathit{true}, \mathit{false}, \mathit{false}, \mathit{false}, \mathit{false}, \mathit{false}, \mathit{false}, \mathit{true}, \mathit{false}, \mathit{false}\}.
@@ -150,7 +192,7 @@ P(\mathbf{Y}\mid \mathbf{X}) = \frac{P(\mathbf{X},\mathbf{Y})}{P(\mathbf{X})}.
 
 Again taking the reference strings in \Cref{fig:example-reference-strings}, we have for example:
 \begin{equation*}
-  P(F\rs N_2{=}\mathit{true}\mid EC_1{=}\mathit{true})=\frac{P(EC_1{=}\mathit{true}, F\rs N_2{=}\mathit{true})}{P(EC_1{=}\mathit{true})}=\frac{0.25}{0.25}=1.
+  P(EC_2{=}\mathit{true}\mid LN_1{=}\mathit{false})=\frac{P(LN_1{=}\mathit{false}, EC_2{=}\mathit{true})}{P(LN_1{=}\mathit{false})}=\frac{0.5}{0.75}\approx0.6667.
 \end{equation*}
 
 \bigskip
@@ -162,13 +204,13 @@ Given a discrete \gls{random variable} $X$, we define the expectation $E[X]$ of 
   E[X]=\sum_{x\in \mathit{Val}(X)} x\cdot P(x).
 \end{equation}
 
-To apply this definition to our example, we redefine $\mathit{Val}(EC_1)=\{\mathit{true},\mathit{false}\}$ as $\mathit{Val}(EC_1)=\{1,0\}$ where we replace $\mathit{true}$ and $\mathit{false}$ with the values $1$ and $0$, respectively.
+To apply this definition to our example, we redefine $\mathit{Val}(LN_1)=\{\mathit{true},\mathit{false}\}$ as $\mathit{Val}(LN_1)=\{1,0\}$ where we replace $\mathit{true}$ and $\mathit{false}$ with the values $1$ and $0$, respectively.
 This gives us:
 \begin{equation*}
   \begin{split}
   \label{equ:expectation-x}
-  E[EC_1]&=\sum_{x\in \mathit{Val}(EC_1)} x\cdot P(x)\\
-  &=1\cdot P(EC_1{=}1)+0\cdot P(EC_1{=}0)\\
+  E[LN_1]&=\sum_{x\in \mathit{Val}(LN_1)} x\cdot P(x)\\
+  &=1\cdot P(LN_1{=}1)+0\cdot P(LN_1{=}0)\\
   &=1\cdot 0.25+0\cdot 0.75\\
   &=0.25.
   \end{split}
@@ -206,11 +248,13 @@ In a \gls{probabilistic graphical model}, the \glspl{random variable} $\mathcal{
 There are two fundamental groups of graphical models, based on the type of edge that are used: \glspl{bayesian network} and \glspl{markov network}.
 Both models have in common that their set of \glspl{random variable} $\mathcal{X}$ can be separated into two subsets:
 $\mathbf{X}$ contains the so-called \glspl{observed variable} which usually represent specific features of the input.
-$\mathbf{Y}$ contains the \glspl{target variable}.
+$\mathbf{Y}$ contains the \glspl{target variable} which we usually want to infer using a graphical model.
 We thereby have $\mathcal{X}=\{\mathbf{X}\cup\mathbf{Y}\}$ with $\mathbf{X}\cap\mathbf{Y}=\emptyset$.
 Yet, there are fundamental differences between \glspl{bayesian network} and \glspl{markov network}.
+To illustrate them, we will refer our previously discussed author extraction example.
+For this, we first add a new \gls{random variable} $\mathit{F\rs N_2}$ with $\mathit{Val}(\mathit{F\rs N_2})=\{\mathit{true},\mathit{false}\}$, which states whether the word $w_2$ in a reference string is a first name.
+Using this, we define $\mathcal{X}=\{EC_2,LN_1,F\rs N_2\}$ with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,F\rs N_2\}$.
 
-Using our author extraction example we can define $\mathcal{X}=\{EC_2,LN_1,F\rs N_2\}$ with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,F\rs N_2\}$.
 
 \bigskip
 
@@ -614,7 +658,7 @@ Note that in \Cref{fig:example-linear-chain-crf}, we do not use the \gls{factor}
 
 \begin{figure}[t]
 \centering
-\input{figures/example-linear-chain-crf.tex}
+\input{figures/example-linear-chain-crf-markov-order-1.tex}
 \caption{%
   \Gls{linear-chain crf} derived from the author extraction example.
 }
