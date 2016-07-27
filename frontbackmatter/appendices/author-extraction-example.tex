@@ -484,45 +484,45 @@ in \Cref{app:subsec-lccrf-example-calculation}.
   \toprule
   \multicolumn{2}{c}{Feature} & \multicolumn{4}{c}{Paper}\\
   Type & Name &\citep{peng2004accurate}&\citep{councill2008parscit}&\citep{wu2014citeseerx}&\citep{bellare2007learning}\\
-  \midrule                  %peng2004 %councill2008   %wu2014   %bellare2007
-  Local   & STARTSWITHCAP        & x       & x           & x        &       \\
-          & ALLCAP               & x       & x           & x        &       \\
-          & MIXEDCAP             &         & x           & x        &       \\
-          & NUMDIGITS            &         & x           & x        & x     \\
-          & DIGITS               & x       & x           & x        &       \\
-          & ALLDIGITS            & x       &             &          & x     \\
-          & PHONEORZIP           & x       &             &          &       \\
-          & DOTS                 & x       &             &          &       \\
-          & DASHES               & x       &             &          &       \\
-          & STARTSWITHQUOTES     &         & x           & x        &       \\
-          & ENDSWITHQUOTES       &         & x           & x        &       \\
-          & ACRONYM              & x       &             &          &       \\
-          & INITIAL              & x       &             &          &       \\
-          & CHARACTER            & x       &             &          &       \\
-          & NUMCHARACTERS        &         &             &          & x     \\
-          & ALLCHARACTERS        & x       &             &          & x     \\
-          & CAPLETTER            & x       &             &          &       \\
-          & PUNCTUATION          & x       &             &          &       \\
-          & CONTPUNCTUATION      &         & x           & x        &       \\
-          & STOPPUNCTUATION      &         & x           & x        &       \\
-          & PAIREDBRACES         &         & x           & x        &       \\
-          & VOLUME               &         & x           & x        &       \\
-          & PAGERANGE            &         & x           & x        &  x    \\
-          & YEAR                 &         & x           & x        &  x    \\
-          & URL                  & x       &             &          &  x    \\
-          & EMAIL                & x       &             &          &       \\
-          & WORD                 & x       & x           & x        &  x    \\
+  \midrule                              %peng2004 %councill2008   %wu2014   %bellare2007
+  Local   & \texttt{STARTSWITHCAP}        & x       & x           & x        &       \\
+          & \texttt{ALLCAP}               & x       & x           & x        &       \\
+          & \texttt{MIXEDCAP}             &         & x           & x        &       \\
+          & \texttt{NUMDIGITS}            &         & x           & x        & x     \\
+          & \texttt{DIGITS}               & x       & x           & x        &       \\
+          & \texttt{ALLDIGITS}            & x       &             &          & x     \\
+          & \texttt{PHONEORZIP}           & x       &             &          &       \\
+          & \texttt{DOTS}                 & x       &             &          &       \\
+          & \texttt{DASHES}               & x       &             &          &       \\
+          & \texttt{STARTSWITHQUOTES}     &         & x           & x        &       \\
+          & \texttt{ENDSWITHQUOTES}       &         & x           & x        &       \\
+          & \texttt{ACRONYM}              & x       &             &          &       \\
+          & \texttt{INITIAL}              & x       &             &          &       \\
+          & \texttt{CHARACTER}            & x       &             &          &       \\
+          & \texttt{NUMCHARACTERS}        &         &             &          & x     \\
+          & \texttt{ALLCHARACTERS}        & x       &             &          & x     \\
+          & \texttt{CAPLETTER}            & x       &             &          &       \\
+          & \texttt{PUNCTUATION}          & x       &             &          &       \\
+          & \texttt{CONTPUNCTUATION}      &         & x           & x        &       \\
+          & \texttt{STOPPUNCTUATION}      &         & x           & x        &       \\
+          & \texttt{PAIREDBRACES}         &         & x           & x        &       \\
+          & \texttt{VOLUME}               &         & x           & x        &       \\
+          & \texttt{PAGERANGE}            &         & x           & x        &  x    \\
+          & \texttt{YEAR}                 &         & x           & x        &  x    \\
+          & \texttt{URL}                  & x       &             &          &  x    \\
+          & \texttt{EMAIL}                & x       &             &          &       \\
+          & \texttt{WORD}                 & x       & x           & x        &  x    \\
   \midrule
-  Layout  & BINNUMBER            & 3       & 12          & 12       &       \\
+  Layout  & \texttt{BINNUMBER}            & 3       & 12          & 12       &       \\
   \midrule
-  Lexicon & AUTHOR               & x       &             &          &       \\
-          & PUBLISHER            &         & x           & x        & x     \\
-          & FEMALE/MALENAME      &         & x           & x        &       \\
-          & LASTNAME             &         &             &          & x     \\
-          & CITY                 &         &             &          & x     \\
-          & MONTH                & x       & x           & x        &       \\
-          & NOTES                & x       & x           & x        &       \\
-          & AFFILIATION          & x       &             &          &       \\
+  Lexicon & \texttt{AUTHOR}               & x       &             &          &       \\
+          & \texttt{PUBLISHER}            &         & x           & x        & x     \\
+          & \texttt{FEMALE/MALENAME}      &         & x           & x        &       \\
+          & \texttt{LASTNAME}             &         &             &          & x     \\
+          & \texttt{CITY}                 &         &             &          & x     \\
+          & \texttt{MONTH}                & x       & x           & x        &       \\
+          & \texttt{NOTES}                & x       & x           & x        &       \\
+          & \texttt{AFFILIATION}          & x       &             &          &       \\
   \bottomrule
 \end{tabular}
 \captionof{table}{Survey of mentioned features for reference string extraction \citet{peng2004accurate}, \citet{councill2008parscit}, \citet{wu2014citeseerx}, and \citet{bellare2007learning}.}
@@ -538,47 +538,47 @@ in \Cref{app:subsec-lccrf-example-calculation}.
   \multicolumn{3}{c}{Feature}\\
   Type & Name & Description\\
   \midrule
-  Local   & STARTSWITHCAP    & Starts with a capitalized letter.\\
-          & ALLCAP           & All characters are capitalized.\\
-          & MIXEDCAP         & A character, except the first, is capitalized.\\
-          & NUMDIGITS        & Contains a specified number of digits. \\
-          & DIGITS           & Contains at least one digit.\\
-          & ALLDIGITS        & All characters are digits.\\
-          & PHONEORZIP       & Phone number or zip code.\\
-          & DOTS             & Contains at least one dot.\\
-          & DASHES           & Contains at least one dash.\\
-          & STARTSWITHQUOTES & Starts with quotation marks.\\
-          & ENDSWITHQUOTES   & Ends with quotation marks.\\
-          & ACRONYM          & Is an acronym.\\
-          & INITIAL          & Is an initial such as ``A.''.\\
-          & CHARACTER        & Is a single character.\\
-          & NUMCHARACTERS    & Contains a specified number of characters.\\
-          & ALLCHARACTERS    & Contains only characters.\\
-          & CAPLETTER        & Is a single capitalized character.\\
-          & PUNCTUATION      & Contains a punctuation mark.\\
-          & CONTPUNCTUATION  & Contains a punct.\ mark such as  ``,'' or ``;''.\\
-          & STOPPUNCTUATION  & Contains a punct.\ mark such as ``.''.\\
-          & PAIREDBRACES     & Starts and ends with braces.\\
-          & VOLUME           & Matches volume number reg.\ expression.\\
-          & PAGERANGE        & Matches page range reg.\ expression.\\
-          & YEAR             & Matches year number reg.\ expression.\\
-          & URL              & Matches URL reg.\ expression.\\
-          & EMAIL            & Matches Email reg.\ expression.\\
-          & WORD             & The word itself.\\
+  Local   & \texttt{STARTSWITHCAP}    & Starts with a capitalized letter.\\
+          & \texttt{ALLCAP}           & All characters are capitalized.\\
+          & \texttt{MIXEDCAP}         & A character, except the first, is capitalized.\\
+          & \texttt{NUMDIGITS}        & Contains a specified number of digits. \\
+          & \texttt{DIGITS}           & Contains at least one digit.\\
+          & \texttt{ALLDIGITS}        & All characters are digits.\\
+          & \texttt{PHONEORZIP}       & Phone number or zip code.\\
+          & \texttt{DOTS}             & Contains at least one dot.\\
+          & \texttt{DASHES}           & Contains at least one dash.\\
+          & \texttt{STARTSWITHQUOTES} & Starts with quotation marks.\\
+          & \texttt{ENDSWITHQUOTES}   & Ends with quotation marks.\\
+          & \texttt{ACRONYM}          & Is an acronym.\\
+          & \texttt{INITIAL}          & Is an initial such as ``A.''.\\
+          & \texttt{CHARACTER}        & Is a single character.\\
+          & \texttt{NUMCHARACTERS}    & Contains a specified number of characters.\\
+          & \texttt{ALLCHARACTERS}    & Contains only characters.\\
+          & \texttt{CAPLETTER}        & Is a single capitalized character.\\
+          & \texttt{PUNCTUATION}      & Contains a punctuation mark.\\
+          & \texttt{CONTPUNCTUATION}  & Contains a punct.\ mark such as  ``,'' or ``;''.\\
+          & \texttt{STOPPUNCTUATION}  & Contains a punct.\ mark such as ``.''.\\
+          & \texttt{PAIREDBRACES}     & Starts and ends with braces.\\
+          & \texttt{VOLUME}           & Matches volume number reg.\ expression.\\
+          & \texttt{PAGERANGE}        & Matches page range reg.\ expression.\\
+          & \texttt{YEAR}             & Matches year number reg.\ expression.\\
+          & \texttt{URL}              & Matches URL reg.\ expression.\\
+          & \texttt{EMAIL}            & Matches Email reg.\ expression.\\
+          & \texttt{WORD}             & The word itself.\\
   \midrule
-  Layout  & BINNUMBER        & Is assigned to a bin, based on line position.\\
+  Layout  & \texttt{BINNUMBER}        & Is assigned to a bin, based on line position.\\
   \midrule
-  Lexicon & AUTHOR           & Appears in author lexicon.\\
-          & PUBLISHER        & Appears in publisher lexicon.\\
-          & FEMALE/MALENAME  & Appears in a female or male name lexicon.\\
-          & LASTNAME         & Appears in a last name dictionary.\\
-          & CITY             & Appears in a city name dictionary.\\
-          & MONTH            & Is word like ``Jan.'' or ``Feb.''.\\
-          & NOTES            & Is word like ``appeared'' or ``submitted''.\\
-          & AFFILIATION      & Is word like ``institution'' or ``Labs''.\\
+  Lexicon & \texttt{AUTHOR}           & Appears in author lexicon.\\
+          & \texttt{PUBLISHER}        & Appears in publisher lexicon.\\
+          & \texttt{FEMALE/MALENAME}  & Appears in a female or male name lexicon.\\
+          & \texttt{LASTNAME}         & Appears in a last name dictionary.\\
+          & \texttt{CITY}             & Appears in a city name dictionary.\\
+          & \texttt{MONTH}            & Is word like ``Jan.'' or ``Feb.''.\\
+          & \texttt{NOTES}            & Is word like ``appeared'' or ``submitted''.\\
+          & \texttt{AFFILIATION}      & Is word like ``institution'' or ``Labs''.\\
   \bottomrule
 \end{tabular}
-\captionof{table}{Description of the features in \Cref{tab:feature-survey} (cf. \citep{peng2004accurate,councill2008parscit,wu2014citeseerx,bellare2007learning})}
+\captionof{table}{Description of the features in \Cref{tab:feature-survey} \citep[cf.][]{peng2004accurate,councill2008parscit,wu2014citeseerx,bellare2007learning}}
 \label{tab:feature-descriptions}
 \end{minipage}
 }
@@ -586,34 +586,34 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 \chapter{Implementation}\label{app:cha-implementation}
 \section{Feature Engineering}\label{app:sec-feature-engineering}
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \begin{tabular}{l l}
   \toprule
   \multicolumn{2}{c}{Feature}\\
-   Name            & Description\\
+   Name                   & Description\\
   \midrule
-   CAPITALIZED     &\verb$[^\\p{L}]*\\p{Lu}.*$\\
-   PERIOD          &\verb$[^\\.]*\\.[^\\.]*$\\
-   PERIODS         &\verb$.*\\..*\\..*$\\
-   CONTAINSPERIOD  &\verb$.+\\..+$\\
-   ENDSWITHPERIOD  &\verb$.+\\..+$\\
-   CONTAINSCOMMA   &\verb$.+,.+$\\
-   ENDSWITHCOMMA   &\verb$.*,$\\
-   CONTAINSDASH    &\verb$.+-.+$\\
-   ENDSWITHDASH    &\verb$.*-$\\
-   NUMBER          &\verb$\\D*\\d+\\D*$\\
-   NUMBERS         &\verb$.*\\d+\\D+\\d+.*$\\
-   ONELETTER       &\verb$[^\\p{L}]*\\p{L}[^\\p{L}]*$\\
-   BRACES          &\verb$.*\\(.*\\).*$\\
-   BRACKETS        &\verb$.*\\[.*\\].*$\\
-   YEAR            &\verb$\\D*(1[6-9][0-9][0-9]|20[0-1][0-9])\\D*$\\
-   MONTH           &\verb$([^\\p{L}]*|.*[^\\p{L}]+)($\\
-                   &\verb$  (monthNames)|(monthAbbreviations))($\\
-                   &\verb$  [^\\p{L}]*|[^\\p{L}]+.*)$\\
+   \texttt{CAPITALIZED}     &\verb$[^\\p{L}]*\\p{Lu}.*$\\
+   \texttt{PERIOD}          &\verb$[^\\.]*\\.[^\\.]*$\\
+   \texttt{PERIODS}         &\verb$.*\\..*\\..*$\\
+   \texttt{CONTAINSPERIOD}  &\verb$.+\\..+$\\
+   \texttt{ENDSWITHPERIOD}  &\verb$.+\\..+$\\
+   \texttt{CONTAINSCOMMA}   &\verb$.+,.+$\\
+   \texttt{ENDSWITHCOMMA}   &\verb$.*,$\\
+   \texttt{CONTAINSDASH}    &\verb$.+-.+$\\
+   \texttt{ENDSWITHDASH}    &\verb$.*-$\\
+   \texttt{NUMBER}          &\verb$\\D*\\d+\\D*$\\
+   \texttt{NUMBERS}         &\verb$.*\\d+\\D+\\d+.*$\\
+   \texttt{ONELETTER}       &\verb$[^\\p{L}]*\\p{L}[^\\p{L}]*$\\
+   \texttt{BRACES}          &\verb$.*\\(.*\\).*$\\
+   \texttt{BRACKETS}        &\verb$.*\\[.*\\].*$\\
+   \texttt{YEAR}            &\verb$\\D*(1[6-9][0-9][0-9]|20[0-1][0-9])\\D*$\\
+   \texttt{MONTH}           &\verb$([^\\p{L}]*|.*[^\\p{L}]+)($\\
+                            &\verb$  (monthNames)|(monthAbbreviations))($\\
+                            &\verb$  [^\\p{L}]*|[^\\p{L}]+.*)$\\
   \bottomrule
 \end{tabular}
 \caption{Used regular expressions for detecting layout features.}
-\label{tab:our-features}
+\label{tab:our-features-regular-expressions}
 \end{table}
 

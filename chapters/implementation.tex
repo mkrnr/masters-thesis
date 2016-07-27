@@ -4,7 +4,7 @@ In this chapter, we discuss our author extraction implementation.
 The following sections are structured similar to \Cref{cha:author-extraction}.
 Thereby, we first look into the preprocessing steps.
 We then consider the generation of distantly supervised training sets which includes creating a author knowledge, and the author name matching.
-Using the reference strings with matched author names, we are able to build \gls{ge} constraints.
+Using the reference strings with matched author names, we then build \gls{ge} constraints.
 The last section of this chapter describes the learning of \glspl{linear-chain crf} using the reference strings as an unlabeled training set in combination with the generated \gls{ge} constraints.
 
 The source code of the discussed implementation is available on GitHub\footnote{\url{https://github.com/mkrnr/reference-string-extraction} (accessed July~25,~2016)} under a GNU General Public License.
@@ -12,6 +12,7 @@ The source code of the discussed implementation is available on GitHub\footnote{
 \section{Preprocessing}\label{sec:i-preprocessing}
 
 The corpus that was used for our study consists of 32,470 research papers\footnote{The papers were downloaded on March~16,~2016.} that are accessible as \gls{pdf} documents via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)}.
+They are related to the area of social sciences\todo{stats on language}
 
 Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
 Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed April~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
@@ -118,7 +119,7 @@ From this portal, a list of author names was extracted via an Apache Solr\footno
 The results were provided in a \gls{xml} file.
 
 In this file, an author name is represented as a string in which the last names are separated from the first names with a comma.
-In some cases, multiple author names appear together in one string, which are then separated by semicolons.
+In some cases, multiple author names appear together in one string, separated by semicolons.
 
 The Sowiport portal was chosen because of it's topical similarity to the research papers from the \gls{ssoar}.
 We will refer to the second data set as the \texttt{swp} data set.
@@ -141,10 +142,10 @@ For example, assuming that we want to match all occurrences of the author ``Frit
 \end{equation*}
 Yet, such a nesting of \gls{xml} tags is not allowed.
 There are a number of approaches that try to overcome this limitation of tree based markup languages.
-Examples are \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}. They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from such documents.
+Examples are \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}. They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from the documents.
 
-In order to avoid this overhead, it would be preferable to annotate our author matches using a data structure that supports overlapping hierarchies by default.
-\citet{sperberg2000goddag} propose such a data structure named \acrfull{goddag}.
+To avoid this overhead, it would be preferable to annotate our author matches using a data structure that supports overlapping hierarchies by default.
+\citet{sperberg2000goddag} propose such a data structure named \acrfull{goddag}\glsunset{goddag}.
 Being a directed graph, it naturally solves the issue of overlaps by allowing a node to have multiple parents.
 The graph has a hierarchy since it it acyclic.
 In addition, it has ordered descendants.
@@ -156,7 +157,7 @@ Using the \gls{goddag} data structure, we will now discuss a concrete way of tag
 
 As a first step, several variations of an author list described in \Cref{subsec:i-knowledge-base-creation} are generated.
 For this, the author names are split into a set of first names and a set of last names.
-If an author has multiple first names or last names, they are not further separated in this case.
+If an author has multiple first names or last names, they are not further separated.
 Thereby, we refer to them as \textit{full first names set} and \textit{full last names set}.
 Since first names can be abbreviated in a reference, a next step is to generated a \textit{first name variations set}.
 For example, given the full first name ``Max Friedrich'', we add the following variations to the first name variations set:
@@ -181,7 +182,7 @@ This structure consists of a root node which has as child nodes the words of the
 These words are the leaf nodes of the \gls{goddag}.
 The leaf nodes contain two representations of the word.
 One that contains the word as it appears in the reference string, including it's leading and trailing non-word characters.
-The other one only contains the word itself, without leading and training non-word characters.
+The other only contains the word itself, without leading and training non-word characters.
 This allows an efficient name lookup in the following steps.
 
 Given this initial \gls{goddag} structure, we now match the entries in the \textit{first name variations set} against the ``word'' properties of the leaf nodes.
@@ -221,7 +222,6 @@ If a match is found, a non-terminal node with the label ``AU'' for author is ins
 \Cref{fig:example-goddag-4-final} shows a \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} that includes three matches from the author list in \Cref{tab:example-author-list}.
 \begin{figure}[t]
   \centering
-%\hspace*{-1.25cm}
 \resizebox{\linewidth}{!}{%
   \input{/home/martin/mt/thesis/figures/example-goddag-4-final.tex}
 }
@@ -250,12 +250,12 @@ As we discussed in \Cref{sec:ae-building-ge-constraints}, for this example we al
 
 \section{Learning \glsentryshortpl{crf}}\label{sec:i-learning-crfs}
 
-After discussing our approach on generating \gls{ge} constraints, we now discuss the implementation for the learning of \glspl{linear-chain crf} which uses an unlabeled set of reference sections and the corresponding \gls{ge} constraints as an input.
+After presenting our approach on generating \gls{ge} constraints, we now discuss the implementation for the learning of \glspl{linear-chain crf} which uses an unlabeled set of reference sections and the corresponding \gls{ge} constraints as an input.
 
 We use the \acrfull{mallet}\glsunset{mallet}~\citep{mccallum2002mallet} for most of the implementation discussed in this section.
-\acrfull{mallet} is an open-source Java library that includes tools for tasks such as document classification, sequence tagging, or topic modeling.
-Especially relevant for us is its implementation of \glspl{linear-chain crf} since it can be learned using \gls{ge} constraints.
-\itodo{mention transducer approach}
+\gls{mallet} is an open-source Java library that includes tools for tasks such as document classification, sequence tagging, or topic modeling.
+Especially relevant for us is its implementation of \glspl{linear-chain crf} since it can be learned using a list of \gls{ge} constraints.
+The learning is performed using gradient ascent with a limited memory \gls{bfgs} approximation (see \Cref{sec:learning-crfs}).
 
 \subsection{Graph Construction}\label{subsec:i-graph-construction}
 
@@ -276,8 +276,8 @@ The other numbers represent additional weight sets to also model lower Markov or
 % * order-0 CRF is built.
 
 For example, an integer array \texttt{[0,1]} specifies an Markov order $1$ \gls{linear-chain crf} and an additional weight set for the Markov order $0$ states.
-For a word $w_n$, the Markov order $0$ state only includes the \gls{target variable} $Y_n$.
-When applied to the author extraction example from \Cref{cha:crfs}, this specification results in a \gls{factor graph} shown in \Cref{fig:example-linear-chain-crf-markov-order-0-1}.
+When modeled with \glspl{factor}, the Markov order $0$ state for a word $w_n$ only includes the \gls{target variable} $Y_n$: $\Psi(Y_n)$.
+Applied to the author extraction example from \Cref{cha:crfs}, this specification results in a \gls{factor graph} shown in \Cref{fig:example-linear-chain-crf-markov-order-0-1}.
 \begin{figure}[t]
 \centering
 \input{figures/example-linear-chain-crf-markov-order-0-1.tex}
@@ -286,11 +286,37 @@ When applied to the author extraction example from \Cref{cha:crfs}, this specifi
 \label{fig:example-linear-chain-crf-markov-order-0-1}
 \end{figure}
 
-\subsection{Feature Engineering}\label{subsec:i-feature-engineering}
-To create features in \gls{mallet}, they are added via so called pipes.
-\itodo{explain pipe system}
+\subsection{Model Parameters}\label{subsec:i-model-parameters}
 
-All local features that we use for the evaluation (see \Cref{tab:our-features}), are implemented using a variation of the \texttt{cc.mallet.pipe.tsf.RegexMatches} class.
-This class matches words against regular expressions that describe a feature and assigns a feature label if a match was found.
-The used Java regular expressions for the different local features are shown in \Cref{app:sec-feature-engineering}.
+The implementation of \glspl{linear-chain crf} in \gls{mallet} allows the modification of several model parameters.
+One that is addressed by \RQ{8} is the regularization parameter of the Gaussian prior (see \Cref{sec:learning-crfs}).
+The default for this parameter is set to $10$.
+
+Further, we can specify the maximum number of iterations during the learning with gradient ascent.
+In our evaluation setup, it was sufficient to set this number to a high value, in our case $10,000$ since the learning always converged in a reasonable time.
+
+A last parameter that we can specify is the number of resets of the L-\gls{bfgs} calculation.
+This can improve the result of the learning since the \dots\todo{continue based on distant supervision section}
+Yet, empirical tests have shown that for our evaluation, modifying this parameter does not have a significant impact on the resulting model.
+Thereby, we set the number of resets to $4$ for all experiments.
+
+\subsection{Feature Engineering}\label{subsec:i-feature-engineering}
+
+To create features in \gls{mallet}, they are added via so-called \textit{pipes}.
+A first step is to transform a given input string into a vector of \textit{tokens}.
+In our case, the input string is a reference section and a token contains a word in the reference string, separated by whitespaces.
+
+It is now possible to assign different features to the tokens.
+The local features that we use for the evaluation (see \Cref{tab:our-features-regular-expressions}), are implemented using a variation of the \texttt{cc.mallet.pipe.tsf.RegexMatches} class.
+This class matches words against a regular expression that describes a feature.
+If a match was found, it assigns a feature label with an initial weight of $1$.
+The Java regular expressions that we use for detecting different local features are shown in \Cref{app:sec-feature-engineering}.
+
+Further, we consider two lexicon features, FIRSTNAME and LASTNAME\@.
+We use the two of the lists that we created for the author name matching in \Cref{subsec:i-author-name-matching} as lexica.
+Tokens are assigned the feature label FIRSTNAME if the contained word appears in the first name variations set.
+Consequently, the feature label LASTNAME is assigned if the word appears in the single last name set.
+In our evaluation, the feature weight is the natural logarithm of the frequency of the word in the original author name knowledge base.
+For example, in the \texttt{swp} data set, the first name ``Max'' was part of $11,618$ author names.
+Thereby, we assign the feature weight $\ln(11,618)\approx9.3603$ to a token that contains the first name ``Max''.
 
