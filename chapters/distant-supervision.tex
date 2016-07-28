@@ -1,4 +1,4 @@
-G\chapter{Distant Supervision}\label{cha:distant-supervision}
+\chapter{Distant Supervision}\label{cha:distant-supervision}
 
 A common approach to the learning of \glspl{crf} is to use manually labeled instances.
 This results in an accurate labeling in most cases but is expensive
@@ -57,7 +57,7 @@ Then, we will present the approach of \acrfull{ge}\glsunset{ge} proposed by \cit
 \Gls{ge} can be used to form an \gls{objective function} for unlabeled data based on \gls{label regularization}.
 As discussed in \Cref{cha:related-work}, \citet{lu2013web} also apply \gls{ge} to learn \glspl{crf} with distantly supervised data sets.
 
-\subsection{Marginalization}
+\subsection{Marginalization}\label{subsec:marginalization}
 
 Given a sequence of length $N$, \citet{tsuboi2008training} define an incomplete annotation $\bm{L}$ as a sequence of subsets of possible assignments to the \gls{target variable} at each position $n$~\citep{tsuboi2008training}:
 \begin{equation}
@@ -121,7 +121,7 @@ This is especially problematic when considering the implementation using distant
 The resulting labelings will often be ambiguous but the probabilities for the different possible labels can be estimated from the external knowledge base.
 In \Cref{cha:author-extraction} we will discuss a concrete example for such a scenario.
 
-\subsection{Generalized Expectation (\glsentryshort{ge})}
+\subsection{Generalized Expectation (\glsentryshort{ge})}\label{subsec:generalized-expectation}
 
 Instead of marginalizing incomplete annotations, \citet{mann2008generalized} apply the concept of \acrfull{ge} on the training of linear-chain \glspl{crf}.
 \Gls{ge} was first proposed in \citet{mann2007simple} under the name \gls{expectation regularization} as a method for semi-supervised learning.

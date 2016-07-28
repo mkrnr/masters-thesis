@@ -9,7 +9,7 @@ There has been a large body of research on information extraction from research 
 \citet{giles1998citeseer} propose one of the first autonomous citation indexing systems called \emph{CiteSeer}.
 It converts papers that are extracted from the World Wide Web to text, extracts the references and the context in which they are made in the body of the paper, and stores the information in a database.
 Yet, the extraction happens based on simple heuristics which results in a relatively low accuracy compared to more advanced approaches.
-In an evaluation of 5,093 documents related to ``neural networks'', 80.2\% of the titles, 82.1\% of the authors, and 44.2\% of the page numbers were extracted correctly from the retrieved references~\cite{giles1998citeseer}.
+In an evaluation of \num{5093} documents related to ``neural networks'', $80.2\%$ of the titles, $82.1\%$ of the authors, and $44.2\%$ of the page numbers were extracted correctly from the retrieved references~\cite{giles1998citeseer}.
 
 %In order to simplify the creation of personal digital libraries, \citet{marinai2009metadata} proposes a software that combines \gls{pdf} parsing, low level document image processing, and layout analysis.
 %First, text blocks of the research paper are segmented and annotated with layout information such as the position on the page and the width and height of the text block.
@@ -18,13 +18,13 @@ In an evaluation of 5,093 documents related to ``neural networks'', 80.2\% of th
 %Evaluated on 80 papers, the approach of learning from layout information resulted in successfully extracting 95\% of the titles and, by integrating information from DBLP, 73.58\% of the authors.
 
 \citet{powley2007evidence} address both citation extraction and citation-reference matching in research papers.
-For the citation extraction, they achieved a very high precision (99.88\%) and recall (96.78\%) by identifying pairs of year and author surnames in the text.
+For the citation extraction, they achieved a very high precision ($99.88\%$) and recall ($96.78\%$) by identifying pairs of year and author surnames in the text.
 The citation-reference matching was done in an integrated fashion.
 A plain text representation of the reference section was segmented into reference strings by matching the author and year information form the extracted citation data.
 This approach again resulted in a very high precision and recall for both the reference segmentation and citation-reference matching \citep{powley2007evidence}.
 
 For extracting bibliographic attributes from research papers that are only available as images, \citet{takasu2003bibliographic} uses optical character recognition combined with a variation of \glspl{hmm}.
-The evaluation was based on 1,575 references obtained from Japanese journal papers and the reported accuracy was above 90\% for all extracted bibliographic attributes except the volume and volume number.
+The evaluation was based on \num{1,575} references obtained from Japanese journal papers and the reported accuracy was above $90\%$ for all extracted bibliographic attributes except the volume and volume number.
 
 %TODO extend this:
 Instead of using \glspl{hmm}, \citet{peng2004accurate}, \citet{councill2008parscit}, as well as \citet{groza2012reference} rely on \glspl{crf} for extracting bibliographic information from research papers.
@@ -34,8 +34,8 @@ Example for such features are the position in the line, whether or not the token
 In addition, external lexicons are used in order to determine features like (author) surnames, places, and months.
 The \gls{crf} is learned on data set containing between 200 and 830 references where every element of the reference gets analyzed for the set of features and also manually assigned a label such as author, title, year, and publisher.
 The trained \gls{crf} is then used for labeling unseen testing data and the performance is evaluated using precision, recall, and the $\text{F}_1$ score.
-\citet{groza2012reference} give an overview of the results of the three mentioned studies on the so-called CORA dataset which contains 200 reference strings.
-The results show a very promising performance with $\text{F}_1$ scores higher than 93\% for all labeled element types and with an average of 96.7\% \citep{groza2012reference}.
+\citet{groza2012reference} give an overview of the results of the three mentioned studies on the so-called CORA dataset which contains $200$ reference strings.
+The results show a very promising performance with $\text{F}_1$ scores higher than $93\%$ for all labeled element types and with an average of $96.7\%$ \citep{groza2012reference}.
 
 Regarding the extraction of the reference string from a given research paper, \citet{councill2008parscit} as well as \citet{groza2012reference} relied on regular expressions that search for section labels like ``References'' or ``Bibliography'' and regarded the following text as reference strings.
 Other regular expressions were used to identify a section heading that ends the reference  block such as ``Appendix'', ``Acknowledgments'', or the end of the document.
@@ -53,7 +53,7 @@ The third approach, bootstrap learning on a small number of seed instances, is s
 By using an external source of information for the supervision, \gls{distant supervision} is able to train on large amounts of data without loosing the focus on the relevant knowledge base \citep{mintz2009distant}.
 In their use case of relation extraction, \citet{mintz2009distant} use the semantic database \gls{freebase} \citep{bollacker2008freebase} for the \gls{distant supervision}.
 The assumption is that if a sentence contains a pair of entities that are part of a \gls{freebase} relation, it is likely to express that relation in some way \citep{mintz2009distant}.
-A human evaluation of the extracted relations resulted in a 67.6\% precision.
+A human evaluation of the extracted relations resulted in a $67.6\%$ precision.
 
 \citet{fan2015detecting} apply the concept of \gls{distant supervision} to the detection of tables in \gls{pdf} files.
 Their assumption is that tables in research papers have surrounding captions that conform to a limited number of official templates \citep{fan2015detecting}.

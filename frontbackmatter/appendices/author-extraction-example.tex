@@ -26,13 +26,13 @@ $\Psi(LN_1,F\rs N_2,EC_2)$\par
  \toprule
  $LN_1$ & $F\rs N_2$ & $EC_2$ & \multicolumn{1}{c}{Value} \\
  \midrule
- $\mathit{false}$ & $\mathit{false}$ & $\mathit{false}$ & $(10\cdot10)\cdot30=3000$\\
- $\mathit{false}$ & $\mathit{false}$ & $\mathit{true}$  & $(20\cdot20)\cdot30=12000$\\
+ $\mathit{false}$ & $\mathit{false}$ & $\mathit{false}$ & $(10\cdot10)\cdot30=\num{3000}$\\
+ $\mathit{false}$ & $\mathit{false}$ & $\mathit{true}$  & $(20\cdot20)\cdot30=\num{12000}$\\
  $\mathit{false}$ & $\mathit{true}$  & $\mathit{false}$ & $(10\cdot10)\cdot1\ \ =100$\\
  $\mathit{false}$ & $\mathit{true}$  & $\mathit{true}$  & $(20\cdot1\ \ )\cdot1\ \ =20$\\
  $\mathit{true}$  & $\mathit{false}$ & $\mathit{false}$ & $(10\cdot10)\cdot1\ \ =100$\\
  $\mathit{true}$  & $\mathit{false}$ & $\mathit{true}$  & $(1\ \ \cdot20)\cdot1\ \ =20$\\
- $\mathit{true}$  & $\mathit{true}$  & $\mathit{false}$ & $(10\cdot10)\cdot10=1000$\\
+ $\mathit{true}$  & $\mathit{true}$  & $\mathit{false}$ & $(10\cdot10)\cdot10=\num{1000}$\\
  $\mathit{true}$  & $\mathit{true}$  & $\mathit{true}$  & $(1\ \ \cdot\ \ 1)\cdot10=10$\\
  \bottomrule
 \end{tabular}
@@ -51,7 +51,7 @@ It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
   & \hspace{2em}\times\Psi(F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false}))\\
   & \hspace{2em}\times\Psi(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true})\\
   &=(10\cdot10)\cdot10\\
-  &=1000\\[1em]
+  &=\num{1000}\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
@@ -61,13 +61,13 @@ It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
   &\hspace{2em}+\Psi(LN_1{=}\mathit{false},F\rs N_2{=}\mathit{false},EC_2{=}\mathit{true})\\
   &\hspace{2em}+\dots\\
   &\hspace{2em}+\Psi(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true},EC_2{=}\mathit{true})\\
-  &= 16250\\[1em]
+  &= \num{16250}\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
 \begin{split}
   P(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false})&=\frac{1}{Z}\tilde{P}\left(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false}\right) \\
-  &=\frac{1}{16250}\cdot1000\\
+  &=\frac{1}{\num{16250}}\cdot\num{1000}\\
   &\approx0.0615\\
 \end{split}
 \end{equation*}
@@ -81,14 +81,14 @@ $P(LN_1,F\rs N_2,EC_2)$\par
  \toprule
  $LN_1$ & $F\rs N_2$ & $EC_2$ & \multicolumn{1}{c}{Value} \\
  \midrule
- $\mathit{false}$ & $\mathit{false}$ & $\mathit{false}$ & $3000/16250\approx0.1846$\\
- $\mathit{false}$ & $\mathit{false}$ & $\mathit{true}$  & $12000/16250\approx0.7385$\\
- $\mathit{false}$ & $\mathit{true}$  & $\mathit{false}$ & $100/16250\approx0.0062$\\
- $\mathit{false}$ & $\mathit{true}$  & $\mathit{true}$  & $20/16250\approx0.0012$\\
- $\mathit{true}$  & $\mathit{false}$ & $\mathit{false}$ & $100/16250\approx0.0062$\\
- $\mathit{true}$  & $\mathit{false}$ & $\mathit{true}$  & $20/16250\approx0.0012$\\
- $\mathit{true}$  & $\mathit{true}$  & $\mathit{false}$ & $1000/16250\approx0.0615$\\
- $\mathit{true}$  & $\mathit{true}$  & $\mathit{true}$  & $10/16250\approx0.0006$\\
+ $\mathit{false}$ & $\mathit{false}$ & $\mathit{false}$ & $\num{3000}/\num{16250}\approx0.1846$\\
+ $\mathit{false}$ & $\mathit{false}$ & $\mathit{true}$  & $\num{12000}/\num{16250}\approx0.7385$\\
+ $\mathit{false}$ & $\mathit{true}$  & $\mathit{false}$ & $\num{100}/\num{16250}\approx0.0062$\\
+ $\mathit{false}$ & $\mathit{true}$  & $\mathit{true}$  & $\num{20}/\num{16250}\approx0.0012$\\
+ $\mathit{true}$  & $\mathit{false}$ & $\mathit{false}$ & $\num{100}/\num{16250}\approx0.0062$\\
+ $\mathit{true}$  & $\mathit{false}$ & $\mathit{true}$  & $\num{20}/\num{16250}\approx0.0012$\\
+ $\mathit{true}$  & $\mathit{true}$  & $\mathit{false}$ & $\num{1000}/\num{16250}\approx0.0615$\\
+ $\mathit{true}$  & $\mathit{true}$  & $\mathit{true}$  & $\num{10}/\num{16250}\approx0.0006$\\
  \bottomrule
 \end{tabular}
 \caption{Values of the \Gls{gibbs distribution} $P(LN_1,F\rs N_2,EC_2)$ using the two \glspl{factor} in \Cref{tab:example-factors}.}
@@ -139,7 +139,7 @@ It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
   &\hspace{2em}\times\Psi(F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false}))\\
   &\hspace{2em}\times\Psi(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true})\\
   &=(10\cdot10)\cdot10\\
-  &=1000\\[1em]
+  &=\num{1000}\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
@@ -149,15 +149,15 @@ It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
   &\hspace{2em}+\tilde{P}(LN_1{=}\mathit{false},F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false})\\
   &\hspace{2em}+\tilde{P}(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{false},EC_2{=}\mathit{false})\\
   &\hspace{2em}+\tilde{P}(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false})\\
-  &=3000+100+100+1000\\
-  &=4200\\[1em]
+  &=\num{3000}+100+100+\num{1000}\\
+  &=\num{4200}\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
 \begin{split}
   &P(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true}\mid EC_2{=}\mathit{false})\\
   &\hspace{2em}=\frac{1}{Z(EC_2{=}\mathit{false})}\cdot\tilde{P}\left(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false}\right)\\
-  &\hspace{2em}=\frac{1}{4200}\cdot1000\\
+  &\hspace{2em}=\frac{1}{\num{4200}}\cdot\num{1000}\\
   &\hspace{2em}\approx0.2381\\
 \end{split}
 \end{equation*}
@@ -291,13 +291,13 @@ The \glspl{assignment} are based on the second reference string in \Cref{fig:exa
   &\hspace{6em}\vphantom{\Big\{}+\cdots+\theta_{k=4}f_{k=4}(F\rs N_2{=}\mathit{true},LN_1{=}\mathit{true}) \\
   &\hspace{4em}\vphantom{\Big\{}+\theta_{l=2}f_{l=2}(F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false})\\
   &\hspace{6em}\vphantom{\Big\{}+\cdots+\theta_{l=5}f_{l=5}(F\rs N_2{=}\mathit{true},EC_2{=}\mathit{false})\Big)\Big\}\\
-  &\hspace{2em} = \exp\Big\{-\Big(-\log(30)\cdot0+-\log(10)\cdot1+-\log(30)\cdot0+-\log(10)\cdot0\\
-  &\hspace{4em}\vphantom{\Big\{}+-\log(30)\cdot0+-\log(10)\cdot1+-\log(10)\cdot0+-\log(20)\cdot0+-\log(10)\cdot0\\
-  &\hspace{4em}\vphantom{\Big\{}+-\log(30)\cdot0+-\log(10)\cdot0+-\log(30)\cdot0+-\log(10)\cdot1\\
-  &\hspace{4em}\vphantom{\Big\{}+-\log(30)\cdot0+-\log(10)\cdot0-\log(10)\cdot0+-\log(20)\cdot0+-\log(10)\cdot1\Big)\Big\}\\
-  &\hspace{2em}=\exp\Big\{-\Big(-\log(10)+-\log(10)+-\log(10)+-\log(10)\Big)\Big\}\\
+  &\hspace{2em} = \exp\Big\{-\Big(-\log(30)\cdot0-\log(10)\cdot1-\log(30)\cdot0-\log(10)\cdot0\\
+  &\hspace{4em}\vphantom{\Big\{}-\log(30)\cdot0-\log(10)\cdot1-\log(10)\cdot0-\log(20)\cdot0-\log(10)\cdot0\\
+  &\hspace{4em}\vphantom{\Big\{}-\log(30)\cdot0-\log(10)\cdot0-\log(30)\cdot0-\log(10)\cdot1\\
+  &\hspace{4em}\vphantom{\Big\{}-\log(30)\cdot0-\log(10)\cdot0-\log(10)\cdot0-\log(20)\cdot0-\log(10)\cdot1\Big)\Big\}\\
+  &\hspace{2em}=\exp\Big\{-\Big(-\log(10)-\log(10)-\log(10)-\log(10)\Big)\Big\}\\
   &\hspace{2em}=\exp\Big\{4\cdot\log(10)\Big\}\\
-  &\hspace{2em}\vphantom{\Big\{}=10000\\[1em]
+  &\hspace{2em}\vphantom{\Big\{}=\num{10000}\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
@@ -321,8 +321,8 @@ The \glspl{assignment} are based on the second reference string in \Cref{fig:exa
   %  T     F      T    30   1    10    10   3000
   %  T     T      F    10   10   1     10   1000
   %  T     T      T    10   10   10    10   10000
-  &\hspace{2em}=300+10+100+1000+9000+3000+1000+10000\\
-  &\hspace{2em}=24410\\[1em]
+  &\hspace{2em}=300+10+100+\num{1000}+\num{9000}+\num{3000}+\num{1000}+\num{10000}\\
+  &\hspace{2em}=\num{24410}\\[1em]
 \end{split}
 \end{equation*}
 \begin{equation*}
@@ -330,7 +330,7 @@ The \glspl{assignment} are based on the second reference string in \Cref{fig:exa
   &P(\texttt{start}{=}\mathit{true},LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true}\mid EC_1{=}\mathit{true},EC_2{=}\mathit{false})\\
   &\hspace{2em}=\frac{1}{Z(EC_1{=}\mathit{true},EC_2{=}\mathit{false})}\\
   &\hspace{4em}\cdot\tilde{P}\left(\texttt{start}{=}\mathit{true},LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true},EC_1{=}\mathit{true},EC_2{=}\mathit{false}\right)\\
-  &\hspace{2em}=\frac{1}{24410}\cdot10000\\
+  &\hspace{2em}=\frac{1}{\num{24410}}\cdot\num{10000}\\
   &\hspace{2em}\approx0.41\\
 \end{split}
 \end{equation*}
@@ -346,13 +346,13 @@ Based on this, we have the following log-likelihood function:
   \begin{split}
     \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right) = & \sum_{m=1}^M \left(-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(m)},Y_{n-1}^{(m)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(m)},\mathbf{\tilde{X}}_n^{(m)}\right)\right)\right. \\
     &\left.-\log Z\left(\mathbf{X}^{(m)}\right)\vphantom{\sum_{l=1}^L}\right)\\
-   =&-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(1)},Y_{n-1}^{(1)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(1)},\mathbf{\tilde{X}}_n^{(1)}\right)\right)-\log Z\left(\mathbf{X}^{(1)}\right)\vphantom{\sum_{l=1}^L}\\
-   &+\cdots\\
-   &+-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(4)},Y_{n-1}^{(4)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(4)},\mathbf{\tilde{X}}_n^{(4)}\right)\right)-\log Z\left(\mathbf{X}^{(4)}\right)\vphantom{\sum_{l=1}^L}\\
-    =&-\Big(-\log(30)+-\log(30)+-\log(30)+-\log(10)\Big)-\log\left(370510\right)\\
-    &+-\Big(-\log(10)+-\log(10)+-\log(10)+-\log(10)\Big)-\log\left(24410\right)\\
-    &+-\Big(-\log(30)+-\log(30)+-\log(30)+-\log(20)\Big)-\log\left(567360\right)\\
-    &+-\Big(-\log(30)+-\log(30)+-\log(30)+-\log(20)\Big)-\log\left(567360\right)\\
+    =&-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(1)},Y_{n-1}^{(1)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(1)},\mathbf{\tilde{X}}_n^{(1)}\right)\right)-\log Z\left(\mathbf{X}^{(1)}\right)\vphantom{\sum_{l=1}^L}\\
+    &+\cdots\\
+    &+-\sum_{n=1}^N \left(\sum_{k=1}^K\theta_k \tilde{f}_k\left(Y_n^{(4)},Y_{n-1}^{(4)}\right)+\sum_{l=1}^L\theta_l \tilde{f}_l\left(Y_n^{(4)},\mathbf{\tilde{X}}_n^{(4)}\right)\right)-\log Z\left(\mathbf{X}^{(4)}\right)\vphantom{\sum_{l=1}^L}\\
+    =&\Big(\log(30)+\log(30)+\log(30)+\log(10)\Big)-\log\left(\num{370510}\right)\\
+    &\Big(\log(10)+\log(10)+\log(10)+\log(10)\Big)-\log\left(\num{24410}\right)\\
+    &\Big(\log(30)+\log(30)+\log(30)+\log(20)\Big)-\log\left(\num{567360}\right)\\
+    &\Big(\log(30)+\log(30)+\log(30)+\log(20)\Big)-\log\left(\num{567360}\right)\\
     \approx&12.5062-12.8226\\
     &+9.2103-10.1027\\
     &+13.1993-13.2487\\
@@ -582,38 +582,4 @@ in \Cref{app:subsec-lccrf-example-calculation}.
 \label{tab:feature-descriptions}
 \end{minipage}
 }
-
-\chapter{Implementation}\label{app:cha-implementation}
-\section{Feature Engineering}\label{app:sec-feature-engineering}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{l l}
-  \toprule
-  \multicolumn{2}{c}{Feature}\\
-   Name                   & Description\\
-  \midrule
-   \texttt{CAPITALIZED}     &\verb$[^\\p{L}]*\\p{Lu}.*$\\
-   \texttt{PERIOD}          &\verb$[^\\.]*\\.[^\\.]*$\\
-   \texttt{PERIODS}         &\verb$.*\\..*\\..*$\\
-   \texttt{CONTAINSPERIOD}  &\verb$.+\\..+$\\
-   \texttt{ENDSWITHPERIOD}  &\verb$.+\\..+$\\
-   \texttt{CONTAINSCOMMA}   &\verb$.+,.+$\\
-   \texttt{ENDSWITHCOMMA}   &\verb$.*,$\\
-   \texttt{CONTAINSDASH}    &\verb$.+-.+$\\
-   \texttt{ENDSWITHDASH}    &\verb$.*-$\\
-   \texttt{NUMBER}          &\verb$\\D*\\d+\\D*$\\
-   \texttt{NUMBERS}         &\verb$.*\\d+\\D+\\d+.*$\\
-   \texttt{ONELETTER}       &\verb$[^\\p{L}]*\\p{L}[^\\p{L}]*$\\
-   \texttt{BRACES}          &\verb$.*\\(.*\\).*$\\
-   \texttt{BRACKETS}        &\verb$.*\\[.*\\].*$\\
-   \texttt{YEAR}            &\verb$\\D*(1[6-9][0-9][0-9]|20[0-1][0-9])\\D*$\\
-   \texttt{MONTH}           &\verb$([^\\p{L}]*|.*[^\\p{L}]+)($\\
-                            &\verb$  (monthNames)|(monthAbbreviations))($\\
-                            &\verb$  [^\\p{L}]*|[^\\p{L}]+.*)$\\
-  \bottomrule
-\end{tabular}
-\caption{Used regular expressions for detecting layout features.}
-\label{tab:our-features-regular-expressions}
-\end{table}
 

@@ -11,7 +11,7 @@ The source code of the discussed implementation is available on GitHub\footnote{
 
 \section{Preprocessing}\label{sec:i-preprocessing}
 
-The corpus that was used for our study consists of 32,470 research papers\footnote{The papers were downloaded on March~16,~2016.} that are accessible as \gls{pdf} documents via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)}.
+The corpus that was used for our study consists of \num{32,470} research papers\footnote{The papers were downloaded on March~16,~2016.} that are accessible as \gls{pdf} documents via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)}.
 They are related to the area of social sciences\todo{stats on language}
 
 Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
@@ -34,7 +34,7 @@ After adding a variety of German section headers to the ParsCit implementation, 
 In other words, many extracted reference sections did not contain reference strings.
 
 As a result, we implemented our own approach which uses similar regular expressions and heuristics as the one of ParsCit.
-Using this implementation, we were able to extract reference sections from 16,513 research papers.
+Using this implementation, we were able to extract reference sections from \num{16513} research papers.
 A manual inspection showed a significantly smaller number of false positive in comparison to the extended ParsCit implementation.
 
 \bigskip
@@ -103,8 +103,8 @@ The table also contains statistics on the number of individual names.
  \toprule
  & \texttt{gnd-full} & \texttt{gnd-diff} &\texttt{swp-trim} &\texttt{swp-full} & \begin{tabular}[c]{@{}c@{}}\texttt{swp-full}\\+\texttt{gnd-full}\end{tabular} \\
  \midrule
- \begin{tabular}[c]{@{}c@{}}Extracted\\Names\end{tabular} & 8,436,468 & 3,684,265 & 3,684,265& 10,796,240 & 19,232,708\\[5mm]
- \begin{tabular}[c]{@{}c@{}}Individual\\Names\end{tabular} &6,853,487 & 3,239,116 & 1,617,698 & 3,135,891 & 9,081,885\\
+ \begin{tabular}[c]{@{}c@{}}Extracted\\Names\end{tabular} & \num{8436468} & \num{3684265} & \num{3684265}& \num{10796240} & \num{19232708}\\[5mm]
+ \begin{tabular}[c]{@{}c@{}}Individual\\Names\end{tabular} &\num{6853487} & \num{3239116} & \num{1617698} & \num{3135891} & \num{9081885}\\
  %& & & & & \\
  \bottomrule
 \end{tabular}
@@ -312,11 +312,11 @@ This class matches words against a regular expression that describes a feature.
 If a match was found, it assigns a feature label with an initial weight of $1$.
 The Java regular expressions that we use for detecting different local features are shown in \Cref{app:sec-feature-engineering}.
 
-Further, we consider two lexicon features, FIRSTNAME and LASTNAME\@.
+Further, we consider two lexicon features, \texttt{FIRSTNAME} and \texttt{LASTNAME}.
 We use the two of the lists that we created for the author name matching in \Cref{subsec:i-author-name-matching} as lexica.
-Tokens are assigned the feature label FIRSTNAME if the contained word appears in the first name variations set.
-Consequently, the feature label LASTNAME is assigned if the word appears in the single last name set.
+Tokens are assigned the feature label \texttt{FIRSTNAME} if the contained word appears in the first name variations set.
+  Consequently, the feature label \texttt{LASTNAME} is assigned if the word appears in the single last name set.
 In our evaluation, the feature weight is the natural logarithm of the frequency of the word in the original author name knowledge base.
-For example, in the \texttt{swp} data set, the first name ``Max'' was part of $11,618$ author names.
+For example, in the \texttt{swp} data set, the first name ``Max'' was part of \num{11618} author names.
 Thereby, we assign the feature weight $\ln(11,618)\approx9.3603$ to a token that contains the first name ``Max''.
 

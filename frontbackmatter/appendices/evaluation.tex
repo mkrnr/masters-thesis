@@ -1,0 +1,46 @@
+\chapter{Evaluation}\label{app:cha-Evaluation}
+\section{Accuracy vs. F1 Score}\label{app:sec-feature-engineering}
+In this section, we discuss the relation between the metrics \gls{accuracy} and \gls{f1 score} in the context of our evaluation.
+As an example, we use the author extraction problem with the following five labels that follow the \gls{bio} format (see \Cref{sec:ae-building-ge-constraints}):
+\begin{equation*}
+  \mathit{Val}(Y_n)=\{\texttt{B-FN},\texttt{B-LN},\texttt{I-FN},\texttt{I-LN},\texttt{O}\}.
+\end{equation*}
+
+First, we consider $\mathit{TP}(L)$, $\mathit{FP}(L)$, $\mathit{TN}(L)$, and $\mathit{FN}(L)$.
+As discussed in \Cref{cha:evaluation}, they refer to the number of True Positive, False Positive, True Negative, and False Negative assignments of the labels in a set of label $L$.
+
+As an example, we have $L=\{\texttt{B-FN}\}$.
+Based on this, the value of $\mathit{TP}(L)$ is the number of words that are correctly labeled with \texttt{B-FN} and $\mathit{FP}(L)$ is the number of words which are incorrectly labeled with \texttt{B-FN}.
+
+For the cases $\mathit{TN}(L)$ and $\mathit{FN}(L)$, we now consider all labels that are not in $L$:
+\begin{equation*}
+  \mathit{NotL}=\mathit{Val}(Y_n)\setminus L.
+\end{equation*}
+In other words, when considering $L$ as the positive labeling, the labels in $\mathit{NotL}$ are considered negative labelings in $\mathit{TN}(L)$ and $\mathit{FN}(L)$.
+
+For our example, we have $\mathit{NotL}=\mathit{Val}(Y_n)\setminus L=\{\texttt{B-LN},\texttt{I-FN},\texttt{I-LN},\texttt{O}\}$.
+This results in $\mathit{TN}(L)$ being the number of words which are correctly labeled with one of the labels in $\mathit{NotL}$.
+Further, $\mathit{FN}(L)$ is the number of words which are incorrectly labeled with one of the labels in $\mathit{NotL}$.
+
+This also gives us for example $\mathit{TN}(L)=\mathit{TP}(\mathit{NotL})$.
+Further, we have for example $\mathit{TN}(L)+\mathit{TP}(\mathit{NotL})=\mathit{TN}(L\cup\mathit{NotL})$.
+
+Using this, we have:
+\begin{equation*}
+\begin{split}
+  \mathit{accuracy}(L)&=\frac{TP(L)+TN(L)}{TP(L)+FP(L)+TN(L)+FN(L)}\\
+  &=\frac{TP(L)+TP(\mathit{NotL})}{TP(L)+FP(L)+TP(\mathit{NotL})+FP(\mathit{NotL})}\\
+  &=\frac{TP(L\cup\mathit{NotL})}{TP(L\cup\mathit{NotL})+FP(L\cup\mathit{NotL})}\\
+  &=\mathit{precision}(L\cup\mathit{NotL}).\\
+  &=\mathit{precision}(\textit{Val}(Y_n)).\\
+\end{split}
+\end{equation*}
+
+Similarly, we can show that $\mathit{accuracy}(L)=\mathit{recall}(\textit{Val}(Y_n))$.
+Since the \gls{f1 score} is the harmonic mean of \gls{precision} and \gls{recall}, we result in:
+\begin{equation*}
+\begin{split}
+  \mathit{accuracy}(L)&=\textit{F1}(\textit{Val}(Y_n)).\\
+\end{split}
+\end{equation*}
+

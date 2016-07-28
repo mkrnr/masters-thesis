@@ -1,0 +1,34 @@
+\chapter{Implementation}\label{app:cha-implementation}
+\section{Feature Engineering}\label{app:sec-feature-engineering}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{l l}
+  \toprule
+  \multicolumn{2}{c}{Feature}\\
+   Name                   & Description\\
+  \midrule
+   \texttt{CAPITALIZED}     &\verb$[^\\p{L}]*\\p{Lu}.*$\\
+   \texttt{PERIOD}          &\verb$[^\\.]*\\.[^\\.]*$\\
+   \texttt{PERIODS}         &\verb$.*\\..*\\..*$\\
+   \texttt{CONTAINSPERIOD}  &\verb$.+\\..+$\\
+   \texttt{ENDSWITHPERIOD}  &\verb$.+\\..+$\\
+   \texttt{CONTAINSCOMMA}   &\verb$.+,.+$\\
+   \texttt{ENDSWITHCOMMA}   &\verb$.*,$\\
+   \texttt{CONTAINSDASH}    &\verb$.+-.+$\\
+   \texttt{ENDSWITHDASH}    &\verb$.*-$\\
+   \texttt{NUMBER}          &\verb$\\D*\\d+\\D*$\\
+   \texttt{NUMBERS}         &\verb$.*\\d+\\D+\\d+.*$\\
+   \texttt{ONELETTER}       &\verb$[^\\p{L}]*\\p{L}[^\\p{L}]*$\\
+   \texttt{BRACES}          &\verb$.*\\(.*\\).*$\\
+   \texttt{BRACKETS}        &\verb$.*\\[.*\\].*$\\
+   \texttt{YEAR}            &\verb$\\D*(1[6-9][0-9][0-9]|20[0-1][0-9])\\D*$\\
+   \texttt{MONTH}           &\verb$([^\\p{L}]*|.*[^\\p{L}]+)($\\
+                            &\verb$  (monthNames)|(monthAbbreviations))($\\
+                            &\verb$  [^\\p{L}]*|[^\\p{L}]+.*)$\\
+  \bottomrule
+\end{tabular}
+\caption{Used regular expressions for detecting layout features.}
+\label{tab:our-features-regular-expressions}
+\end{table}
+
