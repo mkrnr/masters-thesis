@@ -1,0 +1,35 @@
+\newcommand{\colorlist}{colorbrewer cycle list=Set1,}
+\newcommand{\barchartconfig}{%
+  xtick=data,
+  every axis plot/.append style={fill,draw=none,no markers},
+  enlarge x limits=0.15,
+  bar width=7pt,
+  %bar width=0.02\textwidth,
+  ybar,
+}
+\newcommand{\firstchartconfig}{%
+  name=plot1,
+}
+
+\newcommand{\secondchartlegendconfig}{%
+  every axis legend/.append style={%
+    at={(-0.05,1.25)},
+  anchor=south},
+  legend columns=10.,
+}
+\newcommand{\secondchartconfig}{%
+  yticklabel pos = right,
+  name=plot2,
+  at=(plot1.right of south east),
+}
+
+\newcommand{\plotfile}[1]{%
+    \pgfplotstableread{#1}{\table}
+    \pgfplotstablegetcolsof{#1}
+    \pgfmathtruncatemacro\numberofcols{\pgfplotsretval-1}
+    \pgfplotsinvokeforeach{1,...,\numberofcols}{%
+        \pgfplotstablegetcolumnnamebyindex{##1}\of{\table}\to{\colname}
+        \addplot table [y index=##1]{#1};
+        \addlegendentryexpanded{\colname}
+    }
+}

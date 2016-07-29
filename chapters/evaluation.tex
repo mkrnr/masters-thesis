@@ -128,7 +128,7 @@ The results are shown in \todo{ref}.
 
 \RQ{3} addresses how the probability mass is assigned to a \gls{ge} constraint for words $w_n$ that are matched to no author name.
 For this, we compare two approaches.
-The first one is to simply assign the full probability mass of $1$ to the label \texttt{O}.
+The first one is to assign the full probability mass of $1$ to the label \texttt{O}.
 In the second approach, we only assign a specified part of the probability mass to label \texttt{O}.
 The remaining probability mass is then distributed over all other labels.
 Instead of specifying this distribution for all other labels, we derive it from our distantly supervised training set.
@@ -136,10 +136,10 @@ For example, we assume that the label \texttt{B-FN} was used in $25\%$ of all au
 Further, we specify that $80\%$ of our probability mass is assigned to the label \texttt{O}.
 Therefore, we assign $25\%$ of the remaining $20\%$ of the probability mass to the label \texttt{B-FN}.
 
-\todo{add rq3 plots}
+\itodo{plots}
 
-\RQ{4} is focused on the percentage of unmatched $w_n$ that are considered for building \gls{ge} constraints.
-In \Cref{tab:ssoar-number-of-tags}, we summarize the number of tags that were assigned using our different knowledge bases.
+\RQ{4} is focused on the ratio between matched and unmatched $w_n$ that are considered for building \gls{ge} constraints.
+In \Cref{tab:ssoar-number-of-tags}, we summarize the number of tags that were assigned using our different knowledge bases.\todo{new table where we count matched and unmatched words}
 As we can see, the percentage of\dots
 
 \begin{table}[t]
@@ -157,7 +157,18 @@ As we can see, the percentage of\dots
 \label{tab:ssoar-number-of-tags}
 \end{table}
 
-\itodo{answer RQ4 with table since plot is too messy}
+\Cref{fig:eval-other-ratios} shows the evaluation results for different ratios between unmatched words and matched words for the \gls{ge} constraints generation.
+\begin{figure}[t]
+\input{figures/eval-other-ratios}
+\caption{Evaluation results for different ratios between unmatched and matched words that are considered for building \gls{ge} constraints. 500, 1000, and 1500 correspond to the number of reference sections in the unlabeled data.}
+\end{figure}
+We can see that by increasing the relative amount of \texttt{O} from $0.5$ to $2.25$, the \gls{recall} for author labels decreases by almost $10\%$.
+At the same time, the \gls{precision} of author labels does not linearly increase.
+This is especially the case for the model that was learned of $1500$ reference sections.
+When looking at the \gls{f1 score} of the author labels, we see for all three models that by increasing the ratio of \texttt{O} labels, the value first increases and then decreases.\todo{rewrite and remove \texttt{O} labels}
+The more reference sections were used, the lower is the ratio of \texttt{O} labels that results in the best \gls{f1 score}.
+The same is true when looking at the \gls{f1 score} of all labels.
+When comparing the different models, we see that the bigger the model is, the smaller is the relative amount of \texttt{O} labels at the point with the highest \gls{f1 score}.
 
 \bigskip
 

@@ -168,20 +168,18 @@ To illustrate this, given the fourth reference string in \Cref{fig:example-refer
 Thereby, we assign the probability mass $1$ to the label \texttt{B-FN} for the word ``Mia'' and to the label \texttt{I-FN} for the word ``Max''.
 For the word ``Wagner'', we assign the probability mass $0.5$ to each of the labels \texttt{I-LN} and \texttt{B-LN}.
 
-We consider two approaches for the second case.
-The first approach is to add a probability mass of $1$ to the \texttt{O} label for the given word.
-The second approach is to distribute the probability mass $1$ over the labels in $\mathit{Val}(Y_n)$.
+For the second case, the assignment of the probability mass is less clear.
+One approach is to add a probability mass of $1$ to the \texttt{O} label for the given word.
+A second approach is to distribute the probability mass $1$ over the labels in $\mathit{Val}(Y_n)$.
 Such a distribution can either be predefined or it can be estimated from the set of matched author names.
 
-After iterating over all $\mathpzc{u}^{(M)}$ in $\mathcal{U}$, we build the constraints $\tilde{P}(Y_n)$ by normalizing the aggregated probability masses for every word $w_n$.
-
-\bigskip
-
-The two different approaches for assigning a probability mass to a $w_n$ that was not matched to an author result in the following research question:
+These two approaches for assigning a probability mass to an unmatched $w_n$ result in the following research question:
 \newcommand\researchquestionthree{\researchquestionformat{%
   \RQ{3}: How does, for a word $w_n$ that has no matched author names, modifying the probability mass distribution over the labels in $\mathit{Val}(Y_n)$ impact the performance of a distantly supervised \gls{linear-chain crf} model?
 }}
 \researchquestionthree%
+
+After iterating over all $\mathpzc{u}^{(M)}$ in $\mathcal{U}$, we build the constraints $\tilde{P}(Y_n)$ by normalizing the aggregated probability masses for every word $w_n$.
 
 \bigskip
 
@@ -208,7 +206,7 @@ Another reason is that in practice not all author names can be matched against a
 Because of this imbalance, it could be helpful to not consider every unmatched word $w_n$ for the construction of \gls{ge} constraints.
 From this we derive the following research question:
 \newcommand\researchquestionfour{\researchquestionformat{%
-  \RQ{4}: How does removing a number of unmatched words $w_n$ impact the performance of a distantly supervised \gls{linear-chain crf} model that was learned on the resulting \gls{ge} constraints?
+  \RQ{4}: How does changing the ratio between matchted and unmatched words that are considered for building \gls{ge} constraints impact the performance of the resulting distantly supervised \gls{linear-chain crf} model?
 }}
 \researchquestionfour%
 
