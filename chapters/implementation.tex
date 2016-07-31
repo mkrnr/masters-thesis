@@ -275,14 +275,14 @@ The other numbers represent additional weight sets to also model lower Markov or
 % * labels agree. If <code>orders</code> is <code>null</code>, an
 % * order-0 CRF is built.
 
-For example, an integer array \texttt{[0,1]} specifies an Markov order $1$ \gls{linear-chain crf} and an additional weight set for the Markov order $0$ states.
-When modeled with \glspl{factor}, the Markov order $0$ state for a word $w_n$ only includes the \gls{target variable} $Y_n$: $\Psi(Y_n)$.
+For example, an integer array \texttt{[0,1]} specifies an Markov order one \gls{linear-chain crf} and an additional weight set for the Markov order zero states.
+When modeled with \glspl{factor}, the Markov order zero state for a word $w_n$ only includes the \gls{target variable} $Y_n$: $\Psi(Y_n)$.
 Applied to the author extraction example from \Cref{cha:crfs}, this specification results in a \gls{factor graph} shown in \Cref{fig:example-linear-chain-crf-markov-order-0-1}.
 \begin{figure}[t]
 \centering
 \input{figures/example-linear-chain-crf-markov-order-0-1.tex}
 \caption{%
-  \Gls{factor graph} of a \gls{linear-chain crf} with both Markov order $0$ and $1$, derived from the author extraction example in \Cref{cha:crfs}.}
+  \Gls{factor graph} of a \gls{linear-chain crf} with both Markov order zero and one, derived from the author extraction example in \Cref{cha:crfs}.}
 \label{fig:example-linear-chain-crf-markov-order-0-1}
 \end{figure}
 

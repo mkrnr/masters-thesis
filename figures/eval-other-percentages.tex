@@ -1,6 +1,5 @@
-\pgfplotsset{xlabel={Percentage of Unmatched Words}}
+\pgfplotsset{xlabel={Probability Mass of \texttt{O} Label}}
 \pgfplotsset{height=5.5cm,width=8cm}
-\pgfplotsset{xticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}\%}}
 
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}
@@ -11,7 +10,7 @@
     yticklabel style={/pgf/number format/precision=3},
     \colorlist
 ]
-\plotfile{/home/martin/mt/plots/other-ratios-labels-precision.dat}
+\plotfile{/home/martin/mt/plots/other-percentages-labels-precision.dat}
 \legend{}; % empty the legend
 \end{axis}
 
@@ -26,7 +25,7 @@
     yticklabel style={/pgf/number format/precision=3},
     \colorlist
 ]
-\plotfile{/home/martin/mt/plots/other-ratios-labels-recall.dat}
+\plotfile{/home/martin/mt/plots/other-percentages-labels-recall.dat}
 \end{axis}
 \end{tikzpicture}
 }
@@ -41,7 +40,7 @@
     ylabel={F1 Score},
     \colorlist
 ]
-\plotfile{/home/martin/mt/plots/other-ratios-labels-f1.dat}
+\plotfile{/home/martin/mt/plots/other-percentages-labels-f1.dat}
 \legend{}; % empty the legend
 \end{axis}
 
@@ -54,7 +53,7 @@
     yticklabel style={/pgf/number format/precision=3},
     \colorlist
 ]
-\plotfile{/home/martin/mt/plots/other-ratios-total-f1.dat}
+\plotfile{/home/martin/mt/plots/other-percentages-total-f1.dat}
 \legend{}; % empty the legend
 \end{axis}
 \end{tikzpicture}

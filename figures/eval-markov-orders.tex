@@ -1,6 +1,5 @@
-\pgfplotsset{xlabel={Percentage of Unmatched Words}}
+\pgfplotsset{xlabel={Reference Sections in Training Set}}
 \pgfplotsset{height=5.5cm,width=8cm}
-\pgfplotsset{xticklabel={\pgfmathparse{\tick*100}\pgfmathprintnumber{\pgfmathresult}\%}}
 
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}
@@ -9,9 +8,10 @@
     title={Author Labels},
     ylabel={Precision},
     yticklabel style={/pgf/number format/precision=3},
+    \barchartconfig
     \colorlist
 ]
-\plotfile{/home/martin/mt/plots/other-ratios-labels-precision.dat}
+\plotfile{/home/martin/mt/plots/markov-orders-labels-precision.dat}
 \legend{}; % empty the legend
 \end{axis}
 
@@ -20,13 +20,14 @@
 \begin{axis}[
     \secondchartconfig
     \secondchartlegendconfig
-    legend style={font=\rmfamily},
+    legend style={font=\ttfamily},
     title={Author Labels},
     ylabel={Recall},
     yticklabel style={/pgf/number format/precision=3},
+    \barchartconfig
     \colorlist
 ]
-\plotfile{/home/martin/mt/plots/other-ratios-labels-recall.dat}
+\plotfile{/home/martin/mt/plots/markov-orders-labels-recall.dat}
 \end{axis}
 \end{tikzpicture}
 }
@@ -39,9 +40,10 @@
     \firstchartconfig
     title={Author Labels},
     ylabel={F1 Score},
+    \barchartconfig
     \colorlist
 ]
-\plotfile{/home/martin/mt/plots/other-ratios-labels-f1.dat}
+\plotfile{/home/martin/mt/plots/markov-orders-labels-f1.dat}
 \legend{}; % empty the legend
 \end{axis}
 
@@ -52,9 +54,10 @@
     title={All Labels},
     ylabel={F1 Score},
     yticklabel style={/pgf/number format/precision=3},
+    \barchartconfig
     \colorlist
 ]
-\plotfile{/home/martin/mt/plots/other-ratios-total-f1.dat}
+\plotfile{/home/martin/mt/plots/markov-orders-total-f1.dat}
 \legend{}; % empty the legend
 \end{axis}
 \end{tikzpicture}
