@@ -256,24 +256,24 @@ The \gls{forward-backward algorithm} allows an efficient inferencing but require
 For the use case of entity recognition, \glspl{linear-chain crf} are a popular choice~\citep[e.g.][]{peng2004accurate,mann2008generalized,ling2012fine,groza2012reference,ohta2014empirical}.
 \citet{lu2013web} also rely on \glspl{linear-chain crf} in their experiments.
 
-\Glspl{linear-chain crf} can be modeled to follow different \textit{Markov orders}.
-The concept of Markov orders builds on the \textit{Markov assumption} proposed by \citet{markov1957theory}.
+\Glspl{linear-chain crf} can be modeled to follow different \glspl{markov order}.
+The concept of \glspl{markov order} builds on the \textit{Markov assumption} proposed by \citet{markov1957theory}.
 For our author extraction scenario, the Markov assumption states\todo{double check} that the label of a word $w_n$ only depends on the previous $k$ words.
-Following this, a \glspl{linear-chain crf} with Markov order $k$ models dependencies between a \gls{target variable} $Y_n$ and its $k$ preceding \glspl{target variable}.
+Following this, a \glspl{linear-chain crf} with \gls{markov order} $k$ models dependencies between a \gls{target variable} $Y_n$ and its $k$ preceding \glspl{target variable}.
 
-The \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf} thereby has a Markov order of $1$.
-\Cref{fig:example-linear-chain-crf-markov-order-2} shows an example \gls{linear-chain crf} with Markov order $2$.
+The \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf} thereby has a \gls{markov order} of $1$.
+\Cref{fig:example-linear-chain-crf-markov-order-2} shows an example \gls{linear-chain crf} with \gls{markov order} $2$.
 \begin{figure}[t]
 \centering
 \input{figures/example-linear-chain-crf-markov-order-2.tex}
 \caption{%
-  \Gls{factor graph} of a \gls{linear-chain crf} with Markov order $2$, derived from the author extraction example in \Cref{cha:crfs}.}
+  \Gls{factor graph} of a \gls{linear-chain crf} with \gls{markov order} $2$, derived from the author extraction example in \Cref{cha:crfs}.}
 \label{fig:example-linear-chain-crf-markov-order-2}
 \end{figure}
 
 From this, we derive the following research question:
 \newcommand\researchquestionseven{\researchquestionformat{%
-  \RQ{7}: How does changing the Markov order of the distantly supervised \gls{linear-chain crf} impact the performance of the learned model?
+  \RQ{7}: How does changing the \gls{markov order} of the distantly supervised \gls{linear-chain crf} impact the performance of the learned model?
 }}
 \researchquestionseven%
 
@@ -281,10 +281,10 @@ From this, we derive the following research question:
 \subsection{Model Parameters}\label{subsec:ae-model-parameters}
 
 We discussed another variable of our distantly supervised \gls{linear-chain crf} in \Cref{sec:learning-crfs}.
-The regularization parameter of the Gaussian prior can be used to adjust its penalty on the usage of too many parameters.
+The regularization parameter of the \gls{gaussian prior} can be used to adjust its penalty on the usage of too many parameters.
 This results in another research question:
 \newcommand\researchquestioneight{\researchquestionformat{%
-  \RQ{8}: How does changing the regularization parameter of the Gaussian prior impact the performance of the distantly supervised \gls{linear-chain crf} model?
+  \RQ{8}: How does changing the regularization parameter of the \gls{gaussian prior} impact the performance of the distantly supervised \gls{linear-chain crf} model?
 }}
 \researchquestioneight%
 

@@ -43,7 +43,7 @@ urlcolor=blue]{hyperref}
 \usepackage{multirow}% http://ctan.org/pkg/multirow
 \usepackage{epstopdf}
 \usepackage[capitalize,noabbrev,nameinlink]{cleveref} % for \Cref
-\usepackage[toc,nonumberlist,acronym]{glossaries} % make a separate list of acronyms
+\usepackage[toc,acronym]{glossaries} % make a separate list of acronyms
 %\usepackage{glossaries-extra}
 \usepackage{bm}
 \usepackage{bbm}
@@ -140,6 +140,18 @@ and Distant Supervision}
 }
 \setacronymstyle{enquote-long-short}
 
+
+\newglossarystyle{subjectindex}{%
+\setglossarystyle{listgroup}% base this style on the list style
+\renewenvironment{theglossary}{}{}%
+\renewcommand*{\glsgroupheading}[1]{{}}%
+\renewcommand*{\glossentry}[2]{%
+\noindent\glstarget{##1}{\glossentryname{##1}}% the entry name
+\space{}##2% the number list
+
+}
+}
+
 \makeglossaries{}
 
 \addbibresource{frontbackmatter/bibliography.bib}
@@ -152,7 +164,6 @@ and Distant Supervision}
 \newcommand\identityfun{\mathbf{\mathbbm{1}}}
 
 \newcommand\researchquestionformat[1]{\begin{quote}#1\end{quote}}
-
 
 \begin{document}
 \pagenumbering{roman}
@@ -173,7 +184,7 @@ and Distant Supervision}
 %\input{danksagung}
 \cleardoublepage{}
 
-\printglossary[type=\acronymtype,title={List of Abbreviations}]
+\printglossary[type=\acronymtype,title={List of Abbreviations},nonumberlist]
 \cleardoublepage{}
 
 %\listoffigures
@@ -227,7 +238,7 @@ and Distant Supervision}
 \cleardoublepage{}
 
 
-\printglossary[style=altlist]
+\printglossary[style=subjectindex,title=Subject Index,toctitle=Subject Index]
 %\printglossaries
 
 %\bibliographystyle{plain}

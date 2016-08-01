@@ -1,6 +1,6 @@
 \chapter{Distant Supervision}\label{cha:distant-supervision}
 
-A common approach to the learning of \glspl{crf} is to use manually labeled instances.
+The common approach for the learning of \glspl{crf} is to use manually labeled instances.
 This results in an accurate labeling in most cases but is expensive
 Thereby, it can only be performed on relatively small data sets.
 The approach of \gls{distant supervision} allows the automated labeling of large data sets by using heuristics and external sources of information.
@@ -68,10 +68,10 @@ Given a sequence of length $N$, \citet{tsuboi2008training} define an incomplete 
   \end{split}
 \end{equation}
 Here, $\glssymbol{power set}(\textit{Val}(Y_n))$ is the \gls{power set} of the set of possible \glspl{assignment} to $Y_n$.
-Using the definition of $\bm{L}$, we can now specify two cases of incomplete annotations: \textit{Partial annotations} and \textit{ambiguous annotations}.
-A partial annotation refers to a sequence where only a subset of the elements is annotated.
+Using the definition of $\bm{L}$, we can now specify two cases of incomplete annotations: \Glspl{partial annotation} and \glspl{ambiguous annotation}.
+A \gls{partial annotation} refers to a sequence where only a subset of the elements is annotated.
 For an element at position $n$ that is not annotated, $\mathpzc{L}_n$ contains all possible annotations and thereby $|\mathpzc{L}_n|=|Val(Y_n)|$.
-Ambiguous annotations are represented in such a way that the number of \glspl{random variable} in $\mathpzc{L}_n$ equals the number of possible annotations for the corresponding element with $|\mathpzc{L}_n|\leq |Val(Y_n)|$.
+\Glspl{ambiguous annotation} are represented in such a way that the number of \glspl{random variable} in $\mathpzc{L}_n$ equals the number of possible annotations for the corresponding element with $|\mathpzc{L}_n|\leq |Val(Y_n)|$.
 
 Again using the author extraction example from \Cref{cha:crfs}, we define an incomplete annotation regarding the \gls{target variable} $LN_n$ for the third reference string in \Cref{fig:example-reference-strings}:
 \begin{equation*}
@@ -83,7 +83,7 @@ Again using the author extraction example from \Cref{cha:crfs}, we define an inc
 
 %Mia Wagner, Max Friedrich Schmidt (2010): Fourth title, Berlin: Springer.
 Thereby, the word $w_3{=}\text{``Friedrich''}$ is ambiguously annotated as either a last name or not a last name.
-This can also be seen as a partial annotation since $|\mathpzc{L}_2|=|Val(LN_2)|$.
+This can also be seen as a \gls{partial annotation} since $|\mathpzc{L}_2|=|Val(LN_2)|$.
 
 \bigskip
 
@@ -115,7 +115,7 @@ One such issue is that the number of all possible \glspl{full assignment} in $\m
 Another issue is that the log-likelihood function derived from \Cref{equ:crf-marginalization} is not concave~\citep{tsuboi2008training}.
 Thereby, during the maximum log-likelihood estimation (see \Cref{sec:learning-crfs}), a local maximum is not necessarily a global maximum which needs to be considered during the learning phase.
 
-Further, when examining the marginalization of ambiguous annotations, it is not possible to provide additional information on the distribution of possible assignments.
+Further, when examining the marginalization of \glspl{ambiguous annotation}, it is not possible to provide additional information on the distribution of possible assignments.
 In this form, the model does not allow us to specify a \gls{marginal distribution} over the elements in $\mathpzc{L}_n$, which is considered during the marginalization.
 This is especially problematic when considering the implementation using distantly supervised learning.
 The resulting labelings will often be ambiguous but the probabilities for the different possible labels can be estimated from the external knowledge base.
@@ -124,7 +124,7 @@ In \Cref{cha:author-extraction} we will discuss a concrete example for such a sc
 \subsection{Generalized Expectation (\glsentryshort{ge})}\label{subsec:generalized-expectation}
 
 Instead of marginalizing incomplete annotations, \citet{mann2008generalized} apply the concept of \acrfull{ge} on the training of linear-chain \glspl{crf}.
-\Gls{ge} was first proposed in \citet{mann2007simple} under the name \gls{expectation regularization} as a method for semi-supervised learning.
+\Gls{ge} was first proposed in \citet{mann2007simple} under the name \textit{expectation regularization} as a method for semi-supervised learning.
 
 In general, a \gls{ge} criterion $G(\bm{\tilde{\theta}}:\mathcal{U})$ is a score function $S$ which is defined as~\citep{mann2010generalized}:
 \begin{equation}

@@ -1,6 +1,6 @@
 \chapter{Conditional Random Fields (\glsentryshortpl{crf})}\label{cha:crfs}
 
-In this chapter, we give an introduction to the \acrfull{crf} framework.
+In this chapter, we give an introduction to the \glsfirst{crf} framework.
 We first provide an overview of relevant concepts in probability theory, graph theory, and graphical models.
 Following this, we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models.
 
@@ -26,8 +26,8 @@ Such a measurable \gls{event} $\alpha$ is a subset of \glssymbol{outcome space}:
 
 Further, the following four properties must hold true for the \gls{event space}~\citep{koller2009probabilistic}:
 \begin{itemize}
-  \item It contains the \textit{empty \gls{event}} which consists of the empty set $\emptyset$.
-  \item It contains the \textit{trivial \gls{event}} which is the set of all possible outcomes \glssymbol{outcome space}.
+  \item It contains the \textit{empty event} which consists of the empty set $\emptyset$.
+  \item It contains the \textit{trivial event} which is the set of all possible outcomes \glssymbol{outcome space}.
   \item It is closed under union: If \glspl{event} $\alpha$ and $\beta$ are in \glssymbol{event space}, then so is $\alpha\cup\beta$.
   \item It is closed under complementation: If \gls{event} $\alpha$ is in \glssymbol{event space}, then so is $\glssymbol{outcome space}\setminus\alpha$.
 \end{itemize}
@@ -79,7 +79,7 @@ To fulfill the property of \glssymbol{event space} being closed under complement
 Further, to fulfill the union property of \glssymbol{event space}, we add all unions of \glspl{event}.
 Then, we again need to add the complements of the newly added union of \glspl{event}.
 This repeats until all possible unions and complements are added to \glssymbol{event space}.
-For our example, we show the full \gls{event space} \glssymbol{event space} in \todo{add}.
+For our example, we show the full \gls{event space} \glssymbol{event space} in \Cref{app:sec-event-space}.
 Even for this simple example, the resulting \gls{event space} is already considerably big.
 We thereby do not explicitly specify \glssymbol{event space} in the following examples but refer to the shown approach of repeatedly adding the union and complements of \glspl{event} to create the \gls{event space}.
 
@@ -94,10 +94,9 @@ Examples for this are:
       P(\mathit{secondNotEC})&=2/4=0.5.
     \end{split}
 \end{equation*}
-The full list of assignments is shown in \todo{ref}.
-Note that, when building the sum over all assigned probabilities in P, we result in a number greater than $1$.
-When recalling the rules for \glspl{probability distribution}, we see that the probabilities of two \glspl{event} is only defined if the intersection of the two events is the empty set.
-Thereby, our defined P remains a valid \gls{probability distribution}.
+Note that, when building the sum over all assigned probabilities, we result in a number greater than $1$.
+When recalling the rules for \glspl{probability distribution}, we see that the probability for the union of two \glspl{event} is only defined as the addition of their probabilities if the intersection of the two events is the empty set.
+Thereby, our defined \glspl{probability distribution} remain valid.
 
 \bigskip
 
@@ -126,15 +125,15 @@ We can now define our \glspl{probability distribution} on \glspl{random variable
 
 \bigskip
 
-We now consider the concept of \textit{joint probability}.
-Given two \glspl{event} $\alpha$ and $\beta$, the joint probability $P(\alpha,\beta)$ corresponds to the probability of the intersection of the two events~\citep{teschl2007mathematik}:
+We now consider the concept of \gls{joint probability}.
+Given two \glspl{event} $\alpha$ and $\beta$, the \gls{joint probability} $P(\alpha,\beta)$ corresponds to the probability of the intersection of the two events~\citep{teschl2007mathematik}:
 \begin{equation*}
   P(\alpha,\beta)=\alpha\cap\beta.
 \end{equation*}
 
 This concept can also be applied to \glspl{random variable}.
 Given \glspl{random variable} $X$ and $Y$ which are defined on the same \gls{event space} \glssymbol{event space}, we consider their \gls{joint distribution} $P(X,Y)$.
-For the assignments $x$ and $y$, $P(X{=}x,Y{=}y)$ associates a probability with the subset of $\Omega$ which is specified by  $x$ and $y$~\citep{koller2009probabilistic}.
+For the \glspl{assignment} $x$ and $y$, $P(X{=}x,Y{=}y)$ associates a probability with the subset of $\Omega$ which is specified by  $x$ and $y$~\citep{koller2009probabilistic}.
 The \gls{joint distribution} for more than two \glspl{random variable} is defined accordingly.
 
 In our example, $P(LN_1,EC_2)$ has the following values:
@@ -150,10 +149,10 @@ In our example, $P(LN_1,EC_2)$ has the following values:
 \bigskip
 
 A notation that is frequently used in this chapter is that of a set of \glspl{random variable} $\mathbf{X}=\left\{ X_1,\dots,X_N\right\}$.
-The set of assignments to $\mathbf{X}$ is denoted by $\mathbf{x}=\left\{ x_1,\dots,x_N\right\}$ where each $x_n$ is an \gls{assignment} to $X_n\in\mathbf{X}$.
-The set of assignments $\mathbf{x}$ is also called a \gls{full assignment} to $\mathbf{X}$.
+The set of \glspl{assignment} to $\mathbf{X}$ is denoted by $\mathbf{x}=\left\{ x_1,\dots,x_N\right\}$ where each $x_n$ is an \gls{assignment} to $X_n\in\mathbf{X}$.
+The set of \glspl{assignment} $\mathbf{x}$ is also called a \gls{full assignment} to $\mathbf{X}$.
 Any \gls{event} that is described using $\mathbf{X}$ must be a union of \glspl{full assignment} to $\mathbf{X}$.
-This gives us a \gls{canonical outcome space} for which each outcome is a joint assignment to the \glspl{random variable} in $\mathbf{X}$.
+This gives us a \gls{canonical outcome space} for which each outcome is a joint \glspl{assignment} to the \glspl{random variable} in $\mathbf{X}$.
 
 We demonstrate this by extending our definitions of $LN_1$ and $EC_2$ and apply them to all words in a reference string of length $N$.
 This gives us two sets of \glspl{random variable}:
@@ -179,7 +178,7 @@ The \gls{conditional probability} of an \gls{event} $\alpha$ given an \gls{event
 P(\beta\mid\alpha) = \frac{P(\alpha\cap\beta)}{P(\alpha)}.
 \end{equation}
 This definition can be extended to \glspl{random variable}.
-Given that the probability for every assignment to $X$ is greater than zero, the \gls{conditional probability distribution} $P(Y\mid X)$ is calculated with
+Given that the probability for every \gls{assignment} to $X$ is greater than zero, the \gls{conditional probability distribution} $P(Y\mid X)$ is calculated with
 \begin{equation}
 \label{equ:conditional-probability-random-variable}
 P(Y\mid X) = \frac{P(X,Y)}{P(X)}
@@ -359,7 +358,7 @@ $\Psi(LN_1,F\rs N_2)$\par
 \bigskip
 
 An important operation on factors is the \gls{factor product}.
-Given three disjoint sets of assignments $\left\{\mathbf{X}, \mathbf{Y}, \mathbf{Z}\right\}$, a \gls{factor product} $\Psi_1\times\Psi_2$ of the two factors $\Psi_1(\mathbf{X},\mathbf{Y})$ and $\Psi_2(\mathbf{Y},\mathbf{Z})$ is a factor $\Psi(\mathbf{X},\mathbf{Y},\mathbf{Z})$~\citep{koller2009probabilistic}.
+Given three disjoint sets of \glspl{assignment} $\left\{\mathbf{X}, \mathbf{Y}, \mathbf{Z}\right\}$, a \gls{factor product} $\Psi_1\times\Psi_2$ of the two factors $\Psi_1(\mathbf{X},\mathbf{Y})$ and $\Psi_2(\mathbf{Y},\mathbf{Z})$ is a factor $\Psi(\mathbf{X},\mathbf{Y},\mathbf{Z})$~\citep{koller2009probabilistic}.
 The intuition is that the two factors are multiplied by aligning their common set of \glspl{random variable} $\mathbf{Y}$.
 
 One way of calculating the \gls{factor product} of the three \glspl{factor} in \Cref{tab:example-factors} is the following:
@@ -397,7 +396,7 @@ For the full distribution $P(EC_2,F\rs N_2,LN_1)$ see \cref{app:subsec-gd-full-d
 \bigskip
 
 An intuition could be that \glspl{factor} are assigned to the edges of a \gls{markov network} in order to parameterize it.
-Yet, such an assignment is only able to capture the pairwise interactions between the two incident nodes~\citep{koller2009probabilistic}.
+Yet, such an \gls{assignment} is only able to capture the pairwise interactions between the two incident nodes~\citep{koller2009probabilistic}.
 In order to model more complex interactions involving multiple nodes, a \gls{factor scope} needs to allow an arbitrary subset of nodes in $H$.
 Since a factor can be assigned to an arbitrary number of nodes, visualizing \glspl{markov network} by only displaying the random variables as nodes and pairwise interactions as edges is not sufficient.
 Instead, a \gls{factor graph} can be used.
@@ -512,7 +511,7 @@ which are multiplied with the weights $\theta_1{=}-\ln(30)$ and $\theta_2{=}-\ln
 \begin{equation*}
   \epsilon\left(F\rs N_2,LN_1\right)=\left(-\ln(30)\cdot f_1(F\rs N_2,LN_1)\right)+\left(-\ln(10)\cdot f_2(F\rs N_2,LN_1)\right).
 \end{equation*}
-Given the assignments $F\rs N_1{=}\mathit{true}$ and $LN_1{=}\mathit{true}$, we have:
+Given the \glspl{assignment} $F\rs N_1{=}\mathit{true}$ and $LN_1{=}\mathit{true}$, we have:
 \begin{equation*}
   \begin{split}
   \epsilon\left(F\rs N_2{=}\mathit{true},LN_1{=}\mathit{true}\right)&=\left(-\ln(30)\cdot f_1(F\rs N_2{=}\mathit{true},LN_1{=}\mathit{true})\right)\\
@@ -789,7 +788,7 @@ The base case for the recursion is defined as
   \label{equ:linear-chain-crf-z-alpha-base}
  \alpha_1(j) = \Psi_1\left(\vphantom{\tilde{X}}j,Y_0\right)\times\Psi_1\left(j,\mathbf{\tilde{X}}_1\right)
 \end{equation}
-where $Y_0$ again is the \texttt{start} state. Since the calculation is recursive in a way that $\alpha_n$ is calculated using the result of $\alpha_{n-1}$, we refer to $\alpha_n$ as a \textit{forward variable}~\citep{sutton2010introduction}. In order to calculate $Z(\mathbf{X})$ using $\alpha_n(j)$, we calculate the sum over all \glspl{full assignment} to $\mathbf{Y}$, resulting in
+where $Y_0$ again is the \texttt{start} state. Since the calculation is recursive in a way that $\alpha_n$ is calculated using the result of $\alpha_{n-1}$, we refer to $\alpha_n$ as a \gls{forward variable}~\citep{sutton2010introduction}. In order to calculate $Z(\mathbf{X})$ using $\alpha_n(j)$, we calculate the sum over all \glspl{full assignment} to $\mathbf{Y}$, resulting in
 \begin{equation}
   \label{equ:linear-chain-crf-z-alpha-sum}
   Z(\mathbf{X})=\sum_{\mathbf{Y}}\alpha_T\left(\mathbf{Y}\right)
@@ -797,7 +796,7 @@ where $Y_0$ again is the \texttt{start} state. Since the calculation is recursiv
 where $T=|\mathbf{Y}|$.
 \bigskip
 
-Even though the forward variable $\alpha_n$ is sufficient for calculating $Z(\mathbf{X})$, other calculations may also require a \textit{backward variable} $\beta_n$~\citep{sutton2010introduction}. Its difference to $\alpha_n$ is that the recursion expands in the opposite direction such that the calculation of $\beta_n$ uses the result of $\beta_{n+1}$:
+Even though the \gls{forward variable} $\alpha_n$ is sufficient for calculating $Z(\mathbf{X})$, other calculations may also require a \gls{backward variable} $\beta_n$~\citep{sutton2010introduction}. Its difference to $\alpha_n$ is that the recursion expands in the opposite direction such that the calculation of $\beta_n$ uses the result of $\beta_{n+1}$:
 \begin{equation}
   \label{equ:linear-chain-crf-z-beta}
   \beta_n(i) = \sum_{j\in\mathbf{Y}}\left(\left(\Psi_{n+1}\left(\vphantom{\tilde{X}}j,i\right)\times\Psi_{n+1}\left(j,\mathbf{\tilde{X}}_{n+1}\right)\right)\times \beta_{n+1}(j)\right).
@@ -862,24 +861,24 @@ We will thereby focus on the learning of the set of parameters $\bm{\tilde{\thet
 A function that evaluates the performance of a model $\mathcal{\tilde{M}}$ with $\bm{\tilde{\theta}}$ is called an \gls{objective function}~\citep{koller2009probabilistic}.
 
 \bigskip
-Given a data set $\mathcal{D}$, we define the likelihood function $L(\bm{\tilde{\theta}}:\mathcal{D})$ as
+Given a data set $\mathcal{D}$, we define the \gls{likelihood function} $L(\bm{\tilde{\theta}}:\mathcal{D})$ as
 \begin{equation}
   \label{equ:likelihood}
   \mathcal{L}\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=\prod_{m=1}^M P\left(\mathbf{Y}^{(m)}|\mathbf{X}^{(m)}\right)
 \end{equation}
 where $P$ is derived from the graphical model $\mathcal{\tilde{M}}=(\mathcal{\tilde{K}},\bm{\tilde{\theta}})$.
-A common approach is to calculate the \textit{log-likelihood} instead of the likelihood itself~\citep{koller2009probabilistic,sutton2010introduction,mann2010generalized}.
-This is possible since the log-likelihood is monotonically related to the likelihood and thereby the maximization problems are equivalent~\citep{koller2009probabilistic}.
-A computational advantage of using the log-likelihood is that it is calculated over sums instead of products~\citep{koller2009probabilistic}.
+A common approach is to calculate the \gls{log-likelihood function} instead of the \gls{likelihood function} itself~\citep{koller2009probabilistic,sutton2010introduction,mann2010generalized}.
+This is possible since the \gls{log-likelihood function} is monotonically related to the \gls{likelihood function} and thereby the maximization problems are equivalent~\citep{koller2009probabilistic}.
+A computational advantage of using the \gls{log-likelihood function} is that it is calculated over sums instead of products~\citep{koller2009probabilistic}.
 
-The log-likelihood function is defined as~\citep{sutton2010introduction}
+The \gls{log-likelihood function} is defined as~\citep{sutton2010introduction}
 \begin{equation}
   \label{equ:log-likelihood}
   \ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=\sum_{m=1}^M \left(\log P\left(\mathbf{Y}^{(m)}|\mathbf{X}^{(m)}\right)\right)
 \end{equation}
 where $\log$ refers to the natural logarithm.
 
-In order to illustrate the calculation, we now look at a more concrete example of a log-likelihood function.
+In order to illustrate the calculation, we now look at a more concrete example of a \gls{log-likelihood function}.
 Using the definition of \glspl{linear-chain crf} from \Cref{equ:linear-chain-crf-log-linear}, we substitute $P(\mathbf{Y}^{(m)}|\mathbf{X}^{(m)})$ in \Cref{equ:log-likelihood} which gives us:
 \begin{subequations}
 \begin{equation}
@@ -900,7 +899,7 @@ We can simplify this by resolving the $\log$ statement which results in:
 \end{subequations}
 Using the \gls{forward-backward algorithm}, we can efficiently calculate the normalization constant $Z(\mathbf{X}^{(m)})$ as shown in \Cref{sec:inference-crfs}.
 
-In \Cref{app:subsec-llg-example-calculation}, we demonstrate the calculation of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$ for the \gls{linear-chain crf} shown in \Cref{fig:example-linear-chain-crf}.
+In \Cref{app:sec-log-likelihood-function}, we demonstrate the calculation of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$ for the \gls{linear-chain crf} shown in \Cref{fig:example-linear-chain-crf}.
 For this, we have $\mathcal{D}=\{\mathpzc{d}^{(1)},\dots,\mathpzc{d}^{(4)}\}$ consisting of the four reference strings in \Cref{fig:example-reference-strings}.
 The set of \glspl{feature function} and corresponding weights $\bm{\tilde{\theta}}$ is given in \Cref{tab:example-linear-chain-crf-feature-functions-f-k} and \Cref{tab:example-linear-chain-crf-feature-functions-f-l}.
 
@@ -909,9 +908,9 @@ The set of \glspl{feature function} and corresponding weights $\bm{\tilde{\theta
 \citet{sutton2010introduction} discuss that a model $\tilde{\mathcal{M}}$ can overfit the given data set $\mathcal{D}$ when the number of parameters in $\bm{\tilde{\theta}}$ is too high.
 It is thereby common to use a \textit{regularization term} that forms a penalty based on the norm of $\bm{\tilde{\theta}}$ where $\bm{\tilde{\theta}}$ is seen as a vector~\citep{koller2009probabilistic,sutton2010introduction}.
 
-An example for such a term is a \textit{Gaussian prior}.
-Given the parameters $\bm{\theta}$ as a vector, it uses the \textit{Euclidean norm} of $\bm{\theta}$ with a \textit{regularization parameter} $1/2\sigma^2$~\citep{sutton2010introduction}.
-The regularization parameter $\sigma^2$ can be empirically estimated from the training data~\citep{chen1999gaussian}.
+An example for such a term is a \gls{gaussian prior}.
+Given the parameters $\bm{\theta}$ as a vector, it uses the \gls{euclidean norm} of $\bm{\theta}$ with a \gls{regularization parameter} $1/2\sigma^2$~\citep{sutton2010introduction}.
+The \gls{regularization parameter} $\sigma^2$ can be empirically estimated from the training data~\citep{chen1999gaussian}.
 This gives us the following definition of a Gaussian prior~\citep{sutton2010introduction}:
 \begin{equation}
   \label{equ:gaussian-prior}
@@ -932,7 +931,7 @@ In \Cref{cha:distant-supervision} we discuss an additional regularization term b
 
 After demonstrating a calculation of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$ for \glspl{linear-chain crf}, we now want to find the set of parameters $\bm{\hat{\theta}}\in\mathbf{\Theta}$ such that $\ell(\bm{\hat{\theta}}:\mathcal{D})$ has the maximum value regarding a predefined graph $\mathcal{\tilde{K}}$.
 Here, $\bm{\Theta}$ is the set of all possible sets of parameters $\bm{\tilde{\theta}}$.
-This task is referred to as \textit{maximum likelihood estimation} and when considering the log-likelihood function is defined as~\citep{koller2009probabilistic}:
+This task is referred to as \gls{maximum likelihood estimation} and when considering the \gls{log-likelihood function} is defined as~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:maximum-log-likelihood-estimation}
   \ell\left(\bm{\hat{\theta}}:\mathcal{D}\right)=\max_{\bm{\tilde{\theta}}\in\mathbf{\Theta}}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right).
@@ -944,13 +943,13 @@ The \gls{gradient} $\nabla f$ of an \gls{objective function} $f_{\text{obj}}(\bm
   \nabla f=\left\langle\frac{\partial f}{\partial\tilde{\theta}_1},\dots,\frac{\partial f}{\partial\tilde{\theta}_I}\right\rangle.
 \end{equation}
 The first step in finding $\bm{\hat{\theta}}$ is to find a $\bm{\tilde{\theta}}$ for which $\nabla f=0$.
-Applied to our log-likelihood function, we thereby have to solve the following equation~\citep{koller2009probabilistic}:
+Applied to our \gls{log-likelihood function}, we thereby have to solve the following equation~\citep{koller2009probabilistic}:
 \begin{equation}
   \label{equ:log-likelihood-gradient}
   \frac{\partial}{\partial\theta_i}\ell\left(\bm{\tilde{\theta}}:\mathcal{D}\right)=0\ \ \ \ \ \ \ \ \ i=1,\dots,I.
 \end{equation}
 We refer to \citet{sutton2010introduction} and \citet{koller2009probabilistic} for further information on how to calculate these partial derivatives.
-The resulting $\bm{\tilde{\theta}}$ is called a \textit{stationary point} of the function $\ell$ and can be a local maximum, a local minimum, or a saddle point~\citep{koller2009probabilistic}.
+The resulting $\bm{\tilde{\theta}}$ is called a \gls{stationary point} of the function $\ell$ and can be a local maximum, a local minimum, or a saddle point~\citep{koller2009probabilistic}.
 There are multiple ways of controlling if $\bm{\tilde{\theta}}$ is a local maximum, for example by checking the second derivative of $\ell(\bm{\tilde{\theta}}:\mathcal{D})$.
 If it is negative then $\bm{\tilde{\theta}}$ is a local maximum~\citep{koller2009probabilistic}.
 
@@ -966,9 +965,9 @@ Yet, since this approach requires many calculations of $\nabla f$, it can be inf
 
 Several improvements to this have been made that aim to reduce the number of such calculations.
 This is often done by taking information from the second derivative of the \gls{objective function} into account~\citep{sutton2010introduction}.
-Since the matrix of all second derivatives, called the \textit{Hessian}, is quadratic in the number of parameters, computing the full \textit{Hessian} can again be infeasible~\citep{sutton2010introduction}.
-By approximating the Hessian with the \gls{bfgs} algorithm and limiting its memory requirements, \citet{byrd1994representations} provide an approach called \textit{L-BFGS} to the maximization problem that can handle a large number of parameters.
-\citet{andrew2007scalable} state that L-BFGS ``is the algorithm of choice for optimizing the parameters of large-scale log-linear models with $L_2$ regularization''~\citep{andrew2007scalable}.
+Since the matrix of all second derivatives, called the \gls{hessian}, is quadratic in the number of parameters, computing the full \gls{hessian} can again be infeasible~\citep{sutton2010introduction}.
+By approximating the Hessian with the \gls{bfgs} algorithm and limiting its memory requirements, \citet{byrd1994representations} provide an approach called \gls{l-bfgs} to the maximization problem that can handle a large number of parameters.
+\citet{andrew2007scalable} state that \gls{l-bfgs} ``is the algorithm of choice for optimizing the parameters of large-scale log-linear models with $L_2$ regularization''~\citep{andrew2007scalable}.
 $L_2$ regularization is an alternative to the Gaussian prior in \Cref{equ:gaussian-prior}.
 
 \bigskip

@@ -1,6 +1,19 @@
 \chapter{Conclusions and Future Work}\label{cha:conclusion-and-future-work}
 \section{Conclusions}\label{sec:conclusion}
+In this thesis, we presented an approach for the extraction of author names from reference sections of research papers from the area of German social sciences.
+This includes the generation of distantly supervised training sets from unlabeled reference sections and the learning of a \gls{crf} model in combination with \gls{ge} constraints.
+
+Further, we evaluated several aspects of the author extraction task using our approach.
+One of them was the comparison of different author lists as the knowledge bases for distant supervision.
+We demonstrated that tagging reference sections with an author set that comes from a similar research area does improve the performance of the resulting model.
+Another aspect was the percentage of unmatched words that are used for generating \gls{ge} constraints.
+Our evaluation shows that this percentage can be used to influence the typical trade-off between \gls{precision} and \gls{recall} of the resulting model.
+Another outcome is that increasing the size of the training data set does improve the resulting model.
+This is especially interesting since we do not rely on manually labeled data.
+
+
 \section{Future Work}\label{sec:future-work}
+
 \itodo{discuss challenges of distant supervision on our task (see reinanda2014prior)}
 \itodo{sorting of PDFs into different categories (very well suited for extraction or not suited)}
 \itodo{usage of available meta data about the paper (e.g.\ conference/journal title), e.g.\ to learn different models}

@@ -99,7 +99,7 @@ When comparing training sets of different sizes, we do not ensure that the small
 Instead, every training subset is randomly extracted from the complete training set.
 
 We now present our evaluations that address the individual research questions from \Cref{cha:author-extraction}.
-Since we do not mention all parameters of our evaluation setup in the text, we refer to \todo{add} for more detailed information.
+Since we do not mention all parameters of our evaluation setup in the text, we refer to \Cref{app:sec-configuration} for more detailed information.
 
 \bigskip
 
@@ -217,7 +217,7 @@ Using the statistics from the fine-grained approach, we can derive the value of 
 \begin{split}
   FP(\texttt{A})&=true(\texttt{A})-FN(\texttt{A})\\
   &=total(\texttt{A})-FP(\texttt{O})\\
-  &=total(\texttt{A})-(predicted(\texttt{O})-TP(\texttt{O}).\\
+  &=total(\texttt{A})-(predicted(\texttt{O})-TP(\texttt{O})).\\
 \end{split}
 \end{equation*}
 Here, $true(\texttt{A})$ refers to the number of words with label \texttt{A} in the manually labeled testing set and $predicted(\texttt{O})$ refers to the number of words with the label \texttt{O} that were predicted by the model.
@@ -253,25 +253,44 @@ This is because the \gls{ge} constraints are generated from matched author names
 To address the research question, we generate several models with a varying number of reference sections in $\mathcal{U}$.
 \itodo{plots}
 
-\RQ{7} takes the Markov order of \glspl{linear-chain crf} into consideration.
+\RQ{7} takes the \gls{markov order} of \glspl{linear-chain crf} into consideration.
 For this, we compare three different models:
 \begin{itemize}
-  \item \texttt{MO-0}: A Markov order zero \gls{linear-chain crf}.
-  \item \texttt{MO-1}: A Markov order one \gls{linear-chain crf}.
-  \item \texttt{MO-0-1}: A Markov order one \gls{linear-chain crf} with Markov order zero states (see \Cref{subsec:i-graph-construction}).
+  \item \texttt{MO-0}: A \gls{markov order} zero \gls{linear-chain crf}.
+  \item \texttt{MO-1}: A \gls{markov order} one \gls{linear-chain crf}.
+  \item \texttt{MO-0-1}: A \gls{markov order} one \gls{linear-chain crf} with \gls{markov order} zero states (see \Cref{subsec:i-graph-construction}).
 \end{itemize}
 We compare the models for three different training set sizes while using the \texttt{swp-full} author data set for creating \gls{ge} constraints.
-
+The results are presented in \Cref{fig:eval-markov-orders}.
 \begin{figure}[t]
 \input{figures/eval-markov-orders}
-\caption{Evaluation results that compare \glspl{linear-chain crf} of different Markov orders using the \texttt{swp-full} data set with for different numbers of reference sections.}
+\caption{Evaluation results that compare \glspl{linear-chain crf} of different \glspl{markov order} using the \texttt{swp-full} data set with for different numbers of reference sections.}
 \label{fig:eval-markov-orders}
 \end{figure}
+They show that a \gls{markov order} zero model (\texttt{MO-0}) has a better \gls{recall} but a worse \gls{precision} than a \gls{markov order} one model (\texttt{MO-1}).
+The combined \texttt{MO-0-1} model does not have a better recall than the \texttt{MO-0} model or a better precision than the \texttt{MO-1} model for the training set with \num{1000} reference sections.
+Yet, it always has a better \gls{f1 score} than the individual models.
+
+We did not look into higher \glspl{markov order} since they would not be applicable to larger training sets both in terms of hardware requirements and runtime using the current implementation.
+Yet, especially for author names that consist of more than two words, a higher \gls{markov order} could lead to improvements.
 
 \bigskip
 
 
-\RQ{8} aims to compare the impact of different regularization parameters of the Gaussian prior in a \gls{linear-chain crf} model.
+\RQ{8} aims to compare the impact of different \gls{regularization parameter} of the \gls{gaussian prior} in a \gls{linear-chain crf} model.
+Again, we use three different training set sizes and the \texttt{swp-full} author data set to compare nine different \glspl{regularization parameter} between $5$ and $45$.
+\Cref{fig:eval-gaussian} shows the corresponding evaluation results.
+\begin{figure}[t]
+\input{figures/eval-gaussian}
+\caption{Comparison of \glspl{linear-chain crf} with different \gls{markov order} using the \texttt{swp-full} data set with for different numbers of reference sections.}
+\label{fig:eval-gaussian}
+\end{figure}
+They suggest that modifying the \gls{regularization parameter} in this range does not impact the performance to the resulting model.
+This also confirms a similar statement by \citet{sutton2010introduction}.
+Further experiments could investigate wider ranges for the \glspl{regularization parameter}.
+In out other evaluations, we set this parameter to the value $10$
+According to \citet{sutton2010introduction}, this is a typical choice for training sets of a medium size.
+
 %on gaussian prior: Additionally, \citet{sutton2010introduction} state that small changes to $\sigma^2$, for example up to a factor of 10, do not have a big impact on the accuracy of the final model.
 %%sutton2010, page48: gauss=10 is typical for medium-sized training sets
 \itodo{plots}

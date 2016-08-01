@@ -126,7 +126,7 @@ We will refer to the second data set as the \texttt{swp} data set.
 In order to allow a comparison to the \gls{gnd} data set, we additionally generated a version of the \texttt{swp} data set with the same number of authors as the \gls{gnd} data set.
 We refer to this as the \texttt{swp-trim} data set.
 
-\Cref{tab:knowledge-base-statistics}\todo{swp-full +gnd-full or +gnd-diff?} contains statistics on the different variations of the \texttt{gnd} and \texttt{swp} data sets.
+\Cref{tab:knowledge-base-statistics} contains statistics on the different variations of the \texttt{gnd} and \texttt{swp} data sets as well as a combined data set of \texttt{gnd-full} and \texttt{swp-full}.
 
 \subsection{Author Name Matching}\label{subsec:i-author-name-matching}
 Usually, matches are annotated using markup languages such as \gls{xml}.
@@ -261,10 +261,10 @@ The learning is performed using gradient ascent with a limited memory \gls{bfgs}
 
 Based on the discussion in \Cref{subsec:ae-graph-construction}, we focus on the construction of \glspl{linear-chain crf}.
 
-In \gls{mallet}, it is possible to create \glspl{linear-chain crf} with different Markov orders (see \Cref{subsec:ae-graph-construction}).
-More specifically, the Markov order is declared using an integer array with non-negative numbers in increasing order.
-The highest integer specifies the Markov order of the \gls{crf}.
-The other numbers represent additional weight sets to also model lower Markov orders in the same model.
+In \gls{mallet}, it is possible to create \glspl{linear-chain crf} with different \glspl{markov order} (see \Cref{subsec:ae-graph-construction}).
+More specifically, the \gls{markov order} is declared using an integer array with non-negative numbers in increasing order.
+The highest integer specifies the \gls{markov order} of the \gls{crf}.
+The other numbers represent additional weight sets to also model lower \glspl{markov order} in the same model.
 % from MALLET documentation:
 % * @param orders an array of increasing non-negative numbers giving
 % * the orders of the features for this CRF. The largest number
@@ -275,21 +275,21 @@ The other numbers represent additional weight sets to also model lower Markov or
 % * labels agree. If <code>orders</code> is <code>null</code>, an
 % * order-0 CRF is built.
 
-For example, an integer array \texttt{[0,1]} specifies an Markov order one \gls{linear-chain crf} and an additional weight set for the Markov order zero states.
-When modeled with \glspl{factor}, the Markov order zero state for a word $w_n$ only includes the \gls{target variable} $Y_n$: $\Psi(Y_n)$.
+For example, an integer array \texttt{[0,1]} specifies an \gls{markov order} one \gls{linear-chain crf} and an additional weight set for the \gls{markov order} zero states.
+When modeled with \glspl{factor}, the \gls{markov order} zero state for a word $w_n$ only includes the \gls{target variable} $Y_n$: $\Psi(Y_n)$.
 Applied to the author extraction example from \Cref{cha:crfs}, this specification results in a \gls{factor graph} shown in \Cref{fig:example-linear-chain-crf-markov-order-0-1}.
 \begin{figure}[t]
 \centering
 \input{figures/example-linear-chain-crf-markov-order-0-1.tex}
 \caption{%
-  \Gls{factor graph} of a \gls{linear-chain crf} with both Markov order zero and one, derived from the author extraction example in \Cref{cha:crfs}.}
+  \Gls{factor graph} of a \gls{linear-chain crf} with both \gls{markov order} zero and one, derived from the author extraction example in \Cref{cha:crfs}.}
 \label{fig:example-linear-chain-crf-markov-order-0-1}
 \end{figure}
 
 \subsection{Model Parameters}\label{subsec:i-model-parameters}
 
 The implementation of \glspl{linear-chain crf} in \gls{mallet} allows the modification of several model parameters.
-One that is addressed by \RQ{8} is the regularization parameter of the Gaussian prior (see \Cref{sec:learning-crfs}).
+One that is addressed by \RQ{8} is the regularization parameter of the \gls{gaussian prior} (see \Cref{sec:learning-crfs}).
 The default for this parameter is set to $10$.
 
 Further, we can specify the maximum number of iterations during the learning with gradient ascent.
