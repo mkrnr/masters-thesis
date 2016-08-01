@@ -28,12 +28,12 @@ $\Psi(LN_1,F\rs N_2,EC_2)$\par
  \midrule
  $\mathit{false}$ & $\mathit{false}$ & $\mathit{false}$ & $(10\cdot10)\cdot30=\num{3000}$\\
  $\mathit{false}$ & $\mathit{false}$ & $\mathit{true}$  & $(20\cdot20)\cdot30=\num{12000}$\\
- $\mathit{false}$ & $\mathit{true}$  & $\mathit{false}$ & $(10\cdot10)\cdot1\ \ =100$\\
- $\mathit{false}$ & $\mathit{true}$  & $\mathit{true}$  & $(20\cdot1\ \ )\cdot1\ \ =20$\\
- $\mathit{true}$  & $\mathit{false}$ & $\mathit{false}$ & $(10\cdot10)\cdot1\ \ =100$\\
- $\mathit{true}$  & $\mathit{false}$ & $\mathit{true}$  & $(1\ \ \cdot20)\cdot1\ \ =20$\\
+ $\mathit{false}$ & $\mathit{true}$  & $\mathit{false}$ & $(10\cdot10)\cdot\hphantom{0}1=100$\\
+ $\mathit{false}$ & $\mathit{true}$  & $\mathit{true}$  & $(20\cdot\hphantom{0}1)\cdot\hphantom{0}1=20$\\
+ $\mathit{true}$  & $\mathit{false}$ & $\mathit{false}$ & $(10\cdot10)\cdot\hphantom{0}1=100$\\
+ $\mathit{true}$  & $\mathit{false}$ & $\mathit{true}$  & $(\hphantom{0}1\cdot20)\cdot\hphantom{0}1=20$\\
  $\mathit{true}$  & $\mathit{true}$  & $\mathit{false}$ & $(10\cdot10)\cdot10=\num{1000}$\\
- $\mathit{true}$  & $\mathit{true}$  & $\mathit{true}$  & $(1\ \ \cdot\ \ 1)\cdot10=10$\\
+ $\mathit{true}$  & $\mathit{true}$  & $\mathit{true}$  & $(\hphantom{0}1\cdot\hphantom{0}1)\cdot10=10$\\
  \bottomrule
 \end{tabular}
 \caption{Results of the \gls{factor product} $(\Psi(LN_1,EC_2)\times\Psi(F\rs N_2,EC_2))\times\Psi(LN_1,F\rs N_2)$ of the \glspl{factor} in \Cref{tab:example-factors}. For an exemplary calculation see \Cref{app:subsec-gd-example-calculation}.}
@@ -124,7 +124,7 @@ Based on the definition of \glspl{crf} in \Cref{equ:crf-factor} we have for exam
 \end{split}
 \end{equation*}
 
-Thereby, the distributive property allows us to factor out $\Psi(EC_1{=}\mathit{true},EC_2{=}\mathit{false})$ in the denominator which allows us to completely remove $\Psi(EC_1{=}\mathit{true},EC_2{=}\mathit{false})$ from the equation.
+Thereby, the distributive property allows us to factor out $\Psi(EC_1{=}\mathit{true},EC_2{=}\mathit{false})$ in the denominator which allows us to completely remove this \gls{factor} from the equation.
 This example demonstrates that a \gls{factor} with $\mathbf{D}\subseteq\mathbf{X}$ does not have an impact on the result of $P(\mathbf{Y}|\mathbf{X})$.
 
 \subsection{Exemplary Calculation}\label{app:subsec-crf-example-calculation}

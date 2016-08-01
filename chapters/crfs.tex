@@ -386,7 +386,7 @@ A \gls{probability distribution} $P(X_1,\dots,X_N)$ is a \gls{gibbs distribution
   Z & =\sum_{X_1,\ldots,X_N}\tilde{P}\left(X_1,\dots,X_N\right).
   \end{split}
 \end{equation}
-Here, $\tilde{P}(X_1,\dots,X_N)$ is an unnormalized measure and $Z$ is a normalizing constant, sometimes called the \gls{partitioning function}.
+Here, $\tilde{P}(X_1,\dots,X_N)$ is an unnormalized measure and $Z$ is a \gls{normalizing constant}, sometimes called the \gls{partitioning function}.
 It guarantees that the \gls{probability distribution} sums to $1$.
 Having a \gls{gibbs distribution} $P$ where each $\mathbf{D}_k$, $1\leq k \leq K$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P$ factorizes over $\mathcal{H}$~\citep{koller2009probabilistic}.
 
@@ -578,13 +578,13 @@ Given a set of \glspl{factor} $\{\Psi_1(\mathbf{D}_1),\dots\Psi_K(\mathbf{D}_K)\
     Z(\mathbf{X}) & = \sum_{\mathbf{Y}}\tilde{P}(\mathbf{Y},\mathbf{X}).
   \end{split}
 \end{equation}
-Here, similar to the \gls{gibbs distribution} in \Cref{equ:gibbs-distribution}, $\tilde{P}(\mathbf{Y},\mathbf{X})$ is the unnormalized measure and $Z(\mathbf{X})$ is a normalizing constant~\citep{koller2009probabilistic}.
+Here, similar to the \gls{gibbs distribution} in \Cref{equ:gibbs-distribution}, $\tilde{P}(\mathbf{Y},\mathbf{X})$ is the unnormalized measure and $Z(\mathbf{X})$ is a \gls{normalizing constant}~\citep{koller2009probabilistic}.
 Additionally, we have that $\mathbf{D}_k=\mathbf{X}\cup\mathbf{Y}$ and $\mathbf{D}_k\not\subseteq\mathbf{X}$.
 In other words, $\mathbf{D}_k$ needs to contain at least one $Y_n\in \mathbf{Y}$.
 
 In \Cref{app:subsec-gd-example-calculation} we demonstrate that in the case of $\mathbf{D}_k\subseteq \mathbf{X}$ the term $\Psi_k(\mathbf{D}_k)$ ``cancels out'' during the calculation of $P(\mathbf{Y}\mid\mathbf{X})$.
 
-This behavior for a $\mathbf{D}_k\subseteq\mathbf{X}$ is the result of the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above, namely how the normalizing constant $Z$ is defined~\citep{koller2009probabilistic}.
+This behavior for a $\mathbf{D}_k\subseteq\mathbf{X}$ is the result of the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above, namely how the \gls{normalizing constant} $Z$ is defined~\citep{koller2009probabilistic}.
 In \Cref{equ:gibbs-distribution}, $Z$ normalizes $\tilde{P}(X_1,\dots,X_N)$ with a sum over all $X_1,\dots,X_N$ resulting in a \gls{joint distribution} $P(X_1,\dots,X_N)$.
 However, in \Cref{equ:crf-factor}, $Z(\mathbf{X})$ normalizes $\tilde{P}(\mathbf{Y},\mathbf{X})$ with respect to the given $\mathbf{X}$.
 This way of normalizing results in the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$ (cf. \Cref{equ:conditional-probability-random-variable}).
@@ -690,7 +690,6 @@ We now consider the inferencing task for \glspl{probability query} $P(\mathbf{Y}
 \citet{sutton2010introduction} distinguish two kinds of inference problems:
 \begin{enumerate}
   \item Given a trained model and $\mathbf{X}=\mathbf{x}$, predict the most likely assignment $\mathbf{Y}=\mathbf{\hat{y}}$ using
-    \begin{subequations}
     \begin{equation}
       \label{equ:inference-argmax-1}
       \argmax\limits_{\mathbf{\hat{y}}} P(\mathbf{Y}=\mathbf{\hat{y}}\mid\mathbf{X}=\mathbf{x})
@@ -700,8 +699,7 @@ We now consider the inferencing task for \glspl{probability query} $P(\mathbf{Y}
       \label{equ:inference-argmax-2}
       \argmax\limits_{\mathbf{\hat{y}}} \tilde{P}(\mathbf{X}=\mathbf{x},\mathbf{Y}=\mathbf{\hat{y}}).
     \end{equation}
-    \end{subequations}
-  \item Given a trained model and $\mathbf{X}=\mathbf{x}$, compute the normalizing constant
+  \item Given a trained model and $\mathbf{X}=\mathbf{x}$, compute the \gls{normalizing constant}
     \begin{equation}
       \label{equ:inference-normalizing-constant}
       Z(\mathbf{X}=\mathbf{x})=\sum_{\mathbf{Y}}\tilde{P}(\mathbf{X}=\mathbf{x},\mathbf{Y}).
@@ -710,7 +708,7 @@ We now consider the inferencing task for \glspl{probability query} $P(\mathbf{Y}
 %TODO about that 1. and 2. are same fundamental operations (sutton2010, p. 27)
 By replacing the summation operator over $\mathbf{Y}$ in \Cref{equ:inference-normalizing-constant} with the $\argmax$ function, we effectively obtain \Cref{equ:inference-argmax-2}.
 Thereby, the two kinds of inference problems are based on the same underlying operation~\citep{sutton2010introduction}.
-In the following we will focus on the inference of the normalizing constant $Z(\mathbf{X})$ in the context of \glspl{linear-chain crf}.
+In the following we will focus on the inference of the \gls{normalizing constant} $Z(\mathbf{X})$ in the context of \glspl{linear-chain crf}.
 An approach to the prediction task can be derived from it.
 
 \bigskip

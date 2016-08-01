@@ -118,7 +118,7 @@ In \Cref{tab:author-sets-author-labels-f1} and \Cref{tab:author-sets-all-labels-
   \begin{tabular}[c]{@{}c@{}}Reference\\Sections\end{tabular}& \texttt{gnd-full} & \texttt{gnd-diff} &\texttt{swp-trim} &\texttt{swp-full} & \begin{tabular}[c]{@{}c@{}}\texttt{gnd-full}\\+\texttt{swp-full}\end{tabular} \\
   \midrule
   \hphantom{1,}\num{500} & $0.8508$ & $0.8128$ & $\bm{0.8939}$ & $0.8778$ & $0.8652$\\
-  \num{1000} & $0.8272$ & $0.8303$ & $0.8607$ & $0.856$ & $\bm{0.8646}$\\
+  \num{1000} & $0.8272$ & $0.8303$ & $0.8607$ & $0.856\hphantom{0}$ & $\bm{0.8646}$\\
   \num{1500} & $0.8607$ & $0.8399$ & $\bm{0.8833}$ & $0.8823$ & $0.8453$\\
   \num{2000} & $0.867\hphantom{0}$ & $0.8698$ & $0.8731$ & $\bm{0.8823}$ & $0.8713$\\
   \num{2500} & $0.838\hphantom{0}$ & $0.8562$ & $0.8856$ & $\bm{0.8868}$ & $0.8431$\\
@@ -176,11 +176,11 @@ Therefore, we assign $25\%$ of the remaining $20\%$ of the probability mass to t
 \Cref{tab:ssoar-number-of-tags} shows the number of \texttt{AU} nodes in the resulting \glspl{goddag} based on different knowledge bases.
 \begin{table}[t]
 \centering
-\begin{tabular}{c c c c c c}
+\begin{tabular}{l c c c c c}
  \toprule
 \begin{tabular}[c]{@{}c@{}}Count\\Description\end{tabular} & \texttt{gnd-full} & \texttt{gnd-diff} &\texttt{swp-trim} &\texttt{swp-full} & \begin{tabular}[c]{@{}c@{}}\texttt{gnd-full}\\+\texttt{swp-full}\end{tabular} \\
  \midrule
- \texttt{AU} Nodes      & \num{1161744} &  \num{958720}  & \num{998163}  & \num{1203040} & \num{1407053}\\
+ \texttt{AU} Nodes      & \num{1161744} &  \hphantom{1,}\num{958720}  & \hphantom{1,}\num{998163}  & \num{1203040} & \num{1407053}\\
  \texttt{AU} as Parent  & \num{1763518} &  \num{1553250} & \num{1729806} & \num{1959727} & \num{2084520}\\
  \bottomrule
 \end{tabular}
@@ -275,7 +275,6 @@ We did not look into higher \glspl{markov order} since they would not be applica
 Yet, especially for author names that consist of more than two words, a higher \gls{markov order} could lead to improvements.
 
 \bigskip
-
 
 \RQ{8} aims to compare the impact of different \gls{regularization parameter} of the \gls{gaussian prior} in a \gls{linear-chain crf} model.
 Again, we use three different training set sizes and the \texttt{swp-full} author data set to compare nine different \glspl{regularization parameter} between $5$ and $45$.
