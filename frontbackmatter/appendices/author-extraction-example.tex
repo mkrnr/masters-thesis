@@ -128,7 +128,7 @@ Thereby, the distributive property allows us to factor out $\Psi(EC_1{=}\mathit{
 This example demonstrates that a \gls{factor} with $\mathbf{D}\subseteq\mathbf{X}$ does not have an impact on the result of $P(\mathbf{Y}|\mathbf{X})$.
 
 \subsection{Exemplary Calculation}\label{app:subsec-crf-example-calculation}
-The following calculation is based on \gls{factor graph} (a) in \Cref{fig:example-factor-graphs} with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,F\rs N_2\}$.
+The following calculation is based on \gls{factor graph} (a) in \Cref{fig:example-factor-graphs} with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,LN_2\}$.
 It uses the \glspl{factor} defined in \Cref{tab:example-factors}.
 
 \begin{subequations}
@@ -211,8 +211,8 @@ $\Psi(\texttt{start},LN_1)$\par
  \toprule
  \texttt{start} & $LN_1$ & Value \\
  \midrule
- $\mathit{false}$ & $\mathit{false}$ & $-\ln(1)\ \ =\ \ \ 0$ \\
- $\mathit{false}$ & $\mathit{true}$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $\mathit{false}$ & $\mathit{false}$ & $-\ln(1) = 0\hphantom{.00001}$ \\
+ $\mathit{false}$ & $\mathit{true}$ & $-\ln(1) = 0\hphantom{.00001}$ \\
  $\mathit{true}$ & $\mathit{false}$ & $-\ln(30)\approx-3.4012$ \\
  $\mathit{true}$ & $\mathit{true}$ & $-\ln(10)\approx-2.3026$ \\
  \bottomrule
@@ -228,8 +228,8 @@ $\Psi(LN_1,EC_1)$\par
  $LN_1$ & $EC_1$ & Value \\
  \midrule
  $\mathit{false}$ & $\mathit{false}$ & $-\ln(30)\approx-3.4012$ \\
- $\mathit{false}$ & $\mathit{true}$ & $-\ln(1)\ \ =\ \ \ 0$ \\
- $\mathit{true}$ & $\mathit{false}$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $\mathit{false}$ & $\mathit{true}$ & $-\ln(1) = 0\hphantom{.00001}$ \\
+ $\mathit{true}$ & $\mathit{false}$ & $-\ln(1) = 0\hphantom{.00001}$ \\
  $\mathit{true}$ & $\mathit{true}$ & $-\ln(10)\approx-2.3026$ \\
  \bottomrule
 \end{tabular}
@@ -247,9 +247,9 @@ $\Psi(LN_1,EC_1)$\par
  Index & \multicolumn{1}{c}{Feature function $f_k$} & Weight $\theta_k$ \\
  \midrule
  $k=1$ & $\identityfun\left\{LN_1{=}\mathit{false},\texttt{start}{=}\mathit{true}\right\}$ & $-\ln(30)\approx-3.4012$ \\
- $k=2$ & $\identityfun\left\{LN_1{=}\mathit{true},\ \ \texttt{start}{=}\mathit{true}\right\}$ & $-\ln(10)\approx-2.3026$ \\
- $k=3$ & $\identityfun\left\{LN_2{=}\mathit{false},\ \ \ \ \ \ \hspace{-0.1mm}LN_1{=}\mathit{true}\right\}$ & $-\ln(10)\approx-2.3026$\\
- $k=4$ & $\identityfun\left\{LN_2{=}\mathit{true},\ \ \ \ \hspace{-0.1mm}LN_1{=}\mathit{false}\right\}$ & $-\ln(30)\approx-3.4012$ \\
+ $k=2$ & $\identityfun\left\{LN_1{=}\mathit{true},\texttt{start}{=}\mathit{true}\right\}$ & $-\ln(10)\approx-2.3026$ \\
+ $k=3$ & $\identityfun\left\{LN_2{=}\mathit{false},\ \ \ \ \hspace{-0.1mm}LN_1{=}\mathit{true}\right\}$ & $-\ln(10)\approx-2.3026$\\
+ $k=4$ & $\identityfun\left\{LN_2{=}\mathit{true},\ \ \ \ \hspace{0.4mm}LN_1{=}\mathit{false}\right\}$ & $-\ln(30)\approx-3.4012$ \\
  \bottomrule
 \end{tabular}
 \caption{\Glspl{feature function} $\tilde{f}_k(Y_n,Y_{n-1})$ representing $\Psi(\texttt{start},LN_1)$ and $\Psi(LN_1,LN_2)$. Note the inverted argument order of $\tilde{f}_k$.}
@@ -262,9 +262,9 @@ $\Psi(LN_1,EC_1)$\par
  \toprule
  Index & \multicolumn{1}{c}{Feature function $f_l$ } & Weight $\theta_l$ \\
  \midrule
- $l=1$ & $\identityfun\left\{LN_1{=}\mathit{false},\hspace{0.4mm}EC_1{=}\mathit{false}\right\}$ & $-\ln(30)\approx-3.4012$ \\
- $l=2$ & $\identityfun\left\{LN_1{=}\mathit{true},\ \ \hspace{0.4mm}EC_1{=}\mathit{true}\right\}$ & $-\ln(10)\approx-2.3026$ \\
- $l=3$ & $\identityfun\left\{LN_2{=}\mathit{false},\ \ EC_2{=}\mathit{false}\right\}$ & $-\ln(10)\approx-2.3026$ \\
+ $l=1$ & $\identityfun\left\{LN_1{=}\mathit{false},EC_1{=}\mathit{false}\right\}$ & $-\ln(30)\approx-3.4012$ \\
+ $l=2$ & $\identityfun\left\{LN_1{=}\mathit{true},\hspace{0.4mm}EC_1{=}\mathit{true}\right\}$ & $-\ln(10)\approx-2.3026$ \\
+ $l=3$ & $\identityfun\left\{LN_2{=}\mathit{false},EC_2{=}\mathit{false}\right\}$ & $-\ln(10)\approx-2.3026$ \\
  $l=4$ & $\identityfun\left\{LN_2{=}\mathit{true},EC_2{=}\mathit{false}\right\}$ & $-\ln(10)\approx-2.3026$ \\
  $l=5$ & $\identityfun\left\{LN_2{=}\mathit{true},EC_2{=}\mathit{true}\right\}$ & $-\ln(20)\approx-2.9957$ \\
  \bottomrule
@@ -274,7 +274,7 @@ $\Psi(LN_1,EC_1)$\par
 \end{table}
 
 \subsection{Exemplary Calculation}\label{app:subsec-lccrf-example-calculation}
-The following calculation is based on the \gls{linear-chain crf} from \Cref{fig:example-linear-chain-crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,F\rs N_2\}$.
+The following calculation is based on the \gls{linear-chain crf} from \Cref{fig:example-linear-chain-crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,LN_2\}$.
 It uses the \glspl{feature function} defined in \Cref{app:subsec-lccrf-feature-functions}.
 The \glspl{assignment} are based on the second reference string in \Cref{fig:example-reference-strings}.
 
@@ -337,7 +337,7 @@ The \glspl{assignment} are based on the second reference string in \Cref{fig:exa
 \end{subequations}
 
 \section{Log-Likelihood Function}\label{app:sec-log-likelihood-function}
-The following calculation is based on \gls{factor graph} in \Cref{fig:example-linear-chain-crf} that represents a \gls{linear-chain crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,F\rs N_2\}$.
+The following calculation is based on \gls{factor graph} in \Cref{fig:example-linear-chain-crf} that represents a \gls{linear-chain crf} with $\mathbf{X}=\{EC_1,EC_2\}$ and $\mathbf{Y}=\{\texttt{start},LN_1,LN_2\}$.
 It uses the \glspl{feature function} and corresponding weights from \Cref{app:subsec-lccrf-feature-functions}.
 Further, we have $\mathcal{D}=\{\mathpzc{d}^{(1)},\dots,\mathpzc{d}^{(4)}\}$ consisting of the four reference strings in \Cref{fig:example-reference-strings}.
 Based on this, we have the following log-likelihood function:
