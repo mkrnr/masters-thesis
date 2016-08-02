@@ -242,7 +242,7 @@ This makes it possible to represent such distributions as graphs in a tractable 
 
 \bigskip
 
-In a \gls{probabilistic graphical model}, the \glspl{random variable} $\mathcal{X}$ of a distribution are modeled as \glspl{node} where each \gls{node} represents one \gls{random variable} in $\mathcal{X}$. An \gls{edge} then denotes a ``direct probabilistic interaction''~\citep{koller2009probabilistic} between its two incident \glspl{node}.
+In a \gls{probabilistic graphical model}, the \glspl{random variable} $\mathcal{X}$ of a distribution are modeled as \glspl{node} where each \gls{node} represents one \gls{random variable} in $\mathcal{X}$. An \gls{edge} then denotes a probabilistic interaction between its two incident \glspl{node}~\citep{koller2009probabilistic}.
 
 % TODO edge part more precise
 There are two fundamental groups of graphical models, based on the type of edge that are used: \glspl{bayesian network} and \glspl{markov network}.
@@ -251,9 +251,7 @@ $\mathbf{X}$ contains the so-called \glspl{observed variable} which usually repr
 $\mathbf{Y}$ contains the \glspl{target variable} which we usually want to infer using a graphical model.
 We thereby have $\mathcal{X}=\{\mathbf{X}\cup\mathbf{Y}\}$ with $\mathbf{X}\cap\mathbf{Y}=\emptyset$.
 Yet, there are fundamental differences between \glspl{bayesian network} and \glspl{markov network}.
-To illustrate them, we will refer our previously discussed author extraction example.
-For this, we first add a new \gls{random variable} $\mathit{F\rs N_2}$ with $\mathit{Val}(\mathit{F\rs N_2})=\{\mathit{true},\mathit{false}\}$, which states whether the word $w_2$ in a reference string is a first name.
-Using this, we define $\mathcal{X}=\{EC_2,LN_1,F\rs N_2\}$ with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,F\rs N_2\}$.
+In the following, we use our previously discussed author extraction example and define $\mathcal{X}=\{EC_2,LN_1,LN_2\}$ with $\mathbf{X}=\{EC_2\}$ and $\mathbf{Y}=\{LN_1,LN_2\}$.
 
 
 \bigskip
@@ -271,14 +269,14 @@ Consequently, a \gls{cpd} $\mathbf{X}$ given $\mathbf{Y}$ results from the \glsp
 The gray node represents an \gls{observed variable} and the white nodes represent \glspl{target variable}.
 From this we can derive the following \gls{joint distribution}:
 \begin{equation*}
-  P(EC_2,LN_1,F\rs N_2)=P(LN_1)P(F\rs N_2|LN_1)P(EC_2\mid LN_1,F\rs N_2).
+  P(EC_2,LN_1,LN_2)=P(LN_1)P(LN_2|LN_1)P(EC_2\mid LN_1,LN_2).
 \end{equation*}
 
 \begin{figure}[t]
 \centering
 \input{figures/example-networks.tex}
-\caption[Two networks for $\mathcal{X}=\{EC_2,LN_1,F\rs N_2\}$]{%
-  Two networks for $\mathcal{X}=\{EC_2,LN_1,F\rs N_2\}$:
+\caption[Two networks for $\mathcal{X}=\{EC_2,LN_1,LN_2\}$]{%
+  Two networks for $\mathcal{X}=\{EC_2,LN_1,LN_2\}$:
   (a) A \gls{bayesian network} and (b) A \gls{markov network}.
 }
 \label{fig:example-networks}
@@ -294,12 +292,12 @@ It is called nonnegative if all its entries are nonnegative.
 In the following, we will consider all factors to be nonnegative.
 $\mathbf{D}$ is called the \glslink{factor scope}{scope} of $\Psi$, as denoted by $Scope[\Psi]$~\citep{koller2009probabilistic}.
 
-Using the set of \glspl{random variable} $\mathcal{X}$, we define the three factors in \Cref{tab:example-factors}: $\Psi(LN_1,EC_2)$, $\Psi(F\rs N_2,EC_2)$, and $\Psi(LN_1,F\rs N_2)$.
+Using the set of \glspl{random variable} $\mathcal{X}$, we define the three factors in \Cref{tab:example-factors}: $\Psi(LN_1,EC_2)$, $\Psi(LN_2,EC_2)$, and $\Psi(LN_1,LN_2)$.
 The values for the factors are calculated in the following way:
 For every reference string in \Cref{fig:example-reference-strings}, which follows the given \glspl{assignment} to a \gls{factor}, we add $10$ to the corresponding factor value.
 The number $10$ is chosen arbitrarily and, in a practical use case, determining this number is part of the learning process (see \Cref{sec:learning-crfs}).
-As an example, for three of the four reference strings in \Cref{fig:example-reference-strings} we have $LN_1=\mathit{false}$ and $F\rs N_2=\mathit{false}$.
-Thereby, $\Psi(LN_1=\mathit{false},F\rs N_2=\mathit{false})=30$.
+As an example, for three of the four reference strings in \Cref{fig:example-reference-strings} we have $LN_1=\mathit{false}$ and $LN_2=\mathit{true}$.
+Thereby, $\Psi(LN_1=\mathit{false},LN_2=\mathit{true})=30$.
 If, on the other hand, no reference string agrees with the \glspl{assignment}, we set the factor value to $1$.
 This value, again, is chosen arbitrarily.
 The \gls{markov network} that results from the three \glspl{factor} is shown in \Cref{fig:example-networks}.
@@ -324,31 +322,31 @@ $\Psi(LN_1,EC_2)$\par
 \hfill
 \begin{minipage}{0.5\linewidth}
 \centering
-$\Psi(F\rs N_2,EC_2)$\par
+$\Psi(LN_2,EC_2)$\par
 \smallskip
 \begin{tabular}{c c c}
  \toprule
- $F\rs N_2$ & $EC_2$ & Value \\
+ $LN_2$ & $EC_2$ & Value \\
  \midrule
  $\mathit{false}$ & $\mathit{false}$ & $10$ \\
- $\mathit{false}$ & $\mathit{true}$ & $20$ \\
+ $\mathit{false}$ & $\mathit{true}$ & $1$ \\
  $\mathit{true}$ & $\mathit{false}$ & $10$ \\
- $\mathit{true}$ & $\mathit{true}$ & $1$ \\
+ $\mathit{true}$ & $\mathit{true}$ & $20$ \\
  \bottomrule
 \end{tabular}
 \end{minipage}
 \medskip
 \begin{center}
-$\Psi(LN_1,F\rs N_2)$\par
+$\Psi(LN_1,LN_2)$\par
 \smallskip
 \begin{tabular}{c c c}
  \toprule
- $LN_1$ & $F\rs N_2$ & Value \\
+ $LN_1$ & $LN_2$ & Value \\
  \midrule
- $\mathit{false}$ & $\mathit{false}$ & $30$ \\
- $\mathit{false}$ & $\mathit{true}$ & $1$ \\
- $\mathit{true}$ & $\mathit{false}$ & $1$ \\
- $\mathit{true}$ & $\mathit{true}$ & $10$ \\
+ $\mathit{false}$ & $\mathit{false}$ & $1$ \\
+ $\mathit{false}$ & $\mathit{true}$ & $30$ \\
+ $\mathit{true}$ & $\mathit{false}$ & $10$ \\
+ $\mathit{true}$ & $\mathit{true}$ & $1$ \\
  \bottomrule
 \end{tabular}
 \end{center}
@@ -365,13 +363,13 @@ The intuition is that the two factors are multiplied by aligning their common se
 One way of calculating the \gls{factor product} of the three \glspl{factor} in \Cref{tab:example-factors} is the following:
 \begin{equation*}
   \begin{split}
-  &\Psi(LN_1,EC_2)\times\Psi(F\rs N_2,EC_2)\Psi(LN_1,F\rs N_2)\\
-  &\hspace{4em}=\Psi(LN_1,F\rs N_2,EC_2)\times\Psi(LN_1,F\rs N_2)\\
-  &\hspace{4em}=\Psi(LN_1,F\rs N_2,EC_2).
+  &\Psi(LN_1,EC_2)\times\Psi(LN_2,EC_2)\Psi(LN_1,LN_2)\\
+  &\hspace{4em}=\Psi(LN_1,LN_2,EC_2)\times\Psi(LN_1,LN_2)\\
+  &\hspace{4em}=\Psi(LN_1,LN_2,EC_2).
   \end{split}
 \end{equation*}
-Note that in general the $\Psi(LN_1,F\rs N_2,EC_2)$ in line two and three are not the same.
-The concrete values for $\Psi(LN_1,F\rs N_2,EC_2)$ are shown in \Cref{tab:example-factor-product}.
+Note that in general the $\Psi(LN_1,LN_2,EC_2)$ in line two and three are not the same.
+The concrete values for $\Psi(LN_1,LN_2,EC_2)$ are shown in \Cref{tab:example-factor-product}.
 This demonstrates why the values in \Cref{tab:example-factors} are greater than $0$.
 If a value would be $0$, all factor products involving it would also be $0$.
 
@@ -391,8 +389,8 @@ Here, $\tilde{P}(X_1,\dots,X_N)$ is an unnormalized measure and $Z$ is a \gls{no
 It guarantees that the \gls{probability distribution} sums to $1$.
 Having a \gls{gibbs distribution} $P$ where each $\mathbf{D}_k$, $1\leq k \leq K$ is a complete subgraph of a \gls{markov network} $\mathcal{H}$, we say that $P$ factorizes over $\mathcal{H}$~\citep{koller2009probabilistic}.
 
-Based on the two \glspl{factor} from \Cref{tab:example-factors}, we now use \Cref{equ:gibbs-distribution} to calculate $P(EC_2=\mathit{false},F\rs N_2=\mathit{true},LN_1=\mathit{true})\approx 0.2976$ (see \cref{app:subsec-gd-example-calculation}).
-For the full distribution $P(EC_2,F\rs N_2,LN_1)$ see \cref{app:subsec-gd-full-distribution}.
+Based on the two \glspl{factor} from \Cref{tab:example-factors}, we now use \Cref{equ:gibbs-distribution} to calculate $P(EC_2=\mathit{false},LN_2=\mathit{false},LN_1=\mathit{true})\approx 0.2976$ (see \cref{app:subsec-gd-example-calculation}).
+For the full distribution $P(EC_2,LN_2,LN_1)$ see \cref{app:subsec-gd-full-distribution}.
 
 \bigskip
 
@@ -464,31 +462,31 @@ $\epsilon(LN_1,EC_2)$\par
 \hfill
 \begin{minipage}{0.5\linewidth}
 \centering
-$\epsilon(F\rs N_2,EC_2)$\par
+$\epsilon(LN_2,EC_2)$\par
 \smallskip
 \begin{tabular}{c c l}
  \toprule
- $F\rs N_2$ & $EC_2$ & \multicolumn{1}{c}{Value} \\
+ $LN_2$ & $EC_2$ & \multicolumn{1}{c}{Value} \\
  \midrule
  $\mathit{false}$ & $\mathit{false}$ & $-\ln(10)\approx-2.3026$ \\
- $\mathit{false}$ & $\mathit{true}$ & $-\ln(20)\approx-2.9957$ \\
+ $\mathit{false}$ & $\mathit{true}$ & $-\ln(1)\ \ = \ \ \ 0$ \\
  $\mathit{true}$ & $\mathit{false}$ & $-\ln(10)\approx-2.3026$ \\
- $\mathit{true}$ & $\mathit{true}$ & $-\ln(1)\ \ = \ \ \ 0$ \\
+ $\mathit{true}$ & $\mathit{true}$ & $-\ln(20)\approx-2.9957$ \\
  \bottomrule
 \end{tabular}
 \end{minipage}
 \medskip
 \begin{center}
-$\epsilon(LN_1,F\rs N_2)$\par
+$\epsilon(LN_1,LN_2)$\par
 \smallskip
 \begin{tabular}{c c l}
  \toprule
- $LN_1$ & $F\rs N_2$ & \multicolumn{1}{c}{Value} \\
+ $LN_1$ & $LN_2$ & \multicolumn{1}{c}{Value} \\
  \midrule
- $\mathit{false}$ & $\mathit{false}$ & $-\ln(30)\approx-3.4012$ \\
- $\mathit{false}$ & $\mathit{true}$ & $-\ln(1)\ \ =\ \ \ 0$ \\
- $\mathit{true}$ & $\mathit{false}$ & $-\ln(1)\ \ =\ \ \ 0$ \\
- $\mathit{true}$ & $\mathit{true}$ & $-\ln(10)\approx-2.3026$ \\
+ $\mathit{false}$ & $\mathit{false}$ & $-\ln(1)\ \ =\ \ \ 0$ \\
+ $\mathit{false}$ & $\mathit{true}$ & $-\ln(30)\approx-3.4012$ \\
+ $\mathit{true}$ & $\mathit{false}$ & $-\ln(10)\approx-2.3026$ \\
+ $\mathit{true}$ & $\mathit{true}$ & $-\ln(1)\ \ =\ \ \ 0$ \\
  \bottomrule
 \end{tabular}
 \end{center}
@@ -501,22 +499,22 @@ $\epsilon(LN_1,F\rs N_2)$\par
 Using the fact that in practice many values of an \gls{energy function} $\epsilon(\mathbf{D})$ are $0$, it is possible to represent its information in a more compact way.
 This is done using a number of \glspl{feature function} $f(\mathbf{D})$ and the same number of weights $\theta$.
 
-For example, we can represent $\epsilon(LN_1,F\rs N_2)$ from \Cref{tab:example-energy-functions} as the sum over the two indicator functions
+For example, we can represent $\epsilon(LN_1,LN_2)$ from \Cref{tab:example-energy-functions} as the sum over the two indicator functions
 \begin{equation*}
   \begin{split}
-    f_1(F\rs N_2,LN_1)&=\identityfun\left\{F\rs N_2{=}\mathit{false},LN_1{=}\mathit{false}\right\}\\
-    f_2(F\rs N_2,LN_1)&=\identityfun\left\{F\rs N_2{=}\mathit{true},LN_1{=}\mathit{true}\right\}
+    f_1(LN_2,LN_1)&=\identityfun\left\{LN_2{=}\mathit{true},LN_1{=}\mathit{false}\right\}\\
+    f_2(LN_2,LN_1)&=\identityfun\left\{LN_2{=}\mathit{false},LN_1{=}\mathit{true}\right\}
   \end{split}
 \end{equation*}
 which are multiplied with the weights $\theta_1{=}-\ln(30)$ and $\theta_2{=}-\ln(10)$:
 \begin{equation*}
-  \epsilon\left(F\rs N_2,LN_1\right)=\left(-\ln(30)\cdot f_1(F\rs N_2,LN_1)\right)+\left(-\ln(10)\cdot f_2(F\rs N_2,LN_1)\right).
+  \epsilon\left(LN_2,LN_1\right)=\left(-\ln(30)\cdot f_1(LN_2,LN_1)\right)+\left(-\ln(10)\cdot f_2(LN_2,LN_1)\right).
 \end{equation*}
-Given the \glspl{assignment} $F\rs N_1{=}\mathit{true}$ and $LN_1{=}\mathit{true}$, we have:
+Given the \glspl{assignment} $LN_2{=}\mathit{false}$ and $LN_1{=}\mathit{true}$, we have:
 \begin{equation*}
   \begin{split}
-  \epsilon\left(F\rs N_2{=}\mathit{true},LN_1{=}\mathit{true}\right)&=\left(-\ln(30)\cdot f_1(F\rs N_2{=}\mathit{true},LN_1{=}\mathit{true})\right)\\
-  &\hspace{4em}+\left(-\ln(10)\cdot f_2(F\rs N_2{=}\mathit{true},LN_1{=}\mathit{true})\right)\\
+  \epsilon\left(LN_2{=}\mathit{false},LN_1{=}\mathit{true}\right)&=\left(-\ln(30)\cdot f_1(LN_2{=}\mathit{false},LN_1{=}\mathit{true})\right)\\
+  &\hspace{4em}+\left(-\ln(10)\cdot f_2(LN_2{=}\mathit{false},LN_1{=}\mathit{true})\right)\\
   &=\left(-\ln(30)\cdot 0\right)+\left(-\ln(10)\cdot 1\right)\\
   &=-\ln(10).
   \end{split}
@@ -580,7 +578,7 @@ Given a set of \glspl{factor} $\{\Psi_1(\mathbf{D}_1),\dots\Psi_K(\mathbf{D}_K)\
   \end{split}
 \end{equation}
 Here, similar to the \gls{gibbs distribution} in \Cref{equ:gibbs-distribution}, $\tilde{P}(\mathbf{Y},\mathbf{X})$ is the unnormalized measure and $Z(\mathbf{X})$ is a \gls{normalizing constant}~\citep{koller2009probabilistic}.
-Additionally, we have that $\mathbf{D}_k=\mathbf{X}\cup\mathbf{Y}$ and $\mathbf{D}_k\not\subseteq\mathbf{X}$.
+Additionally, we have that $\mathbf{D}_k\subseteq\mathbf{X}\cup\mathbf{Y}$ and $\mathbf{D}_k\not\subseteq\mathbf{X}$.
 In other words, $\mathbf{D}_k$ needs to contain at least one $Y_n\in \mathbf{Y}$.
 
 In \Cref{app:subsec-gd-example-calculation} we demonstrate that in the case of $\mathbf{D}_k\subseteq \mathbf{X}$ the term $\Psi_k(\mathbf{D}_k)$ ``cancels out'' during the calculation of $P(\mathbf{Y}\mid\mathbf{X})$.
@@ -590,7 +588,7 @@ In \Cref{equ:gibbs-distribution}, $Z$ normalizes $\tilde{P}(X_1,\dots,X_N)$ with
 However, in \Cref{equ:crf-factor}, $Z(\mathbf{X})$ normalizes $\tilde{P}(\mathbf{Y},\mathbf{X})$ with respect to the given $\mathbf{X}$.
 This way of normalizing results in the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$ (cf. \Cref{equ:conditional-probability-random-variable}).
 
-\Cref{app:subsec-crf-example-calculation} contains $P(LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true}\mid EC_2{=}\mathit{false})$ as an exemplary calculation according to the \glspl{factor} in \Cref{tab:example-factors}.
+\Cref{app:subsec-crf-example-calculation} contains $P(LN_1{=}\mathit{true},LN_2{=}\mathit{false}\mid EC_2{=}\mathit{false})$ as an exemplary calculation according to the \glspl{factor} in \Cref{tab:example-factors}.
 
 \bigskip
 
@@ -669,7 +667,7 @@ Returning to our argument that \glspl{feature function} are a move compact encod
 This gives us $9$ pairs of \glspl{feature function} and weights instead of the $4\cdot 4=16$ entries in the \gls{factor} tables.
 In \Cref{app:subsec-lccrf-example-calculation}, we show an exemplary calculation for
 \begin{equation*}
-P(\texttt{start}{=}\mathit{true},LN_1{=}\mathit{true},F\rs N_2{=}\mathit{true}\mid EC_1{=}\mathit{true},EC_2{=}\mathit{false}).
+P(\texttt{start}{=}\mathit{true},LN_1{=}\mathit{true},LN_2{=}\mathit{false}\mid EC_1{=}\mathit{true},EC_2{=}\mathit{false}).
 \end{equation*}
 \bigskip
 
@@ -718,7 +716,7 @@ In order to show the computational complexity of this inferencing task, we will 
 According to \Cref{equ:linear-chain-crf-factor} we have:
 \begin{equation}
   \label{equ:linear-chain-crf-z}
-  Z(\mathbf{X}) = \sum_{\mathbf{Y}}\left(\prod_{n=1}^{N}\left(\Psi_n\left(\vphantom{\tilde{x}}Y_n,Y_{n-1}\right)\times\Psi_n\left(Y_n,\mathbf{\tilde{X}}_n\right)\right)\right).
+  Z(\mathbf{X}) = \sum_{\mathbf{Y}}\left(\prod_{n=1}^{N}\left(\Psi_n\left(\vphantom{\tilde{X}}Y_n,Y_{n-1}\right)\times\Psi_n\left(Y_n,\mathbf{\tilde{X}}_n\right)\right)\right).
 \end{equation}
 Since we calculate the \gls{factor product} for every possible joint assignment $\mathbf{\tilde{y}}\in \mathit{Val}(\mathbf{Y})$, the computation of $Z(\mathbf{X})$ is exponential in $N$, the number of \glspl{random variable} in $\mathbf{Y}$:
 \begin{equation}

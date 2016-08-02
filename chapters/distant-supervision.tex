@@ -82,8 +82,8 @@ Again using the author extraction example from \Cref{cha:crfs}, we define an inc
 \end{equation*}
 
 %Mia Wagner, Max Friedrich Schmidt (2010): Fourth title, Berlin: Springer.
-Thereby, the word $w_3{=}\text{``Friedrich''}$ is ambiguously annotated as either a last name or not a last name.
-This can also be seen as a \gls{partial annotation} since $|\mathpzc{L}_2|=|Val(LN_2)|$.
+Thereby, the word $w_4{=}\text{``Friedrich''}$ is ambiguously annotated as either a last name or not a last name.
+This can also be seen as a \gls{partial annotation} since $|\mathpzc{L}_4|=|Val(LN_4)|$.
 
 \bigskip
 
@@ -96,11 +96,11 @@ For this, we let $\mathbf{Y}_{\bm{T}}$ be the set of all \glspl{full assignment}
   \end{split}
 \end{equation}
 
-Based on our incomplete annotation $\bm{L}_1$, we have the following set of \glspl{full assignment} for our \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf}:
+Based on our incomplete annotation $\bm{L}_{LN}$, we have the following set of \glspl{full assignment}:
 \begin{equation*}
 \begin{split}
-  \mathbf{Y}_{\bm{L}}=&\left\{\{\text{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{false}\},\right.\\
-  &\hspace{0.15cm}\left.\{\text{start}{=}\mathit{true},LN_1{=}\mathit{false},F\rs N_2{=}\mathit{true}\}\right\}.\\
+  \mathbf{Y}_{\bm{L}_{LN}}=&\left\{\{LN_1{=}\mathit{false},LN_2{=}\mathit{true},\dots,LN_4{=}\mathit{false},\dots,LN_{10}{=}\mathit{false}\}\right.\\
+  &\hspace{0.15cm}\left.\{LN_1{=}\mathit{false},LN_2{=}\mathit{true},\dots,LN_4{=}\mathit{true},\dots,LN_{10}{=}\mathit{false}\}\right\}.\\
 \end{split}
 \end{equation*}
 
