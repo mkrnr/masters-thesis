@@ -7,14 +7,14 @@ We then consider the generation of distantly supervised training sets which incl
 Using the reference strings with matched author names, we then build \gls{ge} constraints.
 The last section of this chapter describes the learning of \glspl{linear-chain crf} using the reference strings as an unlabeled training set in combination with the generated \gls{ge} constraints.
 
-The source code of the discussed implementation is available on GitHub\footnote{\url{https://github.com/mkrnr/reference-string-extraction} (accessed July~25,~2016)} under a GNU General Public License.
+The source code of the discussed implementation is available online\footnote{\url{http://mkrnr.de/author-extraction} (accessed Jul.~25,~2016)} under a GNU General Public License.
 
 \section{Preprocessing}\label{sec:i-preprocessing}
 
-The corpus that was used for our study consists of \num{32470} research papers\footnote{The papers were downloaded on March~16,~2016.} that are accessible as \gls{pdf} documents via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed April~21,~2016)}.
+The corpus that was used for our study consists of \num{32470} research papers\footnote{The papers were downloaded on March~16,~2016.} that are accessible as \gls{pdf} documents via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed Apr.~21,~2016)}.
 
 Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
-Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed April~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
+Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed Apr.~21,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
 This is done by also taking into account the formatting of the document, for example when a research paper contain two text columns per page.
 This way we were able to extract the text of \num{31795} research papers.
 
@@ -23,7 +23,7 @@ This way we were able to extract the text of \num{31795} research papers.
 After extracting the text from the \glspl{pdf}, the next step is to identify and extract reference sections.
 As discussed in \Cref{sec:ae-preprocessing}, this is necessary to prevent the author matching algorithm from matching author names in the body of the research paper.
 
-The reference string parsing package ParsCit\footnote{\url{http://wing.comp.nus.edu.sg/parsCit/} (accessed July~06,~2016)} uses regular expressions to identify the heading of a reference section by matching against strings such as ``References'', ``Bibliography'', or ``References and Notes''~\citep{councill2008parscit}.
+The reference string parsing package ParsCit\footnote{\url{http://wing.comp.nus.edu.sg/parsCit/} (accessed Jul.~06,~2016)} uses regular expressions to identify the heading of a reference section by matching against strings such as ``References'', ``Bibliography'', or ``References and Notes''~\citep{councill2008parscit}.
 Further heuristics detect whether a found reference section heading was found too early in the text~\citep{councill2008parscit}.
 After the start is identified, another regular expression is used to search for the end of the reference section.
 
@@ -60,7 +60,7 @@ Both have in common that author names are separated into first names and last na
 
 \bigskip
 
-The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed April~27,~2016)}\glsunset{gnd} -- German for integrated authority file --  which is published by the German National Library in cooperation with other library networks and institutions.
+The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed Apr.~27,~2016)}\glsunset{gnd} -- German for integrated authority file --  which is published by the German National Library in cooperation with other library networks and institutions.
 The \gls{gnd} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
 Further, it distinguishes between differentiated and undifferentiated person~\citep{hochstein2013ihr}.
 A differentiated person is connected to exactly one individual whereas for an undifferentiated person, no such connection is modeled.
@@ -69,7 +69,7 @@ This for example is the case for historical personalities for which no precise r
 The \gls{gnd} data set is available under a Creative Commons Zero license and can be downloaded in the following formats: Marc 21, MARCXML, RDF/XML, Turtle, and JSON-LD.\@
 
 For our author extraction, we use the Turtle format which is a format for \gls{rdf} data.
-To extract the author names, we used the Apache Jena\footnote{\url{https://jena.apache.org/} (accessed July~25,~2016)} framework.
+To extract the author names, we used the Apache Jena\footnote{\url{https://jena.apache.org/} (accessed Jul.~25,~2016)} framework.
 After loading the Turtle file into an \gls{rdf} triple store, we extracted the author names using a \gls{sparql} query.
 The used \gls{sparql} query for extracting differentiated persons is shown in \Cref{fig:gnd-sparql-query}.
 \lstset{language=SQL,morekeywords={PREFIX}}
@@ -113,8 +113,8 @@ The table also contains statistics on the number of individual names.
 
 \bigskip
 
-The second source is the social science portal Sowiport\footnote{\url{http://sowiport.gesis.org/} (accessed July~5,~2016)} which is maintained by GESIS --- Leibniz Institute for the Social Sciences.
-From this portal, a list of author names was extracted via an Apache Solr\footnote{\url{http://lucene.apache.org/solr/} (accessed July~25,~2016)} query on June~13,~2016.
+The second source is the social science portal Sowiport\footnote{\url{http://sowiport.gesis.org/} (accessed Jul.~5,~2016)} which is maintained by GESIS --- Leibniz Institute for the Social Sciences.
+From this portal, a list of author names was extracted via an Apache Solr\footnote{\url{http://lucene.apache.org/solr/} (accessed Jul.~25,~2016)} query on June~13,~2016.
 The results were provided in a \gls{xml} file.
 
 In this file, an author name is represented as a string in which the last names are separated from the first names with a comma.
@@ -150,6 +150,8 @@ Being a directed graph, it naturally solves the issue of overlaps by allowing a 
 The graph has a hierarchy since it it acyclic.
 In addition, it has ordered descendants.
 Thereby, for any given node, the order of it's child nodes is defined.
+As a part of this thesis, a Java library for the \gls{goddag} data structure was implemented that allows the generation, serialization, and visualization of \glspl{goddag}.
+It is available online\footnote{\url{http://mkrnr.de/goddag} (accessed Aug.~5,~2016)} under a GNU General Public License.
 
 \bigskip
 
@@ -294,11 +296,7 @@ The default for this parameter is set to $10$.
 
 Further, we can specify the maximum number of iterations during the learning with gradient ascent.
 In our evaluation setup, it was sufficient to set this number to a high value, in our case $10,000$ since the learning always converged in a reasonable time.
-
-A last parameter that we can specify is the number of resets of the L-\gls{bfgs} calculation.
-This can improve the result of the learning since the \dots\todo{continue based on distant supervision section}
-Yet, empirical tests have shown that for our evaluation, modifying this parameter does not have a significant impact on the resulting model.
-Thereby, we set the number of resets to $4$ for all experiments.
+Statistics on the learning runtime are shown in \Cref{app:learning-scalability}.
 
 \subsection{Feature Engineering}\label{subsec:i-feature-engineering}
 

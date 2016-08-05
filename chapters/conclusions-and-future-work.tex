@@ -1,5 +1,7 @@
-\chapter{Conclusions and Future Work}\label{cha:conclusion-and-future-work}
-\section{Conclusions}\label{sec:conclusion}
+\chapter{Conclusion and Future Work}\label{cha:conclusion-and-future-work}
+
+\section{Conclusion}\label{sec:conclusion}
+
 In this thesis, we presented an approach for the extraction of author names from reference sections of research papers from the area of German social sciences.
 This includes the generation of distantly supervised training sets from unlabeled reference sections and the learning of a \gls{crf} model in combination with \gls{ge} constraints.
 
@@ -14,18 +16,42 @@ This is especially interesting since we do not rely on manually labeled data.
 
 \section{Future Work}\label{sec:future-work}
 
-\itodo{discuss challenges of distant supervision on our task (see reinanda2014prior)}
-\itodo{sorting of PDFs into different categories (very well suited for extraction or not suited)}
-\itodo{usage of available meta data about the paper (e.g.\ conference/journal title), e.g.\ to learn different models}
-\itodo{add more labels and data from distant supervision, e.g.\ title, year, conference\dots}
-\itodo{handling special case with dash in name, line break (consider Hans-Peter vs Mich-ael),--- or ``ders.'' instead of name,\dots}
-\itodo{add organization names as authors}
-\itodo{expand j in Generalized Expectation to include context (+ implementation)}
-\itodo{implementation: storing of learned model}
-\itodo{segmentation into reference strings: using year as anchor?\citep{powley2007high}}
-\itodo{}
-\itodo{evaluate impact of features (see \citep{bellare2007learning})}
-\itodo{higher order crf to handle line breaks (currently kicked out)}
+There are several ways in which we aim to improve the performance of our approach for the author extraction problem.
 
+For this, we will implement a better handling of cases such as line breaks in an author name or the usage of ``ders.'' to refer to a previously mentioned author.
+Further, we will include cases in which an institution is named in a reference string instead of an individual author.
 
+We also plan to extend our \glspl{ge constraint} which currently only consider individual words.
+Especially for first or last names that appear frequently, this could reduce the expressive power of the \gls{ge constraint} as part of the \gls{objective function}.
+Our intuition is that increasing the number of words per \gls{ge constraint} can contribute to an \gls{objective function} that better represents the information from the distantly supervised training set.
+For this, also the corresponding constraint functions need to be extended.
+
+Another approach for improving the performance could be to learn separate models for different categories of research papers.
+With the available meta data, such categories could be journals, conferences, or publishers.
+Such a separation is possible due to the large amounts of automatically generated training data using distant supervision.
+
+Currently, we only consider reference strings that appear in a separate reference section.
+In the area of German social sciences, journals such as ``Totalitarismus und Demokratie''\footnote{\url{http://www.hait.tu-dresden.de/td/home.asp} (accessed Aug.~5,~2016)} or ``S\"{u}dosteuropäische Hefte''\footnote{\url{http://suedosteuropaeische-hefte.org/} (accessed Aug.~5,~2016)} follow a citation style where the reference strings are listed in footnotes.
+We plan to extend our approach to also cover such citation styles by localizing reference strings outside of the reference section.
+
+\bigskip
+
+To construct a citation index, additional fields in the reference strings such as the title or the publication year need to be extracted.
+We will thereby extend our approach to include such fields.
+For this, it will be interesting to compare the performance of combined models that cover all fields with the performance of individual models for each field type.
+
+Also, the steps that precede the bibliographic information extraction will be considered for improvements.
+For example, the extraction of text from a \gls{pdf} document can result in malformed text.
+One possible reason is that the \gls{pdf} contains a scanned version of the research paper.
+A heuristic should be implemented that detects such cases.
+
+The application in a productive context further requires a confidence measure for a predicted labeling.
+Thereby, a task is to derive such a confidence measure from the result of the \gls{viterbi algorithm} that is used for calculating the most likely labeling of a given model (see \todo{add}).
+This confidence measure can be used in the following steps in citation index creation.
+Further, instead of only considering the most likely label, a number of alternative labels can be provided to the following steps together with their confidence measures.
+
+\bigskip
+
+We also plan to apply our approach to previously used datasets such as the \textit{CiteSeerX}\footnote{\url{http://citeseerx.ist.psu.edu/index} (accessed Aug.~5,~2016)} dataset used in \citet{councill2008parscit} or the frequently used Cora dataset \citep[e.g.][]{peng2004accurate,councill2008parscit,wu2014citeseerx}.
+In order to apply a distantly supervised approach, related sets of research papers as well as knowledge bases need to be identified.
 

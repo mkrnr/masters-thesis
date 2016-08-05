@@ -1,16 +1,15 @@
 \chapter{Related Work}\label{cha:related-work}
-In this chapter we will discuss some of the related work in the area of entity recognition with a focus on bibliographic information extraction from research papers.
-We will also consider approaches on entity recognition that involve the usage of unlabeled data during the learning process.
+In this chapter, we will discuss some of the related work in the area of entity recognition with a focus on bibliographic information extraction from research papers.
+We will also consider an approach on entity recognition that uses unlabeled data during the learning process.
 
 \bigskip
 
 There has been a large body of research on bibliographic information extraction from research papers.
 \citet{giles1998citeseer} propose one of the first autonomous citation indexing systems called \emph{CiteSeer}.
-It converts papers that are extracted from the World Wide Web to text, extracts the references and the context in which they are made in the body of the paper, and stores the information in a database.
-Yet, the extraction happens based on simple heuristics which results in a relatively low accuracy compared to more advanced approaches.
-In an evaluation of \num{5093} documents related to ``neural networks'', $80.2\%$ of the titles, $82.1\%$ of the authors, and $44.2\%$ of the page numbers were extracted correctly from the retrieved references~\cite{giles1998citeseer}.
-
-\itodo{add some other approaches: HMM\dots}
+The system uses heuristics following an ``invariants first'' philosophy for detecting the different fields in reference strings~\citep{giles1998citeseer}.
+Thereby, fields that appeared in similar positions for all reference strings are parsed first.
+Additionally, databases that contain for example author or journal names are used.
+In an evaluation of \num{5093} documents related to the topic of ``neural networks'', $80.2\%$ of the titles, $82.1\%$ of the authors, and $44.2\%$ of the page numbers were extracted correctly from the retrieved references~\cite{giles1998citeseer}.
 
 \citet{peng2004accurate}, \citet{councill2008parscit}, as well as \citet{groza2012reference} rely on \glspl{crf}~\citep{lafferty2001conditional} for extracting bibliographic information from research papers.
 The three approaches followed the same steps:
@@ -27,22 +26,18 @@ For the author labels, they achieve a \gls{f1 score} of $99.3\%$ for the Cora da
 \bigskip
 
 Instead of relying on fully labeled data, \citet{lu2013web} use the approach of \gls{distant supervision} in combination with \glspl{ge criterion} to learn \gls{crf} models.
-\Gls{distant supervision} uses external knowledge bases for creating partially labeled training data from previously unlabeled data~\citep{mintz2009distant}.
-\Glspl{ge criterion} contribute to an objective function that allows the learning of probabilistic models using partially labeled data~\citep{mann2007simple}.
-\citet{lu2013web} focus on the detection of named entities such as organizations, persons, or places from web pages~\citep{lu2013web}.
-After additionally applying a collective detection model, an evaluation on \num{16755} manually labeled named entities shows a \gls{f1 score} of $72.56\%$ with a \gls{precision} of $70.46\%$ and \gls{recall} of $74.79\%$.
+Their goal is to extract named entities such as organizations, persons, or places from web pages~\citep{lu2013web}.
+After additionally applying a collective detection model, an evaluation on \num{16755} manually labeled named entities shows a \gls{f1 score} of $72.56\%$ with a \gls{precision} of $70.46\%$ and \gls{recall} of $74.79\%$~\citep{lu2013web}.
 
 \bigskip
 
-In summary, several aspects of the bibliographic information extraction from research papers can be achieved with a considerably good performance.
+To summarize, several aspects of the bibliographic information extraction from research papers can be achieved with a considerably good performance.
 Especially the segmentation of a given reference string into its elements by using \glspl{crf} \citep{peng2004accurate,councill2008parscit,groza2012reference} shows very promising results.
 Yet, all current approaches have in common that they rely on manually labeled data sets for training their models.
 Manually labeled data sets are expensive and thereby usually only exist in smaller quantities.
 In our particular use case of extracting references from German social science research papers, no such data set is currently available.
 \citet{lu2013web} show a promising approach that allows a distantly supervised learning of \glspl{crf} using \glspl{ge criterion}.
 
-\bigskip
-
-In the following we will investigate how \gls{distant supervision} can be applied on our author extraction problem.
-For this, we will first introduce \glspl{crf} as a framework for modeling \glspl{probabilistic graphical model}.
+In the following, we will first discuss \glspl{crf} as well as \gls{distant supervision} in general.
+We will then consider our author extraction problem and how a distantly supervised approach can be applied to it.
 

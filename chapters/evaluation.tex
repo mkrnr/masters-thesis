@@ -37,7 +37,7 @@ From this, we selected the $54$ research papers that satisfy the following requi
 
 We then manually tagged all authors in the reference section, while also distinguishing between their first names and last names.
 Statistics of the resulting labels for the \gls{bio} and \gls{bieo} formats are shown in \Cref{tab:statistics-manually-tagged}.
-\begin{table}[t]
+\begin{table}
 \centering
 \begin{minipage}[t]{0.3\linewidth}
 \centering
@@ -111,7 +111,7 @@ To compare the two data sources, we additionally created the \texttt{swp-trim} d
 It contains the same total number of authors as the \texttt{gnd-full} data set (see \Cref{tab:knowledge-base-statistics}).
 Further, we combine both the \texttt{gnd-full} and \texttt{swp-full} data set to see if we result in a better performance than when using the data sets separately.
 In \Cref{tab:author-sets-author-labels-f1} and \Cref{tab:author-sets-all-labels-f1}, we compare the \glspl{f1 score} of the resulting models for author labels and all labels.
-\begin{table}[t]
+\begin{table}
 \centering
 \begin{tabular}{c c c c c c}
   \toprule
@@ -127,7 +127,7 @@ In \Cref{tab:author-sets-author-labels-f1} and \Cref{tab:author-sets-all-labels-
 \caption{\Glspl{f1 score} of author labels for different author data sets and number of reference sections. The best \gls{f1 score} in each row is highlighted.}
 \label{tab:author-sets-author-labels-f1}
 \end{table}
-\begin{table}[t]
+\begin{table}
 \centering
 \begin{tabular}{c c c c c c}
   \toprule
@@ -156,7 +156,7 @@ Thereby, a direct comparison of the two formats is possible.
 
 For our experiments, we use the \texttt{swp} data set and create labelings in the two different formats for both our training sets and manually labeled testing sets.
 The results are shown in \Cref{fig:eval-end-tags}.
-\begin{figure}[t]
+\begin{figure}
 \input{figures/eval-end-tags}
 \caption{Results for models using the \gls{bio} labeling in comparison to the \gls{bieo} labeling.}
 \label{fig:eval-end-tags}
@@ -174,15 +174,21 @@ For example, we assume that the label \texttt{B-FN} was used in $25\%$ of all au
 Further, we specify that $80\%$ of our probability mass is assigned to the label \texttt{O}.
 Therefore, we assign $25\%$ of the remaining $20\%$ of the probability mass to the label \texttt{B-FN}.
 
-\begin{figure}[t]
+The evaluation results are shown in \Cref{fig:eval-other-percentages}.
+\begin{figure}
 \input{figures/eval-other-percentages}
 \caption{Results for different probability masses assigned to the \texttt{O} label for building \gls{ge} constraints using the \texttt{swp-full} data set. 500, 1000, and 1500 are the number of used reference sections.}
 \label{fig:eval-other-percentages}
 \end{figure}
+They suggest that increasing the probability mass of the \texttt{O} label also increases the \gls{precision} of the author labels but decreases their \gls{recall}.
+As a result, this could provide a way of influencing the trade-off between the two metrics.
+When considering the \gls{f1 score}, a probability mass of \texttt{O} of around 0.9 shows the best results considering both author labels and all labels.
+
+\bigskip
 
 \RQ{4} is focused on the ratio between matched and unmatched $w_n$ that are considered for building \gls{ge} constraints.
 \Cref{tab:ssoar-number-of-tags} shows the number of \texttt{AU} nodes in the resulting \glspl{goddag} based on different knowledge bases.
-\begin{table}[t]
+\begin{table}
 \centering
 \begin{tabular}{l c c c c c}
  \toprule
@@ -199,7 +205,7 @@ Further, it shows the number of nodes that have at least on \texttt{AU} as a par
 Since only between $9\%$ and $12\%$ of the words are matched to an author, we investigate a balacing of the training set.
 
 \Cref{fig:eval-other-ratios} summarizes the evaluation results for different percentages of unmatched words for the \gls{ge} constraints generation.
-\begin{figure}[t]
+\begin{figure}
 \input{figures/eval-other-ratios}
 \caption{Results for different percentages of unmatched words for building \gls{ge} constraints using the \texttt{swp-full} data set. The number of matched words is fixed. 500, 1000, and 1500 are the number of used reference sections.}
 \label{fig:eval-other-ratios}
@@ -241,7 +247,7 @@ In comparison to this derivation, we also train separate models that only contai
 The resulting labeling is referred to as \texttt{A-O-model}.
 
 \Cref{fig:eval-authors-only} shows the performance of these two approaches for the $\texttt{A-O}$ problem.
-\begin{figure}[t]
+\begin{figure}
 \input{figures/eval-authors-only}
 \caption{Evaluation results that compare the \texttt{A-O-deriv} labeling with the \texttt{A-O-model} labeling for the \texttt{A-O} problem.}
 \label{fig:eval-authors-only}
@@ -260,14 +266,12 @@ This is because the \gls{ge} constraints are generated from matched author names
 
 To address the research question, we generate several models with a varying number of reference sections in $\mathcal{U}$.
 \Cref{tab:eval-training-size} compares the models based on the metrics \gls{precision}, \gls{recall}, and \gls{f1 score} for the author labels and the \gls{f1 score} for all labels.
-\begin{table}[t]
+\begin{table}
 \hspace{-0.25\textwidth}
 \makebox[1.5\textwidth][c]{%
 \begin{tabular}{c c r r r r r r r}
   \toprule
-  %{} & Reference Sections in Training Set\\
-  %TODO center
- Node Type &Metric & \num{500} & \num{1000} & \num{1500} & \num{2000} & \num{2500}  & \num{5000} & \num{16470}\\
+  Node Type &Metric & \multicolumn{1}{c}{\num{500}} & \multicolumn{1}{c}{\num{1000}} & \multicolumn{1}{c}{\num{1500}} & \multicolumn{1}{c}{\num{2000}} & \multicolumn{1}{c}{\num{2500}}  & \multicolumn{1}{c}{\num{5000}} & \multicolumn{1}{c}{\num{16470}}\\
   \midrule
   Author &\gls{precision} & $0.7845$ & $0.8328$ & $0.8471$ & $0.8593$ & $0.8473$ & $0.8336$ & $0.8349$ \\
   Author &\gls{recall}    & $0.8581$ & $0.8768$ & $0.9103$ & $0.9082$ & $0.9094$ & $0.9118$ & $0.9158$ \\
@@ -283,6 +287,7 @@ We see that a bigger data set does not automatically lead to a better \gls{f1 sc
 Yet, increasing the number of reference sections does lead to an improved \gls{recall} of author labels.
 Again, further experiments are needed to confirm this intuition since the same configuration was used for all models.
 
+\bigskip
 
 \RQ{7} takes the \gls{markov order} of \glspl{linear-chain crf} into consideration.
 For this, we compare three different models:
@@ -293,7 +298,7 @@ For this, we compare three different models:
 \end{itemize}
 We compare the models for three different training set sizes while using the \texttt{swp-full} author data set for creating \gls{ge} constraints.
 The results are presented in \Cref{fig:eval-markov-orders}.
-\begin{figure}[t]
+\begin{figure}
 \input{figures/eval-markov-orders}
 \caption{Evaluation results that compare \glspl{linear-chain crf} of different \glspl{markov order} using the \texttt{swp-full} data set with for different numbers of reference sections.}
 \label{fig:eval-markov-orders}
@@ -302,7 +307,7 @@ They show that a \gls{markov order} zero model (\texttt{MO-0}) has a better \gls
 The combined \texttt{MO-0-1} model does not have a better recall than the \texttt{MO-0} model or a better precision than the \texttt{MO-1} model for the training set with \num{1000} reference sections.
 Yet, it always has a better \gls{f1 score} than the individual models.
 
-We did not look into higher \glspl{markov order} since they would not be applicable to larger training sets both in terms of hardware requirements and runtime using the current implementation.
+We did not consider higher \glspl{markov order} since they would not be applicable to larger training sets both in terms of hardware requirements and runtime using the current implementation.
 Yet, especially for author names that consist of more than two words, a higher \gls{markov order} could lead to improvements.
 
 \bigskip
@@ -310,7 +315,7 @@ Yet, especially for author names that consist of more than two words, a higher \
 \RQ{8} aims to compare the impact of different \gls{regularization parameter} of the \gls{gaussian prior} in a \gls{linear-chain crf} model.
 Again, we use three different training set sizes and the \texttt{swp-full} author data set to compare nine different \glspl{regularization parameter} between $5$ and $45$.
 \Cref{fig:eval-gaussian} shows the corresponding evaluation results.
-\begin{figure}[t]
+\begin{figure}
 \input{figures/eval-gaussian}
 \caption{Comparison of \glspl{linear-chain crf} with different \gls{markov order} using the \texttt{swp-full} data set with for different numbers of reference sections.}
 \label{fig:eval-gaussian}
@@ -326,17 +331,6 @@ According to \citet{sutton2010introduction}, this is a typical choice for traini
 
 \bigskip
 
-After addressing the research questions from \Cref{cha:author-extraction}, we now look into the hardware and time requirements of our approach.
 
-First, we consider the main memory consumption of the learning process.
-For this, we learn models with using a varying number of reference sections.
-This changes both the size of the unlabeled data set as well as the number of \gls{ge} constraints.
-In \todo{add} we show both the absolute increase in memory consumption as well as the increase per \todo{add}.
-
-
-
-\itodo{plots}
-
-
-
+In \Cref{app:learning-scalability}, we provide some insights on the scalability of our learning approach by comparing the main memory consumption as well as the runtime for different numbers of reference sections.
 

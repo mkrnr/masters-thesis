@@ -253,13 +253,10 @@ The underlying graph $\mathcal{\tilde{K}}$ of a \gls{crf} model $\mathcal{\tilde
 As we discussed in \Cref{sec:learning-crfs}, an efficient inferencing is crucial for the learning of \gls{crf}.
 The \gls{forward-backward algorithm} allows an efficient inferencing but requires $\mathcal{\tilde{K}}$ to follow a certain sequential structure.
 
-For the use case of entity recognition, \glspl{linear-chain crf} are a popular choice~\citep[e.g.][]{peng2004accurate,mann2008generalized,ling2012fine,groza2012reference,ohta2014empirical}.
-\citet{lu2013web} also rely on \glspl{linear-chain crf} in their experiments.
-
-\Glspl{linear-chain crf} can be modeled to follow different \glspl{markov order}.
+For the use case of entity recognition, \glspl{linear-chain crf} are a popular choice~\citep[e.g.][]{peng2004accurate,mann2008generalized,ling2012fine,groza2012reference,lu2013web,ohta2014empirical}.
+They can be modeled to follow different \glspl{markov order}.
 The concept of \glspl{markov order} builds on the \textit{Markov assumption} proposed by \citet{markov1957theory}.
-For our author extraction scenario, the Markov assumption states\todo{double check} that the label of a word $w_n$ only depends on the previous $k$ words.
-Following this, a \glspl{linear-chain crf} with \gls{markov order} $k$ models dependencies between a \gls{target variable} $Y_n$ and its $k$ preceding \glspl{target variable}.
+A \glspl{linear-chain crf} with \gls{markov order} $k$ models dependencies between a \gls{target variable} $Y_n$ and its $k$ preceding \glspl{target variable}.
 
 The \gls{linear-chain crf} in \Cref{fig:example-linear-chain-crf} thereby has a \gls{markov order} of $1$.
 \Cref{fig:example-linear-chain-crf-markov-order-2} shows an example \gls{linear-chain crf} with \gls{markov order} $2$.
@@ -340,8 +337,8 @@ Currently, we do not use layout features such as the position of the word in the
 Instead, we concatenate lines by removing line breaks to allow a matching of author names that are separated into two lines.
 More details, for example on the used name dictionaries, are given in \Cref{subsec:i-feature-engineering}.
 
-In addition, we apply so-called \glspl{feature conjunction}~\citep{mccallum2002mallet}.
-They allow the learner to assign features to a word containing information about the features of its neighboring words.
-For example, the learner can assign to a word $w_n$ a feature which states that the word $w_{n-1}$ has the feature \texttt{ENDSWITHPERIOD}.
-Yet, the learner has the freedom to not include all neighbor features.
+In addition, we apply \glspl{feature conjunction}~\citep{mccallum2002mallet}.
+They allow the learner to assign features to a word based on the features of its neighboring words.
+Yet, the learner has the freedom to not include such features.
+In our learning approach and for position $n$, we add \glspl{feature conjunction} for position $n-1$ and $n+1$.
 

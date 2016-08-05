@@ -1,21 +1,15 @@
 \chapter{Introduction}\label{cha:introduction}
 
-% What is the thesis about?
-% Why is it relevant or important?
-% What are the issues or problems?
-% What is the proposed solution or approach?
-% What can one expect in the rest of the thesis?
-
-A citation index provides information on the citations between scholarly works.
-This information is essential for the knowledge discovery process when conducting research and there are several services available that provide citation indices for research areas like mathematics and physics\footnote{\url{http://related-work.net/}}, computer science\footnote{\url{http://dblp.uni-trier.de/}}, and medicine\footnote{\url{http://www.ncbi.nlm.nih.gov/pubmed}}.
-Despite its importance, there is a shortage of citation data for German social science research papers~\citep{herb2015open}.
-Even though there are commercial services available which provide citation data for a broad range of research areas, they do not provide a sufficient coverage of smaller academic fields such as the German social sciences~\citep{mayr2007exploratory}.
+A citation index provides information on the citations between publications.
+This information is essential for the knowledge discovery process when conducting research.
+Several services are available that provide citation indices for research areas such as mathematics and physics\footnote{\url{http://related-work.net/}}, computer science\footnote{\url{http://dblp.uni-trier.de/}}, and medicine\footnote{\url{http://www.ncbi.nlm.nih.gov/pubmed}}.
+Despite its importance, there is a shortage of citation data for German social science publications~\citep{herb2015open}.
+Even though a number of commercial services include citation data for a broad range of research areas, they do not provide a sufficient coverage of smaller academic fields such as the German social sciences~\citep{mayr2007exploratory}.
 In addition, commercial services generally do not publicly share their datasets which hinders a full utilization of the citation data.
 The Social Science Citation Index\footnote{\url{http://scientific.thomson.com/products/ssci/}} by Thomson Reuters in particular was criticized for being ideologically biased and containing methodological deficiencies in the citation counting~\cite{klein2004social}.
-Thereby, the motivation of this thesis is to contribute to the effort of extracting citation data from given research papers in order fill the gap regarding the German social sciences and to be less dependent on commercial services.
+Thereby, the motivation of this thesis is to contribute to the effort of extracting citation data from given research papers in order fill the gap for German social science publications and to be less dependent on commercial services.
 
 \bigskip
-
 
 Possible steps for extracting a citation index from a body of research papers are shown in \Cref{fig:extraction-pipeline}.
 \begin{figure}[t]
@@ -25,7 +19,7 @@ Possible steps for extracting a citation index from a body of research papers ar
 \end{figure}
 Assuming that the research papers are given in the \gls{pdf} format, a first step is to convert them to text files with an appropriate encoding.
 This allows a further processing of the data.
-In this approach, we further assume that all citations that are made in the body of a research paper also appear in the form of reference strings.
+In our approach, we further assume that all citations that are made in the body of a research paper also appear in the form of reference strings.
 Such reference strings can appear either in a separate reference section or in the footnotes near the according citations.
 Thereby, the second step is to extract all reference strings.
 The strings are then segmented into the different attributes that identify the referenced paper in step three.
@@ -42,7 +36,7 @@ Further, we focus on the extraction from research papers in the area of German s
 
 \bigskip
 
-Since there is no data set available to address the given problem with a supervised machine learning approach, we will look into the concept of distant supervision.
+Since there is no data set available to address the given problem with a supervised machine learning approach, we will look into the concept of \gls{distant supervision}.
 This allows an automated tagging of unlabeled data using an external knowledge base.
 In our scenario, this knowledge base is a list of author names from related research domains.
 To apply an automated tagging of author names in reference strings, several issues need to be addressed.
@@ -55,10 +49,10 @@ The probabilistic framework of \glspl{crf} is widely used for entity recognition
 Yet, their original definition by \citet{lafferty2001conditional} is only applicable on fully labeled training data whereas distant supervision provides partially labeled data.
 We will discuss two different approaches that allow the usage of distantly supervised training sets for the learning of \glspl{crf}:
 The first is a marginalization approach by \citet{tsuboi2008training}.
-The second approach uses \gls{ge} criteria that were first proposed by \citet{mann2007simple}.
-We will show that the marginalization approach is less suitable for a distantly supervised training than one using \gls{ge} criteria.
-As a result, our author extraction implementation uses \gls{ge} constraints to learn \glspl{crf}.
-This combination of distant supervision with \gls{ge} constraints for learning \glspl{crf} was first applied by \citet{lu2013web} in the context of web entity detection.
+The second approach uses \gls{ge} \textit{criteria}\glsunset{ge criterion} that were first proposed by \citet{mann2007simple}.
+We will show that the marginalization approach is less suitable for a distantly supervised training than one using \glspl{ge criterion}.
+As a result, our author extraction implementation uses \glspl{ge constraint} to learn \glspl{crf}.
+This combination of distant supervision with \glspl{ge constraint} for learning \glspl{crf} was first applied by \citet{lu2013web} in the context of web entity detection.
 
 \bigskip
 

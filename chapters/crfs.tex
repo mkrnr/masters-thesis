@@ -1,7 +1,7 @@
 \chapter{Conditional Random Fields (\glsentryshortpl{crf})}\label{cha:crfs}
 
 In this chapter, we give an introduction to the \glsfirst{crf} framework.
-We first provide an overview of relevant concepts in probability theory, graph theory, and graphical models.
+We first provide an overview of relevant concepts in probability theory and graphical models.
 Following this, we will introduce the concept of \glspl{crf} and discuss the inference and learning of \gls{crf} models.
 
 In addition to relevant definitions, we use a simplified example of the author extraction problem that we will discuss in \Cref{cha:author-extraction}.
@@ -107,7 +107,7 @@ Similarly, $EC_2$ is defined as the function that associates the value $\mathit{
 
 Given a \gls{random variable} $X$, $P(X)$ is the \gls{probability distribution} over $\mathit{Val}(X)$~\cite{koller2009probabilistic}.
 It is also referred to as the \gls{marginal distribution} over $X$.
-An \gls{assignment} of a concrete value $x\in \mathit{Val}(X)$ to $X$ is denoted as $P(X=x)$ or short $P(x)$.
+An \gls{assignment} of a concrete value $x\in \mathit{Val}(X)$ to $X$ is denoted by $P(X=x)$ or short $P(x)$.
 
 We can now define our \glspl{probability distribution} on \glspl{random variable} instead of \glspl{event}, for example:
 \begin{equation*}
@@ -168,7 +168,7 @@ The \gls{conditional probability} of an \gls{event} $\beta$ given an \gls{event}
 P(\beta\mid\alpha) = \frac{P(\alpha\cap\beta)}{P(\alpha)}.
 \end{equation}
 This definition can be extended to \glspl{random variable}.
-Given that the probability for every \gls{assignment} to $X$ is greater than zero, the \gls{conditional probability distribution} $P(Y\mid X)$ is calculated with
+Given that the probability for every \gls{assignment} to $X$ is greater than zero, the \gls{cpd}\glsunset{conditional probability distribution} $P(Y\mid X)$ is calculated with
 \begin{equation}
 \label{equ:conditional-probability-random-variable}
 P(Y\mid X) = \frac{P(X,Y)}{P(X)}
@@ -205,35 +205,16 @@ This gives us:
   \end{split}
 \end{equation*}
 
-\subsection{Graph Theory}\label{subsec:graph-theory}
-
-This subsection will give a brief overview of concepts from graph theory that are needed for describing \glspl{crf} and graphical models in general.
-
-\bigskip
-
-% TODO add explanation for converting directed graph to undirected by ignoring the directions of the edges?
-A \gls{graph} $\mathcal{K}$ consists of a set of \glspl{node} (also called vertices) $\mathcal{V}$ and a set of \glspl{edge} $\mathcal{E}$.
-In a directed \gls{graph}, a pair of \glspl{node} $(v_i,v_j)$ can be connected by directed \glspl{edge} $v_i\to v_j$.
-We write $v_i\rightleftharpoons v_j$ to denote that there is some directed edge between $v_i$ and $v_j$.
-The \glspl{node} in an undirected graph are connected by undirected \glspl{node} $v_i\undedge v_j$.
-Subsequently, directed \glspl{graph} are denoted with $\mathcal{G}$ and undirected \glspl{graph} with $\mathcal{H}$.
-\itodo{about child and parent?}
-
-Given a \gls{graph} $\mathcal{K} = (\mathcal{V},\mathcal{E})$ and $\mathcal{S}\in\mathcal{V}$, an induced \gls{subgraph} $\mathcal{K}[\mathcal{S}]$ is the \gls{graph} consisting of $(\mathcal{S},\mathcal{E'})$ where $\mathcal{E'}$ is the set of all \glspl{edge} between \glspl{node} in $\mathcal{S}$.
-In a complete \gls{subgraph}, every two \glspl{node} in $\mathcal{S}$ are connected by an \gls{edge}.
-\itodo{add definition of clique?}
-\itodo{add (reference to) example graphs}
-
 \subsection{Probabilistic Graphical Models}\label{subsec:graphical-models}
-When encoding practical problems with \glspl{probability distribution}, a key insight is that ``variables tend to interact only with a very few others''~\citep{koller2009probabilistic}.
+When encoding practical problems with \glspl{probability distribution}, a key insight is that \glspl{random variable} often only interact with a low number of other \glspl{random variable}~\citep{koller2009probabilistic}.
 This makes it possible to represent such distributions as graphs in a tractable and transparent way, allowing domain experts to evaluate their properties~\citep{koller2009probabilistic}.
 \Glspl{probabilistic graphical model} are such representations.
 
 \bigskip
 
-In a \gls{probabilistic graphical model}, the \glspl{random variable} $\mathcal{X}$ of a distribution are modeled as \glspl{node} where each \gls{node} represents one \gls{random variable} in $\mathcal{X}$. An \gls{edge} then denotes a probabilistic interaction between its two incident \glspl{node}~\citep{koller2009probabilistic}.
+In a \gls{probabilistic graphical model}, \glspl{node} represent the elements from the set of \glspl{random variable} $\mathcal{X}$ of a \gls{probability distribution}.
+An \gls{edge} then denotes a probabilistic interaction between its two incident \glspl{node}~\citep{koller2009probabilistic}.
 
-% TODO edge part more precise
 There are two fundamental groups of graphical models, based on the type of edge that are used: \glspl{bayesian network} and \glspl{markov network}.
 Both models have in common that their set of \glspl{random variable} $\mathcal{X}$ can be separated into two subsets:
 $\mathbf{X}$ contains the so-called \glspl{observed variable} which usually represent specific features of the input.
@@ -246,21 +227,11 @@ In the following, we use our previously discussed author extraction example and 
 \bigskip
 
 \Glspl{bayesian network}, usually denoted by $\mathcal{G}$, are encoded using directed \glspl{edge} to build a directed acyclic graph~\citep{koller2009probabilistic}.
-An \gls{edge} $A\to B$ thereby models a direct influence of $A$ on $B$.
-Since the influence is directed, it is possible to separate the \gls{joint distribution} $P(\mathbf{X},\mathbf{Y})$ based on the \gls{bayesian network} as a product of a \gls{prior distribution} $P(\mathbf{Y})$ and a \gls{cpd} $P(\mathbf{X}|\mathbf{Y})$~\citep{sutton2010introduction}:
-\begin{equation}
-  P(\mathbf{X},\mathbf{Y})=P(\mathbf{Y})P(\mathbf{X}|\mathbf{Y}).
-\end{equation}
-Here, the \gls{prior distribution} are \glspl{node} in the \gls{bayesian network} which only have outgoing \glspl{edge}.
-Consequently, a \gls{cpd} $\mathbf{X}$ given $\mathbf{Y}$ results from the \glspl{edge} going from $\mathbf{Y}$ to $\mathbf{X}$.
+Considering a graphical model that is based on a \gls{bayesian network}, an \glspl{edge} from \gls{random variable} $A$ to \gls{random variable} $B$ models a probabilistic influence of $A$ on $B$.
+Since the graph is acyclic and due to the directed probabilistic influences, it is possible to represent the \gls{joint distribution} $P(\mathbf{X},\mathbf{Y})$ as a product of \glspl{marginal distribution} and \glspl{cpd}~\citep{sutton2010introduction}.
+We refer to \citet{koller2009probabilistic} for a detailed introduction to \glspl{bayesian network}.
 
 \Cref{fig:example-networks} shows a \gls{bayesian network} for our author extraction example using the above defined set of \glspl{random variable} $\mathcal{X}$.
-The gray node represents an \gls{observed variable} and the white nodes represent \glspl{target variable}.
-From this we can derive the following \gls{joint distribution}:
-\begin{equation*}
-  P(EC_2,LN_1,LN_2)=P(LN_1)P(LN_2|LN_1)P(EC_2\mid LN_1,LN_2).
-\end{equation*}
-
 \begin{figure}[t]
 \centering
 \input{figures/example-networks.tex}
@@ -270,11 +241,16 @@ From this we can derive the following \gls{joint distribution}:
 }
 \label{fig:example-networks}
 \end{figure}
+The gray node represents an \gls{observed variable} and the white nodes represent \glspl{target variable}.
+From this we can derive the following \gls{joint distribution}:
+\begin{equation*}
+  P(EC_2,LN_1,LN_2)=P(LN_1)P(LN_2|LN_1)P(EC_2\mid LN_1,LN_2).
+\end{equation*}
 
 \bigskip
 
-\Glspl{markov network}, usually denoted with $\mathcal{H}$, use undirected \glspl{edge} to model a symmetrical influence between two \glspl{random variable}.
-Because of this, it is not possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into \glspl{prior distribution} and \glspl{cpd}.
+\Glspl{markov network}, usually denoted by $\mathcal{H}$, use undirected \glspl{edge} to model a symmetrical influence between two \glspl{random variable}.
+Because of this, it is not possible to separate the \gls{joint distribution} $P(\mathcal{X})$ into \glspl{marginal distribution} and \glspl{cpd}.
 Instead, $\mathcal{H}$ is parameterized by a set of \glspl{factor}.
 A \gls{factor} $\Psi(\mathbf{D})$ is a function from a set of \glspl{random variable} $\mathbf{D}$ to $\realnumbers$~\citep{koller2009probabilistic}.
 It is called nonnegative if all its entries are nonnegative.
@@ -636,7 +612,7 @@ By inserting the two types of \glspl{feature function} from \Cref{equ:linear-cha
 Thereby, for every $Y_n$, we iterate over $K$ predefined \glspl{feature function} $\tilde{f}_k$ and $L$ predefined \glspl{feature function} $\tilde{f}_l$.
 Additionally, we have a set of parameters $\bm{\theta}$ which are multiplied with the two different \glspl{feature function}.
 $\bm{\theta}$ thereby contains $K+L$ parameters.
-In order to simplify the notation, we define $Y_0$ as a special start state, denoted \texttt{start}~\citep{lafferty2001conditional}.
+In order to simplify the notation, we define $Y_0$ as a special start state which is denoted by \texttt{start}~\citep{lafferty2001conditional}.
 
 An example for a  \gls{linear-chain crf} derived from our author example is shown in \Cref{fig:example-linear-chain-crf}.
 The two added \glspl{factor} $\Psi(\texttt{start},LN_1)$ and $\Psi(LN_1,EC_1)$ are shown in \Cref{app:subsec-lccrf-additional-factors} and \Cref{app:subsec-lccrf-additional-energy-functions}.
@@ -799,7 +775,11 @@ Again, the definitions of $\alpha_n$ and $\beta_n$ are derived from \citet{sutto
 
 \bigskip
 
-\itodo{few sentences on viterbi algorithm for finding argmax $P(\mathbf{Y}|\mathbf{X})$}
+As mentioned before, this approach can also be applied to the problem of finding the most likely \gls{full assignment} to the \glspl{target variable} $\mathbf{Y}$ (see \Cref{equ:inference-argmax-2}).
+This is done by replacing all summations by a maximization term~\citep{sutton2010introduction}.
+The resulting approach is called the \gls{viterbi algorithm}.
+
+\bigskip
 
 When applying the \gls{forward-backward algorithm} to \glspl{linear-chain crf}, we exploit their sequential structure.
 Yet, not all \gls{crf} models follow such a structure and thereby we can not always apply this algorithm.
