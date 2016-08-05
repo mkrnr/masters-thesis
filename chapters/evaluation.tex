@@ -20,7 +20,7 @@ Further, we consider the metric of \gls{accuracy} which is defined as~\citep{pow
 \begin{equation*}
   \textit{accuracy}(L)=\frac{TP(L)+TN(L)}{TP(L)+FP(L)+TN(L)+FN(L)}.
 \end{equation*}
-Yet, in \todo{ref} we show that the accuracy value of $L$ in our scenario always corresponds to the \gls{f1 score} calculated over all labels in $\textit{Val}$.
+Yet, in \Cref{app:sec-accuracy-vs-f1-score} we show that the accuracy value of $L$ in our scenario always corresponds to the \gls{f1 score} calculated over all labels in $\textit{Val}$.
 We will thereby not show the accuracy in our results.
 
 \bigskip
@@ -155,8 +155,12 @@ In \Cref{sec:i-building-ge-constraints}, we showed that the \gls{bieo} format do
 Thereby, a direct comparison of the two formats is possible.
 
 For our experiments, we use the \texttt{swp} data set and create labelings in the two different formats for both our training sets and manually labeled testing sets.
-The results are shown in \todo{ref}.
-\itodo{plots}
+The results are shown in \Cref{fig:eval-end-tags}.
+\begin{figure}[t]
+\input{figures/eval-end-tags}
+\caption{Results for models using the \gls{bio} labeling in comparison to the \gls{bieo} labeling.}
+\label{fig:eval-end-tags}
+\end{figure}
 
 \bigskip
 
@@ -170,7 +174,11 @@ For example, we assume that the label \texttt{B-FN} was used in $25\%$ of all au
 Further, we specify that $80\%$ of our probability mass is assigned to the label \texttt{O}.
 Therefore, we assign $25\%$ of the remaining $20\%$ of the probability mass to the label \texttt{B-FN}.
 
-\itodo{plots}
+\begin{figure}[t]
+\input{figures/eval-other-percentages}
+\caption{Results for different probability masses assigned to the \texttt{O} label for building \gls{ge} constraints using the \texttt{swp-full} data set. 500, 1000, and 1500 are the number of used reference sections.}
+\label{fig:eval-other-percentages}
+\end{figure}
 
 \RQ{4} is focused on the ratio between matched and unmatched $w_n$ that are considered for building \gls{ge} constraints.
 \Cref{tab:ssoar-number-of-tags} shows the number of \texttt{AU} nodes in the resulting \glspl{goddag} based on different knowledge bases.
@@ -251,7 +259,30 @@ Increasing the size of $\mathcal{U}$ also has an impact on the \gls{ge} constrai
 This is because the \gls{ge} constraints are generated from matched author names in $\mathcal{U}$ against the external list of author names.
 
 To address the research question, we generate several models with a varying number of reference sections in $\mathcal{U}$.
-\itodo{plots}
+\Cref{tab:eval-training-size} compares the models based on the metrics \gls{precision}, \gls{recall}, and \gls{f1 score} for the author labels and the \gls{f1 score} for all labels.
+\begin{table}[t]
+\hspace{-0.25\textwidth}
+\makebox[1.5\textwidth][c]{%
+\begin{tabular}{c c r r r r r r r}
+  \toprule
+  %{} & Reference Sections in Training Set\\
+  %TODO center
+ Node Type &Metric & \num{500} & \num{1000} & \num{1500} & \num{2000} & \num{2500}  & \num{5000} & \num{16470}\\
+  \midrule
+  Author &\gls{precision} & $0.7845$ & $0.8328$ & $0.8471$ & $0.8593$ & $0.8473$ & $0.8336$ & $0.8349$ \\
+  Author &\gls{recall}    & $0.8581$ & $0.8768$ & $0.9103$ & $0.9082$ & $0.9094$ & $0.9118$ & $0.9158$ \\
+  Author &\gls{f1 score}  & $0.8197$ & $0.8542$ & $0.8776$ & $0.8831$ & $0.8773$ & $0.871$ & $0.8735$ \\
+  All &\gls{f1 score}     & $0.9512$ & $0.9594$ & $0.9632$ & $0.9653$ & $0.9633$ & $0.9601$ & $0.9606$ \\
+  \bottomrule
+\end{tabular}
+}
+\caption{Comparison of models that use different numbers of reference sections for the model learning.}
+\label{tab:eval-training-size}
+\end{table}
+We see that a bigger data set does not automatically lead to a better \gls{f1 score} for all labels or even the author labels alone.
+Yet, increasing the number of reference sections does lead to an improved \gls{recall} of author labels.
+Again, further experiments are needed to confirm this intuition since the same configuration was used for all models.
+
 
 \RQ{7} takes the \gls{markov order} of \glspl{linear-chain crf} into consideration.
 For this, we compare three different models:
@@ -287,12 +318,11 @@ Again, we use three different training set sizes and the \texttt{swp-full} autho
 They suggest that modifying the \gls{regularization parameter} in this range does not impact the performance to the resulting model.
 This also confirms a similar statement by \citet{sutton2010introduction}.
 Further experiments could investigate wider ranges for the \glspl{regularization parameter}.
-In out other evaluations, we set this parameter to the value $10$
+In out other evaluations, we set this parameter to the value $10$.
 According to \citet{sutton2010introduction}, this is a typical choice for training sets of a medium size.
 
 %on gaussian prior: Additionally, \citet{sutton2010introduction} state that small changes to $\sigma^2$, for example up to a factor of 10, do not have a big impact on the accuracy of the final model.
 %%sutton2010, page48: gauss=10 is typical for medium-sized training sets
-\itodo{plots}
 
 \bigskip
 

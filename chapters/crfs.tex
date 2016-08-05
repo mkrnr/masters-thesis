@@ -43,8 +43,6 @@ Using this, we can define \gls{event space} \glssymbol{event space} as a subset 
   \glssymbol{event space}\subseteq\glssymbol{power set}(\glssymbol{outcome space}).
 \end{equation*}
 
-%TODO remove this?
-\newpage
 
 The \gls{probability distribution} $P$ now describes a mapping from \glspl{event} in \glssymbol{event space} to real numbers according to the following rules \citep{koller2009probabilistic}:
 \begin{itemize}
@@ -59,9 +57,7 @@ For simplicity reasons, $N$ is the same for all four reference strings in \Cref{
 We now consider two \glspl{event}:
 \begin{equation*}
   \begin{split}
-    %before:firstEC:
     \mathit{firstLN}&=\left\{w_1\ \dots\ w_N \mid w_1\ \text{is a last name}\right\}.\\
-    %before:secondFN
     \mathit{secondEC}&=\left\{w_1\ \dots\ w_N \mid w_2\ \text{ends with a comma}\right\}.
   \end{split}
 \end{equation*}
@@ -79,9 +75,7 @@ To fulfill the property of \glssymbol{event space} being closed under complement
 Further, to fulfill the union property of \glssymbol{event space}, we add all unions of \glspl{event}.
 Then, we again need to add the complements of the newly added union of \glspl{event}.
 This repeats until all possible unions and complements are added to \glssymbol{event space}.
-For our example, we show the full \gls{event space} \glssymbol{event space} in \Cref{app:sec-event-space}.
 Even for this simple example, the resulting \gls{event space} is already considerably big.
-We thereby do not explicitly specify \glssymbol{event space} in the following examples but refer to the shown approach of repeatedly adding the union and complements of \glspl{event} to create the \gls{event space}.
 
 We now consider the resulting \glspl{probability distribution} for this example.
 Based on the four reference strings in \glssymbol{outcome space}, we assign the corresponding probabilities to the events in \glssymbol{event space}.
@@ -152,8 +146,8 @@ A notation that is frequently used in this chapter is that of a set of \glspl{ra
 The set of \glspl{assignment} to $\mathbf{X}$ is denoted by $\mathbf{x}=\left\{ x_1,\dots,x_N\right\}$ where each $x_n$ is an \gls{assignment} to $X_n\in\mathbf{X}$.
 The set of \glspl{assignment} $\mathbf{x}$ is also called a \gls{full assignment} to $\mathbf{X}$.
 Any \gls{event} that is described using $\mathbf{X}$ must be a union of \glspl{full assignment} to $\mathbf{X}$.
-This gives us a \gls{canonical outcome space} for which each outcome is a joint \gls{assignment} to the \glspl{random variable} in $\mathbf{X}$.
-\todo{example for canonical outcome space}
+In the following, we assume every \gls{outcome space} \glssymbol{outcome space} to be defined as a set of \glspl{full assignment} to some set of \glspl{random variable} $\mathcal{X}$.
+This is also called a \gls{canonical outcome space}~\citep{koller2009probabilistic}.
 
 We demonstrate this by extending our definitions of $LN_1$ and $EC_2$ and apply them to all words in a reference string of length $N$.
 This gives us two sets of \glspl{random variable}:
@@ -163,12 +157,7 @@ This gives us two sets of \glspl{random variable}:
     \mathbf{EC}=& \{EC_1, \dots, EC_N\}.
   \end{split}
 \end{equation*}
-This, however, also requires the extension of our \gls{event space} \glssymbol{event space} which has to include all possible unions and complements of the newly defined \glspl{random variable}.
-
-For example, the \gls{full assignment} to $\mathbf{EC}$ derived from the second reference string in \Cref{fig:example-reference-strings} is:
-\begin{equation*}
-  \mathbf{EC}=\{\mathit{true}, \mathit{false}, \mathit{false}, \mathit{false}, \mathit{false}, \mathit{false}, \mathit{false}, \mathit{true}, \mathit{false}, \mathit{false}\}.
-\end{equation*}
+Using this, we define a \gls{canonical outcome space} \glssymbol{outcome space} as the set of all \glspl{full assignment} to $\mathbf{LN}\cup\mathbf{EC}$.
 
 \bigskip
 

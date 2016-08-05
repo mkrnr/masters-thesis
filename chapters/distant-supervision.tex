@@ -159,9 +159,8 @@ We now use the $\text{KL}$-divergence as the score function $D_{\text{KL}}$ in \
   G(\bm{\tilde{\theta}}:\mathcal{U})=D_{\text{KL}}\left(\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}\mid\mid E_{\mathcal{U}}\left[P(\mathbf{Y}\mid\mathbf{X})G(\mathbf{X},\mathbf{Y})\right]\right)
 \end{equation}
 Here, $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$ expresses an expectation for $\mathbf{X}\cup\mathbf{Y}$, either in the form of a particular value or as a \gls{marginal distribution}~\citep{mann2010generalized}.
-The result of $D_{\text{KL}}$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$.
-Additionally, the expectation over the sets of assignments $\left\{\mathbf{X},\mathbf{Y}\right\}$ in $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\mathbf{Y}\mid\mathbf{X})$.
-Further, \citet{mann2010generalized} use the term \gls{label regularization} for the case when using a number constraint functions
+The result of $D_{\text{KL}}$ describes the divergence between the expectation of a given constraint $\tilde{g}_{\left(\mathbf{X},\mathbf{Y}\right)}$ and the expectation over the sets of assignments $\left\{\mathbf{X},\mathbf{Y}\right\}$ in $\mathcal{U}$ with respect to the modeled \gls{cpd} $P(\mathbf{Y}\mid\mathbf{X})$.
+Further, \citet{mann2010generalized} use the term \gls{label regularization} for the case when using a number of constraint functions
 \begin{equation}
   \label{equ:label-regularization-constraint-function}
   G(\mathbf{X},Y_n)=\mathbf{\mathbbm{1}}(Y_n)
@@ -172,8 +171,8 @@ and a number of constraints
   \tilde{g}_{\left(\mathbf{X},Y_n\right)}=\tilde{P}(Y_n)
 \end{equation}
 in the \gls{ge} term of \Cref{equ:generalized-expectation-kl}.
-
 Here, $\tilde{P}(Y_n)$ is an estimated \gls{marginal distribution} over a \gls{target variable} $Y_n\in\mathbf{Y}$ which is given as an input to the learner.
+We will define a similar regularization approach for our author extraction problem in \Cref{sec:ae-building-ge-constraints}.
 
 \bigskip
 
@@ -186,17 +185,19 @@ In the context of semi-supervised learning, \citet{mann2010generalized} discuss 
 This way, both, a labeled data set $\mathcal{D}$ and an unlabeled data set $\mathcal{U}$, can be utilized during the learning of $\bm{\tilde{\theta}}$.
 
 It is also possible to build an \gls{objective function} by only using an unlabeled data set $\mathcal{U}$.
-For this, we use the \gls{ge} criterion, combined with a Gaussian prior (see \Cref{equ:gaussian-prior}) to prevent overfitting:
+For this, we use the \gls{ge} criterion, combined with a Gaussian prior (see \Cref{equ:gaussian-prior}) to prevent an overfitting of the model:
 \begin{equation}
   \label{equ:objective-function-g}
   O(\bm{\tilde{\theta}}:\mathcal{U})=G(\bm{\tilde{\theta}}:\mathcal{U})+Gauss(\bm{\tilde{\theta}}).
 \end{equation}
 Such an approach was first discussed in \citet{mann2008generalized}.
-\itodo{mention that the optimization is not convex.}
 
 Seen from a different perspective, using \gls{ge} as an objective function allows us to express expectations on a subset of elements from an unlabeled data set while other elements remain unconstrained~\citep{mann2010generalized}.
 This is precisely what is needed in order to apply \gls{distant supervision} to the learning of \glspl{crf}.
 The idea is to generate \glspl{marginal distribution} $\tilde{P}(\mathbf{Y})$ (see \Cref{equ:label-regularization-constraints}) for the $\mathbf{Y}$ for which we have information from an external source.
+
+It is important to mention that \gls{ge} criteria a not convex functions~\citep{mann2010generalized}.
+Thereby, when using a \gls{ge} criterion as the objective function for learning a \gls{crf} model, a local maximum does not have to be a global maximum.
 
 In the following chapter, we will use this idea for the extraction of authors from the reference section of research papers using a distantly supervised training set.
 

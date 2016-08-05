@@ -4,66 +4,47 @@ We will also survey \gls{distant supervision} as a method for generating trainin
 
 \bigskip
 
-There has been a large body of research on information extraction from research papers and in the following we discuss a number of examples for such research.
+There has been a large body of research on information extraction from research papers.
 
 \citet{giles1998citeseer} propose one of the first autonomous citation indexing systems called \emph{CiteSeer}.
 It converts papers that are extracted from the World Wide Web to text, extracts the references and the context in which they are made in the body of the paper, and stores the information in a database.
 Yet, the extraction happens based on simple heuristics which results in a relatively low accuracy compared to more advanced approaches.
 In an evaluation of \num{5093} documents related to ``neural networks'', $80.2\%$ of the titles, $82.1\%$ of the authors, and $44.2\%$ of the page numbers were extracted correctly from the retrieved references~\cite{giles1998citeseer}.
 
-%In order to simplify the creation of personal digital libraries, \citet{marinai2009metadata} proposes a software that combines \gls{pdf} parsing, low level document image processing, and layout analysis.
-%First, text blocks of the research paper are segmented and annotated with layout information such as the position on the page and the width and height of the text block.
-%Then, a \gls{mlp} classifier is applied on the annotated text blocks in order to extract the title and authors of the research paper.
-%Based on this pair of title and authors, additional information about the paper is extracted from the DBLP\footnote{\url{http://dblp.uni-trier.de/}} computer science bibliography.
-%Evaluated on 80 papers, the approach of learning from layout information resulted in successfully extracting 95\% of the titles and, by integrating information from DBLP, 73.58\% of the authors.
-
-\citet{powley2007evidence} address both citation extraction and citation-reference matching in research papers.
-For the citation extraction, they achieved a very high precision ($99.88\%$) and recall ($96.78\%$) by identifying pairs of year and author surnames in the text.
-The citation-reference matching was done in an integrated fashion.
-A plain text representation of the reference section was segmented into reference strings by matching the author and year information form the extracted citation data.
-This approach again resulted in a very high precision and recall for both the reference segmentation and citation-reference matching \citep{powley2007evidence}.
-
-For extracting bibliographic attributes from research papers that are only available as images, \citet{takasu2003bibliographic} uses optical character recognition combined with a variation of \glspl{hmm}.
-The evaluation was based on \num{1,575} references obtained from Japanese journal papers and the reported accuracy was above $90\%$ for all extracted bibliographic attributes except the volume and volume number.
 
 %TODO extend this:
-Instead of using \glspl{hmm}, \citet{peng2004accurate}, \citet{councill2008parscit}, as well as \citet{groza2012reference} rely on \glspl{crf} for extracting bibliographic information from research papers.
+\citet{peng2004accurate}, \citet{councill2008parscit}, as well as \citet{groza2012reference} rely on \glspl{crf} for extracting bibliographic information from research papers.
 The three approaches followed the same steps:
 After extracting and segmenting the reference strings, they are split into tokens and each token gets assigned a number of features.
 Example for such features are the position in the line, whether or not the token starts with a capitalized letter, contains a dot, or only contains digits.
 In addition, external lexicons are used in order to determine features like (author) surnames, places, and months.
-The \gls{crf} is learned on data set containing between 200 and 830 references where every element of the reference gets analyzed for the set of features and also manually assigned a label such as author, title, year, and publisher.
-The trained \gls{crf} is then used for labeling unseen testing data and the performance is evaluated using precision, recall, and the $\text{F}_1$ score.
-\citet{groza2012reference} give an overview of the results of the three mentioned studies on the so-called CORA dataset which contains $200$ reference strings.
+The \glspl{crf} are learned on fully labeled data sets containing between 200 and 830 reference strings.
+The resulting \gls{crf} model is then used for labeling unseen testing data and the performance is evaluated using precision, recall, and the $\text{F}_1$ score.
+\citet{groza2012reference} give an overview of the results of the three mentioned studies on the CORA dataset which contains $200$ reference strings.
 The results show a very promising performance with $\text{F}_1$ scores higher than $93\%$ for all labeled element types and with an average of $96.7\%$ \citep{groza2012reference}.
-
-Regarding the extraction of the reference string from a given research paper, \citet{councill2008parscit} as well as \citet{groza2012reference} relied on regular expressions that search for section labels like ``References'' or ``Bibliography'' and regarded the following text as reference strings.
-Other regular expressions were used to identify a section heading that ends the reference  block such as ``Appendix'', ``Acknowledgments'', or the end of the document.
-The content of the extracted reference block was separated into reference strings with another set of regular expressions that search for makers like ``[1]'', ``[PM04]'', or ``1.'' at the beginning of the lines.
-If such markers were not found, other heuristics like author names at the beginning of the line, punctuation at the end of the line, and the length of the line were used.
-This approach was sufficient for the considered use cases in computer science and health sciences \citep{councill2008parscit,groza2012reference}.
-Other related studies such as the one by \citet{peng2004accurate} did not retrieve reference strings from research papers but used a preprocessed data set containing reference strings.
 
 \bigskip
 
-\citet{mintz2009distant} propose the paradigm of \gls{distant supervision} for relation extraction to avoid the weaknesses of supervised, unsupervised, and bootstrap learning.
-They argue that supervised learning can only be done with small data sets since labeling data manually is expensive.
-Purely unsupervised information extraction on the other hand may result in findings that are unrelated to a particular knowledge base \citep{mintz2009distant}.
-The third approach, bootstrap learning on a small number of seed instances, is said to often suffer from low precision and semantic drift \citep{mintz2009distant}.
-By using an external source of information for the supervision, \gls{distant supervision} is able to train on large amounts of data without loosing the focus on the relevant knowledge base \citep{mintz2009distant}.
-In their use case of relation extraction, \citet{mintz2009distant} use the semantic database \gls{freebase} \citep{bollacker2008freebase} for the \gls{distant supervision}.
-The assumption is that if a sentence contains a pair of entities that are part of a \gls{freebase} relation, it is likely to express that relation in some way \citep{mintz2009distant}.
-A human evaluation of the extracted relations resulted in a $67.6\%$ precision.
-
-\citet{fan2015detecting} apply the concept of \gls{distant supervision} to the detection of tables in \gls{pdf} files.
-Their assumption is that tables in research papers have surrounding captions that conform to a limited number of official templates \citep{fan2015detecting}.
-Following this assumption, a training set is automatically generated by extracting the context around text lines that start with words like ``Table'' or ``Tab.''.
-The extracted context also includes further information about the coordinates in the file and the font style \citep{fan2015detecting}.
-Three canonical classifiers, namely Logistic Regression, Support Vector Machines, and Naive Bayes, are built with the training set \citep{fan2015detecting}.
-Their performance was evaluated against a \emph{Heuristics} approach \citep{klampfl2014comparison} that was assumed to be state-of-the-art.
-The evaluation on two data sets showed that the approach by \citet{fan2015detecting} was superior to the Heuristics approach in all cases.
-
 \itodo{\citet{lu2013web}: distant supervision and GE on name entity recognition}
+
+
+%\citet{mintz2009distant} propose the paradigm of \gls{distant supervision} for relation extraction to avoid the weaknesses of supervised, unsupervised, and bootstrap learning.
+%They argue that supervised learning can only be done with small data sets since labeling data manually is expensive.
+%Purely unsupervised information extraction on the other hand may result in findings that are unrelated to a particular knowledge base \citep{mintz2009distant}.
+%The third approach, bootstrap learning on a small number of seed instances, is said to often suffer from low precision and semantic drift \citep{mintz2009distant}.
+%By using an external source of information for the supervision, \gls{distant supervision} is able to train on large amounts of data without loosing the focus on the relevant knowledge base \citep{mintz2009distant}.
+%In their use case of relation extraction, \citet{mintz2009distant} use the semantic database \gls{freebase} \citep{bollacker2008freebase} for the \gls{distant supervision}.
+%The assumption is that if a sentence contains a pair of entities that are part of a \gls{freebase} relation, it is likely to express that relation in some way \citep{mintz2009distant}.
+%A human evaluation of the extracted relations resulted in a $67.6\%$ precision.
+%
+%\citet{fan2015detecting} apply the concept of \gls{distant supervision} to the detection of tables in \gls{pdf} files.
+%Their assumption is that tables in research papers have surrounding captions that conform to a limited number of official templates \citep{fan2015detecting}.
+%Following this assumption, a training set is automatically generated by extracting the context around text lines that start with words like ``Table'' or ``Tab.''.
+%The extracted context also includes further information about the coordinates in the file and the font style \citep{fan2015detecting}.
+%Three canonical classifiers, namely Logistic Regression, Support Vector Machines, and Naive Bayes, are built with the training set \citep{fan2015detecting}.
+%Their performance was evaluated against a \emph{Heuristics} approach \citep{klampfl2014comparison} that was assumed to be state-of-the-art.
+%The evaluation on two data sets showed that the approach by \citet{fan2015detecting} was superior to the Heuristics approach in all cases.
+
 
 \bigskip
 
@@ -75,10 +56,10 @@ In our particular use case of extracting references from German social science r
 
 \Gls{distant supervision} is a promising approach that allows the reduction of labeling costs by including external sources of information during the generation of partially annotated data sets.
 
-In order to use such a data set for the training of a \gls{crf} model, two approaches were discussed.
-\citet{tsuboi2008training} marginalize unlabeled tokens by generating sequences for all possible labelings for these tokens.
-Instead of labeled instances, \citet{mann2008generalized} use \gls{ge} criteria and labeled features.
-In addition they can also incorporate \glsfirst{conditional probability distribution} over the labelings.
+\itodo{mention lu2013 here}
+
+%Instead of labeled instances, \citet{mann2008generalized} use \gls{ge} criteria and labeled features.
+%In addition they can also incorporate \glsfirst{conditional probability distribution} over the labelings.
 
 In the following chapter we will first introduce \glspl{crf} as a framework for modeling \glspl{probabilistic graphical model}.
 This will build the foundation of our discussion in \Cref{cha:distant-supervision} about the usage of partially annotated data in \glspl{crf} during \gls{distant supervision}.
