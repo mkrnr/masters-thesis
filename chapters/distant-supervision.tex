@@ -8,7 +8,7 @@ The approach of \gls{distant supervision} allows the automated labeling of large
 In this chapter, we will first give an overview of \gls{distant supervision} by discussing past usages.
 We will then discuss approaches on how \glspl{crf} can be learned using distantly supervised data sets.
 
-\section{Overview}
+\section{Overview}\label{sec:overview}
 
 The term \gls{distant supervision} was introduced by \citet{mintz2009distant} as an approach for relation extraction without labeled data.
 They state that \gls{distant supervision} extends the paradigm used by \citet{snow2005learning} for the extraction of hypernym relations.
@@ -40,7 +40,7 @@ What all automated approaches have in common is that they use some heuristic to 
 Our usage of the term \gls{distant supervision} on the other hand focuses on the utilization of an external knowledge base to perform the labeling.
 Thereby, we define \gls{distant supervision} as the labeling of a data set using an external knowledge base with the goal of generating a training data set.
 
-\section{Distant Supervision and \glsentryshortpl{crf}}
+\section{Distant Supervision and \glsentryshortpl{crf}}\label{sec:distant-supervision-and-crfs}
 
 Data sets that are used within a distantly supervised learning approach are typically incompletely annotated.
 This is due to the fact that, in practice, external knowledge bases do not cover all observed cases in the training set.

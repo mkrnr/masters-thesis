@@ -131,17 +131,18 @@ We refer to this as the \texttt{swp-trim} data set.
 Usually, matches are annotated using markup languages such as \gls{xml}.
 For example, the third reference string in \Cref{fig:example-reference-strings} could be annotated with:
 \begin{equation*}
-  \texttt{<a><fn>}\text{Fritz}\texttt{</fn> <ln>}\text{M\"{u}ller,}\texttt{</ln></a> }\text{Fritz Schmidt (2010): \dots}
+  \texttt{<a1><fn>}\text{Max}\texttt{</fn> <ln>}\text{M\"{u}ller,}\texttt{</ln></a1> }\text{Fritz Schmidt (2010): \dots}
 \end{equation*}
-Here, \texttt{<a>\dots</a>} marks an author name, \texttt{<fn>\dots</fn>} a first name, and a last name is marked with \texttt{<ln>\dots</ln>}.
+Here, \texttt{<a1>\dots</a1>} marks the first author name in the sequence, \texttt{<fn>\dots</fn>} a first name, and \texttt{<ln>\dots</ln>} a last name.
 Since such markup language use tree based models, they do not allow a direct encoding of overlaps.
-For example, assuming that we want to match all occurrences of the author ``Fritz M\"{u}ller'', the first three words of the previous example would need to be annotated with:
+For example, assuming that we want to match all occurrences of the authors ``Max M\"{u}ller'' and ``Fritz M\"{u}ller'', the first three words of the previous example would need to be annotated with:
 \begin{equation*}
-  \texttt{<a><fn>}\text{Fritz}\texttt{</fn> <a><ln>}\text{M\"{u}ller,}\texttt{</ln></a> <fn>}\text{Fritz}\texttt{</fn></a>}
+  \texttt{<a1><fn>}\text{Max}\texttt{</fn> <a2><ln>}\text{M\"{u}ller,}\texttt{</ln></a1> <fn>}\text{Fritz}\texttt{</fn></a2>}
 \end{equation*}
-Yet, such a nesting of \gls{xml} tags is not allowed.
+Yet, such a nesting of the \texttt{<a1>} and \texttt{<a2>} tags is not allowed in \gls{xml}.
 There are a number of approaches that try to overcome this limitation of tree based markup languages.
-Examples are \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}. They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from the documents.
+Examples are \textit{milestone elements}, \textit{fragmentation}, and \textit{standoff markup}~\citep{sperberg2000goddag}.
+They all drastically increase the complexity of the markup document and require specialized parsers in order to retrieve data from the documents.
 
 To avoid this overhead, it would be preferable to annotate our author matches using a data structure that supports overlapping hierarchies by default.
 \citet{sperberg2000goddag} propose such a data structure named \acrfull{goddag}\glsunset{goddag}.

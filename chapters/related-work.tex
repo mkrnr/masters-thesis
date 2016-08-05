@@ -1,66 +1,48 @@
 \chapter{Related Work}\label{cha:related-work}
-In this chapter we will give an overview of the related work in the area of information extraction from research papers.
-We will also survey \gls{distant supervision} as a method for generating training data without manual labeling.
+In this chapter we will discuss some of the related work in the area of entity recognition with a focus on bibliographic information extraction from research papers.
+We will also consider approaches on entity recognition that involve the usage of unlabeled data during the learning process.
 
 \bigskip
 
-There has been a large body of research on information extraction from research papers.
-
+There has been a large body of research on bibliographic information extraction from research papers.
 \citet{giles1998citeseer} propose one of the first autonomous citation indexing systems called \emph{CiteSeer}.
 It converts papers that are extracted from the World Wide Web to text, extracts the references and the context in which they are made in the body of the paper, and stores the information in a database.
 Yet, the extraction happens based on simple heuristics which results in a relatively low accuracy compared to more advanced approaches.
 In an evaluation of \num{5093} documents related to ``neural networks'', $80.2\%$ of the titles, $82.1\%$ of the authors, and $44.2\%$ of the page numbers were extracted correctly from the retrieved references~\cite{giles1998citeseer}.
 
+\itodo{add some other approaches: HMM\dots}
 
-%TODO extend this:
-\citet{peng2004accurate}, \citet{councill2008parscit}, as well as \citet{groza2012reference} rely on \glspl{crf} for extracting bibliographic information from research papers.
+\citet{peng2004accurate}, \citet{councill2008parscit}, as well as \citet{groza2012reference} rely on \glspl{crf}~\citep{lafferty2001conditional} for extracting bibliographic information from research papers.
 The three approaches followed the same steps:
 After extracting and segmenting the reference strings, they are split into tokens and each token gets assigned a number of features.
 Example for such features are the position in the line, whether or not the token starts with a capitalized letter, contains a dot, or only contains digits.
 In addition, external lexicons are used in order to determine features like (author) surnames, places, and months.
 The \glspl{crf} are learned on fully labeled data sets containing between 200 and 830 reference strings.
-The resulting \gls{crf} model is then used for labeling unseen testing data and the performance is evaluated using precision, recall, and the $\text{F}_1$ score.
-\citet{groza2012reference} give an overview of the results of the three mentioned studies on the CORA dataset which contains $200$ reference strings.
-The results show a very promising performance with $\text{F}_1$ scores higher than $93\%$ for all labeled element types and with an average of $96.7\%$ \citep{groza2012reference}.
+The labels represent the different fields in a reference string such as the authors, title, date, and publisher.
+The resulting \gls{crf} model is then used for labeling unseen testing data and the performance is evaluated using the metrics \gls{precision}, \gls{recall}, and \gls{f1 score} (see \Cref{cha:evaluation}).
+\citet{groza2012reference} compares the three mentioned studies by applying them on the \textit{Cora} dataset\footnote{\url{https://people.cs.umass.edu/~mccallum/data.html} (accessed Aug.~5,~2016)} which resulted from the Cora portal for research papers~\citep{mccallum2000automating}.
+The approach by \citet{groza2012reference} outperforms the two other approached and has a \glspl{f1 score} higher than $93\%$ for all considered labels~\citep{groza2012reference}.
+For the author labels, they achieve a \gls{f1 score} of $99.3\%$ for the Cora dataset.
 
 \bigskip
 
-\itodo{\citet{lu2013web}: distant supervision and GE on name entity recognition}
-
-
-%\citet{mintz2009distant} propose the paradigm of \gls{distant supervision} for relation extraction to avoid the weaknesses of supervised, unsupervised, and bootstrap learning.
-%They argue that supervised learning can only be done with small data sets since labeling data manually is expensive.
-%Purely unsupervised information extraction on the other hand may result in findings that are unrelated to a particular knowledge base \citep{mintz2009distant}.
-%The third approach, bootstrap learning on a small number of seed instances, is said to often suffer from low precision and semantic drift \citep{mintz2009distant}.
-%By using an external source of information for the supervision, \gls{distant supervision} is able to train on large amounts of data without loosing the focus on the relevant knowledge base \citep{mintz2009distant}.
-%In their use case of relation extraction, \citet{mintz2009distant} use the semantic database \gls{freebase} \citep{bollacker2008freebase} for the \gls{distant supervision}.
-%The assumption is that if a sentence contains a pair of entities that are part of a \gls{freebase} relation, it is likely to express that relation in some way \citep{mintz2009distant}.
-%A human evaluation of the extracted relations resulted in a $67.6\%$ precision.
-%
-%\citet{fan2015detecting} apply the concept of \gls{distant supervision} to the detection of tables in \gls{pdf} files.
-%Their assumption is that tables in research papers have surrounding captions that conform to a limited number of official templates \citep{fan2015detecting}.
-%Following this assumption, a training set is automatically generated by extracting the context around text lines that start with words like ``Table'' or ``Tab.''.
-%The extracted context also includes further information about the coordinates in the file and the font style \citep{fan2015detecting}.
-%Three canonical classifiers, namely Logistic Regression, Support Vector Machines, and Naive Bayes, are built with the training set \citep{fan2015detecting}.
-%Their performance was evaluated against a \emph{Heuristics} approach \citep{klampfl2014comparison} that was assumed to be state-of-the-art.
-%The evaluation on two data sets showed that the approach by \citet{fan2015detecting} was superior to the Heuristics approach in all cases.
-
+Instead of relying on fully labeled data, \citet{lu2013web} use the approach of \gls{distant supervision} in combination with \glspl{ge criterion} to learn \gls{crf} models.
+\Gls{distant supervision} uses external knowledge bases for creating partially labeled training data from previously unlabeled data~\citep{mintz2009distant}.
+\Glspl{ge criterion} contribute to an objective function that allows the learning of probabilistic models using partially labeled data~\citep{mann2007simple}.
+\citet{lu2013web} focus on the detection of named entities such as organizations, persons, or places from web pages~\citep{lu2013web}.
+After additionally applying a collective detection model, an evaluation on \num{16755} manually labeled named entities shows a \gls{f1 score} of $72.56\%$ with a \gls{precision} of $70.46\%$ and \gls{recall} of $74.79\%$.
 
 \bigskip
 
-In summary, several aspects of the information extraction from research papers can be achieved with a considerably good performance.
-Especially the segmentation of a given reference string into its elements by using \glspl{crf} \citep{peng2004accurate,councill2008parscit,groza2012reference} as well as the combination of citation extraction and citation-reference matching \citep{powley2007evidence} show very promising results.
+In summary, several aspects of the bibliographic information extraction from research papers can be achieved with a considerably good performance.
+Especially the segmentation of a given reference string into its elements by using \glspl{crf} \citep{peng2004accurate,councill2008parscit,groza2012reference} shows very promising results.
 Yet, all current approaches have in common that they rely on manually labeled data sets for training their models.
 Manually labeled data sets are expensive and thereby usually only exist in smaller quantities.
 In our particular use case of extracting references from German social science research papers, no such data set is currently available.
+\citet{lu2013web} show a promising approach that allows a distantly supervised learning of \glspl{crf} using \glspl{ge criterion}.
 
-\Gls{distant supervision} is a promising approach that allows the reduction of labeling costs by including external sources of information during the generation of partially annotated data sets.
+\bigskip
 
-\itodo{mention lu2013 here}
-
-%Instead of labeled instances, \citet{mann2008generalized} use \gls{ge} criteria and labeled features.
-%In addition they can also incorporate \glsfirst{conditional probability distribution} over the labelings.
-
-In the following chapter we will first introduce \glspl{crf} as a framework for modeling \glspl{probabilistic graphical model}.
-This will build the foundation of our discussion in \Cref{cha:distant-supervision} about the usage of partially annotated data in \glspl{crf} during \gls{distant supervision}.
+In the following we will investigate how \gls{distant supervision} can be applied on our author extraction problem.
+For this, we will first introduce \glspl{crf} as a framework for modeling \glspl{probabilistic graphical model}.
 
