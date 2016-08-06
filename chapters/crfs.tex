@@ -932,7 +932,7 @@ Yet, since this approach requires many calculations of $\nabla f$, it can be inf
 Several improvements to this have been made that aim to reduce the number of such calculations.
 This is often done by taking information from the second derivative of the \gls{objective function} into account~\citep{sutton2010introduction}.
 Since the matrix of all second derivatives, called the \gls{hessian}, is quadratic in the number of parameters, computing the full \gls{hessian} can again be infeasible~\citep{sutton2010introduction}.
-By approximating the Hessian with the \gls{bfgs} algorithm and limiting its memory requirements, \citet{byrd1994representations} provide an approach called \gls{l-bfgs} to the maximization problem that can handle a large number of parameters.
+By approximating the Hessian with the \gls{bfgs} algorithm and limiting its memory requirements, \citet{byrd1994representations} provide an approach called \textit{L-BFGS} to the maximization problem that can handle a large number of parameters.
 \citet{andrew2007scalable} state that \gls{l-bfgs} ``is the algorithm of choice for optimizing the parameters of large-scale log-linear models with $L_2$ regularization''~\citep{andrew2007scalable}.
 $L_2$ regularization is an alternative to the Gaussian prior in \Cref{equ:gaussian-prior}.
 

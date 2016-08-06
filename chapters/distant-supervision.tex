@@ -13,20 +13,20 @@ We will then discuss approaches on how \glspl{crf} can be learned using distantl
 The term \gls{distant supervision} was introduced by \citet{mintz2009distant} as an approach for relation extraction without labeled data.
 They state that \gls{distant supervision} extends the paradigm used by \citet{snow2005learning} for the extraction of hypernym relations.
 A hypernym can be seen as a generic term and a hyponym is a subtype or instance of this generic term~\citep{snow2005learning}.
-A first step for extracting such relations was to learn dependency paths from hypernym/hyponym word pairs that were extracted from the lexical database WordNet\footnote{\url{https://wordnet.princeton.edu/} (accessed Jul.~20,~2016)}~\citep{snow2005learning}.
+A first step for extracting such relations was to learn dependency paths from hypernym/hyponym word pairs that were extracted from the lexical database \textit{WordNet}\footnote{\url{https://wordnet.princeton.edu/} (accessed Aug.~6,~2016)}~\citep{snow2005learning}.
 The dependency paths were then used as features in a Logistic Regression classifier with the task of identifying hypernym pairs in a corpus~\citep{snow2005learning}.
 Additionally, \citet{mintz2009distant} mention a similarity of \gls{distant supervision} to the usage of weakly labeled data in bioinformatics.
 One mentioned example is how \citet{craven1999constructing} extract relations between biological objects such as proteins, cell-types, and diseases from a text corpus.
 For this, they train a Na\"{\i}ve Bayes classifier with data from the Yeast Protein Database~\citep{payne1997yeast}.
 \citet{surdeanu2012multi} even state that distant supervision for information extraction was introduced by \citet{craven1999constructing}.
 
-While not giving a definition of the term, \citet[p.~2]{mintz2009distant} state that ``[t]he intuition of distant supervision is that any sentence that contains a pair of entities that participate in a known \gls{freebase} relation is likely to express that relation in some way.''
+While not giving a definition of the term, \citet[p.~2]{mintz2009distant} state that ``[t]he intuition of distant supervision is that any sentence that contains a pair of entities that participate in a known \textit{freebase} relation is likely to express that relation in some way.''
 There is now a body of research that uses the paradigm of \citet{mintz2009distant} for relation extraction~\citep{benson2011event,ritter2011named,nguyen2011end,takamatsu2012reducing,xu2013filling}.
 
 \bigskip
 
-There exists another intuition of \gls{distant supervision} which is not based on leveraging existing knowledge bases such as \gls{freebase} or WordNet:
-\citet{go2009twitter} use emoticons in Twitter\footnote{\url{https://twitter.com/} (accessed May~19,~2016)} tweets as noisy labels to build a training set for sentiment analysis~\citep{go2009twitter}.
+There exists another intuition of \gls{distant supervision} which is not based on leveraging existing knowledge bases such as Freebase or WordNet:
+\citet{go2009twitter} use emoticons in Twitter\footnote{\url{https://twitter.com/} (accessed Aug.~6,~2016)} tweets as noisy labels to build a training set for sentiment analysis~\citep{go2009twitter}.
 This approach to sentiment analysis was also used in a number of other researches~\citep{purver2012experimenting,marchetti2012learning,suttles2013distant}.
 
 \citet{fan2015detecting} also apply distant supervision without using a knowledge base.

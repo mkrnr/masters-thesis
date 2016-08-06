@@ -171,17 +171,12 @@ and Distant Supervision}
 \maketitle
 
 \input{frontbackmatter/abstract}
-\cleardoublepage{}
+\clearpage{}
 
-%TODO add license
-%\input{frontbackmatter/license}
-%\cleardoublepage{}
+\input{frontbackmatter/license}
+\clearpage{}
 
 \tableofcontents
-\cleardoublepage{}
-
-%TODO add, position?
-%\input{danksagung}
 \cleardoublepage{}
 
 \printglossary[type=\acronymtype,title={List of Abbreviations},nonumberlist,nogroupskip]
@@ -232,20 +227,22 @@ and Distant Supervision}
 \addappheadtotoc%
 \input{frontbackmatter/appendices/author-extraction-example}
 \cleardoublepage{}
-\input{frontbackmatter/appendices/implementation}
-\cleardoublepage{}
+%\input{frontbackmatter/appendices/implementation}
+%\cleardoublepage{}
 \input{frontbackmatter/appendices/evaluation}
 \cleardoublepage{}
 
 
 \printglossary[style=subjectindex,title=Subject Index,toctitle=Subject Index]
 %\printglossaries
+\cleardoublepage{}
 
 %\bibliographystyle{plain}
 %\bibliographystyle{alpha}
 
+\input{frontbackmatter/acknowledgements}
+\cleardoublepage{}
 
 \printbibliography[heading=bibintoc]
-\cleardoublepage{}
 
 \end{document}

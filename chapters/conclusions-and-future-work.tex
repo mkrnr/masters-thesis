@@ -12,11 +12,12 @@ Another aspect was the percentage of unmatched words that are used for generatin
 Our evaluation shows that this percentage can be used to influence the typical trade-off between \gls{precision} and \gls{recall} of the resulting model.
 Another outcome is that increasing the size of the training data set does improve the resulting model.
 This is especially interesting since we do not rely on manually labeled data.
+When considering a variation of the author extraction problem where we only decide if a given word is part of an author name or not, deriving the labeling from a more complex model has shown better results than when learning a separate model for this problem.
 
 
 \section{Future Work}\label{sec:future-work}
 
-There are several ways in which we aim to improve the performance of our approach for the author extraction problem.
+There are several ways in which we aim to improve our approach for the author extraction problem.
 
 For this, we will implement a better handling of cases such as line breaks in an author name or the usage of ``ders.'' to refer to a previously mentioned author.
 Further, we will include cases in which an institution is named in a reference string instead of an individual author.
@@ -31,7 +32,7 @@ With the available meta data, such categories could be journals, conferences, or
 Such a separation is possible due to the large amounts of automatically generated training data using distant supervision.
 
 Currently, we only consider reference strings that appear in a separate reference section.
-In the area of German social sciences, journals such as ``Totalitarismus und Demokratie''\footnote{\url{http://www.hait.tu-dresden.de/td/home.asp} (accessed Aug.~5,~2016)} or ``S\"{u}dosteuropäische Hefte''\footnote{\url{http://suedosteuropaeische-hefte.org/} (accessed Aug.~5,~2016)} follow a citation style where the reference strings are listed in footnotes.
+In the area of German social sciences, journals such as ``Totalitarismus und Demokratie''\footnote{\url{http://www.hait.tu-dresden.de/td/home.asp} (accessed Aug.~6,~2016)} or ``S\"{u}dosteuropäische Hefte''\footnote{\url{http://suedosteuropaeische-hefte.org/} (accessed Aug.~6,~2016)} follow a citation style where the reference strings are listed in footnotes.
 We plan to extend our approach to also cover such citation styles by localizing reference strings outside of the reference section.
 
 \bigskip
@@ -46,12 +47,12 @@ One possible reason is that the \gls{pdf} contains a scanned version of the rese
 A heuristic should be implemented that detects such cases.
 
 The application in a productive context further requires a confidence measure for a predicted labeling.
-Thereby, a task is to derive such a confidence measure from the result of the \gls{viterbi algorithm} that is used for calculating the most likely labeling of a given model (see \todo{add}).
+Thereby, a task is to derive such a confidence measure from the result of the \gls{viterbi algorithm} that is used for calculating the most likely labeling of a given model (see \Cref{sec:inference-crfs}).
 This confidence measure can be used in the following steps in citation index creation.
 Further, instead of only considering the most likely label, a number of alternative labels can be provided to the following steps together with their confidence measures.
 
 \bigskip
 
-We also plan to apply our approach to previously used datasets such as the \textit{CiteSeerX}\footnote{\url{http://citeseerx.ist.psu.edu/index} (accessed Aug.~5,~2016)} dataset used in \citet{councill2008parscit} or the frequently used Cora dataset \citep[e.g.][]{peng2004accurate,councill2008parscit,wu2014citeseerx}.
+We also plan to apply our approach to previously used datasets such as the \textit{CiteSeerX}\footnote{\url{http://citeseerx.ist.psu.edu/index} (accessed Aug.~6,~2016)} dataset used in \citet{councill2008parscit} or the frequently used Cora dataset \citep[e.g.][]{peng2004accurate,councill2008parscit,wu2014citeseerx}.
 In order to apply a distantly supervised approach, related sets of research papers as well as knowledge bases need to be identified.
 
