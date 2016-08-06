@@ -206,12 +206,12 @@ Another reason is that in practice not all author names can be matched against a
 Because of this imbalance, it could be helpful to not consider every unmatched word $w_n$ for the construction of \gls{ge} constraints.
 From this we derive the following research question:
 \newcommand\researchquestionfour{\researchquestionformat{%
-  \RQ{4}: How does changing the ratio between matchted and unmatched words that are considered for building \gls{ge} constraints impact the performance of the resulting distantly supervised \gls{linear-chain crf} model?
+  \RQ{4}: How does changing the percentage of unmatched words that are used in the training set for building \gls{ge} constraints impact the performance of the resulting distantly supervised \gls{linear-chain crf} model?
 }}
 \researchquestionfour%
 
-\Cref{tab:example-ge-constraints} shows the \gls{ge} constraints for the matches of author names in \Cref{tab:example-author-list} with the four reference strings in \Cref{fig:example-reference-strings}.
-For this example, we additionally consider every third unmatched word for the constraint calculation.
+For our author extraction example, \Cref{tab:example-ge-constraints} shows the \gls{ge} constraints for the matches of author names in \Cref{tab:example-author-list} with the four reference strings in \Cref{fig:example-reference-strings}.
+Here, we additionally consider every third unmatched word for the constraint calculation.
 
 \bigskip
 

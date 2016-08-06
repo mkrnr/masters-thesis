@@ -46,8 +46,80 @@ Since the \gls{f1 score} is the harmonic mean of \gls{precision} and \gls{recall
 
 \section{Configuration}\label{app:sec-configuration}
 
+\begin{table}[h]
+\hspace{-0.25\textwidth}
+\makebox[1.5\textwidth][c]{%
+\begin{tabular}{l l l l l l l l}
+  \toprule
+  \RQ{}& Figure/  &  Author & Markov  & Gaussian & Number of  & Unlabeled & \texttt{O} Label\\
+  & Table    &  List  &  Order &  Parameter &Ref. Sections  & Percentage & Prob. Mass \\
+  \midrule
+  \multirow{2}{*}{\RQN{1}}& \Cref{tab:author-sets-author-labels-f1} & \multirow{2}{*}{Multiple} & \multirow{2}{*}{\texttt{M-0-1}} & \multirow{2}{*}{$10$} & \multirow{2}{*}{Multiple} &\multirow{2}{*}{$0.5$}&\multirow{2}{*}{$0.82586$}\\
+  &\&\Cref{tab:author-sets-all-labels-f1}& & & & & &\\
+  \RQN{2}& \Cref{fig:eval-end-tags} & \texttt{swp-full} & \texttt{M-0-1} & $10$ & Multiple &$0.5$&$0.82586$\\
+  \RQN{3}& \Cref{fig:eval-other-percentages} & \texttt{swp-full} & \texttt{M-0-1} & $10$ & Multiple &$0.5$&Multiple\\
+  \RQN{4}& \Cref{fig:eval-other-ratios} & \texttt{swp-full} & \texttt{M-0-1} & $10$ & Multiple &Multiple\footnotemark&$0.82586$\\
+  \RQN{5}& \Cref{fig:eval-authors-only} & \texttt{swp-full} & \texttt{M-0-1} & $10$ & Multiple &$0.5$&$0.82586$\\
+  \RQN{6}& \Cref{tab:eval-training-size} & \texttt{swp-full} & \texttt{M-0-1} & $10$ & Multiple &$0.3333$&$0.9$\\
+  \RQN{7}& \Cref{fig:eval-markov-orders} & \texttt{swp-full} & Multiple & $10$ & Multiple &$0.5$&$0.82586$\\
+  \RQN{8}& \Cref{fig:eval-gaussian} & \texttt{swp-full} & \texttt{M-0-1} & Multiple & Multiple &$0.5$&$0.82586$\\
+  \bottomrule
+\end{tabular}
+}
+\caption{Configuration for the different evaluations. For the value of fields that contain ``Multiple'', we refer to the corresponding figure or table. A probability mass of $0.82586$ for \texttt{O} labels reflects the distribution in the testing set.}
+\label{tab:configuration}
+\end{table}
+\footnotetext{Unlabeled Percentages: $0.2,0.3333,0.4286,0.5,0.5556,0.6,0.6364,0.6667,0.6923$}
+\clearpage
 
 \section{Detailed Results}\label{app:detailed-results}
 
+\begin{table}[h]
+%\hspace{-0.25\textwidth}
+%\makebox[1.5\textwidth][c]{%
+  \centering
+\begin{tabular}{l c c c r r r}
+\toprule
+Label  & Precision  & Recall &  F1 Score & Predicted  &Correct  & True  \\
+  &   &  &   &  Labels & Labels &  Labels \\
+\midrule
+\texttt{B-FN}  & $0.6529$  & $0.8875$ & $0.7523$ & \num{749}   & \num{489}     &     \num{551}  \\
+\texttt{B-LN}  & $0.8881$  & $0.9296$ & $0.9083$ & \num{2823}  & \num{2507}    &     \num{2697} \\
+\texttt{I-FN}  & $0.8935$  & $0.9287$ & $0.9107$ & \num{3323}  & \num{2969}    &     \num{3197} \\
+\texttt{I-LN}  & $0.5877$  & $0.8145$ & $0.6827$ & \num{844}   & \num{496}     &     \num{609} \\
+\texttt{I-O}   & $0.0000$  & $0.0000$ & $0.0000$ & \num{0}     & \num{0}       &     \num{1} \\
+\texttt{O}     & $0.9903$  & $0.9701$ & $0.9801$ & \num{32775} & \num{32457}   &     \num{33459}\\
+\midrule
+Author Labels  & $0.8349$  & $0.9158$ & $0.8735$ & \num{7739}  & \num{6461}    &     \num{7055}\\
+All Labels     & $0.9606$  & $0.9606$ & $0.9606$ & \num{40514} & \num{38918}   &     \num{40514}\\
+\bottomrule
+\end{tabular}
+%}
+\caption{Detailed results for the \gls{linear-chain crf} model consisting of \num{16470} reference sections in \Cref{tab:eval-training-size}. Predicted labels is the number of labels that the model assigned. Correct labels is the number of labels that the model correctly assigned. True labels is the number of labels in the testing set.}
+\label{tab:detailed-results}
+\end{table}
 
-\section{Learning Scalability}\label{app:learning-scalability}
+\section{Scalability}\label{app:scalability}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c c c}
+ \toprule
+ Reference & Main Memory  & Runtime \\
+  Sections &  Usage in GBytes &  in Minutes\\
+ \midrule
+ \hphantom{00}\num{500} &  \hphantom{0}$7.9424$ &\hphantom{0}$498.45$\hphantom{00}   \\
+ \hphantom{0}\num{1000}&  $12.4670$&\hphantom{0}$721.1333$ \\
+ \hphantom{0}\num{1500} &  $12.5132$&\hphantom{0}$344.8$\hphantom{000}    \\
+ \hphantom{0}\num{2000} &  $12.2374$&$1122.6833$\\
+\hphantom{0}\num{2500} &  $12.4078$&$1099.1833$\\
+\hphantom{0}\num{3000} &  $12.4078$&$2583.6667$\\
+\hphantom{0}\num{5000} &  $18.1346$&$1493$\hphantom{.0000}     \\
+\num{16470}&  $52.2180$&$6650.5$\hphantom{000}   \\
+ \bottomrule
+\end{tabular}
+\caption{Statistics on the main memory usage and runtime for learning the models used in \Cref{tab:eval-training-size}. The number of reference sections was used as unlabeled data for the distant supervision.}
+\label{tab:ssoar-number-of-tags}
+\end{table}
+
+

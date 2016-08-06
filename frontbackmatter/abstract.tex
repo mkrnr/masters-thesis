@@ -3,7 +3,12 @@
   \bfseries{Zusammenfassung}
   \end{large}
 \end{center}
-Zusammenfassung auf Deutsch
+Um die Beseitigung des Mangels an Zitationsdaten f\"{u}r die deutschen Sozialwissenschaften zu unterst\"{u}tzen, trägt diese Arbeit einen Ansatz zur Autorenextraktion von Literaturverzeichnissen bei.
+Anstatt sich auf kleine Mengen manuell markierter Daten zu verlassen, nutzen wir den Ansatz der Distant Supervision um automatisch teilweise markierte Trainingsdaten zu erstellen.
+Generalized Expectation Kriterien bieten eine geeignete Zielfunktion um Conditional Random Fields mithilfe von teilweise markieren Daten zu lernen.
+Das resultierende Modell entscheidet nicht nur ob ein Wort Teil eines Autorennamen ist, sondern seperiert aufgelistete Autoren und unterscheidet zwischen deren Vornamen und Nachnamen.
+Die Evaluierung unseres Ansatzes zur Autorenextraktion berichtet vielversprechende Ergebnisse.
+Zus\"{a}tzlich deutet sie auf einen Weg hin, der die Abw\"{a}gung der beiden Metriken Spezifität und Relevanz f\"{u}r das Modell beeinflussen kann.
 \par\bigskip
 \par\bigskip
 \selectlanguage{english}
@@ -12,9 +17,9 @@ Zusammenfassung auf Deutsch
   \bfseries{Abstract}
   \end{large}
 \end{center}
-To help in overcoming a shortage of citation information for the German social sciences, we contribute an approach for extracting author names from reference sections.
+To help in overcoming a shortage of citation information for the German social sciences, this thesis contributes an approach for extracting author names from reference sections.
 Instead of relying on small amounts of manually labeled data, we use a distantly supervised approach to automatically generate a partially labeled training data set.
-To apply this data set to the widely used probabilistic framework of conditional random fields, GE criteria provide a suitable objective function.
-The resulting model does not only decide if a word is part of an author, but also separates the listed authors and distinguishes between first and last names.
-The evaluation of our model reports a promising performance for the author extraction task.
+Generalized expectation criteria provide a suitable objective function to learn conditional random fields using such partially labeled data.
+The resulting model does not only decide if a word is part of an author, but also separates the listed authors and distinguishes between their first and last names.
+The evaluation of our approach for the author extraction task reports a promising performance.
 In addition, it suggests ways of influencing the trade-off between the precision and recall of the model.

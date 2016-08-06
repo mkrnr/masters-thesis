@@ -267,19 +267,21 @@ To address the research question, we generate several models with a varying numb
   \toprule
   Node Type &Metric & \multicolumn{1}{c}{\num{500}} & \multicolumn{1}{c}{\num{1000}} & \multicolumn{1}{c}{\num{1500}} & \multicolumn{1}{c}{\num{2000}} & \multicolumn{1}{c}{\num{2500}}  & \multicolumn{1}{c}{\num{5000}} & \multicolumn{1}{c}{\num{16470}}\\
   \midrule
-  Author &\gls{precision} & $0.7845$ & $0.8328$ & $0.8471$ & $0.8593$ & $0.8473$ & $0.8336$ & $0.8349$ \\
-  Author &\gls{recall}    & $0.8581$ & $0.8768$ & $0.9103$ & $0.9082$ & $0.9094$ & $0.9118$ & $0.9158$ \\
-  Author &\gls{f1 score}  & $0.8197$ & $0.8542$ & $0.8776$ & $0.8831$ & $0.8773$ & $0.871$ & $0.8735$ \\
-  All &\gls{f1 score}     & $0.9512$ & $0.9594$ & $0.9632$ & $0.9653$ & $0.9633$ & $0.9601$ & $0.9606$ \\
+  Author &\gls{precision} & $0.7845$ & $0.8328$ & $0.8471$ & $\bm{0.8593}$ & $0.8473$ & $0.8336$ & $0.8349$ \\
+  Author &\gls{recall}    & $0.8581$ & $0.8768$ & $0.9103$ & $0.9082$ & $0.9094$ & $0.9118$ & $\bm{0.9158}$ \\
+  Author &\gls{f1 score}  & $0.8197$ & $0.8542$ & $0.8776$ & $\bm{0.8831}$ & $0.8773$ & $0.871$ & $0.8735$ \\
+  All &\gls{f1 score}     & $0.9512$ & $0.9594$ & $0.9632$ & $\bm{0.9653}$ & $0.9633$ & $0.9601$ & $0.9606$ \\
   \bottomrule
 \end{tabular}
 }
-\caption{Comparison of models that use different numbers of reference sections for the model learning.}
+\caption{Comparison of models that use different numbers of reference sections for the model learning. The best score in each row is highlighted.}
 \label{tab:eval-training-size}
 \end{table}
+Based on the previous evaluation results, we deliberately set the percentage of unmatched words in the training set to $0.3333$ and the probability mass assigned to \texttt{O} labels to $0.9$.
 We see that a bigger data set does not automatically lead to a better \gls{f1 score} for all labels or even the author labels alone.
 Yet, increasing the number of reference sections does lead to an improved \gls{recall} of author labels.
 Again, further experiments are needed to confirm this intuition since the same configuration was used for all models.
+\Cref{tab:detailed-results} shows the detailed results per label for the model that was learned with \num{16470} reference sections.
 
 \bigskip
 
@@ -321,5 +323,5 @@ According to \citet{sutton2010introduction}, this is a typical choice for traini
 
 \bigskip
 
-In \Cref{app:learning-scalability}, we provide some insights on the scalability of our learning approach by comparing the main memory consumption as well as the runtime for different numbers of reference sections.
+In \Cref{app:scalability}, we provide some insights on the scalability of our learning approach by comparing the main memory consumption as well as the runtime for different numbers of reference sections.
 
