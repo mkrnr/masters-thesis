@@ -8,19 +8,21 @@ This includes the generation of distantly supervised training sets from unlabele
 Further, we evaluated several aspects of the author extraction task using our approach.
 One of them was the comparison of different author lists as the knowledge bases for distant supervision.
 We demonstrated that tagging reference sections with an author set that comes from a similar research area does improve the performance of the resulting model.
+A comparison of the \gls{bio} and \gls{bieo} formats showed a better performance of models that use the \gls{bio} format.
+By comparing the assignment of different probability masses to the \texttt{O} label in a \gls{ge constraint} when considering an unmatched word, we observed an strong influence on the model performance.
 Another aspect was the percentage of unmatched words that are used for generating \gls{ge} constraints.
 Our evaluation shows that this percentage can be used to influence the typical trade-off between \gls{precision} and \gls{recall} of the resulting model.
-Another outcome is that increasing the size of the training data set does improve the resulting model.
 This is especially interesting since we do not rely on manually labeled data.
 When considering a variation of the author extraction problem where we only decide if a given word is part of an author name or not, deriving the labeling from a more complex model has shown better results than when learning a separate model for this problem.
-
+Another outcome is that increasing the size of the training data set does improve the resulting model.
+Also the \gls{markov order} of the learned \gls{linear-chain crf} was evaluated and a combination of a \gls{markov order} $0$ and \gls{markov order} $1$ model showed the best performance.
+We further confirmed that modifying the \gls{regularization parameter} of the \gls{gaussian prior} in our objective function by up to a factor of ten does not significantly impact the performance of the model.
 
 \section{Future Work}\label{sec:future-work}
 
 There are several ways in which we aim to improve our approach for the author extraction problem.
 
-For this, we will implement a better handling of cases such as line breaks in an author name or the usage of ``ders.'' to refer to a previously mentioned author.
-Further, we will include cases in which an institution is named in a reference string instead of an individual author.
+For example, we will implement a better handling of cases such as line breaks in an author name or the usage of ``ders.'' to refer to a previously mentioned author.
 
 We also plan to extend our \glspl{ge constraint} which currently only consider individual words.
 Especially for first or last names that appear frequently, this could reduce the expressive power of the \gls{ge constraint} as part of the \gls{objective function}.

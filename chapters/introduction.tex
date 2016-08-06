@@ -36,7 +36,7 @@ Further, we focus on the extraction from research papers in the area of German s
 
 \bigskip
 
-Since there is no data set available to address the given problem with a supervised machine learning approach, we will look into the concept of \gls{distant supervision}.
+Since there is no data set available to address the given task with a supervised machine learning approach, we will look into the concept of \gls{distant supervision}.
 This allows an automated generation of partially labeled training data using an external knowledge base.
 In our scenario, this knowledge base is a list of author names from related research domains.
 This list of author names is matched against a given set of unlabeled reference sections.
@@ -61,7 +61,7 @@ This combination of distant supervision with \glspl{ge constraint} for learning 
 
 The remainder of this thesis is structured as follows.
 In \Cref{cha:related-work}, we give an overview of the related work in the area of entity recognition with a focus on reference string extraction.
-Using the author extraction problem as an example, \Cref{cha:crfs} discusses the foundations of \glspl{crf} as well as their encoding, inferencing, and learning.
+Using the author extraction task as an example, \Cref{cha:crfs} discusses the foundations of \glspl{crf} as well as their encoding, inferencing, and learning.
 \Cref{cha:distant-supervision} focuses on distant supervision as an approach to learn \glspl{crf} by comparing the approaches of marginalization and \gls{ge} constraints.
 The different steps of our author extraction approach are discussed in more detail in \Cref{cha:author-extraction}.
 In that chapter, we also state the research questions that are addressed in this thesis.

@@ -185,7 +185,7 @@ When considering the \gls{f1 score}, a probability mass of \texttt{O} of around 
 
 \bigskip
 
-\RQ{4} is focused on the ratio between matched and unmatched $w_n$ that are considered for building \gls{ge} constraints.
+\RQ{4} is focused on the percentage of unmatched words in the training set from which the \gls{ge} constraints are generated.
 \Cref{tab:ssoar-number-of-tags} shows the number of \texttt{AU} nodes in the resulting \glspl{goddag} based on different knowledge bases.
 \begin{table}
 \centering
@@ -208,7 +208,7 @@ Since only between $9\%$ and $12\%$ of the words are matched to an author, we in
 \caption{Results for different percentages of unmatched words for building \gls{ge} constraints using the \texttt{swp-full} data set. The number of matched words is fixed. 500, 1000, and 1500 are the number of used reference sections.}
 \label{fig:eval-other-ratios}
 \end{figure}
-We can see that by increasing the percentage of unmatched words from $20\%$ to $69\%$, the \gls{recall} for author labels decreases by almost $10\%$.
+We can see that by increasing the percentage of unmatched words in the training set from $20\%$ to $69\%$, the \gls{recall} for author labels decreases by almost $10\%$.
 At the same time, the \gls{precision} of author labels does not increase accordingly.
 This is especially true for the model that was learned with $1500$ reference sections.
 When looking at the \glspl{f1 score}, we see for all three models that by increasing the percentage of unmatched words, the value first increases and then decreases.
@@ -216,11 +216,11 @@ The more reference sections were used, the lower is the percentage of unmatched 
 
 \bigskip
 
-\RQ{5} considers a variation of the author extraction problem.
+\RQ{5} considers a variation of the author extraction task.
 Instead of grouping words to individual author names and distinguishing between first and last names, a word $w_n$ is only labeled as part of an author name.
 This results in a labeling which consists of two labels:
 \texttt{A} for Author and \texttt{O} for Other.
-We refer to this as the $\texttt{A-O}$ problem.
+We refer to this as the $\texttt{A-O}$ labeling task.
 This can be addressed using our more fine-grained approach that includes the labels \texttt{B-FN}, \texttt{B-LN}, \texttt{I-FN}, \texttt{I-LN}, and \texttt{O}.
 For this, we assume all labels except \texttt{O} to represent the \texttt{A} label.
 Using the statistics from the fine-grained approach, we can derive the value of $FP(\texttt{A})$ with:
@@ -241,17 +241,17 @@ The values of $TP(\texttt{A})$, $FP(\texttt{A})$, and $FN(\texttt{A})$ are suffi
 We refer to this as the \texttt{A-O-deriv} labeling.
 In comparison to this derivation, we also train separate models that only contain the two labels \texttt{A} and \texttt{O}.
 The resulting labeling is referred to as \texttt{A-O-model}.
-\Cref{fig:eval-authors-only} shows the performance of these two approaches for the $\texttt{A-O}$ problem.
+\Cref{fig:eval-authors-only} shows the performance of these two approaches for the $\texttt{A-O}$ labeling task.
 \begin{figure}
 \input{figures/eval-authors-only}
-\caption{Evaluation results that compare the \texttt{A-O-deriv} labeling with the \texttt{A-O-model} labeling for the \texttt{A-O} problem.}
+\caption{Evaluation results that compare the \texttt{A-O-deriv} labeling with the \texttt{A-O-model} labeling for the \texttt{A-O} labeling task.}
 \label{fig:eval-authors-only}
 \end{figure}
-The derived labeling consistently scores higher than the labeling by the model that was specifically trained for the \texttt{A-O} problem.
+The derived labeling consistently scores higher than the labeling by the model that was specifically trained for the \texttt{A-O} labeling task.
 The latter also shows a stronger fluctuation in the result, depending on the randomly selected reference sections.
 Yet, this result only gives a first intuition and should not be taken as an answer to \RQ{5}.
-This is because we trained the model for the \texttt{A-O} problem using the same configuration as for the fine-grained model.
-To come to a more conclusive answer, different configurations for the \texttt{A-O} model would need to be considered.
+This is because we trained the model for the \texttt{A-O} labeling task using the same configuration as for the fine-grained model.
+To come to a more conclusive answer, different configurations for \texttt{A-O-model} would need to be considered.
 
 \bigskip
 

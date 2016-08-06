@@ -9,32 +9,29 @@
 \usepackage{amssymb}					      	%	math symbols
 \usepackage{amsmath}					      	% overall enhancements to math environment
 \usepackage{mathtools}
-\usepackage[textsize=footnotesize]{todonotes}					      	% package for notes/comments
+%\usepackage[textsize=footnotesize]{todonotes}					      	% package for notes/comments
 \usepackage[bookmarks=true,
 bookmarksopen=true,
 bookmarksnumbered=true,
 pdfstartpage=1,
-%TODO add final title
-pdftitle={},
+pdftitle={Author Extraction from Social Science Research Papers Using Conditional Random Fields and Distant Supervision},
 pdfauthor={Martin K\"{o}rner},
 pdfsubject={Master's Thesis},
-%TODO add keywords
-pdfkeywords={},
+pdfkeywords={CRFs,distant supervision,author extraction,entity recognition,probabilistic graphical models, generalized expectation},
 breaklinks=true,
 colorlinks=true,
-%TODO set links to black
-%linkcolor=black,
-%anchorcolor=black,
-%citecolor=black,
-%filecolor=black,
-%menucolor=black,
-%urlcolor=black]{hyperref}
-linkcolor=blue,
-anchorcolor=blue,
-citecolor=blue,
-filecolor=blue,
-menucolor=blue,
-urlcolor=blue]{hyperref}
+linkcolor=black,
+anchorcolor=black,
+citecolor=black,
+filecolor=black,
+menucolor=black,
+urlcolor=black]{hyperref}
+%linkcolor=blue,
+%anchorcolor=blue,
+%citecolor=blue,
+%filecolor=blue,
+%menucolor=blue,
+%urlcolor=blue]{hyperref}
 \usepackage{float}                    % additional positions for images
 \usepackage{listings}                 % source code
 \usepackage[labelfont=bf]{caption}    % captions
@@ -70,7 +67,7 @@ urlcolor=blue]{hyperref}
 \DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 
-\newcommand{\itodo}[1]{\todo[inline]{#1}} %TODO remove
+%\newcommand{\itodo}[1]{\todo[inline]{#1}} %TODO remove
 
 \newcommand{\RQ}[1]{\textbf{\textsf{RQ#1}}}
 \newcommand{\RQN}[1]{\textbf{\textsf{#1}}}
@@ -220,7 +217,7 @@ and Distant Supervision}
 \input{chapters/evaluation}
 \cleardoublepage{}
 
-\input{chapters/conclusions-and-future-work}
+\input{chapters/conclusion-and-future-work}
 \cleardoublepage{}
 
 \appendix

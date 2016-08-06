@@ -70,6 +70,42 @@ Since the \gls{f1 score} is the harmonic mean of \gls{precision} and \gls{recall
 \label{tab:configuration}
 \end{table}
 \footnotetext{Unlabeled Percentages: $0.2,0.3333,0.4286,0.5,0.5556,0.6,0.6364,0.6667,0.6923$}
+
+\clearpage
+
+\section{Feature Engineering}\label{app:sec-feature-engineering}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{l l}
+  \toprule
+  \multicolumn{2}{c}{Feature}\\
+   Name                   & Description\\
+  \midrule
+   \texttt{CAPITALIZED}     &\verb$[^\\p{L}]*\\p{Lu}.*$\\
+   \texttt{PERIOD}          &\verb$[^\\.]*\\.[^\\.]*$\\
+   \texttt{PERIODS}         &\verb$.*\\..*\\..*$\\
+   \texttt{CONTAINSPERIOD}  &\verb$.+\\..+$\\
+   \texttt{ENDSWITHPERIOD}  &\verb$.+\\..+$\\
+   \texttt{CONTAINSCOMMA}   &\verb$.+,.+$\\
+   \texttt{ENDSWITHCOMMA}   &\verb$.*,$\\
+   \texttt{CONTAINSDASH}    &\verb$.+-.+$\\
+   \texttt{ENDSWITHDASH}    &\verb$.*-$\\
+   \texttt{NUMBER}          &\verb$\\D*\\d+\\D*$\\
+   \texttt{NUMBERS}         &\verb$.*\\d+\\D+\\d+.*$\\
+   \texttt{ONELETTER}       &\verb$[^\\p{L}]*\\p{L}[^\\p{L}]*$\\
+   \texttt{BRACES}          &\verb$.*\\(.*\\).*$\\
+   \texttt{BRACKETS}        &\verb$.*\\[.*\\].*$\\
+   \texttt{YEAR}            &\verb$\\D*(1[6-9][0-9][0-9]|20[0-1][0-9])\\D*$\\
+   \texttt{MONTH}           &\verb$([^\\p{L}]*|.*[^\\p{L}]+)($\\
+                            &\verb$  (monthNames)|(monthAbbreviations))($\\
+                            &\verb$  [^\\p{L}]*|[^\\p{L}]+.*)$\\
+  \bottomrule
+\end{tabular}
+\caption{Used regular expressions for detecting layout features.}
+\label{tab:our-features-regular-expressions}
+\end{table}
+
 \clearpage
 
 \section{Detailed Results}\label{app:detailed-results}

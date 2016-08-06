@@ -43,6 +43,7 @@ Using this, we can define \gls{event space} \glssymbol{event space} as a subset 
   \glssymbol{event space}\subseteq\glssymbol{power set}(\glssymbol{outcome space}).
 \end{equation*}
 
+\newpage
 
 The \gls{probability distribution} $P$ now describes a mapping from \glspl{event} in \glssymbol{event space} to real numbers according to the following rules \citep{koller2009probabilistic}:
 \begin{itemize}
@@ -65,17 +66,20 @@ In other words, $\mathit{firstLN}$ contains all reference strings in \glssymbol{
 
 To fulfill the three properties of an \gls{event space} \glssymbol{event space}, we need to introduce a number of additional \glspl{event}.
 First, we add the empty \gls{event} $\emptyset$ and the trivial \gls{event} $\Omega$ to \glssymbol{event space}.
-To fulfill the property of \glssymbol{event space} being closed under complementation, we then add the complement of $\mathit{firstLN}$ and $\mathit{secondEC}$:
+Further, to fulfill the property of \glssymbol{event space} being closed under complementation, we then add the complement of $\mathit{firstLN}$ and $\mathit{secondEC}$:
 \begin{equation*}
   \begin{split}
     \mathit{firstNotLN}&=\glssymbol{outcome space}\setminus\textit{firstLN}.\\
     \mathit{secondNotEC}&=\glssymbol{outcome space}\setminus\textit{secondEC}.\\
   \end{split}
 \end{equation*}
-Further, to fulfill the union property of \glssymbol{event space}, we add all unions of \glspl{event}.
+To fulfill the union property of \glssymbol{event space}, we add all unions of \glspl{event}.
 Then, we again need to add the complements of the newly added union of \glspl{event}.
 This repeats until all possible unions and complements are added to \glssymbol{event space}.
 Even for this simple example, the resulting \gls{event space} is already considerably big.
+In the following, we thereby to not explicitly discuss the content of \glssymbol{event space}.
+
+\bigskip
 
 We now consider the resulting \glspl{probability distribution} for this example.
 Based on the four reference strings in \glssymbol{outcome space}, we assign the corresponding probabilities to the events in \glssymbol{event space}.
@@ -720,6 +724,8 @@ In order to find a recursive definition of $Z(\mathbf{X})$ that allows the reuse
     \end{split}
   \end{equation}
   where we have $Y_N=j$ and where the calculations including $j$ are isolated from the product over all other calculations.
+
+  \newpage
 
   Since we only use the assignments $Y_{N-1}$ from the sum over $Y_1,\dots,Y_{N-1}$ in the two \glspl{factor} $\Psi_N$, we can rewrite \Cref{equ:linear-chain-crf-z-j-1} as
   \begin{equation}
