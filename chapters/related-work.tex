@@ -4,7 +4,6 @@ We will also consider an approach on entity recognition that uses unlabeled data
 
 \bigskip
 
-There has been a large body of research on bibliographic information extraction from research papers.
 \citet{giles1998citeseer} propose one of the first autonomous citation indexing systems called \emph{CiteSeer}.
 The system uses heuristics following an ``invariants first'' philosophy for detecting the different fields in reference strings~\citep{giles1998citeseer}.
 Thereby, fields that appeared in similar positions for all reference strings are parsed first.
@@ -27,6 +26,7 @@ For the author labels, they achieve a \gls{f1 score} of $99.3\%$ for the Cora da
 
 Instead of relying on fully labeled data, \citet{lu2013web} use the approach of \gls{distant supervision} in combination with \glspl{ge criterion} to learn \gls{crf} models.
 Their goal is to extract named entities such as organizations, persons, or places from web pages~\citep{lu2013web}.
+For this, they use \textit{DBpedia}\footnote{\url{http://wiki.dbpedia.org/} (accessed Aug.~6,~2016)} as a knowledge base for the different entity types for the automated labeling of semi-structured HTML elements.
 After additionally applying a collective detection model, an evaluation on \num{16755} manually labeled named entities shows a \gls{f1 score} of $72.56\%$ with a \gls{precision} of $70.46\%$ and \gls{recall} of $74.79\%$~\citep{lu2013web}.
 
 \bigskip

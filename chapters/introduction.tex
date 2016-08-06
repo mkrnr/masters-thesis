@@ -4,30 +4,30 @@ A citation index provides information on the citations between publications.
 This information is essential for the knowledge discovery process when conducting research.
 Several services are available that provide citation indices for research areas such as mathematics and physics\footnote{\url{http://related-work.net/} (accessed Aug.~6,~2016)}, computer science\footnote{\url{http://dblp.uni-trier.de/} (accessed Aug.~6,~2016)}, and medicine\footnote{\url{http://www.ncbi.nlm.nih.gov/pubmed} (accessed Aug.~6,~2016)}.
 Despite its importance, there is a shortage of citation data for German social science publications~\citep{herb2015open}.
-Even though a number of commercial services include citation data for a broad range of research areas, they do not provide a sufficient coverage of smaller academic fields such as the German social sciences~\citep{mayr2007exploratory}.
+Even though a number of commercial services include citation data for a broad range of research areas, they do not provide a sufficient coverage of smaller academic fields~\citep{mayr2007exploratory}.
 In addition, commercial services generally do not publicly share their datasets which hinders a full utilization of the citation data.
 The Social Science Citation Index\footnote{\url{http://scientific.thomson.com/products/ssci/} (accessed Aug.~6,~2016)} by Thomson Reuters in particular was criticized for being ideologically biased and containing methodological deficiencies in the citation counting~\cite{klein2004social}.
-Thereby, the motivation of this thesis is to contribute to the effort of extracting citation data from given research papers in order fill the gap for German social science publications and to be less dependent on commercial services.
+Thereby, the motivation of this thesis is to contribute to the efforts of extracting citation data from research papers in order to fill the gap for German social science publications and to be less dependent on commercial services.
 
 \bigskip
 
 Possible steps for extracting a citation index from a body of research papers are shown in \Cref{fig:extraction-pipeline}.
-\begin{figure}[t]
-\includegraphics[width=\textwidth]{figures/extraction-pipeline}
-\caption{Extraction pipeline for generating a citation network from given research papers in the \gls{pdf} format.}
-\label{fig:extraction-pipeline}
-\end{figure}
-Assuming that the research papers are given in the \gls{pdf} format, a first step is to convert them to text files with an appropriate encoding.
+Assuming that the research papers are given in the \gls{pdf}, a first step is to convert them to text files with an appropriate encoding.
 This allows a further processing of the data.
 In our approach, we further assume that all citations that are made in the body of a research paper also appear in the form of reference strings.
 Such reference strings can appear either in a separate reference section or in the footnotes near the according citations.
 Thereby, the second step is to extract all reference strings.
-The strings are then segmented into the different attributes that identify the referenced paper in step three.
+The strings are then segmented into different attributes that identify the referenced paper in step three.
 Such attributes can be the authors, title, journal, and publication year.
 An approach that combines the second and third step by detecting reference strings based on the appearance of the mentioned attributes also could be imaginable.
 Step four is to match this extracted information against existing meta data records in order to assign a unique identifier such as a \textit{digital object identifier} (DOI).
 From this we can construct a network of research papers where citations are modeled as directed edges.
 The resulting network can be used as a citation index.
+\begin{figure}[t]
+\includegraphics[width=\textwidth]{figures/extraction-pipeline}
+\caption{Extraction process for generating a citation network from given research papers as \gls{pdf} files.}
+\label{fig:extraction-pipeline}
+\end{figure}
 
 It is not the goal of this thesis to cover all these steps.
 Instead, we focus on the extraction of author names from the reference section of a given research paper.
@@ -37,16 +37,19 @@ Further, we focus on the extraction from research papers in the area of German s
 \bigskip
 
 Since there is no data set available to address the given problem with a supervised machine learning approach, we will look into the concept of \gls{distant supervision}.
-This allows an automated tagging of unlabeled data using an external knowledge base.
+This allows an automated generation of partially labeled training data using an external knowledge base.
 In our scenario, this knowledge base is a list of author names from related research domains.
+This list of author names is matched against a given set of unlabeled reference sections.
+
 To apply an automated tagging of author names in reference strings, several issues need to be addressed.
-For example, there are several ways in which an author name can be written in a reference string.
-An automated tagging also often results in overlapping tags when multiple authors are listed in one reference string.
+For example, there are different ways in which an author name can be written in a reference string.
+An automated tagging also often results in overlapping tags when multiple authors are listed in the same reference string.
 Instead of considering only one of the overlapping tags, we aim to include all available information in our model.
 For this, we will discuss the \gls{goddag} as an appropriate data structure for representing overlapping tags.
 
 The probabilistic framework of \glspl{crf} is widely used for entity recognition tasks.
-Yet, their original definition by \citet{lafferty2001conditional} is only applicable on fully labeled training data whereas distant supervision provides partially labeled data.
+Yet, their original definition by \citet{lafferty2001conditional} is only applicable to fully labeled training data.
+Distant supervision on the other hand provides partially labeled data.
 We will discuss two different approaches that allow the usage of distantly supervised training sets for the learning of \glspl{crf}:
 The first is a marginalization approach by \citet{tsuboi2008training}.
 The second approach uses \gls{ge} \textit{criteria}\glsunset{ge criterion} that were first proposed by \citet{mann2007simple}.
@@ -58,10 +61,10 @@ This combination of distant supervision with \glspl{ge constraint} for learning 
 
 The remainder of this thesis is structured as follows.
 In \Cref{cha:related-work}, we give an overview of the related work in the area of entity recognition with a focus on reference string extraction.
-Using the author extraction problem as an example, \Cref{cha:crfs} discussed the foundations of \glspl{crf} as well as their encoding, inferencing, and learning.
+Using the author extraction problem as an example, \Cref{cha:crfs} discusses the foundations of \glspl{crf} as well as their encoding, inferencing, and learning.
 \Cref{cha:distant-supervision} focuses on distant supervision as an approach to learn \glspl{crf} by comparing the approaches of marginalization and \gls{ge} constraints.
 The different steps of our author extraction approach are discussed in more detail in \Cref{cha:author-extraction}.
-In this chapter, we also state the research questions that we address in this thesis.
+In that chapter, we also state the research questions that are addressed in this thesis.
 Following this, we present our author extraction implementation in \Cref{cha:implementation}.
 An evaluation that addresses our research questions will be presented in \Cref{cha:evaluation}.
 In \Cref{cha:conclusion-and-future-work}, we conclude the thesis and discuss the possible future work.

@@ -3,12 +3,12 @@
   \bfseries{Zusammenfassung}
   \end{large}
 \end{center}
-Um die Beseitigung des Mangels an Zitationsdaten f\"{u}r die deutschen Sozialwissenschaften zu unterst\"{u}tzen, trägt diese Arbeit einen Ansatz zur Autorenextraktion von Literaturverzeichnissen bei.
-Anstatt sich auf kleine Mengen manuell markierter Daten zu verlassen, nutzen wir den Ansatz der Distant Supervision um automatisch teilweise markierte Trainingsdaten zu erstellen.
-Generalized Expectation Kriterien bieten eine geeignete Zielfunktion um Conditional Random Fields mithilfe von teilweise markieren Daten zu lernen.
-Das resultierende Modell entscheidet nicht nur ob ein Wort Teil eines Autorennamen ist, sondern seperiert aufgelistete Autoren und unterscheidet zwischen deren Vornamen und Nachnamen.
-Die Evaluierung unseres Ansatzes zur Autorenextraktion berichtet vielversprechende Ergebnisse.
-Zus\"{a}tzlich deutet sie auf einen Weg hin, der die Abw\"{a}gung der beiden Metriken Spezifität und Relevanz f\"{u}r das Modell beeinflussen kann.
+Um die Erstellung von Zitationsdaten f\"{u}r die deutschen Sozialwissenschaften zu unterst\"{u}tzen, trägt diese Arbeit einen Ansatz zur Autorenextraktion von Literaturverzeichnissen bei.
+Anstatt sich auf kleine Mengen manuell annotierter Daten zu verlassen, nutzen wir den Ansatz der Distant Supervision um automatisch teilweise annotierter Trainingsdaten zu erstellen.
+Generalized Expectation Kriterien bieten eine geeignete Zielfunktion um Conditional Random Fields mithilfe von teilweise annotierten Daten zu lernen.
+Das resultierende Modell entscheidet nicht nur ob ein Wort Teil eines Autorennamens ist, sondern seperiert auch aufgelistete Autoren und unterscheidet zwischen deren Vor- und Nachnamen.
+Die Evaluierung unseres Ansatzes zur Autorenextraktion zeigt vielversprechende Ergebnisse.
+Zus\"{a}tzlich deutet sie auf einen Weg hin, mit dem der Kompromiss zwischen den beiden Metriken Spezifität und Relevanz f\"{u}r das Modell beeinflusst werden kann.
 \par\bigskip
 \par\bigskip
 \selectlanguage{english}
@@ -17,7 +17,7 @@ Zus\"{a}tzlich deutet sie auf einen Weg hin, der die Abw\"{a}gung der beiden Met
   \bfseries{Abstract}
   \end{large}
 \end{center}
-To help in overcoming a shortage of citation information for the German social sciences, this thesis contributes an approach for extracting author names from reference sections.
+To help in the creation of citation information for the German social sciences, this thesis contributes an approach for extracting author names from reference sections.
 Instead of relying on small amounts of manually labeled data, we use a distantly supervised approach to automatically generate a partially labeled training data set.
 Generalized expectation criteria provide a suitable objective function to learn conditional random fields using such partially labeled data.
 The resulting model does not only decide if a word is part of an author, but also separates the listed authors and distinguishes between their first and last names.

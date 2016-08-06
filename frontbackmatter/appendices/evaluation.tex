@@ -103,19 +103,19 @@ All Labels     & $0.9606$  & $0.9606$ & $0.9606$ & \num{40514} & \num{38918}   &
 
 \begin{table}[h]
 \centering
-\begin{tabular}{c c c}
+\begin{tabular}{c c c c c}
  \toprule
- Reference & Main Memory  & Runtime \\
-  Sections &  Usage in GBytes &  in Minutes\\
+ Reference & Main Memory  & Runtime & Iterations& Minutes per\\
+  Sections &  Usage in GBytes &  in Minutes& &Iteration\\
  \midrule
- \hphantom{00}\num{500} &  \hphantom{0}$7.9424$ &\hphantom{0}$498.45$\hphantom{00}   \\
- \hphantom{0}\num{1000}&  $12.4670$&\hphantom{0}$721.1333$ \\
- \hphantom{0}\num{1500} &  $12.5132$&\hphantom{0}$344.8$\hphantom{000}    \\
- \hphantom{0}\num{2000} &  $12.2374$&$1122.6833$\\
-\hphantom{0}\num{2500} &  $12.4078$&$1099.1833$\\
-\hphantom{0}\num{3000} &  $12.4078$&$2583.6667$\\
-\hphantom{0}\num{5000} &  $18.1346$&$1493$\hphantom{.0000}     \\
-\num{16470}&  $52.2180$&$6650.5$\hphantom{000}   \\
+ \hphantom{00}\num{500} &  \hphantom{0}$7.9424$ &\hphantom{0}$498.45$\hphantom{00} & $827$ &\hphantom{0}$0.6027$\\
+ \hphantom{0}\num{1000}&  $12.4670$&\hphantom{0}$721.1333$ &$645$&\hphantom{0}$1.118$\hphantom{0}\\
+ \hphantom{0}\num{1500} &  $12.5132$&\hphantom{0}$344.8$\hphantom{000}  &$202$ &\hphantom{0}$1.7069$ \\
+ \hphantom{0}\num{2000} &  $12.2374$&$1122.6833$&$486$&\hphantom{0}$2.31$\hphantom{00}\\
+ \hphantom{0}\num{2500} &  $12.4078$&$1099.1833$&$312$&\hphantom{0}$3.524$\hphantom{0}\\
+ \hphantom{0}\num{3000} &  $12.4078$&$2583.6667$&$589$&\hphantom{0}$4.2865$\\
+ \hphantom{0}\num{5000} &  $18.1346$&$1493$\hphantom{.0000}  &$157$  &\hphantom{0}$9.5096$ \\
+ \num{16470}&  $52.2180$&$6650.5$\hphantom{000}  &$208$ &$31.9736$\\
  \bottomrule
 \end{tabular}
 \caption{Statistics on the main memory usage and runtime for learning the models used in \Cref{tab:eval-training-size}. The number of reference sections was used as unlabeled data for the distant supervision.}

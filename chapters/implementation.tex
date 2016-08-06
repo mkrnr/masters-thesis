@@ -1,40 +1,37 @@
 \chapter{Implementation}\label{cha:implementation}
 
 In this chapter, we discuss our author extraction implementation.
-The following sections are structured similar to \Cref{cha:author-extraction}.
-Thereby, we first look into the preprocessing steps.
-We then consider the generation of distantly supervised training sets which includes creating a author knowledge, and the author name matching.
+We will first look into the preprocessing steps.
+We then consider the generation of distantly supervised training sets which includes creating an author knowledge base and the author name matching.
 Using the reference strings with matched author names, we then build \gls{ge} constraints.
 The last section of this chapter describes the learning of \glspl{linear-chain crf} using the reference strings as an unlabeled training set in combination with the generated \gls{ge} constraints.
 
-The source code of the discussed implementation is available online\footnote{\url{http://mkrnr.de/author-extraction} (accessed Aug.~6,~2016)} under a GNU General Public License.
+The source code of the discussed implementation is available online\footnote{\url{http://mkrnr.de/author-extraction} (accessed Aug.~6,~2016)} under a GNU General Public License (GPLv3).
 
-\section{Preprocessing}\label{sec:i-preprocessing}
+\section{Research Paper Preprocessing}\label{sec:i-preprocessing}
 
-The corpus that was used for our study consists of \num{32470} research papers\footnote{The papers were downloaded on Aug.~6,~2016.} that are accessible as \gls{pdf} documents via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed Aug.~6,~2016)}.
+The corpus that was used for our study consists of all research papers\footnote{\num{32470} papers were downloaded on March~6,~2016.} that are accessible as \gls{pdf} files via the \gls{ssoar}\footnote{\url{http://www.ssoar.info} (accessed Aug.~6,~2016)}.
 
-Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf}.
-Apache PDFBox\footnote{\url{https://pdfbox.apache.org/} (accessed Aug.~6,~2016)}, a Java library for manipulating \glspl{pdf}, allows the extraction of the content as Unicode text.
-This is done by also taking into account the formatting of the document, for example when a research paper contain two text columns per page.
-This way we were able to extract the text of \num{31795} research papers.
+Since our later steps require textual input, the first step is to extract the content from the \glspl{pdf} files.
+\textit{Apache PDFBox}\footnote{\url{https://pdfbox.apache.org/} (accessed Aug.~6,~2016)}, a Java library for manipulating \glspl{pdf} files, allows the extraction of the content as Unicode text.
+This is done by also taking into account the formatting of the document, for example when a research paper contains two text columns per page.
+This way, we were able to extract the text of \num{31795} research papers while \num{675} \gls{pdf} files could not be processed by Apache PDFBox
 
 \bigskip
 
 After extracting the text from the \glspl{pdf}, the next step is to identify and extract reference sections.
 As discussed in \Cref{sec:ae-preprocessing}, this is necessary to prevent the author matching algorithm from matching author names in the body of the research paper.
 
-The reference string parsing package ParsCit\footnote{\url{http://wing.comp.nus.edu.sg/parsCit/} (accessed Aug.~6,~2016)} uses regular expressions to identify the heading of a reference section by matching against strings such as ``References'', ``Bibliography'', or ``References and Notes''~\citep{councill2008parscit}.
-Further heuristics detect whether a found reference section heading was found too early in the text~\citep{councill2008parscit}.
+The reference string parsing package \textit{ParsCit}\footnote{\url{http://wing.comp.nus.edu.sg/parsCit/} (accessed Aug.~6,~2016)} uses regular expressions to identify the heading of a reference section by matching against strings such as ``References'', ``Bibliography'', or ``References and Notes''~\citep{councill2008parscit}.
+Further heuristics detect whether a found reference section heading was found too early, i.e., in the first $40\%$ of the text~\citep{councill2008parscit}.
 After the start is identified, another regular expression is used to search for the end of the reference section.
 
 Yet, the implementation in ParsCit only considers research papers in the English language.
-Thereby, German section headers such as ``Referenzen'' or ``Literaturverzeichnis'' are not covered by the regular expressions.
-After adding a variety of German section headers to the ParsCit implementation, we encountered a high number of false positive matches.
-In other words, many extracted reference sections did not contain reference strings.
-
-As a result, we implemented our own approach which uses similar regular expressions and heuristics as the one of ParsCit.
+Thereby, German headers for reference sections such as ``Referenzen'' or ``Literaturverzeichnis'' are not matched by the regular expressions.
+Even after adding a variety of German section headers to the ParsCit implementation, a thourough manual inspections suggested a poor performance.
+We thereby implemented our own approach which uses similar regular expressions and heuristics as the one of ParsCit.
 Using this implementation, we were able to extract reference sections from \num{16513} research papers.
-A manual inspection showed a significantly smaller number of false positive in comparison to the extended ParsCit implementation.
+Yet, further investigations are necessary to identify the reasons for the bad performance of ParsCit when applied on our data set.
 
 \bigskip
 
@@ -42,33 +39,41 @@ Before using the extracted reference sections as an input for the author matchin
 The reason for this is a reference style in which author names are separated by a slash instead of a space.
 An example for this is the following reference string:
 \begin{quote}
-  Andretta, G./Baethge, M./Dittmer, S. 1994: Übergang wohin? Schwierigkeiten ostdeutscher Industriearbeiter bei ihrer betrieblichen Neuorientierung. In: SOFI-Mitteilungen Nr. 21/März 1994, Göttingen.
+  Andretta, G./Baethge, M./Dittmer, S. 1994: \"{U}bergang wohin? Schwierigkeiten ostdeutscher Industriearbeiter bei ihrer betrieblichen Neuorientierung. In: SOFI-Mitteilungen Nr. 21/M\"{a}rz 1994, G\"{o}ttingen.
 \end{quote}
-Since we use whitespaces to separate words, without a preprocessing we would result in words such as ``G./Beathge,{}'' or ``M./Dittmer,{}''.
+Since we use whitespaces to separate words, without preprocessing, we would obtain words such as ``G./Beathge,{}'' or ``M./Dittmer,{}''.
 To prevent this, we add spaces around slashes.
 For our example, this gives us:
 \begin{quote}
-  Andretta, G. / Baethge, M. / Dittmer, S. 1994: Übergang wohin? Schwierigkeiten ostdeutscher Industriearbeiter bei ihrer betrieblichen Neuorientierung. In: SOFI-Mitteilungen Nr. 21 / März 1994, Göttingen.
+  Andretta, G. / Baethge, M. / Dittmer, S. 1994: \"{U}bergang wohin? Schwierigkeiten ostdeutscher Industriearbeiter bei ihrer betrieblichen Neuorientierung. In: SOFI-Mitteilungen Nr. 21 / M\"{a}rz 1994, G\"{o}ttingen.
 \end{quote}
 
-\section{Generating Training Sets with Distant Supervision}\label{sec:i-distant-supervision}
+
+\section{Generating Training Sets using Distant Supervision}\label{sec:i-distant-supervision}
+
+We divide the training set generation into two steps.
+First, a suitable knowledge base needs to be created.
+In our case, such a knowledge base needs to contain author names with separated first and last names.
+The second step is a matching of author names in the author list with their occurrences in the unlabeled reference sections.
+For this, we also need to consider different formats in which an author name can appear in a reference string.
 
 \subsection{Knowledge Base Creation}\label{subsec:i-knowledge-base-creation}
 
-In order to address \RQ{1} during our evaluation, we consider two different sources of author names.
+\RQ{1} aims to compare the impact of different author sets on the performance of the resulting model.
+For this, we consider two different sources of author names.
 Both have in common that author names are separated into first names and last names.
 
 \bigskip
 
-The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed Aug.~6,~2016)}\glsunset{gnd} -- German for integrated authority file --  which is published by the German National Library in cooperation with other library networks and institutions.
-The \gls{gnd} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking world which includes Germany, Austria, and Switzerland.
-Further, it distinguishes between differentiated and undifferentiated person~\citep{hochstein2013ihr}.
+The first source is the \acrfull{gnd}\footnote{\url{http://www.dnb.de/EN/Standardisierung/GND/gnd.html} (accessed Aug.~6,~2016)}\glsunset{gnd}---German for integrated authority file---which is published by the German National Library in cooperation with other library networks and institutions.
+The \gls{gnd} contains information on persons, corporate bodies, conferences, and other topics with a focus on the German-speaking countries which includes Germany, Austria, and Switzerland.
+Further, it distinguishes between differentiated and undifferentiated persons~\citep{hochstein2013ihr}.
 A differentiated person is connected to exactly one individual whereas for an undifferentiated person, no such connection is modeled.
 This for example is the case for historical personalities for which no precise records on their identity exist.
 
-The \gls{gnd} data set is available under a Creative Commons Zero license and can be downloaded in the following formats: Marc 21, MARCXML, RDF/XML, Turtle, and JSON-LD.\@
+The \gls{gnd} data set is available under a Creative Commons Zero (CC0) license and can be downloaded in the following formats: Marc 21, MARCXML, RDF/XML, Turtle, and JSON-LD.\@
 
-For our author extraction, we use the Turtle format which is a format for \gls{rdf} data.
+For our author extraction, we use the Turtle format which is a compact format for \gls{rdf} data.
 To extract the author names, we used the Apache Jena\footnote{\url{https://jena.apache.org/} (accessed Aug.~6,~2016)} framework.
 After loading the Turtle file into an \gls{rdf} triple store, we extracted the author names using a \gls{sparql} query.
 The used \gls{sparql} query for extracting differentiated persons is shown in \Cref{fig:gnd-sparql-query}.
@@ -88,12 +93,13 @@ SELECT ?forename ?surname WHERE {
 \label{fig:gnd-sparql-query}
 \end{figure}
 The \gls{gnd} file also contains name variations for some persons.
-Yet, for our evaluation we only consider the name that is marked as ``preferred name''.
+Yet, for our evaluation we only consider the name that is marked as \texttt{preferred name}.
+Further evaluations could investigate whether including name variations provides a better performance or introduces more false-positive matches.
 
-Due to the distinction between differentiated and undifferentiated names, we created two different lists of names.
-One that only contains the names of differentiated persons and one that contains the names of both differentiated and undifferentiated persons.
+Due to the distinction between differentiated and undifferentiated names, we created two separate lists of names.
+One that only contains the names of differentiated persons and another one that contains the names of both differentiated and undifferentiated persons.
 We refer to the data sets as \texttt{gnd-diff} and \texttt{gnd-full}, respectively.
-General statistics on the number of extracted names is shown in \Cref{tab:knowledge-base-statistics}.
+General statistics on the number of extracted names are shown in \Cref{tab:knowledge-base-statistics}.
 The table also contains statistics on the number of individual names.
 
 \begin{table}[t]
@@ -107,34 +113,34 @@ The table also contains statistics on the number of individual names.
  %& & & & & \\
  \bottomrule
 \end{tabular}
-\caption{Statistics for different variations of the \texttt{gnd} and \texttt{swp} name lists.}
+\caption{Statistics for different variations of the \texttt{gnd} (GND) and \texttt{swp} (Sowiport) name lists.}
 \label{tab:knowledge-base-statistics}
 \end{table}
 
 \bigskip
 
 The second source is the social science portal Sowiport\footnote{\url{http://sowiport.gesis.org/} (accessed Aug.~6,~2016)} which is maintained by GESIS --- Leibniz Institute for the Social Sciences.
-From this portal, a list of author names was extracted via an Apache Solr\footnote{\url{http://lucene.apache.org/solr/} (accessed Aug.~6,~2016)} query on June~13,~2016.
-The results were provided in a \gls{xml} file.
+From this portal, GESIS provided a list of author names that was extracted via an Apache Solr\footnote{\url{http://lucene.apache.org/solr/} (accessed Aug.~6,~2016)} query on June~13,~2016.
+The results were stored in an \gls{xml} file.
 
 In this file, an author name is represented as a string in which the last names are separated from the first names with a comma.
 In some cases, multiple author names appear together in one string, separated by semicolons.
 
-The Sowiport portal was chosen because of it's topical similarity to the research papers from the \gls{ssoar}.
+The Sowiport portal was chosen because of its topical similarity to the research papers from the \gls{ssoar}.
 We will refer to the second data set as the \texttt{swp} data set.
-In order to allow a comparison to the \gls{gnd} data set, we additionally generated a version of the \texttt{swp} data set with the same number of authors as the \gls{gnd} data set.
+In order to allow a comparison with the \gls{gnd} data set, we additionally generated a version of the \texttt{swp} data set containing the same number of authors as the \gls{gnd} data set.
 We refer to this as the \texttt{swp-trim} data set.
 
 \Cref{tab:knowledge-base-statistics} contains statistics on the different variations of the \texttt{gnd} and \texttt{swp} data sets as well as a combined data set of \texttt{gnd-full} and \texttt{swp-full}.
 
 \subsection{Author Name Matching}\label{subsec:i-author-name-matching}
-Usually, matches are annotated using markup languages such as \gls{xml}.
+A common practice is to annotated matches using markup languages such as \gls{xml}~\citep[e.g.][]{mccallum2000automating,councill2008parscit}.
 For example, the third reference string in \Cref{fig:example-reference-strings} could be annotated with:
 \begin{equation*}
   \texttt{<a1><fn>}\text{Max}\texttt{</fn> <ln>}\text{M\"{u}ller,}\texttt{</ln></a1> }\text{Fritz Schmidt (2010): \dots}
 \end{equation*}
-Here, \texttt{<a1>\dots</a1>} marks the first author name in the sequence, \texttt{<fn>\dots</fn>} a first name, and \texttt{<ln>\dots</ln>} a last name.
-Since such markup language use tree based models, they do not allow a direct encoding of overlaps.
+Here, \texttt{<a1>\dots</a1>} marks up the first author name in the sequence, \texttt{<fn>\dots</fn>} a first name, and \texttt{<ln>\dots</ln>} a last name.
+Since such a markup language uses a tree-based model, they do not allow a direct encoding of overlaps.
 For example, assuming that we want to match all occurrences of the authors ``Max M\"{u}ller'' and ``Fritz M\"{u}ller'', the first three words of the previous example would need to be annotated with:
 \begin{equation*}
   \texttt{<a1><fn>}\text{Max}\texttt{</fn> <a2><ln>}\text{M\"{u}ller,}\texttt{</ln></a1> <fn>}\text{Fritz}\texttt{</fn></a2>}
@@ -149,7 +155,7 @@ To avoid this overhead, it would be preferable to annotate our author matches us
 Being a directed graph, it naturally solves the issue of overlaps by allowing a node to have multiple parents.
 The graph has a hierarchy since it it acyclic.
 In addition, it has ordered descendants.
-Thereby, for any given node, the order of it's child nodes is defined.
+Thereby, for any given node, the order of its child nodes is defined.
 As a part of this thesis, a Java library for the \gls{goddag} data structure was implemented that allows the generation, serialization, and visualization of \glspl{goddag}.
 It is available online\footnote{\url{http://mkrnr.de/goddag} (accessed Aug.~6,~2016)} under a GNU General Public License.
 
@@ -159,9 +165,9 @@ Using the \gls{goddag} data structure, we will now discuss a concrete way of tag
 
 As a first step, several variations of an author list described in \Cref{subsec:i-knowledge-base-creation} are generated.
 For this, the author names are split into a set of first names and a set of last names.
-If an author has multiple first names or last names, they are not further separated.
+If an author has multiple first names or last names, they are not further separated in this case.
 Thereby, we refer to them as \textit{full first names set} and \textit{full last names set}.
-Since first names can be abbreviated in a reference, a next step is to generated a \textit{first name variations set}.
+Since first names can be abbreviated in a reference, a next step is to generate a \textit{first name variations set}.
 For example, given the full first name ``Max Friedrich'', we add the following variations to the first name variations set:
 \begin{itemize}
   \itemsep0em
@@ -173,18 +179,19 @@ For example, given the full first name ``Max Friedrich'', we add the following v
   \item F
 \end{itemize}
 Note that no variation ends with a period.
-This is because we later will ignore leading and trailing punctuation marks when matching names.
+This is because we will later ignore leading and trailing punctuation marks when matching names.
 
 Further, we split entries in the full last names set that contain multiple last names, resulting in the \textit{single last names set}.
 
 \bigskip
 
 We now generate an initial \gls{goddag} structure for our given text.
-This structure consists of a root node which has as child nodes the words of the reference section, separated at white space or new line characters.
+This structure consists of a root node which contains the words of the reference section has as child nodes.
+Words are separated at white space or newline characters.
 These words are the leaf nodes of the \gls{goddag}.
 The leaf nodes contain two representations of the word.
-One that contains the word as it appears in the reference string, including it's leading and trailing non-word characters.
-The other only contains the word itself, without leading and training non-word characters.
+One that contains the word as it appears in the reference string, including its leading and trailing non-word characters.
+The other only contains the word itself without leading and trailing non-word characters.
 This allows an efficient name lookup in the following steps.
 
 Given this initial \gls{goddag} structure, we now match the entries in the \textit{first name variations set} against the ``word'' properties of the leaf nodes.
@@ -196,7 +203,7 @@ After the two iterations, a leaf node can simultaneously have a first name node 
 This again is not allowed in a tree-based structure such as \gls{xml}.
 
 \Cref{fig:example-goddag-4-names} shows a \gls{goddag} for the fourth reference string in \Cref{fig:example-reference-strings} with matched first names and last names.
-Here, The word ``Friedrich'' is tagged as both a possible first name and last name.
+Here, the word ``Friedrich'' is tagged as both a possible first name and last name.
 Note that in our evaluation, we use one \gls{goddag} per reference section.
 \begin{figure}[t]
   \centering
@@ -210,14 +217,14 @@ Note that in our evaluation, we use one \gls{goddag} per reference section.
 
 \bigskip
 
-The goal now is to match the list of authors against the \gls{goddag} structure with identified first names and last names.
-For this, we generate an \textit{author name map} that contains as keys the entries from the full last names set.
+The goal now is to match the list of authors against the \gls{goddag} structure with identified first and last names.
+For this, we generate an \textit{author name map} that contains the entries from the full last names set as keys.
 As values, it contains the first name variations of first names that appear together with the given last names in our original author list.
 
-Given this map, we iterate over the leaf nodes using a sliding window approach.
+Using this map, we iterate over the leaf nodes using a sliding window approach.
 First, we examine if one or more neighboring leaf nodes have a last name parent node.
 If this is the case, we examine their neighboring leaf nodes for first name parent nodes.
-If both last name parent nodes and neighboring first name parent nodes are found, a lookup in the author name map is performed using the ``word'' property of the leaf nodes.
+If both last name parent nodes and neighboring first name parent nodes are found, a lookup in the author name map is performed using the \texttt{word} property of the leaf nodes.
 
 If a match is found, a non-terminal node with the label ``AU'' for author is inserted between the root node and the corresponding parents of the matched leaf nodes.
 
@@ -239,20 +246,21 @@ To recall from \Cref{sec:ae-building-ge-constraints}, a \gls{ge} constraint is a
 \begin{equation*}
   \mathit{Val}(Y_n)=\{\texttt{B-FN},\texttt{B-LN},\texttt{I-FN},\texttt{I-LN},\texttt{O}\}
 \end{equation*}
-We can derive this \gls{probability distribution} from the \glspl{goddag} by iterating over the children of the root node and.
-When reaching an author node, we can add the according probability mass to the probability distributions of of it's children.
+We can derive this \gls{probability distribution} from the \glspl{goddag} by iterating over the children of the root node.
+When reaching an author node, we can add the according probability mass to the probability distributions of of its children.
 
 For example, the first author node in \Cref{fig:example-goddag-4-final} contains a first name node and a last name node.
 Since the children are ordered, the first name node appears first in the sequence.
-Thereby, we add a probability mass of one to the label \texttt{B-FN} of the word ``Mia'' and to the label \texttt{I-LN} of the word ``Wagner,''.
+Thereby, we add a probability mass of $1$ to the label \texttt{B-FN} of the word ``Mia'' and to the label \texttt{I-LN} of the word ``Wagner,''.
 This shows the importance of having ordered children in this graph structure.
 
-\Cref{tab:example-ge-constraints} shows the resulting \gls{ge} constraints for the four \glspl{goddag} that were derived from the matched of the author list in \Cref{tab:example-author-list} with the reference strings in \Cref{fig:example-reference-strings}.
-As we discussed in \Cref{sec:ae-building-ge-constraints}, for this example we also include every third word that is not matched to an author name, starting with ``(2010):'' in the first reference string.
+\Cref{tab:example-ge-constraints} shows the resulting \gls{ge} constraints for the four \glspl{goddag} that were derived from the matched of the author list in \Cref{tab:example-author-list} using the reference strings in \Cref{fig:example-reference-strings}.
+As we discussed in \Cref{sec:ae-building-ge-constraints}, for this example we also include every third word that is not matched to an author name.
+The first included word is ``(2010):'' in the first reference string.
 
 \section{Learning \glsentryshortpl{crf}}\label{sec:i-learning-crfs}
 
-After presenting our approach on generating \gls{ge} constraints, we now discuss the implementation for the learning of \glspl{linear-chain crf} which uses an unlabeled set of reference sections and the corresponding \gls{ge} constraints as an input.
+After presenting our approach of generating \gls{ge} constraints, we now discuss the implementation of the learning of \glspl{linear-chain crf} which uses an unlabeled set of reference sections and the corresponding \gls{ge} constraints as an input.
 
 We use the \acrfull{mallet}\glsunset{mallet}~\citep{mccallum2002mallet} for most of the implementation discussed in this section.
 \gls{mallet} is an open-source Java library that includes tools for tasks such as document classification, sequence tagging, or topic modeling.
@@ -266,7 +274,7 @@ Based on the discussion in \Cref{subsec:ae-graph-construction}, we focus on the 
 In \gls{mallet}, it is possible to create \glspl{linear-chain crf} with different \glspl{markov order} (see \Cref{subsec:ae-graph-construction}).
 More specifically, the \gls{markov order} is declared using an integer array with non-negative numbers in increasing order.
 The highest integer specifies the \gls{markov order} of the \gls{crf}.
-The other numbers represent additional weight sets to also model lower \glspl{markov order} in the same model.
+The other numbers represent weight sets that represent lower \glspl{markov order} in the same model.
 % from MALLET documentation:
 % * @param orders an array of increasing non-negative numbers giving
 % * the orders of the features for this CRF. The largest number
@@ -277,14 +285,14 @@ The other numbers represent additional weight sets to also model lower \glspl{ma
 % * labels agree. If <code>orders</code> is <code>null</code>, an
 % * order-0 CRF is built.
 
-For example, an integer array \texttt{[0,1]} specifies an \gls{markov order} one \gls{linear-chain crf} and an additional weight set for the \gls{markov order} zero states.
-When modeled with \glspl{factor}, the \gls{markov order} zero state for a word $w_n$ only includes the \gls{target variable} $Y_n$: $\Psi(Y_n)$.
-Applied to the author extraction example from \Cref{cha:crfs}, this specification results in a \gls{factor graph} shown in \Cref{fig:example-linear-chain-crf-markov-order-0-1}.
+For example, an integer array \texttt{[0,1]} specifies a \gls{markov order} $1$ \gls{linear-chain crf} and an additional weight set for the \gls{markov order} $0$ states.
+When modeled with \glspl{factor}, the \gls{markov order} $0$ state for a word $w_n$ only includes the \gls{target variable} $Y_n$: $\Psi(Y_n)$.
+Applied to the author extraction example from \Cref{cha:crfs}, this specification results in the \gls{factor graph} shown in \Cref{fig:example-linear-chain-crf-markov-order-0-1}.
 \begin{figure}[t]
 \centering
 \input{figures/example-linear-chain-crf-markov-order-0-1.tex}
 \caption{%
-  \Gls{factor graph} of a \gls{linear-chain crf} with both \gls{markov order} zero and one, derived from the author extraction example in \Cref{cha:crfs}.}
+  \Gls{factor graph} of a \gls{linear-chain crf} with both \gls{markov order} $0$ and $1$, derived from the author extraction example in \Cref{cha:crfs}.}
 \label{fig:example-linear-chain-crf-markov-order-0-1}
 \end{figure}
 
@@ -293,19 +301,21 @@ Applied to the author extraction example from \Cref{cha:crfs}, this specificatio
 The implementation of \glspl{linear-chain crf} in \gls{mallet} allows the modification of several model parameters.
 One that is addressed by \RQ{8} is the regularization parameter of the \gls{gaussian prior} (see \Cref{sec:learning-crfs}).
 The default for this parameter is set to $10$.
+In \Cref{cha:evaluation}, we will show that small modifications do not have a significant impact on the performance of the resulting model.
 
 Further, we can specify the maximum number of iterations during the learning with gradient ascent.
-In our evaluation setup, it was sufficient to set this number to a high value, in our case $10,000$ since the learning always converged in a reasonable time.
-Statistics on the learning runtime are shown in \Cref{app:learning-scalability}.
+In our evaluation setup, we set this number to $10,000$ since the learning always converged in a reasonable time.
+Statistics on the learning runtime are shown in \Cref{app:scalability}.
 
 \subsection{Feature Engineering}\label{subsec:i-feature-engineering}
 
-To create features in \gls{mallet}, they are added via so-called \textit{pipes}.
+To include features in \gls{mallet}, they are added via \textit{pipes}.
+A pipe performs an individual manipulation of a stream of input data and provides an stream of processed output data.
 A first step is to transform a given input string into a vector of \textit{tokens}.
-In our case, the input string is a reference section and a token contains a word in the reference string, separated by whitespaces.
+In our case, the input string is a reference section and a token containing a word in the reference string, separated by whitespaces.
 
 It is now possible to assign different features to the tokens.
-The local features that we use for the evaluation (see \Cref{tab:our-features-regular-expressions}), are implemented using a variation of the \texttt{cc.mallet.pipe.tsf.RegexMatches} class.
+The local features that we use for the evaluation (see \Cref{tab:our-features-regular-expressions}), are implemented using a variation of the \texttt{RegexMatches} class.
 This class matches words against a regular expression that describes a feature.
 If a match was found, it assigns a feature label with an initial weight of $1$.
 
@@ -313,7 +323,9 @@ Further, we consider two lexicon features, \texttt{FIRSTNAME} and \texttt{LASTNA
 We use the two of the lists that we created for the author name matching in \Cref{subsec:i-author-name-matching} as lexica.
 Tokens are assigned the feature label \texttt{FIRSTNAME} if the contained word appears in the first name variations set.
   Consequently, the feature label \texttt{LASTNAME} is assigned if the word appears in the single last name set.
-In our evaluation, the feature weight is the natural logarithm of the frequency of the word in the original author name knowledge base.
+In our evaluation, the feature weight is set to the natural logarithm of the frequency of the word in the original author name knowledge base.
+This is done to reduce the impact of the feature for words that appear with a very high frequency.
 For example, in the \texttt{swp} data set, the first name ``Max'' was part of \num{11618} author names.
 Thereby, we assign the feature weight $\ln(11,618)\approx9.3603$ to a token that contains the first name ``Max''.
+Further evaluations should investigate the selection of this feature weight.
 
