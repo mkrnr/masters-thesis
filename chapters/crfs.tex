@@ -174,12 +174,12 @@ P(\beta\mid\alpha) = \frac{P(\alpha\cap\beta)}{P(\alpha)}.
 This definition can be extended to \glspl{random variable}.
 Given that the probability for every \gls{assignment} to $X$ is greater than zero, the \gls{cpd}\glsunset{conditional probability distribution} $P(Y\mid X)$ is calculated with
 \begin{equation}
-\label{equ:conditional-probability-random-variable}
+\label{equ:conditional-probability-random-variable-1}
 P(Y\mid X) = \frac{P(X,Y)}{P(X)}
 \end{equation}
 and for sets of \glspl{random variable} $\mathbf{X}$ and $\mathbf{Y}$ we have:
 \begin{equation}
-\label{equ:conditional-probability-random-variable}
+\label{equ:conditional-probability-random-variable-2}
 P(\mathbf{Y}\mid \mathbf{X}) = \frac{P(\mathbf{X},\mathbf{Y})}{P(\mathbf{X})}.
 \end{equation}
 
@@ -193,7 +193,7 @@ Again taking the reference strings in \Cref{fig:example-reference-strings}, we h
 A value that can be used as a metric for comparing different \glspl{probability distribution} with each other is called \gls{expectation}.
 Given a discrete \gls{random variable} $X$, we define the expectation $E[X]$ of $X$ under the distribution $P$ as~\cite{koller2009probabilistic}:
 \begin{equation}
-  \label{equ:expectation-x}
+  \label{equ:expectation-x-1}
   E[X]=\sum_{x\in \mathit{Val}(X)} x\cdot P(x).
 \end{equation}
 
@@ -201,7 +201,7 @@ To apply this definition to our example, we redefine $\mathit{Val}(LN_1)=\{\math
 This gives us:
 \begin{equation*}
   \begin{split}
-  \label{equ:expectation-x}
+  \label{equ:expectation-x-2}
   E[LN_1]&=\sum_{x\in \mathit{Val}(LN_1)} x\cdot P(x)\\
   &=1\cdot P(LN_1{=}1)+0\cdot P(LN_1{=}0)\\
   &=1\cdot 0.25+0\cdot 0.75\\
@@ -555,7 +555,7 @@ In \Cref{app:subsec-gd-example-calculation} we demonstrate that in the case of $
 This behavior for a $\mathbf{D}_k\subseteq\mathbf{X}$ is the result of the only difference between the definition of a \gls{gibbs distribution} in \Cref{equ:gibbs-distribution} and the definition of a \gls{crf} above, namely how the \gls{normalizing constant} $Z$ is defined~\citep{koller2009probabilistic}.
 In \Cref{equ:gibbs-distribution}, $Z$ normalizes $\tilde{P}(X_1,\dots,X_N)$ with a sum over all $X_1,\dots,X_N$ resulting in a \gls{joint distribution} $P(X_1,\dots,X_N)$.
 However, in \Cref{equ:crf-factor}, $Z(\mathbf{X})$ normalizes $\tilde{P}(\mathbf{Y},\mathbf{X})$ with respect to the given $\mathbf{X}$.
-This way of normalizing results in the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$ (cf. \Cref{equ:conditional-probability-random-variable}).
+This way of normalizing results in the \gls{conditional probability distribution} $P(\mathbf{Y}\mid\mathbf{X})$ (cf. \Cref{equ:conditional-probability-random-variable-2}).
 
 \Cref{app:subsec-crf-example-calculation} contains $P(LN_1{=}\mathit{true},LN_2{=}\mathit{false}\mid EC_2{=}\mathit{false})$ as an exemplary calculation according to the \glspl{factor} in \Cref{tab:example-factors}.
 
